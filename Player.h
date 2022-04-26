@@ -9,10 +9,9 @@ private:
 	void initVariables();
 	void initComponents();
 public:
-	Player(float x, float y, sf::Texture& texture_sheet);
+	Player(float x, float y, sf::Texture& texture);
 	virtual ~Player();
 
 	//Functions
-	void update(const float& dt) override;
 };
 

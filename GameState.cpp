@@ -24,16 +24,15 @@ void GameState::initKeybinds()
 //Textures initialisation
 void GameState::initTextures()
 {
-	if (!this->textures["PLAYER_SHEET"].loadFromFile("Textures/characters/player/player_sheet.png"))
+	if (!this->textures["PLAYER_IDLE"].loadFromFile("Textures/test.png"))
 	{
 		throw("Could not load player texture");
-		std::cout << "Fail";
 	}
 }
 
 void GameState::initPlayers()
 {
-	this->player = new Player(0, 0, this->textures["PLAYER_SHEET"]);
+	this->player = new Player(0, 0, this->textures["PLAYER_IDLE"]);
 }
 
 GameState::GameState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states)
