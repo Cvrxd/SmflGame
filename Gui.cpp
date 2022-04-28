@@ -1,7 +1,9 @@
-#include "Button.h"
+#include "Gui.h"
+
+/////////Button//////////
 
 // init funcs
-Button::Button(float x, float y, float width, float height, 
+GUI::Button::Button(float x, float y, float width, float height, 
 	sf::Font* font, const std::string& text, unsigned charcter_size,
 	sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color,
 	sf::Color idleColor, sf::Color hoverColor, sf::Color activeColor)
@@ -25,13 +27,13 @@ Button::Button(float x, float y, float width, float height,
 	this->text.setPosition(this->shape.getPosition().x + 20, this->shape.getPosition().y + 8);
 }
 
-Button::~Button()
+GUI::Button::~Button()
 {
 }
 
 //Accessors
 
-const bool Button::isPressed() const
+const bool GUI::Button::isPressed() const
 {
 	if (this->buttonState == BTN_ACTIVE)
 		return true;
@@ -41,7 +43,7 @@ const bool Button::isPressed() const
 
 //functions
 
-void Button::update(const sf::Vector2f& mousePosition)
+void GUI::Button::update(const sf::Vector2f& mousePosition)
 {
 	// update bolleans for hover and pressed
 
@@ -84,8 +86,27 @@ void Button::update(const sf::Vector2f& mousePosition)
 	}
 }
 
-void Button::render(sf::RenderTarget* target)
+void GUI::Button::render(sf::RenderTarget& target)
 {
-	target->draw(this->shape);
-	target->draw(this->text);
+	target.draw(this->shape);
+	target.draw(this->text);
+}
+
+//////////DropDownBox/////////
+
+GUI::DropDownList::DropDownList(sf::Font& font)
+	:font(font)
+{
+}
+
+GUI::DropDownList::~DropDownList()
+{
+}
+
+void GUI::DropDownList::update(const sf::Vector2f& mousePosition)
+{
+}
+
+void GUI::DropDownList::render(sf::RenderTarget& target)
+{
 }

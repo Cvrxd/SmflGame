@@ -12,6 +12,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Window.hpp>
 
+enum MovementStates {IDLE = 0, MOVING, MOVING_LEFT, MOVING_RIGHT, MOVE_UP, MOVE_DOWN, CAST_SPELL};
 
 class MovementComponent
 {
@@ -32,10 +33,11 @@ public:
 	virtual ~MovementComponent();
 
 	//Accessors
+	const float& getMaxVelocity() const;
 	const sf::Vector2f& getVelocity() const;
 
 	//Functions
-	const bool idle() const;
+	const bool getState(const short unsigned state) const;
 
 	void move(const float dir_x, const float dir_y, const float& dt);
 

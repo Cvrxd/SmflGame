@@ -2,26 +2,53 @@
 
 //Initialisation funcs
 State::State(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states)
+	: window(window), supportedKeys(supportedKeys), states(states), quit(false), paused(false), keyTime(0.f), keyTimeMax(10.f)
 {
-	this->window = window;
-	this->supportedKeys = supportedKeys;
-	this->states = states;
-	this->quit = false;
+
 }
 
 State::~State()
 {
 }
 
-// Quit func
+// PauseMenu functions
+void State::pauseState()
+{
+	this->paused = true;
+}
+
+void State::unpausedState()
+{
+	this->paused = false;
+}
+
+//Accessors
 const bool& State::getQuit() const
 {
 	return this->quit;
 }
 
+const bool& State::getKeyTime()
+{
+	return this->keyTime >= this->keyTimeMax;
+}
+
+//Other Functions
 void State::endState()
 {
 	this->quit = true;
+}
+
+void State::updateKeyTime(const float& dt)
+{
+	if (this->keyTime < this->keyTimeMax)
+	{
+		this->keyTime += 100.f * dt;
+	}
+	else
+	{
+		this->keyTime = 0;
+	}
 }
 
 //Mouse position update

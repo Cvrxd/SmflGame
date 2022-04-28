@@ -1,13 +1,11 @@
 #pragma once
-#include "GameState.h"
-#include "EditorState.h"
-#include "SettingsState.h"
+#include "State.h"
 #include "Gui.h"
 
-class MainMenuState : public State
+class SettingsState : public State
 {
 private:
-	//variables 
+	//Variables
 	sf::Texture backgroundTexture;
 	sf::RectangleShape background;
 	sf::Font font;
@@ -20,9 +18,12 @@ private:
 	void initFonts();
 	void initButtons();
 	void initKeybinds() override;
+
 public:
-	MainMenuState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states);
-	virtual ~MainMenuState() override;
+	SettingsState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states);
+	virtual ~SettingsState();
+
+	//Accessors
 
 	//Functions
 	void updateInput(const float& dt) override;

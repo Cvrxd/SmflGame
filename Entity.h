@@ -1,4 +1,5 @@
 #pragma once
+#include"HitboxComponent.h"
 #include"MovementComponent.h"
 #include"AnimationComponent.h"
 
@@ -11,6 +12,7 @@ protected:
 	//core
 	sf::Sprite sprite;
 	
+	HitboxComponent* hitboxComponent;
 	MovementComponent* movementComponent;
 	AnimationComponent* animationComponent;
 
@@ -20,8 +22,9 @@ public:
 
 	//component functions
 	void setTexture(sf::Texture& texture);
+	void createHitboxComponent(sf::Sprite& sprite, const float& offset_x, const float& offset_y, const float& width, const float& height);
 	void createMovementComponent(const float maxVelocity, float acceleration, float deceleration);
-	void createAnimationComponent(sf::Texture& texture_sheet);
+	virtual void createAnimationComponent(sf::Texture& texture_sheet);
 
 	// Functions
 	virtual void setPosition(const float x, const float y);
@@ -31,7 +34,7 @@ public:
 	virtual void update(const float& dt);
 
 	//render
-	virtual void render(sf::RenderTarget* target);
+	virtual void render(sf::RenderTarget& target);
 
 };
 
