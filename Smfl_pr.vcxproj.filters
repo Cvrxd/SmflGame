@@ -28,6 +28,9 @@
     <Filter Include="GUI">
       <UniqueIdentifier>{a938a803-a69c-47b7-983c-0efcfd5bbd76}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{718cdfe3-ba47-4bc5-9a82-e29cec541c5d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -78,6 +81,12 @@
     <ClCompile Include="Gui.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
+    <ClCompile Include="TileMap.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -121,6 +130,12 @@
     </ClInclude>
     <ClInclude Include="Gui.h">
       <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMap.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "MovementComponent.h"
 
 //Initialisation
@@ -27,8 +28,6 @@ const bool MovementComponent::getState(const short unsigned state) const
 {
 	switch (state)
 	{
-	case CAST_SPELL:
-		
 	case IDLE:
 		return this->velocity.x == 0.f && this->velocity.y == 0.f;
 		break;

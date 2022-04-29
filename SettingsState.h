@@ -9,14 +9,19 @@ private:
 	sf::Texture backgroundTexture;
 	sf::RectangleShape background;
 	sf::Font font;
+	sf::Text optionsText;
 
 	std::map<std::string, GUI::Button*> buttons;
+	std::map<std::string, GUI::DropDownList*> dropDownLists;
+
+	std::vector<sf::VideoMode> videoModes;
 
 	//Functions
 	void initVariables();
+	void initText();
 	void initBackground();
 	void initFonts();
-	void initButtons();
+	void initGUI();
 	void initKeybinds() override;
 
 public:
@@ -27,9 +32,9 @@ public:
 
 	//Functions
 	void updateInput(const float& dt) override;
-	void updateButtons();
+	void updateGUI(const float& dt);
 	void update(const float& dt) override;
-	void renderButtons(sf::RenderTarget& target);
+	void renderGUI(sf::RenderTarget& target);
 	void render(sf::RenderTarget* target = NULL) override;
 };
 

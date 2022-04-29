@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "AnimationComponent.h"
 
 AnimationComponent::AnimationComponent(sf::Sprite& sprite, sf::Texture& textureSheet)
@@ -34,7 +35,6 @@ void AnimationComponent::addAnimation(const std::string key,
 
 const bool& AnimationComponent::play(const std::string& key, const float& dt, const bool priority)
 {
-	//Change later
 	if (this->priorityAnimation) //If there is a prioritu animation
 	{
 		if (this->priorityAnimation == this->animations[key])
@@ -51,9 +51,8 @@ const bool& AnimationComponent::play(const std::string& key, const float& dt, co
 					this->lastAnimation = this->animations[key];
 				}
 			}
-			
 			//If prioty animation is done, remove it 
-			if (this->animations[key]->play(dt))
+			if(this->animations[key]->play(dt))
 			{
 				this->priorityAnimation = NULL;
 			}
@@ -61,6 +60,11 @@ const bool& AnimationComponent::play(const std::string& key, const float& dt, co
 	}
 	else //If there is no priority animation 
 	{
+		if (priority)
+		{
+			this->priorityAnimation = this->animations[key];
+		}
+
 		if (this->lastAnimation != this->animations[key])
 		{
 			if (this->lastAnimation == NULL)

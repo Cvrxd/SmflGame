@@ -1,12 +1,4 @@
 #pragma once
-#include <ctime>
-#include <iostream> 
-#include <string>
-
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Window.hpp>
-
 class HitboxComponent
 {
 private:

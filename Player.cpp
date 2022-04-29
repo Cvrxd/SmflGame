@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Player.h"
 
 //Initialasation functions
@@ -53,16 +54,25 @@ Player::~Player()
 
 //Functions
 
+void Player::updateAttack(const float& dt)
+{
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		this->isAttacking = true;
+	}
+	if (this->isAttacking)
+	{
+		if (this->animationComponent->play("ATTACK", dt, true))
+			this->isAttacking = false;
+	}
+}
+
 void Player::updateRegularKeyboard(const float& dt)
 {
 	//Regular keyboardupdate
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F))
 	{
 		this->animationComponent->play("CAST_SPELL", dt, true);
-	}
-	else if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-	{
-		this->animationComponent->play("ATTACK", dt, true);
 	}
 	else if (this->movementComponent->getState(IDLE))
 	{
@@ -93,9 +103,8 @@ void Player::updateRegularKeyboard(const float& dt)
 void Player::update(const float& dt)
 {
 	this->movementComponent->update(dt);
-
+	this->updateAttack(dt);
 	this->updateRegularKeyboard(dt);
-
 	this->hitboxComponent->update();	
 }
 

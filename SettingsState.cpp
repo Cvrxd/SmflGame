@@ -1,9 +1,23 @@
+#include "stdafx.h"
 #include "SettingsState.h"
 
 //Initialisation functions
 
 void SettingsState::initVariables()
 {
+	this->videoModes = std::move(sf::VideoMode::getFullscreenModes());
+}
+
+void SettingsState::initText()
+{
+	this->optionsText.setFont(this->font);
+	this->optionsText.setPosition(sf::Vector2f(100.f, 250.f)); 
+	this->optionsText.setCharacterSize(30);
+	this->optionsText.setFillColor(sf::Color(255, 255, 255, 200));
+
+	this->optionsText.setString(
+		"Resolution \n\nFullscreen \n\nVsync \n\nAntializating"
+	);
 }
 
 void SettingsState::initBackground()
@@ -45,16 +59,32 @@ void SettingsState::initFonts()
 }
 
 //buttons init
-void SettingsState::initButtons()
+void SettingsState::initGUI()
 {
-	this->buttons["EXIT_STATE"] = new GUI::Button(100.f, 550.f, 180.f, 75.f,
-		&this->font, "Quit", 70,
+	this->buttons["EXIT_STATE"] = new GUI::Button(815.f, 850.f, 180.f, 75.f,
+		&this->font, "Quit", 50,
 		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
 		sf::Color(100, 100, 100, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
 	);
 
-}
+	this->buttons["APPLY"] = new GUI::Button(800.f, 700.f, 180.f, 75.f,
+		&this->font, "Apply", 50,
+		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
+		sf::Color(100, 100, 100, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
+	);
 
+	std::vector<std::string> modes_str;
+
+	modes_str.reserve(this->videoModes.size());
+
+	for (auto& el : this->videoModes)
+	{
+		modes_str.push_back(std::to_string(el.width) + " x " + std::to_string(el.height));
+	}
+
+	std::string text_list[] = { "1920 x 1080", "800 x 600", "640 x 480" };
+	this->dropDownLists["RESOLUTION"] =  new GUI::DropDownList(800, 450, 200, 50, font, modes_str.data(), modes_str.size(), 0);
+}
 
 SettingsState::SettingsState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states)
 	: State(window, supportedKeys, states)
@@ -63,7 +93,8 @@ SettingsState::SettingsState(sf::RenderWindow* window, std::map<std::string, int
 	this->initBackground();
 	this->initFonts();	  //init fonts 
 	this->initKeybinds(); //init key binds from ini
-	this->initButtons();  //init buttons 
+	this->initGUI();  //init gui
+	this->initText();
 }
 
 SettingsState::~SettingsState()
@@ -72,6 +103,11 @@ SettingsState::~SettingsState()
 	{
 		delete it->second;
 	} 
+	
+	for (auto it = this->dropDownLists.begin(); it != dropDownLists.end(); ++it)
+	{
+		delete it->second;
+	}
 }
 
 //Accessors
@@ -82,12 +118,25 @@ void SettingsState::updateInput(const float& dt)
 
 }
 
-void SettingsState::updateButtons()
+void SettingsState::updateGUI(const float& dt)
 {
 	//updates all buttons
 	for (auto& el : this->buttons)
 	{
 		el.second->update(this->mousPosView);
+	}
+
+	//update drop down list
+	for (auto& el : this->dropDownLists)
+	{
+		el.second->update(this->mousPosView, dt);
+	} 
+
+	//Apply selected changes
+	if (this->buttons["APPLY"]->isPressed())
+	{
+		//Test
+		this->window->create(this->videoModes[this->dropDownLists["RESOLUTION"]->getActiveBoxId()], "test", sf::Style::Default);
 	}
 
 	//Quit state
@@ -101,13 +150,20 @@ void SettingsState::update(const float& dt)
 {
 	this->updateInput(dt);
 	this->updateMousePosition();
-	this->updateButtons();
+	this->updateGUI(dt);
 }
 
 //render
-void SettingsState::renderButtons(sf::RenderTarget& target)
+void SettingsState::renderGUI(sf::RenderTarget& target)
 {
+	//render buttons
 	for (auto& el : this->buttons)
+	{
+		el.second->render(target);
+	}
+
+	//render drop down list
+	for (auto& el : this->dropDownLists)
 	{
 		el.second->render(target);
 	}
@@ -121,8 +177,9 @@ void SettingsState::render(sf::RenderTarget* target)
 	}
 
 	target->draw(this->background);
+	target->draw(this->optionsText);
 
-	this->renderButtons(*target);
+	this->renderGUI(*target);
 
 	//REMOVE LATER JUST DEBUG!!!
 	/*sf::Text mouseText;

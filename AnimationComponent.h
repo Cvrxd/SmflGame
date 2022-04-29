@@ -1,10 +1,4 @@
 #pragma once
-#include <map>
-#include <string>
-
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Window.hpp>
 
 class AnimationComponent
 {
@@ -23,6 +17,7 @@ private:
 		float timer;
 		int width;
 		int height;
+
 		bool done;
 
 		sf::IntRect startRect;
@@ -37,6 +32,7 @@ private:
 			:sprite(sprite), textureSheet(textureSheet), width(width), height(height), animationTimer(animationTimer)
 		{
 			this->timer = 0.f;
+			this->done = false;
 
 			this->startRect = sf::IntRect(start_frame_x * width, start_frame_y * height, width, height);
 			this->currentRect = this->startRect;
@@ -139,7 +135,7 @@ public:
 	void addAnimation(const std::string key,
 		const int& start_frame_x, const int& start_frame_y,
 		const int& frame_x, const int& frame_y,
-		const int& width, const int& height, const float& animationTimer); // -__-
+		const int& width, const int& height, const float& animationTimer); 
 
 	const bool& play(const std::string& key, const float& dt, const bool priority = false);
 	const bool& play(const std::string& key, const float& dt, const float& modifier, const float& modifier_max, const bool priority = false);
