@@ -4,11 +4,12 @@
 ////========================Button==========================//
 
 // init funcs
-GUI::Button::Button(float x, float y, float width, float height, 
-	sf::Font* font, const std::string& text, unsigned charcter_size,
-	sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color,
-	sf::Color idleColor, sf::Color hoverColor, sf::Color activeColor, 
-	sf::Color outlineIdleColor, sf::Color outlineHoverColor, sf::Color outlineActiveColor, short unsigned id)
+GUI::Button::Button(const float& x, const float& y, const float& width, const float& height,
+	sf::Font* font, const std::string& text, const unsigned& charcter_size,
+	const sf::Color& text_idle_color, const sf::Color& text_hover_color, const sf::Color& text_active_color,
+	const sf::Color& idleColor, const sf::Color& hoverColor, const sf::Color& activeColor,
+	const sf::Color& outlineIdleColor, const sf::Color& outlineHoverColor, const sf::Color& outlineActiveColor,
+	short unsigned id)
 
 	: textIdleColor(text_idle_color), textHoverColor(text_hover_color), texActiveColor(text_active_color), id(id),
 	outlineActiveColor(outlineActiveColor), outlineHoverColor(outlineHoverColor), outlineIdleColor(outlineIdleColor),
@@ -46,13 +47,13 @@ const bool GUI::Button::isPressed() const
 		return false;
 }
 
-const std::string GUI::Button::getText() const
+std::string GUI::Button::getText()
 {
 	return this->text.getString();
 }
 
 //Seters
-void GUI::Button::setText(const std::string& text)
+void GUI::Button::setText(std::string text)
 {
 	this->text.setString(text);
 }
@@ -162,7 +163,7 @@ const unsigned short& GUI::DropDownList::getActiveBoxId() const
 	return this->activeBox->getId();
 }
 
-const bool& GUI::DropDownList::getKeyTime()
+const bool GUI::DropDownList::getKeyTime()
 {
 	if (this->keyTime >= this->keyTimeMax)
 	{

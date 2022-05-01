@@ -1,4 +1,4 @@
-#pragma once
+
 
 //Core
 #include<algorithm>

@@ -1,6 +1,8 @@
 #pragma once
 #include "Entity.h"
 
+class Entity;
+
 class Player : public Entity
 {
 private:
@@ -14,7 +16,7 @@ private:
 	void addAnimations();
 	void initComponents(sf::Texture& texture_sheet);
 public:
-	Player(float x, float y, sf::Texture& texture_sheet);
+	Player(const float& x, const float& y, sf::Texture& texture_sheet);
 	virtual ~Player();
 
 	//Functions

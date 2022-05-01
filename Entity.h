@@ -3,6 +3,10 @@
 #include"MovementComponent.h"
 #include"AnimationComponent.h"
 
+class HitboxComponent;
+class MovementComponent;
+class AnimationComponent;
+
 class Entity
 {
 private:
@@ -23,12 +27,12 @@ public:
 	//component functions
 	void setTexture(sf::Texture& texture);
 	void createHitboxComponent(sf::Sprite& sprite, const float& offset_x, const float& offset_y, const float& width, const float& height);
-	void createMovementComponent(const float maxVelocity, float acceleration, float deceleration);
+	void createMovementComponent(const float& maxVelocity, const float& acceleration, const float& deceleration);
 	virtual void createAnimationComponent(sf::Texture& texture_sheet);
 
 	// Functions
-	virtual void setPosition(const float x, const float y);
-	virtual void move(const float x, const float y, const float& dt);
+	virtual void setPosition(const float& x, const float& y);
+	virtual void move(const float& x, const float& y, const float& dt);
 
 	//update
 	virtual void update(const float& dt);

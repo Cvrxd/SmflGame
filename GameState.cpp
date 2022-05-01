@@ -2,8 +2,7 @@
 #include "GameState.h"
 
 // Initialisation
-//
-// Keybinds init from ini
+
 void GameState::initKeybinds()
 {
 	std::ifstream ifs("Configs/gamestate_keybinds.ini");
@@ -30,7 +29,6 @@ void GameState::initFonts()
 	}
 }
 
-//Textures initialisation
 void GameState::initTextures()
 {
 	if (!this->textures["PLAYER_SHEET"].loadFromFile("Textures/characters/player/test_sheet.png"))
@@ -48,25 +46,32 @@ void GameState::initPauseMenu()
 	this->pauseMenu->addButton("QUIT", 600.f, 40.f,"Quit");
 }
 
-//Init player 
 void GameState::initPlayers()
 {
 	this->player = new Player(0, 0, this->textures["PLAYER_SHEET"]);
 }
 
-GameState::GameState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states)
-	: State(window, supportedKeys, states)
+void GameState::initTileMap()
+{
+	this->tileMap = new TileMap(this->stateData->gridSize, 10, 10);
+}
+
+GameState::GameState(StateData* state_data)
+	: State(state_data)
 {
 	this->initFonts();
 	this->initKeybinds();
 	this->initTextures();
 	this->initPauseMenu();
 	this->initPlayers();
+	this->initTileMap();
 }
 
 GameState::~GameState()
 {
+	delete this->pauseMenu;
 	delete player;
+	delete tileMap;
 }
 
 // Funtions
@@ -118,7 +123,6 @@ void GameState::updateInput(const float& dt)
 		{
 			this->unpausedState();
 		}
-
 	}
 }
 
@@ -148,6 +152,9 @@ void GameState::render(sf::RenderTarget* target)
 	{
 		target = this->window;
 	}
+
+	this->tileMap->render(*target);
+
 	this->player->render(*target);
 
 	if (this->paused) //Pause menu render

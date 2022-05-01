@@ -86,8 +86,8 @@ void SettingsState::initGUI()
 	this->dropDownLists["RESOLUTION"] =  new GUI::DropDownList(800, 450, 200, 50, font, modes_str.data(), modes_str.size(), 0);
 }
 
-SettingsState::SettingsState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states)
-	: State(window, supportedKeys, states)
+SettingsState::SettingsState(StateData* state_data)
+	: State(state_data)
 {
 	this->initVariables();
 	this->initBackground();
@@ -136,7 +136,9 @@ void SettingsState::updateGUI(const float& dt)
 	if (this->buttons["APPLY"]->isPressed())
 	{
 		//Test
-		this->window->create(this->videoModes[this->dropDownLists["RESOLUTION"]->getActiveBoxId()], "test", sf::Style::Default);
+		this->stateData->gfxSettings->resolution = this->videoModes[this->dropDownLists["RESOLUTION"]->getActiveBoxId()];
+
+		this->window->create(this->stateData->gfxSettings->resolution, this->stateData->gfxSettings->title, sf::Style::Default);
 	}
 
 	//Quit state

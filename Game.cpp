@@ -6,47 +6,30 @@
 void Game::initVariables()
 {
 	this->window = NULL;
-	this->fullscreen = false;
 	this->dt = 0.f;
+	this->gridSize = 100.f;
+}
+
+void Game::initGraphicsSettings()
+{
+	this->gfxSettings.loadFromFile("Configs/graphics.ini");
 }
 
 void Game::initWnodow()
 {
-	std::ifstream ifs("Configs/window.ini");
-	this->videoModes = sf::VideoMode::getFullscreenModes();
-
-	std::string title = "None";
-	sf::VideoMode window_bounds = sf::VideoMode::getDesktopMode();
-	bool fullscreen = false;
-	unsigned framerate_limit = 120;
-	bool vertical_sync_enabled = false;
-	unsigned antialiasing_level = 0;
-
-	if (ifs.is_open())
+	if (this->gfxSettings.fullscreen)
 	{
-		std::getline(ifs, title);
-		ifs >> window_bounds.width >> window_bounds.height;
-		ifs >> fullscreen;
-		ifs >> framerate_limit;
-		ifs >> vertical_sync_enabled;
-		ifs >> antialiasing_level;
-	}
-	ifs.close();
-	
-	this->fullscreen = fullscreen;
-	this->windowSettings.antialiasingLevel = antialiasing_level;
-
-	if (this->fullscreen)
-	{
-		this->window = new sf::RenderWindow(window_bounds, title, sf::Style::Fullscreen, windowSettings);
+		this->window = new sf::RenderWindow(this->gfxSettings.resolution, this->gfxSettings.title,
+			sf::Style::Fullscreen, this->gfxSettings.contextSettings);
 	}
 	else
 	{
-		this->window = new sf::RenderWindow(window_bounds, title, sf::Style::Titlebar | sf::Style::Close, windowSettings);
+		this->window = new sf::RenderWindow(this->gfxSettings.resolution, this->gfxSettings.title, 
+			sf::Style::Titlebar | sf::Style::Close, this->gfxSettings.contextSettings);
 	}
 	
-	this->window->setFramerateLimit(framerate_limit);
-	this->window->setVerticalSyncEnabled(vertical_sync_enabled);
+	this->window->setFramerateLimit(this->gfxSettings.framerateLimit);
+	this->window->setVerticalSyncEnabled(this->gfxSettings.vertucalSync);
 }
 
 void Game::initKeys()
@@ -73,15 +56,27 @@ void Game::initKeys()
 	}
 }
 
+void Game::initStateData()
+{
+	this->stateData.window = this->window;
+	this->stateData.states = &this->states;
+	this->stateData.supportedKeys = &this->supportedKeys;
+	this->stateData.gfxSettings = &this->gfxSettings;
+	this->stateData.gridSize = this->gridSize;
+}
+
 void Game::initStates()
 {
-	this->states.push(new MainMenuState(this->window, &this->supportedKeys, &this->states));
+	this->states.push(new MainMenuState(&this->stateData));
 }
 
 Game::Game()
 {
+	this->initVariables();
+	this->initGraphicsSettings();
 	this->initWnodow();
 	this->initKeys();
+	this->initStateData();
 	this->initStates();
 }
 
@@ -169,4 +164,3 @@ void Game::run()
 		this->render();
 	}
 }
-//

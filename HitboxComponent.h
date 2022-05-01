@@ -1,4 +1,6 @@
 #pragma once
+//#include"stdafx.h"
+
 class HitboxComponent
 {
 private:
@@ -15,7 +17,7 @@ public:
 	~HitboxComponent();
 
 	//Fucntions
-	bool checkIntersect(const sf::FloatRect& frect);
+	const bool checkIntersect(const sf::FloatRect& frect);
 
 	void update();
 	void render(sf::RenderTarget& target);

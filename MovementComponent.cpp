@@ -2,7 +2,7 @@
 #include "MovementComponent.h"
 
 //Initialisation
-MovementComponent::MovementComponent(sf::Sprite& sprite, float maxVelocity, float acceleration, float deceleration)
+MovementComponent::MovementComponent(sf::Sprite& sprite, const float& maxVelocity, const float& acceleration, const float& deceleration)
 	:sprite(sprite), maxVelocity(maxVelocity), acceleration(acceleration), deceleration(deceleration)
 {
 	
@@ -46,11 +46,13 @@ const bool MovementComponent::getState(const short unsigned state) const
 	case MOVE_DOWN:
 		return this->velocity.y > 0.f;
 		break;
+	default:
+		break;
 	}
 }
 
 //Functions
-void MovementComponent::move(const float dir_x, const float dir_y, const float& dt)
+void MovementComponent::move(const float& dir_x, const float& dir_y, const float& dt)
 {
 	//Accelerating sprite untill it reaches his max velocity
 

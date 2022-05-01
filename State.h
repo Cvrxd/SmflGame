@@ -1,15 +1,40 @@
 #pragma once
+#include"GraphicsSettings.h"
 #include"Player.h"
+
+struct GraphicsSettings;
+class Player;
+class State;
+
+struct StateData
+{
+	StateData()
+	{
+
+	}
+
+	//Variables
+	float gridSize;
+	GraphicsSettings* gfxSettings;
+	sf::RenderWindow* window;
+	std::map<std::string, int>* supportedKeys;
+	std::stack<State*>* states;
+};
 
 class State
 {
 protected:
 	//Core variables
 	std::stack<State*>* states;
-
+	
+	StateData* stateData;
+	
 	sf::RenderWindow* window = nullptr;
 	std::map<std::string, int>* supportedKeys;
 	std::map<std::string, int> keybinds;
+
+	float gridSize;
+
 	bool quit;
 	bool paused;
 
@@ -19,7 +44,8 @@ protected:
 	sf::Vector2i mousePosScreen;
 	sf::Vector2i mousePosWindow;
 	sf::Vector2f mousPosView; 
-	
+	sf::Vector2u mousePosGrid;
+
 	//Resourses
 	std::map<std::string, sf::Texture> textures;
 
@@ -27,7 +53,7 @@ protected:
 	virtual void initKeybinds() = 0;
 
 public:
-	State(sf::RenderWindow* window, std::map<std::string,int>* supportedKeys, std::stack<State*>* states);
+	State(StateData* state_data);
 	virtual ~State();
 
 	//Functions
@@ -36,7 +62,7 @@ public:
 	
 	//Accessors
 	const bool& getQuit() const;
-	const bool& getKeyTime();
+	const bool getKeyTime();
  
 	// end state
 	virtual void endState();

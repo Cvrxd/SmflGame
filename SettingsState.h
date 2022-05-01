@@ -2,6 +2,10 @@
 #include "State.h"
 #include "Gui.h"
 
+class State;
+class Button;
+class DropDownList;
+
 class SettingsState : public State
 {
 private:
@@ -15,6 +19,7 @@ private:
 	std::map<std::string, GUI::DropDownList*> dropDownLists;
 
 	std::vector<sf::VideoMode> videoModes;
+	
 
 	//Functions
 	void initVariables();
@@ -25,7 +30,7 @@ private:
 	void initKeybinds() override;
 
 public:
-	SettingsState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states);
+	SettingsState(StateData* state_data);
 	virtual ~SettingsState();
 
 	//Accessors

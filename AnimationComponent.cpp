@@ -7,6 +7,7 @@ AnimationComponent::AnimationComponent(sf::Sprite& sprite, sf::Texture& textureS
 
 }
 
+
 AnimationComponent::~AnimationComponent()
 {
 	for (auto& el : this->animations)

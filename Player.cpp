@@ -40,7 +40,7 @@ void Player::addAnimations()
 	this->animationComponent->addAnimation("CAST_SPELL", 0, 3, 8, 3, 50, 37, 10.f);
 }
 
-Player::Player(float x, float y, sf::Texture& texture_sheet)
+Player::Player(const float& x, const float& y, sf::Texture& texture_sheet)
 {
 	this->sprite.setScale(3.f, 3.f);
 	this->setPosition(x, y);

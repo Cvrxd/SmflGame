@@ -22,14 +22,14 @@
     <Filter Include="Components">
       <UniqueIdentifier>{e9ec450d-fec8-4cca-b6d1-0dccf8545124}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tiles">
-      <UniqueIdentifier>{78802346-cdaa-4b0d-9c83-a6eec50f8808}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GUI">
       <UniqueIdentifier>{a938a803-a69c-47b7-983c-0efcfd5bbd76}</UniqueIdentifier>
     </Filter>
     <Filter Include="Map">
       <UniqueIdentifier>{718cdfe3-ba47-4bc5-9a82-e29cec541c5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map\Tiles">
+      <UniqueIdentifier>{78802346-cdaa-4b0d-9c83-a6eec50f8808}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -70,7 +70,7 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Tile.cpp">
-      <Filter>Tiles</Filter>
+      <Filter>Map\Tiles</Filter>
     </ClCompile>
     <ClCompile Include="PauseMenu.cpp">
       <Filter>GUI</Filter>
@@ -86,6 +86,9 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Файлы заголовков</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsSettings.cpp">
+      <Filter>Файлы ресурсов</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -120,7 +123,7 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Tile.h">
-      <Filter>Tiles</Filter>
+      <Filter>Map\Tiles</Filter>
     </ClInclude>
     <ClInclude Include="PauseMenu.h">
       <Filter>GUI</Filter>
@@ -136,6 +139,9 @@
     </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsSettings.h">
+      <Filter>Файлы ресурсов</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

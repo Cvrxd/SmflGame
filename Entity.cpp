@@ -31,7 +31,7 @@ void Entity::createHitboxComponent(sf::Sprite& sprite, const float& offset_x, co
 	this->hitboxComponent = new HitboxComponent(this->sprite, offset_x, offset_y, width, height);
 }
 
-void Entity::createMovementComponent(const float maxVelocity, const float acceleration, const float deceleration)
+void Entity::createMovementComponent(const float& maxVelocity, const float& acceleration, const float& deceleration)
 {
 	this->movementComponent = new MovementComponent(this->sprite, maxVelocity, acceleration, deceleration);
 }
@@ -42,12 +42,12 @@ void Entity::createAnimationComponent(sf::Texture& texture_sheet)
 }
 
 // Functios
-void Entity::setPosition(const float x, const float y)
+void Entity::setPosition(const float& x, const float& y)
 {
 	this->sprite.setPosition(x, y);
 }
 
-void Entity::move(const float dir_x, const float dir_y, const float& dt)
+void Entity::move(const float& dir_x, const float& dir_y, const float& dt)
 {
 	if (this->movementComponent)
 	{
