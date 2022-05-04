@@ -6,18 +6,28 @@
 class State;
 class PauseMenu;
 class TileMap;
+class sf::View;
+class sf::Font;
+class sf::RenderTexture;
 
 class GameState : public State
 {
 private:
 	//variables 
+	sf::View view;
 	sf::Font font;
+
+	sf::RenderTexture renderTexture;
+	sf::Sprite renderSprite;
+
 	PauseMenu* pauseMenu;
 
 	Player* player;
 	TileMap* tileMap;
 
 	//Functions
+	void initRenderTextures();
+	void initView();
 	void initFonts();
 	void initKeybinds() override;
 	void initTextures();
@@ -29,6 +39,7 @@ public:
 	virtual ~GameState() override;
 
 	//functions
+	void updateView(const float& dt);
 	void updatePauseMenuButtons();
 	void updatePlayerInput(const float& dt);
 	void updateInput(const float& dt) override;

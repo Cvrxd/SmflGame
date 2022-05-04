@@ -1,6 +1,6 @@
 #pragma once
 
-enum TileTypes { DEFAULT = 0 };
+enum TileTypes { DEFAULT = 0, DAMAGING };
 
 class Tile
 {
@@ -17,7 +17,7 @@ protected:
 	unsigned y;
 	
 public:
-	Tile(const float& x, const float& y, const float& gridSizef, const sf::Texture& texture, const sf::IntRect& texture_rect, 
+	Tile(const unsigned& x, const unsigned& y, const float& gridSizef, const sf::Texture& texture, const sf::IntRect& texture_rect,
 		const bool& collision = false, const short& type = TileTypes::DEFAULT);
 
 	virtual ~Tile();

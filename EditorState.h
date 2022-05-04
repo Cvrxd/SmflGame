@@ -14,21 +14,27 @@ class EditorState : public State
 {
 private:
 	//Variables 
+	sf::View view;
+	float cameraSpeed;
+
 	sf::Font font;
 	sf::Text cursorText;
 
 	sf::RectangleShape sidebar;
 	sf::RectangleShape selectorRect;
 	sf::IntRect textureRect;
-
-	PauseMenu* pauseMenu;
-	TileMap* tileMap;
 	GUI::TextureSelector* textureSelector;
 
+	PauseMenu* pauseMenu;
 	std::map<std::string, GUI::Button*> buttons;
+
+	TileMap* tileMap;
+	bool collision;
+	short tileType;
 
 	//Functions
 	void initVariables();
+	void initView();
 	void initBackground();
 	void initFonts();
 	void initTexts();
@@ -43,6 +49,7 @@ public:
 	virtual ~EditorState() override;
 
 	//functions
+	void updateView(const float& dt);
 	void updateInput(const float& dt) override;
 	void updateEditorInput(const float& dt);
 	void updateButtons();

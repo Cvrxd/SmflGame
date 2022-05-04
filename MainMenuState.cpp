@@ -105,7 +105,7 @@ void MainMenuState::updateButtons()
 	//updates all buttons
 	for (auto& el : this->buttons)
 	{
-		el.second->update(this->mousPosView);
+		el.second->update(this->mousePosWindow);
 	}
 
 	//New game start

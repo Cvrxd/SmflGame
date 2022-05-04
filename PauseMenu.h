@@ -26,9 +26,9 @@ public:
 	std::map<std::string, GUI::Button*>& getButtons();
 
 	//Functions
-	const bool& isButtonPressed(const std::string& key);
+	const bool isButtonPressed(const std::string& key);
 	void addButton(const std::string& key, const float& y, const float& modifier_x, const std::string& text);
-	void update(const sf::Vector2f& mousePosition);
+	void update(const sf::Vector2i& mousePosition);
 	void render(sf::RenderTarget& target);
 };
 

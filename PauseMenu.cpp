@@ -34,7 +34,7 @@ std::map<std::string, GUI::Button*>& PauseMenu::getButtons()
 
 //Functions
 
-const bool& PauseMenu::isButtonPressed(const std::string& key)
+const bool PauseMenu::isButtonPressed(const std::string& key)
 {
 	return this->buttons[key]->isPressed();
 }
@@ -52,7 +52,7 @@ void PauseMenu::addButton(const std::string& key, const float& y, const float& m
 	);
 }
 
-void PauseMenu::update(const sf::Vector2f& mousePosition)
+void PauseMenu::update(const sf::Vector2i& mousePosition)
 {
 	for (auto& el : this->buttons)
 	{

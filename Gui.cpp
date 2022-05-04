@@ -66,13 +66,13 @@ void GUI::Button::setId(const short unsigned& id)
 //functions
 
 // update bolleans for hoverand pressed
-void GUI::Button::update(const sf::Vector2f& mousePosition)
+void GUI::Button::update(const sf::Vector2i& mousePosition)
 {
 	//Idle
 	this->buttonState = BTN_IDLE;
 
 	//Hover
-	if (this->shape.getGlobalBounds().contains(mousePosition))
+	if (this->shape.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosition)))
 	{
 		this->buttonState = BTN_HOVER;
 
@@ -116,7 +116,6 @@ void GUI::Button::render(sf::RenderTarget& target)
 	target.draw(this->shape);
 	target.draw(this->text);
 }
-
 
 
 //========================DropDownBox==========================//
@@ -186,7 +185,7 @@ void GUI::DropDownList::updateKeyTime(const float& dt)
 	}
 }
 
-void GUI::DropDownList::update(const sf::Vector2f& mousePosition, const float& dt)
+void GUI::DropDownList::update(const sf::Vector2i& mousePosition, const float& dt)
 {
 	this->updateKeyTime(dt);
 
@@ -249,11 +248,11 @@ void GUI::TextureSelector::initSpriteSheet(const float& x, const float& y, const
 
 	if (this->sheet.getGlobalBounds().width > this->bounds.getGlobalBounds().width)
 	{
-		this->sheet.setTextureRect(sf::IntRect(0, 0, this->bounds.getGlobalBounds().width, this->sheet.getGlobalBounds().height));
+		this->sheet.setTextureRect(sf::IntRect(0, 0, int(this->bounds.getGlobalBounds().width), int(this->sheet.getGlobalBounds().height)));
 	}
 	if (this->sheet.getGlobalBounds().height > this->bounds.getGlobalBounds().height)
 	{
-		this->sheet.setTextureRect(sf::IntRect(0, 0, this->bounds.getGlobalBounds().height, this->sheet.getGlobalBounds().width));
+		this->sheet.setTextureRect(sf::IntRect(0, 0, int(this->bounds.getGlobalBounds().height), int(this->sheet.getGlobalBounds().width)));
 	}
 }
 
@@ -329,7 +328,7 @@ void GUI::TextureSelector::update(const sf::Vector2i& mousePosWIndow,const float
 {
 	this->updateKeyTime(dt);
 
-	this->hideButton->update(static_cast<sf::Vector2f>(mousePosWIndow));
+	this->hideButton->update(mousePosWIndow);
 
 	if (this->hideButton->isPressed() && this->getKeyTime())
 	{

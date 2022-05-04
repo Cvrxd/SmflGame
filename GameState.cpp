@@ -21,11 +21,25 @@ void GameState::initKeybinds()
 	ifs.close();
 }
 
+void GameState::initRenderTextures()
+{
+	this->renderTexture.create(this->stateData->gfxSettings->resolution.width, this->stateData->gfxSettings->resolution.height);
+
+	this->renderSprite.setTexture(this->renderTexture.getTexture());
+	this->renderSprite.setTextureRect(sf::IntRect(0, 0, this->stateData->gfxSettings->resolution.width, this->stateData->gfxSettings->resolution.height));
+}
+
+void GameState::initView()
+{
+	this->view.setSize(sf::Vector2f(this->stateData->gfxSettings->resolution.width, this->stateData->gfxSettings->resolution.height));
+	this->view.setCenter(sf::Vector2f(this->stateData->gfxSettings->resolution.width / 2.f, this->stateData->gfxSettings->resolution.height / 2.f));
+}
+
 void GameState::initFonts()
 {
 	if (!this->font.loadFromFile("Fonts/Greybeard.ttf"))
 	{
-		throw("ERROR::MAINMENUSTATE::COULD NOT LOAD FONT");
+		throw("ERROR::GAMESTATE::COULD NOT LOAD FONT");
 	}
 }
 
@@ -33,8 +47,8 @@ void GameState::initTextures()
 {
 	if (!this->textures["PLAYER_SHEET"].loadFromFile("Textures/characters/player/test_sheet.png"))
 	{
-		throw("Could not load player texture");
-		std::cout << "Fail";
+		throw("ERROR::GAMESTATE::COULD NOT LOAD PLAYER TEEXTURE");
+	
 	}
 }
 
@@ -54,13 +68,15 @@ void GameState::initPlayers()
 void GameState::initTileMap()
 {
 	this->tileMap = new TileMap(this->stateData->gridSize, 10, 10, "Textures/tiles/test.png");
-	
-	//this->tileMap->loadFromFile("map");
+	this->tileMap->loadFromFile("map/game_map.txt");
 }
 
+//Constructor
 GameState::GameState(StateData* state_data)
 	: State(state_data)
 {
+	this->initRenderTextures();
+	this->initView();
 	this->initFonts();
 	this->initKeybinds();
 	this->initTextures();
@@ -77,6 +93,10 @@ GameState::~GameState()
 }
 
 // Funtions
+void GameState::updateView(const float& dt)
+{
+	this->view.setCenter(this->player->getPosition());
+}
 
 //Pause menu update
 void GameState::updatePauseMenuButtons()
@@ -128,26 +148,25 @@ void GameState::updateInput(const float& dt)
 	}
 }
 
-// update GameState
 void GameState::update(const float& dt)
 {
-	this->updateMousePosition();
+	this->updateMousePosition(&this->view);
 	this->updateKeyTime(dt);
 	this->updateInput(dt);
 	
 	if (!this->paused) //Unpaused
 	{
+		this->updateView(dt);
 		this->updatePlayerInput(dt);
 		this->player->update(dt);
 	} 
 	else //Paused
 	{
-		this->pauseMenu->update(this->mousPosView);
+		this->pauseMenu->update(this->mousePosWindow);
 		this->updatePauseMenuButtons();
 	}
 }
 
-//render
 void GameState::render(sf::RenderTarget* target)
 {
 	if (!target)
@@ -155,12 +174,15 @@ void GameState::render(sf::RenderTarget* target)
 		target = this->window;
 	}
 
+	target->setView(this->view);
 	this->tileMap->render(*target);
-
 	this->player->render(*target);
 
 	if (this->paused) //Pause menu render
 	{
+		target->setView(this->window->getDefaultView());
 		this->pauseMenu->render(*target);
 	}
+
+
 }

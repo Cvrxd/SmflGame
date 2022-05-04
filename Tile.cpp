@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "Tile.h"
 
-Tile::Tile(const float& x, const float& y, const float& gridSizef, const sf::Texture& texture, const sf::IntRect& texture_rect, 
+Tile::Tile(const unsigned& x, const unsigned& y, const float& gridSizef, const sf::Texture& texture, const sf::IntRect& texture_rect, 
 	const bool& collision, const short& type)
 	: collision(collision), type(type), x(x), y(y)
 {
 	this->shape.setSize(sf::Vector2f(gridSizef, gridSizef));
 	this->shape.setFillColor(sf::Color::White);
-	this->shape.setPosition(x, y);
+	this->shape.setPosition(static_cast<float>(x) * gridSizef, static_cast<float>(y) * gridSizef);
 	this->shape.setTexture(&texture);
 	this->shape.setTextureRect(texture_rect);
 
@@ -29,16 +29,6 @@ const std::string Tile::getAsString() const
 	return ss.str();
 }
 
-void Tile::setX(const unsigned& x)
-{
-	this->x = x;
-}
-
-void Tile::setY(const unsigned& y)
-{
-	this->y = y;
-}
-
 const unsigned& Tile::getX()
 {
 	return this->x;
@@ -48,8 +38,6 @@ const unsigned& Tile::getY()
 {
 	return this->y;
 }
-
-
 
 //Functions
 void Tile::update()

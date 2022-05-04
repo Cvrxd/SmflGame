@@ -123,13 +123,13 @@ void SettingsState::updateGUI(const float& dt)
 	//updates all buttons
 	for (auto& el : this->buttons)
 	{
-		el.second->update(this->mousPosView);
+		el.second->update(this->mousePosWindow);
 	}
 
 	//update drop down list
 	for (auto& el : this->dropDownLists)
 	{
-		el.second->update(this->mousPosView, dt);
+		el.second->update(this->mousePosWindow, dt);
 	} 
 
 	//Apply selected changes

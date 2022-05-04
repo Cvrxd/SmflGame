@@ -10,8 +10,8 @@ private:
 	float gridSizeF;
 	unsigned gridSizeU;
 	std::string textureFile;
-
 	sf::Vector2u maxSize;
+
 	std::vector<std::vector<Tile>> map;
 
 	sf::Texture tileTextureSheet;
@@ -27,7 +27,7 @@ public:
 	const sf::Texture& getTileTextureSheet() const;
 
 	//Functions
-	void addTile(const unsigned& x, const unsigned& y, const sf::IntRect& texture_rect);
+	void addTile(const unsigned& x, const unsigned& y, const sf::IntRect& texture_rect, const bool& collision, const short& type);
 	void removeTile(const unsigned& x, const unsigned& y);
 
 	void saveToFile(const std::string& file);

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Entity.h"
+
 //Initialisation functions
 void Entity::initVariables()
 {
@@ -39,6 +40,12 @@ void Entity::createMovementComponent(const float& maxVelocity, const float& acce
 void Entity::createAnimationComponent(sf::Texture& texture_sheet)
 {
 	this->animationComponent = new AnimationComponent(this->sprite, texture_sheet);
+}
+
+//Accessors
+const sf::Vector2f& Entity::getPosition() const
+{
+	return this->sprite.getPosition();
 }
 
 // Functios

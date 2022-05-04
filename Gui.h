@@ -47,7 +47,7 @@ namespace GUI
 		void setId(const short unsigned& id);
 
 		//Functions
-		void update(const sf::Vector2f& mousePosition);
+		void update(const sf::Vector2i& mousePosition);
 		void render(sf::RenderTarget& target);
 
 	};
@@ -75,7 +75,7 @@ namespace GUI
 		//Functions
 		const bool getKeyTime();
 		void updateKeyTime(const float& dt);
-		void update(const sf::Vector2f& mousePosition, const float& dt);
+		void update(const sf::Vector2i& mousePosition, const float& dt);
 		void render(sf::RenderTarget& target);
 	};
 

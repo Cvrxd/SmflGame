@@ -15,10 +15,10 @@ TileMap::TileMap(const float& gridSize, const unsigned& width, const unsigned& h
 
 	this->map.reserve(static_cast<size_t>(this->maxSize.x));
 
-	for (size_t x = 0; x < this->maxSize.x; ++x)
+	for (size_t y = 0; y < this->maxSize.y; ++y)
 	{
 		this->map.push_back(std::vector<Tile>());
-		this->map[x].reserve(static_cast<size_t>(this->maxSize.y));
+		this->map[y].reserve(static_cast<size_t>(this->maxSize.y));
 	}
 
 	this->initTextureSheet();
@@ -35,11 +35,11 @@ const sf::Texture& TileMap::getTileTextureSheet() const
 }
 
 //Functions
-void TileMap::addTile(const unsigned& x, const unsigned& y, const sf::IntRect& texture_rect)
+void TileMap::addTile(const unsigned& x, const unsigned& y, const sf::IntRect& texture_rect, const bool& collision, const short& type)
 {
 	if (x < this->maxSize.x && x >= 0 && y < this->maxSize.y && y >= 0)
 	{
-		this->map[x].push_back(Tile(x * this->gridSizeF, y * this->gridSizeF, this->gridSizeF, this->tileTextureSheet, texture_rect));
+		this->map[y].push_back(Tile(x, y, this->gridSizeF, this->tileTextureSheet, texture_rect, collision, type));
 		
 		std::cout << "\nAdded  " << x << " " << y;
 	}
@@ -49,9 +49,9 @@ void TileMap::removeTile(const unsigned& x, const unsigned& y)
 {
 	if (x < this->maxSize.x && x >= 0 && y < this->maxSize.y && y >= 0)
 	{
-		if (!map[x].empty())
+		if (!map[y].empty())
 		{
-			map[x].pop_back();
+			map[y].pop_back();
 			std::cout << "\nDeleted " << x << " " << y;
 		}
 	}
@@ -84,8 +84,7 @@ void TileMap::saveToFile(const std::string& file_name)
 		{
 			for (auto& el : el_x)
 			{
-				ofile << el.getX() << " " << el.getY() << " " 
-					<< el.getAsString() << " "; //DONT SAVE LAST SPASE, FIX LATER !!!
+				ofile << el.getX() << " " << el.getY() << " " << el.getAsString() << " "; //DONT SAVE LAST SPASE, FIX LATER !!!
 			}
 		}
 	}
@@ -99,31 +98,50 @@ void TileMap::loadFromFile(const std::string& file_name)
 
 	if (ifile.is_open())
 	{
+		//Basics
 		sf::Vector2u size;
 		unsigned _gridSizeU;
 		std::string texture_file;
 
+		ifile >> size.x >> size.y >> _gridSizeU >> texture_file;
+
+		this->gridSizeF = static_cast<float>(_gridSizeU);
+		this->gridSizeU = _gridSizeU;
+		this->maxSize.x = size.x;
+		this->maxSize.y = size.y;
+		this->textureFile = texture_file;
+		//Basic
+		
+		this->map.clear();
+
+		//Tiles
 		unsigned x;
 		unsigned y;
 
-		unsigned trX = 0;
-		unsigned trY = 0;
+		int trX = 0;
+		int trY = 0;
 		bool collision = false;
 		short type = 0;
 
-		this->map.clear();
+		//===========
+		this->map.reserve(static_cast<size_t>(this->maxSize.x));
 
-		//Basics
-		ifile >> size.x >> size.y >> _gridSizeU >> texture_file;
+		for (size_t y = 0; y < this->maxSize.y; ++y)
+		{
+			this->map.push_back(std::vector<Tile>());
+			this->map[y].reserve(static_cast<size_t>(this->maxSize.y));
+		}
+
+		this->initTextureSheet();
+		//============
+
+		while (ifile >> x >> y >> trX >> trY >> collision >> type)
+		{
+			this->map[y].push_back(Tile(x, y, this->gridSizeF, this->tileTextureSheet, 
+				sf::IntRect(trX, trY, this->gridSizeU, this->gridSizeU), collision, type));
+		}
 
 		//Tiles
-		for (auto& el_x : this->map)
-		{
-			for (auto& el_y : el_x)
-			{
-				
-			}
-		}
 	}
 
 	ifile.close();
