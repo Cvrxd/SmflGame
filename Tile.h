@@ -1,4 +1,7 @@
 #pragma once
+
+enum TileTypes { DEFAULT = 0 };
+
 class Tile
 {
 private:
@@ -7,17 +10,25 @@ private:
 protected:
 	//Variables
 	sf::RectangleShape shape;
+	bool collision;
+	short type;
 
-	float x;
-	float y;
-	bool added;
-
+	unsigned x;
+	unsigned y;
+	
 public:
-	Tile(const float& x, const float& y, const float& gridSizef);
+	Tile(const float& x, const float& y, const float& gridSizef, const sf::Texture& texture, const sf::IntRect& texture_rect, 
+		const bool& collision = false, const short& type = TileTypes::DEFAULT);
+
 	virtual ~Tile();
 	
 	//Accessors
-	const sf::Vector2u& getCoordinates();
+	const std::string getAsString() const;
+
+	void setX(const unsigned& x);
+	void setY(const unsigned& y);
+	const unsigned& getX();
+	const unsigned& getY();
 
 	//Functions
 	void update();
