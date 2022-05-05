@@ -7,6 +7,7 @@ void TileMap::initTextureSheet()
 	this->tileTextureSheet.loadFromFile(this->textureFile);
 }
 
+//Constructor
 TileMap::TileMap(const float& gridSize, const unsigned& width, const unsigned& hight, const std::string& textureFile)
 	: gridSizeF(gridSize), gridSizeU(static_cast<unsigned>(gridSizeF)), textureFile(textureFile)
 {
@@ -22,6 +23,12 @@ TileMap::TileMap(const float& gridSize, const unsigned& width, const unsigned& h
 	}
 
 	this->initTextureSheet();
+
+	////Collision BOX for DEBUG////
+	this->collisionBox.setSize(sf::Vector2f(gridSize, gridSize));
+	this->collisionBox.setFillColor(sf::Color(255, 0, 0, 50));
+	this->collisionBox.setOutlineColor(sf::Color::Red);
+	this->collisionBox.setOutlineThickness(1.f);
 }
 
 TileMap::~TileMap()
@@ -147,17 +154,29 @@ void TileMap::loadFromFile(const std::string& file_name)
 	ifile.close();
 }
 
+void TileMap::updateCollision(Entity* entity)
+{
+
+}
+
 void TileMap::update()
 {
 }
 
-void TileMap::render(sf::RenderTarget& target)
+void TileMap::render(sf::RenderTarget& target, Entity* entity)
 {
 	for (auto& el_x : this->map)
 	{
 		for (auto& el_y : el_x)
 		{
 			el_y.render(target);
+			
+			//DEBUG
+			if (el_y.getCollision())
+			{
+				this->collisionBox.setPosition(el_y.getPositionF());
+				target.draw(this->collisionBox);
+			}
 		}
 	}
 }

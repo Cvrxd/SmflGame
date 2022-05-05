@@ -16,8 +16,7 @@ void Player::createAnimationComponent(sf::Texture& texture_sheet)
 void Player::initComponents(sf::Texture& texture_sheet)
 {
 	this->createHitboxComponent(this->sprite, 50.f, 50.f, 60.f, 60.f);
-	this->createMovementComponent(300.f, 15.f, 5.f);
-	
+	this->createMovementComponent(400.f, 20.f, 6.f);
 	this->createAnimationComponent(texture_sheet);
 
 	/*

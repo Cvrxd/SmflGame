@@ -58,6 +58,8 @@ void EditorState::initGUI()
 	this->textureSelector = new GUI::TextureSelector(
 		20.f, 20.f, 500.f, 500.f, this->stateData->gridSize, 
 		this->tileMap->getTileTextureSheet(), this->font);
+
+
 }
 
 void EditorState::initTileMap()

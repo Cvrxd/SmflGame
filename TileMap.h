@@ -1,6 +1,8 @@
 #pragma once
 #include "Tile.h"
+#include "Entity.h"
 
+class Entity;
 class Tile;
 
 class TileMap
@@ -9,12 +11,13 @@ private:
 	//Variavles
 	float gridSizeF;
 	unsigned gridSizeU;
-	std::string textureFile;
 	sf::Vector2u maxSize;
 
-	std::vector<std::vector<Tile>> map;
-
+	std::string textureFile;
 	sf::Texture tileTextureSheet;
+	
+	sf::RectangleShape collisionBox;
+	std::vector<std::vector<Tile>> map;
 
 	//Functions
 	void initTextureSheet();
@@ -26,14 +29,17 @@ public:
 	//Accessors
 	const sf::Texture& getTileTextureSheet() const;
 
-	//Functions
+	//Core Functions
 	void addTile(const unsigned& x, const unsigned& y, const sf::IntRect& texture_rect, const bool& collision, const short& type);
 	void removeTile(const unsigned& x, const unsigned& y);
 
 	void saveToFile(const std::string& file);
 	void loadFromFile(const std::string& file);
 
+	//Other Fucntions
+	void updateCollision(Entity* entity);
+	
 	void update();
-	void render(sf::RenderTarget& target);
+	void render(sf::RenderTarget& target, Entity* entity = NULL);
 };
 

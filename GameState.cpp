@@ -174,15 +174,20 @@ void GameState::render(sf::RenderTarget* target)
 		target = this->window;
 	}
 
-	target->setView(this->view);
-	this->tileMap->render(*target);
-	this->player->render(*target);
+	this->renderTexture.clear();
+	this->renderTexture.setView(this->view);
+
+	this->tileMap->render(this->renderTexture);
+	this->player->render(this->renderTexture);
 
 	if (this->paused) //Pause menu render
 	{
-		target->setView(this->window->getDefaultView());
-		this->pauseMenu->render(*target);
+		this->renderTexture.setView(this->renderTexture.getDefaultView());
+		this->pauseMenu->render(this->renderTexture);
 	}
 
-
+	//Render
+	this->renderTexture.display();
+	this->renderSprite.setTexture(this->renderTexture.getTexture());
+	target->draw(this->renderSprite);
 }

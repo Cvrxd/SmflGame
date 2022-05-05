@@ -24,9 +24,8 @@ public:
 	
 	//Accessors
 	const std::string getAsString() const;
-
-	void setX(const unsigned& x);
-	void setY(const unsigned& y);
+	const sf::Vector2f& getPositionF() const;
+	const bool& getCollision() const;
 	const unsigned& getX();
 	const unsigned& getY();
 
