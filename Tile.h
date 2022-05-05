@@ -25,8 +25,11 @@ public:
 	//Accessors
 	const std::string getAsString() const;
 	const sf::Vector2f& getPositionF() const;
+	const sf::FloatRect getGlobalBounds() const;
+
 	const bool& getCollision() const;
 	const bool inersects(const sf::FloatRect bounds) const;
+
 	const unsigned& getX();
 	const unsigned& getY();
 

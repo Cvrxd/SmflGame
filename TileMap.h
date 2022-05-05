@@ -11,7 +11,7 @@ private:
 	//Variavles
 	float gridSizeF;
 	unsigned gridSizeU;
-	sf::Vector2u maxSizeWorldGrid;
+	sf::Vector2i maxSizeWorldGrid;
 	sf::Vector2f maxSizeWorldF;
 
 	std::string textureFile;
@@ -30,7 +30,7 @@ private:
 	void initTextureSheet();
 
 public:
-	TileMap(const float& gridSize, const unsigned& width, const unsigned& hight, const std::string& textureFile);
+	TileMap(const float& gridSize, const int& width, const int& hight, const std::string& textureFile);
 	virtual ~TileMap();
 
 	//Accessors
@@ -44,7 +44,8 @@ public:
 	void loadFromFile(const std::string& file);
 
 	//Other Fucntions
-	void updateCollision(Entity* entity);
+	void clear();
+	void updateCollision(Entity* entity, const float& dt);
 	
 	void update();
 	void render(sf::RenderTarget& target, Entity* entity = NULL);

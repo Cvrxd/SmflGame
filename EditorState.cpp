@@ -14,7 +14,10 @@ void EditorState::initVariables()
 
 void EditorState::initView()
 {
-	this->view.setSize(sf::Vector2f(this->stateData->gfxSettings->resolution.width, this->stateData->gfxSettings->resolution.height));
+	this->view.setSize(sf::Vector2f(
+		static_cast<float>(this->stateData->gfxSettings->resolution.width),
+		static_cast<float>(this->stateData->gfxSettings->resolution.height)));
+
 	this->view.setCenter(this->stateData->gfxSettings->resolution.width / 2.f, this->stateData->gfxSettings->resolution.height / 2.f);
 }
 
@@ -56,7 +59,7 @@ void EditorState::initGUI()
 	this->selectorRect.setTextureRect(this->textureRect);
 
 	this->textureSelector = new GUI::TextureSelector(
-		20.f, 20.f, 500.f, 500.f, this->stateData->gridSize, 
+		20.f, 20.f, 500.f, 500.f, static_cast<unsigned int>(this->stateData->gridSize), 
 		this->tileMap->getTileTextureSheet(), this->font);
 
 
@@ -91,9 +94,10 @@ void EditorState::initPauseMenu()
 {
 	this->pauseMenu = new PauseMenu(*this->window, this->font);
 
-	this->pauseMenu->addButton("SAVE", 300.f, 40.f, "Save");
-	this->pauseMenu->addButton("LOAD", 450.f, 40.f, "Load");
-	this->pauseMenu->addButton("QUIT", 600.f, 40.f, "Quit");
+	this->pauseMenu->addButton("SAVE", 350.f, 40.f, "Save");
+	this->pauseMenu->addButton("LOAD", 470.f, 40.f, "Load");
+	this->pauseMenu->addButton("CLEAR", 590.f, 40.f, "Clear");
+	this->pauseMenu->addButton("QUIT", 710.f, 40.f, "Quit");
 }
 
 //Constructor
@@ -251,6 +255,12 @@ void EditorState::updatePauseMenuButtons()
 	else if (this->pauseMenu->isButtonPressed("LOAD") && this->getKeyTime())
 	{
 		this->tileMap->loadFromFile("map/game_map.txt");
+		this->paused = false;
+	}
+	else if (this->pauseMenu->isButtonPressed("CLEAR") && this->getKeyTime())
+	{
+		//this->tileMap->clear();
+
 		this->paused = false;
 	}
 }

@@ -17,7 +17,7 @@ HitboxComponent::HitboxComponent(sf::Sprite& sprite, const float& offset_x, cons
 
 	//Debug
 	this->hitbox.setFillColor(sf::Color::Transparent);
-	this->hitbox.setOutlineThickness(1.f);
+	this->hitbox.setOutlineThickness(-1.f);
 	this->hitbox.setOutlineColor(sf::Color::Green);
 }
 

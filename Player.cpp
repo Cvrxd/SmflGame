@@ -34,8 +34,9 @@ void Player::addAnimations()
 {
 	//Regular sprite
 	this->animationComponent->addAnimation("IDLE", 0, 0, 3, 0, 50, 40, 13.f);
-	this->animationComponent->addAnimation("MOVE", 1, 8, 4, 8, 50, 37, 8.f);
-	this->animationComponent->addAnimation("ATTACK", 0, 4, 8, 4, 50, 37, 7.f);
+	this->animationComponent->addAnimation("MOVE", 0, 1, 5, 1, 50, 37, 10.f);
+	this->animationComponent->addAnimation("ATTACK_FIRST", 0, 4, 8, 4, 50, 37, 7.f);
+	this->animationComponent->addAnimation("ATTACK_SECOND", 0, 5, 8, 5, 50, 37, 7.f);
 	this->animationComponent->addAnimation("CAST_SPELL", 0, 3, 8, 3, 50, 37, 10.f);
 }
 
@@ -52,7 +53,6 @@ Player::~Player()
 }
 
 //Functions
-
 void Player::updateAttack(const float& dt)
 {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -61,8 +61,11 @@ void Player::updateAttack(const float& dt)
 	}
 	if (this->isAttacking)
 	{
-		if (this->animationComponent->play("ATTACK", dt, true))
-			this->isAttacking = false;
+		if (this->animationComponent->play("ATTACK_FIRST", dt, true))
+		{
+			if(this->animationComponent->play("ATTACK_SECOND", dt, true))
+				this->isAttacking = false;
+		}
 	}
 }
 
@@ -71,7 +74,7 @@ void Player::updateRegularKeyboard(const float& dt)
 	//Regular keyboardupdate
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F))
 	{
-		this->animationComponent->play("CAST_SPELL", dt, true);
+		this->animationComponent->play("CAST_SPELL", dt);
 	}
 	else if (this->movementComponent->getState(IDLE))
 	{

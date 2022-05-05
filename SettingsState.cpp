@@ -73,6 +73,7 @@ void SettingsState::initGUI()
 		sf::Color(100, 100, 100, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
 	);
 
+	//Resolution list
 	std::vector<std::string> modes_str;
 
 	modes_str.reserve(this->videoModes.size());
@@ -83,8 +84,10 @@ void SettingsState::initGUI()
 	}
 
 	std::string text_list[] = { "1920 x 1080", "800 x 600", "640 x 480" };
-	this->dropDownLists["RESOLUTION"] =  new GUI::DropDownList(800, 450, 200, 50, font, modes_str.data(), 
+	this->dropDownLists["RESOLUTION"] =  new GUI::DropDownList(280, 225, 200, 50, font, modes_str.data(), 
 		static_cast<unsigned int>(modes_str.size()), 0);
+	//
+
 }
 
 SettingsState::SettingsState(StateData* state_data)

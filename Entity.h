@@ -34,6 +34,7 @@ public:
 	virtual const sf::Vector2f& getPosition() const;
 	virtual const sf::Vector2u getGridPosition(const unsigned& gridSizeU) const;
 	virtual const sf::FloatRect& getGlobalBounds() const;
+	virtual const sf::FloatRect& getNextPosition(const float& dt) const;
 
 	// Functions
 	virtual void stopVelocity();

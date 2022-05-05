@@ -8,7 +8,7 @@ void TileMap::initTextureSheet()
 }
 
 //Constructor
-TileMap::TileMap(const float& gridSize, const unsigned& width, const unsigned& hight, const std::string& textureFile)
+TileMap::TileMap(const float& gridSize, const int& width, const int& hight, const std::string& textureFile)
 	: gridSizeF(gridSize), gridSizeU(static_cast<unsigned>(gridSizeF)), textureFile(textureFile), 
 	fromX(0), toX(0), fromY(0), toY(0)
 {
@@ -160,12 +160,20 @@ void TileMap::loadFromFile(const std::string& file_name)
 	ifile.close();
 }
 
-void TileMap::updateCollision(Entity* entity)
+void TileMap::clear()
+{
+	for (auto& el : map)
+	{
+		el.clear();
+	}
+	this->map.clear();
+}
+
+void TileMap::updateCollision(Entity* entity, const float& dt)
 {
 	//World Bounds Collision
-	// 
 	//X check
-	if (entity->getPosition().x < 0.f)
+	if (entity->getPosition().x  < 0.f)
 	{
 		entity->setPosition(0.f, entity->getPosition().y);
 		entity->stopVelocityX();
@@ -229,16 +237,59 @@ void TileMap::updateCollision(Entity* entity)
 		this->toY = this->maxSizeWorldGrid.y;
 	}
 	
-	/////
+
+	//Collision for loup
 	for (auto& el_x : this->map)
 	{
 		for (auto& el : el_x)
 		{
+			sf::FloatRect playerBounds = entity->getGlobalBounds();
+			sf::FloatRect wallBounds = el.getGlobalBounds();
+			sf::FloatRect nextPositionBounds = entity->getNextPosition(dt);
+
 			if (el.getX() < toX && el.getY() < toY && el.getX() > fromX && el.getY() > fromY)
 			{
-				if (el.getCollision() && el.inersects(entity->getGlobalBounds()))
+				if (el.getCollision() && el.inersects(nextPositionBounds))
 				{ 
-					std::cout << "COLLISION\n";
+					//Bottom collision
+					if (playerBounds.top < wallBounds.top
+						&& playerBounds.top + playerBounds.height < wallBounds.top + wallBounds.height
+						&& playerBounds.left < wallBounds.left + wallBounds.width
+						&& playerBounds.left + playerBounds.width > wallBounds.left)
+					{
+						entity->stopVelocityY();
+						entity->setPosition(playerBounds.left, wallBounds.top - playerBounds.height);
+					}
+
+					//Top collision
+					else if (playerBounds.top > wallBounds.top
+						&& playerBounds.top + playerBounds.height > wallBounds.top + wallBounds.height
+						&& playerBounds.left < wallBounds.left + wallBounds.width
+						&& playerBounds.left + playerBounds.width > wallBounds.left)
+					{
+						entity->stopVelocityY();
+						entity->setPosition(playerBounds.left, wallBounds.top + wallBounds.height);
+					}
+
+					//Right collision
+					if (playerBounds.left < wallBounds.left
+						&& playerBounds.left + playerBounds.width < wallBounds.left + wallBounds.width
+						&& playerBounds.top < wallBounds.top + wallBounds.height
+						&& playerBounds.top + playerBounds.height > wallBounds.top)
+					{
+						entity->stopVelocityX();
+						entity->setPosition(wallBounds.left - playerBounds.width, playerBounds.top);
+					}
+
+					//Left collision
+					else if (playerBounds.left > wallBounds.left
+						&& playerBounds.left + playerBounds.width > wallBounds.left + wallBounds.width
+						&& playerBounds.top < wallBounds.top + wallBounds.height
+						&& playerBounds.top + playerBounds.height > wallBounds.top)
+					{
+						entity->stopVelocityX();
+						entity->setPosition(wallBounds.left + wallBounds.width, playerBounds.top);
+					}
 				}
 			}
 		}
@@ -260,7 +311,7 @@ void TileMap::render(sf::RenderTarget& target, Entity* entity)
 		{
 			for (auto& el : el_x)
 			{
-				if (el.getX() < toX && el.getY() < toY && el.getX() > fromX && el.getY() > fromY)
+ 				if (el.getX() < toX && el.getY() < toY && el.getX() > fromX && el.getY() > fromY)
 				{
 					el.render(target);
 					//DEBUG
