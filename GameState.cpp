@@ -95,7 +95,7 @@ GameState::~GameState()
 // Funtions
 void GameState::updateView(const float& dt)
 {
-	this->view.setCenter(this->player->getPosition());
+	this->view.setCenter(std::floor(this->player->getPosition().x), std::floor(this->player->getPosition().y));
 }
 
 //Pause menu update
@@ -148,6 +148,12 @@ void GameState::updateInput(const float& dt)
 	}
 }
 
+void GameState::updateTileMap(const float& dt)
+{
+	this->tileMap->update();
+	this->tileMap->updateCollision(this->player);
+}
+
 void GameState::update(const float& dt)
 {
 	this->updateMousePosition(&this->view);
@@ -159,6 +165,7 @@ void GameState::update(const float& dt)
 		this->updateView(dt);
 		this->updatePlayerInput(dt);
 		this->player->update(dt);
+		this->updateTileMap(dt);
 	} 
 	else //Paused
 	{
@@ -177,7 +184,7 @@ void GameState::render(sf::RenderTarget* target)
 	this->renderTexture.clear();
 	this->renderTexture.setView(this->view);
 
-	this->tileMap->render(this->renderTexture);
+	this->tileMap->render(this->renderTexture, this->player);
 	this->player->render(this->renderTexture);
 
 	if (this->paused) //Pause menu render

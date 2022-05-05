@@ -11,13 +11,20 @@ private:
 	//Variavles
 	float gridSizeF;
 	unsigned gridSizeU;
-	sf::Vector2u maxSize;
+	sf::Vector2u maxSizeWorldGrid;
+	sf::Vector2f maxSizeWorldF;
 
 	std::string textureFile;
 	sf::Texture tileTextureSheet;
 	
 	sf::RectangleShape collisionBox;
 	std::vector<std::vector<Tile>> map;
+
+	//Culling
+	int fromX;
+	int toX;
+	int fromY;
+	int toY;
 
 	//Functions
 	void initTextureSheet();

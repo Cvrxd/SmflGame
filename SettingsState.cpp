@@ -83,7 +83,8 @@ void SettingsState::initGUI()
 	}
 
 	std::string text_list[] = { "1920 x 1080", "800 x 600", "640 x 480" };
-	this->dropDownLists["RESOLUTION"] =  new GUI::DropDownList(800, 450, 200, 50, font, modes_str.data(), modes_str.size(), 0);
+	this->dropDownLists["RESOLUTION"] =  new GUI::DropDownList(800, 450, 200, 50, font, modes_str.data(), 
+		static_cast<unsigned int>(modes_str.size()), 0);
 }
 
 SettingsState::SettingsState(StateData* state_data)

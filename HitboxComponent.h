@@ -1,5 +1,4 @@
 #pragma once
-//#include"stdafx.h"
 
 class HitboxComponent
 {
@@ -8,6 +7,7 @@ private:
 	//Core
 	sf::Sprite& sprite;
 	sf::RectangleShape hitbox;
+	sf::FloatRect nextPosition;
 
 	float offsetX;
 	float offsetY;
@@ -16,8 +16,17 @@ public:
 	HitboxComponent(sf::Sprite& sprite, const float& offset_x, const float& offset_y, const float& width, const float& height);
 	~HitboxComponent();
 
+	//Accessors
+	const sf::Vector2f& getPositionHitbox() const;
+	const sf::FloatRect& getGlobalBounds() const;
+	const sf::FloatRect& getNextPosition(const sf::Vector2f& velocity);
+
+	//Modifiers
+	void setPosition(const float& x, const float& y);
+	void setPosition(const sf::Vector2f& position);
+
 	//Fucntions
-	const bool checkIntersect(const sf::FloatRect& frect);
+	const bool intersects(const sf::FloatRect& frect);
 
 	void update();
 	void render(sf::RenderTarget& target);

@@ -2,6 +2,8 @@
 #include "MovementComponent.h"
 
 //Initialisation
+
+//Constructor
 MovementComponent::MovementComponent(sf::Sprite& sprite, const float& maxVelocity, const float& acceleration, const float& deceleration)
 	:sprite(sprite), maxVelocity(maxVelocity), acceleration(acceleration), deceleration(deceleration)
 {
@@ -13,7 +15,6 @@ MovementComponent::~MovementComponent()
 }
 
 //Accessors
-
 const float& MovementComponent::getMaxVelocity() const
 {
 	return this->maxVelocity;
@@ -52,6 +53,23 @@ const bool MovementComponent::getState(const short unsigned state) const
 }
 
 //Functions
+void MovementComponent::stopVelocity()
+{
+	//Reset the velocity
+	this->velocity.x = 0;
+	this->velocity.y = 0;
+}
+
+void MovementComponent::stopVelocityX()
+{
+	this->velocity.x = 0;
+}
+
+void MovementComponent::stopVelocityY()
+{
+	this->velocity.y = 0;
+}
+
 void MovementComponent::move(const float& dir_x, const float& dir_y, const float& dt)
 {
 	//Accelerating sprite untill it reaches his max velocity

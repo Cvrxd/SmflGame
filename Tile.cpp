@@ -39,6 +39,11 @@ const bool& Tile::getCollision() const
 	return this->collision;
 }
 
+const bool Tile::inersects(const sf::FloatRect bounds) const
+{
+	return this->shape.getGlobalBounds().intersects(bounds);
+}
+
 const unsigned& Tile::getX()
 {
 	return this->x;

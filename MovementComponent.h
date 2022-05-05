@@ -1,5 +1,4 @@
 #pragma once
-//#include"stdafx.h"
 
 enum MovementStates {IDLE = 0, MOVING, MOVING_LEFT, MOVING_RIGHT, MOVE_UP, MOVE_DOWN};
 
@@ -24,12 +23,14 @@ public:
 	//Accessors
 	const float& getMaxVelocity() const;
 	const sf::Vector2f& getVelocity() const;
-
-	//Functions
 	const bool getState(const short unsigned state) const;
 
-	void move(const float& dir_x, const float& dir_y, const float& dt);
+	//Functions
+	void stopVelocity();
+	void stopVelocityX();
+	void stopVelocityY();
 
+	void move(const float& dir_x, const float& dir_y, const float& dt);
 	void update(const float& dt);
 };
 

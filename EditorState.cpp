@@ -131,19 +131,19 @@ void EditorState::updateView(const float& dt)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_VIEW_UP"))))
 	{
-		this->view.move(0.f, -this->cameraSpeed * dt * 4);
+		this->view.move(0.f, -std::floor(this->cameraSpeed * dt * 6));
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_VIEW_DOWN"))))
 	{
-		this->view.move(0.f, +this->cameraSpeed * dt * 4);
+		this->view.move(0.f, std::floor(this->cameraSpeed * dt * 6));
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_VIEW_LEFT"))))
 	{
-		this->view.move(-this->cameraSpeed * dt * 4, 0.f);
+		this->view.move(-std::floor(this->cameraSpeed * dt * 6), 0.f);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_VIEW_RIGHT"))))
 	{
-		this->view.move(this->cameraSpeed * dt * 4, 0.f);
+		this->view.move(std::floor(this->cameraSpeed * dt * 6), 0.f);
 	}
 }
 

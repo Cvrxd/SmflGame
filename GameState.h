@@ -43,6 +43,7 @@ public:
 	void updatePauseMenuButtons();
 	void updatePlayerInput(const float& dt);
 	void updateInput(const float& dt) override;
+	void updateTileMap(const float& dt);
 	void update(const float& dt) override;
 	void render(sf::RenderTarget* target = nullptr) override;
 };

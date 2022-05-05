@@ -91,7 +91,7 @@ Game::~Game()
 	}
 }
 
-/////////////// GAME Functions ///////////////
+//Functions
 
 void Game::endAplication()
 {
@@ -121,7 +121,7 @@ void Game::update()
 	this->updateSFMLEvents();
 
 	// update states
-	if (!this->states.empty())
+	if (!this->states.empty() && this->window->hasFocus())
 	{
 		this->states.top()->update(dt);
 
