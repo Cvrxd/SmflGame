@@ -10,7 +10,7 @@ class TileMap
 private:
 	//Variavles
 	float gridSizeF;
-	unsigned gridSizeU;
+	int gridSizeI;
 	sf::Vector2i maxSizeWorldGrid;
 	sf::Vector2f maxSizeWorldF;
 
@@ -37,8 +37,8 @@ public:
 	const sf::Texture& getTileTextureSheet() const;
 
 	//Core Functions
-	void addTile(const unsigned& x, const unsigned& y, const sf::IntRect& texture_rect, const bool& collision, const short& type);
-	void removeTile(const unsigned& x, const unsigned& y);
+	void addTile(const int& x, const int& y, const sf::IntRect& texture_rect, const bool& collision, const short& type);
+	void removeTile(const int& x, const int& y);
 
 	void saveToFile(const std::string& file);
 	void loadFromFile(const std::string& file);

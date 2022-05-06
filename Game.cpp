@@ -121,16 +121,19 @@ void Game::update()
 	this->updateSFMLEvents();
 
 	// update states
-	if (!this->states.empty() && this->window->hasFocus())
+	if (!this->states.empty())
 	{
-		this->states.top()->update(dt);
-
-		if (this->states.top()->getQuit())
+		if (this->window->hasFocus())
 		{
-			// some stuff like saving the game
-			this->states.top()->endState();
-			delete this->states.top();
-			this->states.pop();
+			this->states.top()->update(dt);
+
+			if (this->states.top()->getQuit())
+			{
+				// some stuff like saving the game
+				this->states.top()->endState();
+				delete this->states.top();
+				this->states.pop();
+			}
 		}
 	}
 	// aplications end

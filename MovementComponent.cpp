@@ -48,6 +48,7 @@ const bool MovementComponent::getState(const short unsigned state) const
 		return this->velocity.y > 0.f;
 		break;
 	default:
+		return false;
 		break;
 	}
 }

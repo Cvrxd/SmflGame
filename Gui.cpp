@@ -133,7 +133,7 @@ GUI::DropDownList::DropDownList(const float& x, const float& y, const float& wid
 
 	this->dropBox.reserve(number_of_elements);
 
-	for (size_t i = 0; i < number_of_elements; ++i)
+	for (unsigned short i = 0; i < number_of_elements; ++i)
 	{
 		this->dropBox.push_back(new GUI::Button(x, y + ((i+1) * hight) + 20, width + 8, hight,
 			&this->font, text_list[i], 28,

@@ -35,8 +35,8 @@ void Player::addAnimations()
 	//Regular sprite
 	this->animationComponent->addAnimation("IDLE", 0, 0, 3, 0, 50, 40, 13.f);
 	this->animationComponent->addAnimation("MOVE", 0, 1, 5, 1, 50, 37, 10.f);
-	this->animationComponent->addAnimation("ATTACK_FIRST", 0, 4, 8, 4, 50, 37, 7.f);
-	this->animationComponent->addAnimation("ATTACK_SECOND", 0, 5, 8, 5, 50, 37, 7.f);
+	this->animationComponent->addAnimation("ATTACK_FIRST", 0, 4, 8, 4, 50, 37, 6.f);
+	this->animationComponent->addAnimation("ATTACK_SECOND", 0, 5, 8, 5, 50, 37, 6.f);
 	this->animationComponent->addAnimation("CAST_SPELL", 0, 3, 8, 3, 50, 37, 10.f);
 }
 

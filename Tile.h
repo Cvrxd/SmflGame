@@ -13,11 +13,11 @@ protected:
 	bool collision;
 	short type;
 
-	unsigned x;
-	unsigned y;
+	int x;
+	int y;
 	
 public:
-	Tile(const unsigned& x, const unsigned& y, const float& gridSizef, const sf::Texture& texture, const sf::IntRect& texture_rect,
+	Tile(const int& x, const int& y, const float& gridSizef, const sf::Texture& texture, const sf::IntRect& texture_rect,
 		const bool& collision = false, const short& type = TileTypes::DEFAULT);
 
 	virtual ~Tile();
@@ -30,8 +30,8 @@ public:
 	const bool& getCollision() const;
 	const bool inersects(const sf::FloatRect bounds) const;
 
-	const unsigned& getX();
-	const unsigned& getY();
+	const int& getX();
+	const int& getY();
 
 	//Functions
 	void update();

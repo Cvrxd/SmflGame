@@ -52,20 +52,20 @@ const sf::Vector2f& Entity::getPosition() const
 	return this->sprite.getPosition();
 }
 
-const sf::Vector2u Entity::getGridPosition(const unsigned& gridSizeU) const
+const sf::Vector2i Entity::getGridPosition(const int& gridSizeI) const
 {
 	if (this->hitboxComponent)
 	{
-		return sf::Vector2u(
-			static_cast<unsigned>(this->hitboxComponent->getPositionHitbox().x) / gridSizeU, 
-			static_cast<unsigned>(this->hitboxComponent->getPositionHitbox().y) / gridSizeU);
+		return sf::Vector2i(
+			static_cast<int>(this->hitboxComponent->getPositionHitbox().x) / gridSizeI, 
+			static_cast<int>(this->hitboxComponent->getPositionHitbox().y) / gridSizeI);
 	}
-	return sf::Vector2u(
-		static_cast<unsigned>(this->sprite.getPosition().x) / gridSizeU,
-		static_cast<unsigned>(this->sprite.getPosition().y) / gridSizeU);
+	return sf::Vector2i(
+		static_cast<int>(this->sprite.getPosition().x) / gridSizeI,
+		static_cast<int>(this->sprite.getPosition().y) / gridSizeI);
 }
 
-const sf::FloatRect& Entity::getGlobalBounds() const
+const sf::FloatRect Entity::getGlobalBounds() const
 {
 	if (this->hitboxComponent)
 	{
@@ -83,7 +83,7 @@ const sf::FloatRect& Entity::getNextPosition(const float& dt) const
 	return sf::FloatRect();
 }
 
-// Functios
+// Functions
 void Entity::stopVelocity()
 {
 	if (this->movementComponent)

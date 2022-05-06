@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Tile.h"
 
-Tile::Tile(const unsigned& x, const unsigned& y, const float& gridSizef, const sf::Texture& texture, const sf::IntRect& texture_rect, 
+Tile::Tile(const int& x, const int& y, const float& gridSizef, const sf::Texture& texture, const sf::IntRect& texture_rect, 
 	const bool& collision, const short& type)
 	: collision(collision), type(type), x(x), y(y)
 {
@@ -49,12 +49,12 @@ const bool Tile::inersects(const sf::FloatRect bounds) const
 	return this->shape.getGlobalBounds().intersects(bounds);
 }
 
-const unsigned& Tile::getX()
+const int& Tile::getX()
 {
 	return this->x;
 }
 
-const unsigned& Tile::getY()
+const int& Tile::getY()
 {
 	return this->y;
 }

@@ -31,7 +31,7 @@ const sf::Vector2f& HitboxComponent::getPositionHitbox() const
 	return this->hitbox.getPosition();
 }
 
-const sf::FloatRect& HitboxComponent::getGlobalBounds() const
+const sf::FloatRect HitboxComponent::getGlobalBounds() const
 {
 	return this->hitbox.getGlobalBounds();
 }

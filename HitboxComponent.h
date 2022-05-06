@@ -18,7 +18,7 @@ public:
 
 	//Accessors
 	const sf::Vector2f& getPositionHitbox() const;
-	const sf::FloatRect& getGlobalBounds() const;
+	const sf::FloatRect getGlobalBounds() const;
 	const sf::FloatRect& getNextPosition(const sf::Vector2f& velocity);
 
 	//Modifiers
