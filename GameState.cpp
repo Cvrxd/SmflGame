@@ -68,6 +68,11 @@ void GameState::initPlayers()
 	this->player = new Player(500, 500, this->textures["PLAYER_SHEET"]);
 }
 
+void GameState::initPlayerGUI()
+{
+	this->playerGUI = new PlayerGUI(*this->player, this->font);
+}
+
 void GameState::initTileMap()
 {
 	this->tileMap = new TileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test.png");
@@ -85,20 +90,25 @@ GameState::GameState(StateData* state_data)
 	this->initTextures();
 	this->initPauseMenu();
 	this->initPlayers();
+	this->initPlayerGUI();
 	this->initTileMap();
 }
 
 GameState::~GameState()
 {
 	delete this->pauseMenu;
-	delete player;
-	delete tileMap;
+	delete this->player;
+	delete this->tileMap;
+	delete this->playerGUI;
 }
 
 // Funtions
 void GameState::updateView(const float& dt)
 {
-	this->view.setCenter(std::floor(this->player->getPosition().x), std::floor(this->player->getPosition().y));
+	this->view.setCenter(
+		std::floor(this->player->getPosition().x + (static_cast<float>(this->mousePosWindow.x) - static_cast<float>(this->stateData->gfxSettings->resolution.width / 2)) / 10.f),
+		std::floor(this->player->getPosition().y + (static_cast<float>(this->mousePosWindow.y) - static_cast<float>(this->stateData->gfxSettings->resolution.height / 2)) / 10.f)
+	);
 }
 
 //Pause menu update
@@ -134,6 +144,10 @@ void GameState::updatePlayerInput(const float& dt)
 	{
 		this->player->move(0.f, 1.f, dt);
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
+	{
+		this->player->getLVLcomponent()->gainEXP(1);
+	}
 }
 
 void GameState::updateInput(const float& dt)
@@ -168,6 +182,9 @@ void GameState::update(const float& dt)
 		this->updatePlayerInput(dt);
 		this->updateTileMap(dt);
 		this->player->update(dt);
+
+		//GUI UPDATE
+		this->playerGUI->update(dt);
 	} 
 	else //Paused
 	{
@@ -183,17 +200,22 @@ void GameState::render(sf::RenderTarget* target)
 		target = this->window;
 	}
 
+	//Set render texture
 	this->renderTexture.clear();
 	this->renderTexture.setView(this->view);
 
+	//tile map and player render
 	this->tileMap->renderGameState(this->renderTexture);
 	this->player->render(this->renderTexture);
-
 	this->tileMap->renderAbove(this->renderTexture);
+
+	//player GUI render
+	this->renderTexture.setView(this->renderTexture.getDefaultView());
+	this->playerGUI->render(this->renderTexture);
 
 	if (this->paused) //Pause menu render
 	{
-		this->renderTexture.setView(this->renderTexture.getDefaultView());
+		//this->renderTexture.setView(this->renderTexture.getDefaultView());
 		this->pauseMenu->render(this->renderTexture);
 	}
 

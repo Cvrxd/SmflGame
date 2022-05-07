@@ -2,13 +2,12 @@
 #include "State.h"
 #include "PauseMenu.h"
 #include "TileMap.h"
+#include "PlayerGUI.h"
 
 class State;
 class PauseMenu;
 class TileMap;
-class sf::View;
-class sf::Font;
-class sf::RenderTexture;
+class PlayerGUI;
 
 class GameState : public State
 {
@@ -23,6 +22,7 @@ private:
 	PauseMenu* pauseMenu;
 
 	Player* player;
+	PlayerGUI* playerGUI;
 	TileMap* tileMap;
 
 	//Functions
@@ -33,6 +33,7 @@ private:
 	void initTextures();
 	void initPauseMenu();
 	void initPlayers();
+	void initPlayerGUI();
 	void initTileMap();
 public:
 	GameState(StateData* state_data);

@@ -59,7 +59,7 @@ void EditorState::initGUI()
 	this->selectorRect.setTextureRect(this->textureRect);
 
 	this->textureSelector = new GUI::TextureSelector(
-		20.f, 20.f, 800.f, 500.f, static_cast<unsigned int>(this->stateData->gridSize), 
+		20.f, 20.f, 600.f, 600.f, static_cast<unsigned int>(this->stateData->gridSize), 
 		this->tileMap->getTileTextureSheet(), this->font);
 }
 

@@ -2,7 +2,7 @@
 #include "LevelingComponent.h"
 
 //Constructor
-LevelingComponent::LevelingComponent(unsigned level)
+LevelingComponent::LevelingComponent(const int& level)
 	:level(level), exp(0), statsPoints(3)
 {
 	//Exp
@@ -14,8 +14,6 @@ LevelingComponent::LevelingComponent(unsigned level)
 	this->armor = this->armorMAX = 1;
 
 	//Atributes
-	this->luck = 1;
-	this->accurancy = 1;
 	this->damagePhysical = 1;
 	this->damageMagical = 1;
 
@@ -56,7 +54,6 @@ void LevelingComponent::updateLevel()
 		{
 			++this->damagePhysical;
 			++this->damageMagical;
-			++this->luck;
 		}
 		this->exp = 0;
 		this->expNext = static_cast<unsigned>(this->level * 20 - (this->level * 5));

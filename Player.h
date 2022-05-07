@@ -9,7 +9,6 @@ private:
 	//Variables
 	bool isAttacking = false;
 	
-
 	//Initialisation functios
 	void initVariables();
 	void createAnimationComponent(sf::Texture& texture_sheet) override;
@@ -19,7 +18,11 @@ public:
 	Player(const float& x, const float& y, sf::Texture& texture_sheet);
 	virtual ~Player();
 
+	//Accessors
+	LevelingComponent* getLVLcomponent();
+
 	//Functions
+
 	void updateAttack(const float& dt);
 	void updateRegularKeyboard(const float& dt);
 	void update(const float& dt) override;

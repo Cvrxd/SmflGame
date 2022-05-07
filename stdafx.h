@@ -12,6 +12,7 @@
 #include<sstream>
 #include<fstream>
 #include<cmath>
+#include<thread>
 
 //SFML
 #include<SFML/Audio.hpp>

@@ -235,7 +235,7 @@ void GUI::DropDownList::render(sf::RenderTarget& target)
 void GUI::TextureSelector::initBounds(const float& x, const float& y, const float& width_bounds, const float& height_bounds)
 {
 	this->bounds.setSize(sf::Vector2f(width_bounds, height_bounds));
-	this->bounds.setPosition(x + 60.f, y);
+	this->bounds.setPosition(x + gridSize, y);
 	this->bounds.setFillColor(sf::Color(50, 50, 50, 100));
 	this->bounds.setOutlineThickness(1.f);
 	this->bounds.setOutlineColor(sf::Color(255, 255, 255, 200));
@@ -244,7 +244,7 @@ void GUI::TextureSelector::initBounds(const float& x, const float& y, const floa
 void GUI::TextureSelector::initSpriteSheet(const float& x, const float& y, const sf::Texture& texture_sheet)
 {
 	this->sheet.setTexture(texture_sheet);
-	this->sheet.setPosition(x + 60.f, y);
+	this->sheet.setPosition(x + this->gridSize, y);
 
 	if (this->sheet.getGlobalBounds().width > this->bounds.getGlobalBounds().width)
 	{
@@ -259,7 +259,7 @@ void GUI::TextureSelector::initSpriteSheet(const float& x, const float& y, const
 void GUI::TextureSelector::initSelector_TextureRect(const float& x, const float& y)
 {
 	//Selector
-	this->selector.setPosition(x + 60.f, y);
+	this->selector.setPosition(x + gridSize, y);
 	this->selector.setSize(sf::Vector2f(static_cast<float>(this->gridSize), static_cast<float>(this->gridSize)));
 	this->selector.setFillColor(sf::Color::Transparent);
 	this->selector.setOutlineThickness(2.f);

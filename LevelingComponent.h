@@ -4,7 +4,7 @@ class LevelingComponent
 {
 public:
 	//Leveling
-	unsigned level;
+	int level;
 	unsigned exp;
 	unsigned expNext;
 	unsigned statsPoints;
@@ -17,13 +17,11 @@ public:
 	int armor;
 	int armorMAX;
 
-	int accurancy;
-	int luck;
 	int damagePhysical;
 	int damageMagical;
 
 	//Constructor
-	LevelingComponent(unsigned level);
+	LevelingComponent(const int& level);
 	~LevelingComponent();
 
 	//Functions

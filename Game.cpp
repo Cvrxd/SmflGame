@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Game.h"
 
-// itialisation funcs
+//Itialisation
 
 void Game::initVariables()
 {
