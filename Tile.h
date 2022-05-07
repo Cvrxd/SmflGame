@@ -1,6 +1,6 @@
 #pragma once
 
-enum TileTypes { DEFAULT = 0, DAMAGING };
+enum TileTypes { DEFAULT = 0, ABOVE, DAMAGING };
 
 class Tile
 {
@@ -28,6 +28,7 @@ public:
 	const sf::FloatRect getGlobalBounds() const;
 
 	const bool& getCollision() const;
+	const short& getType() const;
 	const bool inersects(const sf::FloatRect bounds) const;
 
 	const int& getX();

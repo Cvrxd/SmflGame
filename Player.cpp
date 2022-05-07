@@ -16,18 +16,9 @@ void Player::createAnimationComponent(sf::Texture& texture_sheet)
 void Player::initComponents(sf::Texture& texture_sheet)
 {
 	this->createHitboxComponent(this->sprite, 50.f, 50.f, 60.f, 60.f);
-	this->createMovementComponent(400.f, 20.f, 6.f);
+	this->createMovementComponent(400.f, 2000.f, 700.f);
 	this->createAnimationComponent(texture_sheet);
-
-	/*
-	this->createHitboxComponent(this->sprite, 160.f, 180.f, 80.f, 80.f);
-	this->createMovementComponent(300.f, 15.f, 5.f);
-	this->createAnimationComponent(texture_sheet);
-
-	this->animationComponent->addAnimation("IDLE", 0, 0, 7, 0, 160, 128, 11.f);
-	this->animationComponent->addAnimation("MOVE", 0, 1, 7, 1, 160, 128, 7.f);
-	this->animationComponent->addAnimation("ATTACK", 0, 2, 12, 3, 160, 128, 6.f);
-	*/
+	this->createLevelingComponent(1);
 }
 
 void Player::addAnimations()

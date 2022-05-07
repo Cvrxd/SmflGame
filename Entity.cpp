@@ -7,6 +7,7 @@ void Entity::initVariables()
 	this->hitboxComponent = NULL;
 	this->movementComponent = NULL;
 	this->animationComponent = NULL;
+	this->levelingComponent = NULL;
 }
 
 Entity::Entity()
@@ -19,12 +20,18 @@ Entity::~Entity()
 	delete this->movementComponent;
 	delete this->hitboxComponent;
 	delete this->animationComponent;
+	delete this->levelingComponent;
 }
 
 //Component functions
 void Entity::setTexture(sf::Texture& texture)
 {
 	this->sprite.setTexture(texture);
+}
+
+void Entity::createLevelingComponent(const unsigned& level)
+{
+	this->levelingComponent = new LevelingComponent(level);
 }
 
 void Entity::createHitboxComponent(sf::Sprite& sprite, const float& offset_x, const float& offset_y, const float& width, const float& height)

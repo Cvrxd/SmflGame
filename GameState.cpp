@@ -1,8 +1,7 @@
 #include "stdafx.h" 
 #include "GameState.h"
 
-// Initialisation
-
+//Initialisation
 void GameState::initKeybinds()
 {
 	std::ifstream ifs("Configs/gamestate_keybinds.ini");
@@ -36,6 +35,7 @@ void GameState::initView()
 		static_cast<float>(this->stateData->gfxSettings->resolution.height)));
 
 	this->view.setCenter(sf::Vector2f(this->stateData->gfxSettings->resolution.width / 2.f, this->stateData->gfxSettings->resolution.height / 2.f));
+	
 }
 
 void GameState::initFonts()
@@ -65,12 +65,12 @@ void GameState::initPauseMenu()
 
 void GameState::initPlayers()
 {
-	this->player = new Player(0, 0, this->textures["PLAYER_SHEET"]);
+	this->player = new Player(500, 500, this->textures["PLAYER_SHEET"]);
 }
 
 void GameState::initTileMap()
 {
-	this->tileMap = new TileMap(this->stateData->gridSize, 10, 10, "Textures/tiles/test.png");
+	this->tileMap = new TileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test.png");
 	this->tileMap->loadFromFile("map/game_map.txt");
 }
 
@@ -114,7 +114,7 @@ void GameState::updatePauseMenuButtons()
 	}
 }
 
-//movement function and key board press
+//Update functions
 void GameState::updatePlayerInput(const float& dt)
 {
 	//check for keyboard key player
@@ -153,8 +153,7 @@ void GameState::updateInput(const float& dt)
 
 void GameState::updateTileMap(const float& dt)
 {
-	this->tileMap->update();
-	this->tileMap->updateCollision(this->player, dt);
+	this->tileMap->update(this->player, dt);
 }
 
 void GameState::update(const float& dt)
@@ -187,8 +186,10 @@ void GameState::render(sf::RenderTarget* target)
 	this->renderTexture.clear();
 	this->renderTexture.setView(this->view);
 
-	this->tileMap->render(this->renderTexture, this->player);
+	this->tileMap->renderGameState(this->renderTexture);
 	this->player->render(this->renderTexture);
+
+	this->tileMap->renderAbove(this->renderTexture);
 
 	if (this->paused) //Pause menu render
 	{

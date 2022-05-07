@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "MainMenuState.h"
 
-///////// Initialisation //////////
+//Initialisation
 
 void MainMenuState::initVariables()
 {
@@ -36,7 +36,6 @@ void MainMenuState::initKeybinds()
 	ifs.close();
 }
 
-//fonts
 void MainMenuState::initFonts()
 {
 	if (!this->font.loadFromFile("Fonts/Greybeard.ttf"))
@@ -45,7 +44,6 @@ void MainMenuState::initFonts()
 	}
 }
 
-//buttons init
 void MainMenuState::initButtons()
 {
 	this->buttons["GAME_STATE"] = new GUI::Button(100.f, 100.f, 300.f, 70.f,
@@ -79,9 +77,9 @@ MainMenuState::MainMenuState(StateData* state_data)
 {
 	this->initVariables();
 	this->initBackground();
-	this->initFonts();	  //init fonts 
-	this->initKeybinds(); //init key binds from ini
-	this->initButtons();  //init buttons 
+	this->initFonts();	   
+	this->initKeybinds(); 
+	this->initButtons();  
 }
 
 MainMenuState::~MainMenuState()
@@ -94,7 +92,6 @@ MainMenuState::~MainMenuState()
 
 // Functions 
  
-// update
 void MainMenuState::updateInput(const float& dt)
 { 
 	
@@ -140,7 +137,6 @@ void MainMenuState::update(const float& dt)
 	this->updateButtons();
 }
 
-//render
 void MainMenuState::renderButtons(sf::RenderTarget& target)
 {
 	for (auto& el : this->buttons)

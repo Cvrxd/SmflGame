@@ -44,7 +44,7 @@ protected:
 	sf::Vector2i mousePosScreen;
 	sf::Vector2i mousePosWindow;
 	sf::Vector2f mousPosView; 
-	sf::Vector2u mousePosGrid;
+	sf::Vector2i mousePosGrid;
 
 	//Resourses
 	std::map<std::string, sf::Texture> textures;

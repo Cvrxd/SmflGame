@@ -2,10 +2,12 @@
 #include"HitboxComponent.h"
 #include"MovementComponent.h"
 #include"AnimationComponent.h"
+#include"LevelingComponent.h"
 
 class HitboxComponent;
 class MovementComponent;
 class AnimationComponent;
+class LevelingComponent;
 
 class Entity
 {
@@ -19,6 +21,7 @@ protected:
 	HitboxComponent* hitboxComponent;
 	MovementComponent* movementComponent;
 	AnimationComponent* animationComponent;
+	LevelingComponent* levelingComponent;
 
 public:
 	Entity();
@@ -26,6 +29,8 @@ public:
 
 	//component functions
 	void setTexture(sf::Texture& texture);
+
+	void createLevelingComponent(const unsigned& level);
 	void createHitboxComponent(sf::Sprite& sprite, const float& offset_x, const float& offset_y, const float& width, const float& height);
 	void createMovementComponent(const float& maxVelocity, const float& acceleration, const float& deceleration);
 	virtual void createAnimationComponent(sf::Texture& texture_sheet);
