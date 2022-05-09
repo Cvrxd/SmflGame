@@ -13,6 +13,8 @@ class GameState : public State
 {
 private:
 	//variables 
+	sf::Shader core_shader;
+
 	sf::View view;
 	sf::Font font;
 
@@ -32,6 +34,7 @@ private:
 	void initKeybinds() override;
 	void initTextures();
 	void initPauseMenu();
+	void initShaders();
 	void initPlayers();
 	void initPlayerGUI();
 	void initTileMap();

@@ -19,6 +19,7 @@ void EditorState::initView()
 		static_cast<float>(this->stateData->gfxSettings->resolution.height)));
 
 	this->view.setCenter(this->stateData->gfxSettings->resolution.width / 2.f, this->stateData->gfxSettings->resolution.height / 2.f);
+	//this->view.zoom(0.3f);
 }
 
 void EditorState::initBackground()
@@ -59,13 +60,13 @@ void EditorState::initGUI()
 	this->selectorRect.setTextureRect(this->textureRect);
 
 	this->textureSelector = new GUI::TextureSelector(
-		20.f, 20.f, 600.f, 600.f, static_cast<unsigned int>(this->stateData->gridSize), 
+		100.f, 20.f, 1280.f, 640.f, static_cast<unsigned int>(this->stateData->gridSize), 
 		this->tileMap->getTileTextureSheet(), this->font);
 }
 
 void EditorState::initTileMap()
 {
-	this->tileMap = new TileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test.png");
+	this->tileMap = new TileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg");
 }
 
 void EditorState::initFonts()
@@ -133,19 +134,19 @@ void EditorState::updateView(const float& dt)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_VIEW_UP"))))
 	{
-		this->view.move(0.f, -std::floor(this->cameraSpeed * dt * 10));
+		this->view.move(0.f, -std::floor(this->cameraSpeed * dt * 4));
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_VIEW_DOWN"))))
 	{
-		this->view.move(0.f, std::floor(this->cameraSpeed * dt * 10));
+		this->view.move(0.f, std::floor(this->cameraSpeed * dt * 4));
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_VIEW_LEFT"))))
 	{
-		this->view.move(-std::floor(this->cameraSpeed * dt * 10), 0.f);
+		this->view.move(-std::floor(this->cameraSpeed * dt * 4), 0.f);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_VIEW_RIGHT"))))
 	{
-		this->view.move(std::floor(this->cameraSpeed * dt * 10), 0.f);
+		this->view.move(std::floor(this->cameraSpeed * dt * 4), 0.f);
 	}
 }
 

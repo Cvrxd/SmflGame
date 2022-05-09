@@ -15,8 +15,8 @@ void Player::createAnimationComponent(sf::Texture& texture_sheet)
 
 void Player::initComponents(sf::Texture& texture_sheet)
 {
-	this->createHitboxComponent(this->sprite, 50.f, 50.f, 60.f, 60.f);
-	this->createMovementComponent(400.f, 2000.f, 700.f);
+	this->createHitboxComponent(this->sprite, 45.f, 48.f, 55.f, 55.f);
+	this->createMovementComponent(270.f, 1200.f, 400.f);
 	this->createAnimationComponent(texture_sheet);
 	this->createLevelingComponent(1);
 }
@@ -25,7 +25,7 @@ void Player::addAnimations()
 {
 	//Regular sprite
 	this->animationComponent->addAnimation("IDLE", 0, 0, 3, 0, 50, 40, 13.f);
-	this->animationComponent->addAnimation("MOVE", 0, 1, 5, 1, 50, 37, 10.f);
+	this->animationComponent->addAnimation("MOVE", 0, 1, 5, 1, 50, 37, 9.f);
 	this->animationComponent->addAnimation("ATTACK_FIRST", 0, 4, 8, 4, 50, 37, 6.f);
 	this->animationComponent->addAnimation("ATTACK_SECOND", 0, 5, 8, 5, 50, 37, 6.f);
 	this->animationComponent->addAnimation("CAST_SPELL", 0, 3, 8, 3, 50, 37, 10.f);
@@ -34,10 +34,10 @@ void Player::addAnimations()
 //Constructor
 Player::Player(const float& x, const float& y, sf::Texture& texture_sheet)
 {
-	this->sprite.setScale(3.f, 3.f);
 	this->setPosition(x, y);
 	this->initComponents(texture_sheet);
 	this->addAnimations();
+	this->sprite.setScale(2.8f, 2.8f);
 }
 
 Player::~Player()
@@ -81,13 +81,13 @@ void Player::updateRegularKeyboard(const float& dt)
 	else if (this->movementComponent->getState(MOVING_RIGHT))
 	{
 		this->sprite.setOrigin(0.f, 0.f);
-		this->sprite.setScale(3.f, 3.f);
+		this->sprite.setScale(2.8f, 2.8f);
 		this->animationComponent->play("MOVE", dt, this->movementComponent->getVelocity().x, this->movementComponent->getMaxVelocity());
 	}
 	else if (this->movementComponent->getState(MOVING_LEFT))
 	{
 		this->sprite.setOrigin(50.f, 0.f);
-		this->sprite.setScale(-3.f, 3.f);
+		this->sprite.setScale(-2.8f, 2.8f);
 		this->animationComponent->play("MOVE", dt, this->movementComponent->getVelocity().x, this->movementComponent->getMaxVelocity());
 	}
 	else if (this->movementComponent->getState(MOVE_UP))
@@ -108,8 +108,19 @@ void Player::update(const float& dt)
 	this->hitboxComponent->update();	
 }
 
-void Player::render(sf::RenderTarget& target)
+void Player::render(sf::RenderTarget& target, sf::Shader* shader)
 {
-	target.draw(this->sprite);
+	if (shader)
+	{
+		shader->setUniform("hasTexture", true);
+		shader->setUniform("lightPos", this->getCenter());
+
+		target.draw(this->sprite, shader);
+	}
+	else
+	{
+		target.draw(this->sprite);
+	}
+	
 	this->hitboxComponent->render(target);
 }

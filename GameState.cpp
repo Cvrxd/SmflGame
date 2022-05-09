@@ -35,7 +35,7 @@ void GameState::initView()
 		static_cast<float>(this->stateData->gfxSettings->resolution.height)));
 
 	this->view.setCenter(sf::Vector2f(this->stateData->gfxSettings->resolution.width / 2.f, this->stateData->gfxSettings->resolution.height / 2.f));
-	
+	//this->view.zoom(0.f);
 }
 
 void GameState::initFonts()
@@ -63,6 +63,14 @@ void GameState::initPauseMenu()
 	this->pauseMenu->addButton("QUIT", 600.f, 40.f,"Quit");
 }
 
+void GameState::initShaders()
+{
+	if (!this->core_shader.loadFromFile("vertex_shader.vert", "fragment_shader.frag"))
+	{
+		std::cout << "Shader error";
+	}
+}
+
 void GameState::initPlayers()
 {
 	this->player = new Player(500, 500, this->textures["PLAYER_SHEET"]);
@@ -75,7 +83,7 @@ void GameState::initPlayerGUI()
 
 void GameState::initTileMap()
 {
-	this->tileMap = new TileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test.png");
+	this->tileMap = new TileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg");
 	this->tileMap->loadFromFile("map/game_map.txt");
 }
 
@@ -89,6 +97,7 @@ GameState::GameState(StateData* state_data)
 	this->initKeybinds();
 	this->initTextures();
 	this->initPauseMenu();
+	this->initShaders();
 	this->initPlayers();
 	this->initPlayerGUI();
 	this->initTileMap();
@@ -206,7 +215,7 @@ void GameState::render(sf::RenderTarget* target)
 
 	//tile map and player render
 	this->tileMap->renderGameState(this->renderTexture);
-	this->player->render(this->renderTexture);
+	this->player->render(this->renderTexture, &this->core_shader);
 	this->tileMap->renderAbove(this->renderTexture);
 
 	//player GUI render

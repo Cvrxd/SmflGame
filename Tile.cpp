@@ -10,6 +10,7 @@ Tile::Tile(const int& x, const int& y, const float& gridSizef, const sf::Texture
 	this->shape.setPosition(static_cast<float>(x) * gridSizef, static_cast<float>(y) * gridSizef);
 	this->shape.setTexture(&texture);
 	this->shape.setTextureRect(texture_rect);
+	//this->shape.setScale(2.f, 2.f);
 
 	//this->shape.setOutlineThickness(1.f);
 	//this->shape.setOutlineColor(sf::Color::Black);
@@ -69,7 +70,17 @@ void Tile::update()
 {
 }
 
-void Tile::render(sf::RenderTarget& target)
+void Tile::render(sf::RenderTarget& target, const sf::Vector2f& player_position, sf::Shader* shader)
 {
-	target.draw(this->shape);
+	if (shader)
+	{
+		shader->setUniform("hasTexture", true);
+		shader->setUniform("lightPos", player_position);
+
+		target.draw(this->shape, shader);
+	}
+	else
+	{
+		target.draw(this->shape);
+	}
 }

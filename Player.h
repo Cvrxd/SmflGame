@@ -26,6 +26,6 @@ public:
 	void updateAttack(const float& dt);
 	void updateRegularKeyboard(const float& dt);
 	void update(const float& dt) override;
-	void render(sf::RenderTarget& target) override;
+	void render(sf::RenderTarget& target, sf::Shader* shader = NULL) override;
 };
 

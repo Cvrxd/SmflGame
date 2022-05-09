@@ -245,7 +245,6 @@ void GUI::TextureSelector::initSpriteSheet(const float& x, const float& y, const
 {
 	this->sheet.setTexture(texture_sheet);
 	this->sheet.setPosition(x + this->gridSize, y);
-
 	if (this->sheet.getGlobalBounds().width > this->bounds.getGlobalBounds().width)
 	{
 		this->sheet.setTextureRect(sf::IntRect(0, 0, int(this->bounds.getGlobalBounds().width), int(this->sheet.getGlobalBounds().height)));
@@ -279,7 +278,7 @@ GUI::TextureSelector::TextureSelector(const float& x, const float& y, const floa
 	this->initSpriteSheet(x, y, texture_sheet);
 	this->initSelector_TextureRect(x, y);
 
-	this->hideButton = new GUI::Button(x, y, 50.f, 50.f,
+	this->hideButton = new GUI::Button(x - 40, y - 10, 50.f, 50.f,
 		&font, "TS", 30,
 		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
 		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
