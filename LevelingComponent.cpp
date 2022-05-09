@@ -3,7 +3,7 @@
 
 //Constructor
 LevelingComponent::LevelingComponent(const int& level)
-	:level(level), exp(0), statsPoints(3)
+	:level(level), exp(0), statsPoints(3), skillPoints(1)
 {
 	//Exp
 	this->expNext = static_cast<unsigned>(this->level * 20 - (this->level * 5));
@@ -37,13 +37,33 @@ std::string LevelingComponent::debugPrint()
 	return ss.str();
 }
 
-void LevelingComponent::gainEXP(const unsigned exp)
+//Functions
+void LevelingComponent::gainEXP(const unsigned& exp)
 {
 	this->exp += exp;
 	this->updateLevel();
 }
 
-//Functions
+void LevelingComponent::loseHP(const int& hp)
+{
+	this->hp -= hp;
+	if (this->hp < 0)
+	{
+		this->hp = 0;
+
+		//GameOVer
+	}
+}
+
+void LevelingComponent::gainHP(const int& hp)
+{
+	this->hp += hp;
+	if (this->hp > this->hpMAX)
+	{
+		this->hp = this->hpMAX;
+	}
+}
+
 void LevelingComponent::updateLevel()
 {
 	//New level gained
@@ -54,10 +74,15 @@ void LevelingComponent::updateLevel()
 		{
 			++this->damagePhysical;
 			++this->damageMagical;
+			++this->skillPoints;
+			++this->statsPoints;
 		}
+
 		this->exp = 0;
 		this->expNext = static_cast<unsigned>(this->level * 20 - (this->level * 5));
+
 		++this->statsPoints;
+		++this->skillPoints;
 	}
 	
 }

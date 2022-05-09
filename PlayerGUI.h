@@ -10,10 +10,15 @@ private:
 	Player& player;
 	sf::Font& font;
 
-	//Bars
+	//Stat bars 
 	sf::Texture borderTexture;
 	std::vector<std::pair<sf::RectangleShape, sf::RectangleShape>> bars;
 	std::vector<sf::Texture> barsTextures;
+
+	//Quick slot bars
+	sf::Texture quickSlotBorderTexture;
+	std::vector<std::pair<sf::RectangleShape, sf::RectangleShape>> quickSlotBars;
+	std::vector<sf::Texture> quickSlotIconsTextures;
 
 	//Text and icons
 	sf::Texture iconsSheet;
@@ -21,7 +26,8 @@ private:
 	std::map<std::string, sf::RectangleShape> iconsSprites;
 
 	//Functions
-	void initBars();
+	void initStatBars();
+	void initQuickSlotBars();
 	void initTextsIcons();
 public:
 	//Constructor

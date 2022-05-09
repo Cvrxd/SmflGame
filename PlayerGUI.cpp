@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "PlayerGUI.h"
 
-void PlayerGUI::initBars()
+void PlayerGUI::initStatBars()
 {
 	//Fill borders textures
 	this->barsTextures.resize(3);
@@ -23,6 +23,11 @@ void PlayerGUI::initBars()
 		this->bars[i].second.setPosition(sf::Vector2f(130 + 5, 2 + 35 + 20 * (i * 3)));
 		this->bars[i].second.setSize(sf::Vector2f(450 - (i * 80) - 10, 40 - 5));
 	}
+}
+
+void PlayerGUI::initQuickSlotBars()
+{
+	this->quickSlotBorderTexture.loadFromFile("Textures/inventory_hud/1bit_icons.png");
 }
 
 void PlayerGUI::initTextsIcons()
@@ -58,7 +63,7 @@ void PlayerGUI::initTextsIcons()
 PlayerGUI::PlayerGUI(Player& player, sf::Font& font)
 	:player(player), font(font)
 {
-	this->initBars();
+	this->initStatBars();
 	this->initTextsIcons();
 }
 

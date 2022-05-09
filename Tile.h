@@ -9,7 +9,7 @@ private:
 	
 protected:
 	//Variables
-	sf::RectangleShape shape;
+	sf::Sprite shape;
 	bool collision;
 	short type;
 
@@ -36,6 +36,6 @@ public:
 
 	//Functions
 	void update();
-	void render(sf::RenderTarget& target, const sf::Vector2f& player_position, sf::Shader* shader = NULL);
+	void render(sf::RenderTarget& target, const sf::Vector2f& player_position = sf::Vector2f(), sf::Shader* shader = NULL);
 };
 

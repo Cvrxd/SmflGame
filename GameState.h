@@ -16,6 +16,8 @@ private:
 	sf::Shader core_shader;
 
 	sf::View view;
+	sf::Vector2i viewGridPosition;
+
 	sf::Font font;
 
 	sf::RenderTexture renderTexture;

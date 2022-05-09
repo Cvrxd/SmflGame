@@ -62,6 +62,11 @@ const sf::Texture& TileMap::getTileTextureSheet() const
 	return this->tileTextureSheet;
 }
 
+const sf::Vector2f& TileMap::getMaxSizeF() const
+{
+	return this->maxSizeLevelF;
+}
+
 //Functions
 void TileMap::addTile(const int& x, const int& y, const sf::IntRect& texture_rect, const bool& collision, const short& type)
 {
@@ -219,7 +224,7 @@ void TileMap::updateLevelCollision(Entity* entity, const float& dt)
 void TileMap::updateTilesCollision(Entity* entity, const sf::Vector2i& gridPosition, const float& dt)
 {
 	//Tiles Collision
-	this->fromX = gridPosition.x - 15;
+	this->fromX = gridPosition.x - 20;
 	if (this->fromX < 0)
 	{
 		this->fromX = 0;
@@ -229,7 +234,7 @@ void TileMap::updateTilesCollision(Entity* entity, const sf::Vector2i& gridPosit
 		this->fromX = this->maxSizeLevelGrid.x;
 	}
 
-	this->toX = gridPosition.x + 16;
+	this->toX = gridPosition.x + 20;
 	if (this->toX < 0)
 	{
 		this->toX = 0;
@@ -239,7 +244,7 @@ void TileMap::updateTilesCollision(Entity* entity, const sf::Vector2i& gridPosit
 		this->toX = this->maxSizeLevelGrid.x;
 	}
 
-	this->fromY = gridPosition.y - 9;
+	this->fromY = gridPosition.y - 14;
 	if (this->fromY < 0)
 	{
 		this->fromY = 0;
@@ -249,7 +254,7 @@ void TileMap::updateTilesCollision(Entity* entity, const sf::Vector2i& gridPosit
 		this->fromY = this->maxSizeLevelGrid.y;
 	}
 
-	this->toY = gridPosition.y + 10;
+	this->toY = gridPosition.y + 15;
 	if (this->toY < 0)
 	{
 		this->toY = 0;
@@ -319,13 +324,13 @@ void TileMap::updateTilesCollision(Entity* entity, const sf::Vector2i& gridPosit
 }
 
 //Regular update
-void TileMap::update(Entity* entity, const float& dt)
+void TileMap::update(Entity* entity, const sf::Vector2i& gridPosition, const float& dt)
 {
 	//updateLevelCollision(entity, dt);
-	updateTilesCollision(entity, entity->getGridPosition(this->gridSizeI), dt);
+	updateTilesCollision(entity, gridPosition, dt);
 }
 
-void TileMap::renderGameState(sf::RenderTarget& target)
+void TileMap::renderGameState(sf::RenderTarget& target, const sf::Vector2f& player_position, sf::Shader* shader)
 {
 	for (auto& el_x : this->map)
 	{
@@ -358,14 +363,7 @@ void TileMap::renderEditorState(sf::RenderTarget& target)
 	{
 		for (auto& el_y : el_x)
 		{
-			if (shader)
-			{
-				el_y.render(target, player_position, shader);
-			}
-			else
-			{
-				el_y.render(target);
-			}
+			el_y.render(target);
 			//DEBUG
 			if (el_y.getCollision())
 			{
@@ -377,7 +375,7 @@ void TileMap::renderEditorState(sf::RenderTarget& target)
 	}
 }
 
-void TileMap::renderAbove(sf::RenderTarget& target)
+void TileMap::renderAbove(sf::RenderTarget& target, const sf::Vector2f& player_position, sf::Shader* shader)
 {
 	for (auto& el : this->mapAbove)
 	{
@@ -385,11 +383,11 @@ void TileMap::renderAbove(sf::RenderTarget& target)
 		{
 			if (shader)
 			{
-				el.render(target, player_position, shader);
+				el->render(target, player_position, shader);
 			}
 			else
 			{
-				el.render(target);
+				el->render(target);
 			}
 		}
 	}

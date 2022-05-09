@@ -1,19 +1,21 @@
-arying in vec4 vert_pos;
+//fragment_shader.frag
+ in vec4 vert_pos;
 
 uniform sampler2D texture;
 uniform bool hasTexture;
 uniform vec2 lightPos;
+vec2 light;
 
 void main()
 {
 	//Ambient light
-	vec4 ambient = vec4(0.02, 0.02, 0.5, 1.0);
+	vec4 ambient = vec4(0.04, 0.04, 0.55, 1);
 	
 	//Convert light to view coords
-	lightPos = (gl_ModelViewProjectionMatrix * vec4(lightPos, 0, 1)).xy;
+	light = (gl_ModelViewProjectionMatrix * vec4(lightPos, 0, 1)).xy;
 	
 	//Calculate the vector from light to pixel (Make circular)
-	vec2 lightToFrag = lightPos - vert_pos.xy;
+	vec2 lightToFrag = light - vert_pos.xy;
 	lightToFrag.y = lightToFrag.y / 1.7;
 
 	//Length of the vector (distance)

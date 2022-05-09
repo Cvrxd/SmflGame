@@ -38,6 +38,7 @@ public:
 
 	//Accessors
 	const sf::Texture& getTileTextureSheet() const;
+	const sf::Vector2f& getMaxSizeF() const;
 
 	//Core Functions
 	void addTile(const int& x, const int& y, const sf::IntRect& texture_rect, const bool& collision, const short& type);
@@ -52,11 +53,11 @@ public:
 	void updateLevelCollision(Entity* entity, const float& dt);
 	void updateTilesCollision(Entity* entity, const sf::Vector2i& gridPosition, const float& dt);
 	
-	void update(Entity* entity, const float& dt);
+	void update(Entity* entity, const sf::Vector2i& gridPosition, const float& dt);
 
-	void renderGameState(sf::RenderTarget& target);
+	void renderGameState(sf::RenderTarget& target, const sf::Vector2f& player_position = sf::Vector2f(), sf::Shader* shader = NULL);
 	void renderEditorState(sf::RenderTarget& target);
-	void renderAbove(sf::RenderTarget& target);
+	void renderAbove(sf::RenderTarget& target, const sf::Vector2f& player_position = sf::Vector2f(), sf::Shader* shader = NULL);
 
 };
 

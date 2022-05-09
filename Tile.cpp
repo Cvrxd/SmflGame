@@ -5,10 +5,10 @@ Tile::Tile(const int& x, const int& y, const float& gridSizef, const sf::Texture
 	const bool& collision, const short& type)
 	: collision(collision), type(type), x(x), y(y)
 {
-	this->shape.setSize(sf::Vector2f(gridSizef, gridSizef));
-	this->shape.setFillColor(sf::Color::White);
+	/*this->shape.setSize(sf::Vector2f(gridSizef, gridSizef));
+	this->shape.setFillColor(sf::Color::White);*/
 	this->shape.setPosition(static_cast<float>(x) * gridSizef, static_cast<float>(y) * gridSizef);
-	this->shape.setTexture(&texture);
+	this->shape.setTexture(texture);
 	this->shape.setTextureRect(texture_rect);
 	//this->shape.setScale(2.f, 2.f);
 

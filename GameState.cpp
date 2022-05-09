@@ -97,9 +97,9 @@ GameState::GameState(StateData* state_data)
 	this->initKeybinds();
 	this->initTextures();
 	this->initPauseMenu();
-	this->initShaders();
 	this->initPlayers();
 	this->initPlayerGUI();
+	this->initShaders();
 	this->initTileMap();
 }
 
@@ -118,6 +118,36 @@ void GameState::updateView(const float& dt)
 		std::floor(this->player->getPosition().x + (static_cast<float>(this->mousePosWindow.x) - static_cast<float>(this->stateData->gfxSettings->resolution.width / 2)) / 10.f),
 		std::floor(this->player->getPosition().y + (static_cast<float>(this->mousePosWindow.y) - static_cast<float>(this->stateData->gfxSettings->resolution.height / 2)) / 10.f)
 	);
+
+	this->viewGridPosition.x = static_cast<int>(this->view.getCenter().x / this->stateData->gridSize);
+	this->viewGridPosition.y = static_cast<int>(this->view.getCenter().y / this->stateData->gridSize);
+
+	//World view
+	
+	/*if (this->tileMap->getMaxSizeF().x >= this->view.getSize().x)
+	{
+		if (this->view.getCenter().x - this->view.getSize().x / 2.f < 0.f)
+		{
+			this->view.setCenter(0.f + this->view.getSize().x / 2.f, this->view.getCenter().y);
+		}
+		else if (this->view.getCenter().x + this->view.getSize().x / 2.f > this->tileMap->getMaxSizeF().x)
+		{
+			this->view.setCenter(this->tileMap->getMaxSizeF().x - this->view.getSize().x / 2.f, this->view.getCenter().y);
+		}
+	}
+
+	if (this->tileMap->getMaxSizeF().y >= this->view.getSize().y)
+	{
+		if (this->view.getCenter().y - this->view.getSize().y / 2.f < 0.f)
+		{
+			this->view.setCenter(this->view.getCenter().x, 0.f + this->view.getSize().y / 2.f);
+		}
+		else if (this->view.getCenter().y + this->view.getSize().y / 2.f > this->tileMap->getMaxSizeF().y)
+		{
+			this->view.setCenter(this->view.getCenter().x, this->tileMap->getMaxSizeF().y - this->view.getSize().y / 2.f);
+		}
+	}*/
+
 }
 
 //Pause menu update
@@ -176,7 +206,7 @@ void GameState::updateInput(const float& dt)
 
 void GameState::updateTileMap(const float& dt)
 {
-	this->tileMap->update(this->player, dt);
+	this->tileMap->update(this->player, this->viewGridPosition, dt);
 }
 
 void GameState::update(const float& dt)
@@ -190,7 +220,7 @@ void GameState::update(const float& dt)
 		this->updateView(dt);
 		this->updatePlayerInput(dt);
 		this->updateTileMap(dt);
-		this->player->update(dt);
+		this->player->update(dt, this->mousPosView);
 
 		//GUI UPDATE
 		this->playerGUI->update(dt);
@@ -214,9 +244,10 @@ void GameState::render(sf::RenderTarget* target)
 	this->renderTexture.setView(this->view);
 
 	//tile map and player render
-	this->tileMap->renderGameState(this->renderTexture);
+	//Using shader
+	this->tileMap->renderGameState(this->renderTexture, this->player->getCenter(), &this->core_shader);
 	this->player->render(this->renderTexture, &this->core_shader);
-	this->tileMap->renderAbove(this->renderTexture);
+	this->tileMap->renderAbove(this->renderTexture, this->player->getCenter(), &this->core_shader);
 
 	//player GUI render
 	this->renderTexture.setView(this->renderTexture.getDefaultView());

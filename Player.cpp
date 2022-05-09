@@ -50,6 +50,22 @@ LevelingComponent* Player::getLVLcomponent()
 	return this->levelingComponent;
 }
 
+//Stat functions
+void Player::gainEXP(const unsigned& exp)
+{
+	this->levelingComponent->gainEXP(exp);
+}
+
+void Player::loseHP(const int& hp)
+{
+	this->levelingComponent->loseHP(hp);
+}
+
+void Player::gainHP(const int& hp)
+{
+	this->levelingComponent->gainHP(hp);
+}
+
 //Functions
 void Player::updateAttack(const float& dt)
 {
@@ -67,7 +83,7 @@ void Player::updateAttack(const float& dt)
 	}
 }
 
-void Player::updateRegularKeyboard(const float& dt)
+void Player::updateRegularKeyboard(const float& dt, sf::Vector2f mouse_pos_view)
 {
 	//Regular keyboardupdate
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F))
@@ -76,6 +92,17 @@ void Player::updateRegularKeyboard(const float& dt)
 	}
 	else if (this->movementComponent->getState(IDLE))
 	{
+		if (mouse_pos_view.x < this->hitboxComponent->getPositionHitbox().x)
+		{
+			this->sprite.setOrigin(50.f, 0.f);
+			this->sprite.setScale(-2.8f, 2.8f);
+		}
+		else
+		{
+			this->sprite.setOrigin(0.f, 0.f);
+			this->sprite.setScale(2.8f, 2.8f);
+		}
+
 		this->animationComponent->play("IDLE", dt);
 	}
 	else if (this->movementComponent->getState(MOVING_RIGHT))
@@ -100,12 +127,14 @@ void Player::updateRegularKeyboard(const float& dt)
 	}
 }
 
-void Player::update(const float& dt)
+void Player::update(const float& dt, sf::Vector2f mouse_pos_view)
 {
 	this->movementComponent->update(dt);
 	this->updateAttack(dt);
-	this->updateRegularKeyboard(dt);
-	this->hitboxComponent->update();	
+	this->updateRegularKeyboard(dt, mouse_pos_view);
+	this->hitboxComponent->update();
+
+	//Debug!
 }
 
 void Player::render(sf::RenderTarget& target, sf::Shader* shader)

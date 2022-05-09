@@ -8,6 +8,7 @@ public:
 	unsigned exp;
 	unsigned expNext;
 	unsigned statsPoints;
+	unsigned skillPoints;
 
 	//Stats
 	int hp;
@@ -27,7 +28,9 @@ public:
 	//Functions
 	std::string debugPrint();
 
-	void gainEXP(const unsigned exp);
+	void gainEXP(const unsigned& exp);
+	void loseHP(const int& hp);
+	void gainHP(const int& hp);
 
 	void updateLevel();
 	void updateStats(const bool& reset = false);
