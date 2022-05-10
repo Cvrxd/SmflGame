@@ -1,8 +1,23 @@
 #pragma once
 
-class LevelingComponent
+class StatsComponent
 {
 public:
+	struct Items
+	{
+		bool sword = false;
+		bool staff = false;
+		bool ring = false;
+		bool necklase = false;
+		bool helmet = false;
+		bool armor = false;
+		bool gloves = false;
+		bool boots = false;
+	};
+
+	//Items
+	Items items;
+
 	//Leveling
 	int level;
 	unsigned exp;
@@ -22,11 +37,12 @@ public:
 	int damageMagical;
 
 	//Constructor
-	LevelingComponent(const int& level);
-	~LevelingComponent();
+	StatsComponent(const int& level);
+	~StatsComponent();
 
 	//Functions
 	std::string debugPrint();
+	void addItem(const short& item);
 
 	void gainEXP(const unsigned& exp);
 	void loseHP(const int& hp);

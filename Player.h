@@ -9,6 +9,7 @@ private:
 	//Variables
 	bool isAttacking = false;
 	
+
 	//Initialisation functios
 	void initVariables();
 	void createAnimationComponent(sf::Texture& texture_sheet) override;
@@ -19,7 +20,7 @@ public:
 	virtual ~Player();
 
 	//Accessors
-	LevelingComponent* getLVLcomponent();
+	StatsComponent* getStatsComponent();
 
 	//Functions
 	void gainEXP(const unsigned& exp);

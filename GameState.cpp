@@ -60,7 +60,8 @@ void GameState::initPauseMenu()
 	this->pauseMenu = new PauseMenu(*this->window, this->font);
 
 	this->pauseMenu->addButton("CONTINUE", 400.f, -20.f,"Continue");
-	this->pauseMenu->addButton("QUIT", 600.f, 40.f,"Quit");
+	this->pauseMenu->addButton("SKILLS", 550.f, 20.f, "Skills");
+	this->pauseMenu->addButton("QUIT", 700.f, 40.f,"Quit");
 }
 
 void GameState::initShaders()
@@ -161,6 +162,10 @@ void GameState::updatePauseMenuButtons()
 	{
 		this->unpausedState();
 	}
+	else if (this->pauseMenu->isButtonPressed("SKILLS"))
+	{
+		//
+	}
 }
 
 //Update functions
@@ -185,7 +190,7 @@ void GameState::updatePlayerInput(const float& dt)
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
 	{
-		this->player->getLVLcomponent()->gainEXP(1);
+		this->player->getStatsComponent()->gainEXP(1);
 	}
 }
 
@@ -258,6 +263,7 @@ void GameState::render(sf::RenderTarget* target)
 		//this->renderTexture.setView(this->renderTexture.getDefaultView());
 		this->pauseMenu->render(this->renderTexture);
 	}
+
 
 	//Render
 	this->renderTexture.display();

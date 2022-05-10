@@ -1,8 +1,8 @@
 #include "stdafx.h"
-#include "LevelingComponent.h"
+#include "StatsComponent.h"
 
 //Constructor
-LevelingComponent::LevelingComponent(const int& level)
+StatsComponent::StatsComponent(const int& level)
 	:level(level), exp(0), statsPoints(3), skillPoints(1)
 {
 	//Exp
@@ -21,11 +21,11 @@ LevelingComponent::LevelingComponent(const int& level)
 	this->updateStats(true);
 }
 
-LevelingComponent::~LevelingComponent()
+StatsComponent::~StatsComponent()
 {
 }
 
-std::string LevelingComponent::debugPrint()
+std::string StatsComponent::debugPrint()
 {
 	std::stringstream ss;
 
@@ -37,14 +37,18 @@ std::string LevelingComponent::debugPrint()
 	return ss.str();
 }
 
+void StatsComponent::addItem(const short& item)
+{
+}
+
 //Functions
-void LevelingComponent::gainEXP(const unsigned& exp)
+void StatsComponent::gainEXP(const unsigned& exp)
 {
 	this->exp += exp;
 	this->updateLevel();
 }
 
-void LevelingComponent::loseHP(const int& hp)
+void StatsComponent::loseHP(const int& hp)
 {
 	this->hp -= hp;
 	if (this->hp < 0)
@@ -55,7 +59,7 @@ void LevelingComponent::loseHP(const int& hp)
 	}
 }
 
-void LevelingComponent::gainHP(const int& hp)
+void StatsComponent::gainHP(const int& hp)
 {
 	this->hp += hp;
 	if (this->hp > this->hpMAX)
@@ -64,7 +68,7 @@ void LevelingComponent::gainHP(const int& hp)
 	}
 }
 
-void LevelingComponent::updateLevel()
+void StatsComponent::updateLevel()
 {
 	//New level gained
 	if(this->exp >= this->expNext)
@@ -87,7 +91,7 @@ void LevelingComponent::updateLevel()
 	
 }
 
-void LevelingComponent::updateStats(const bool& reset)
+void StatsComponent::updateStats(const bool& reset)
 {
 	//Reset main stats if needed
 	if (reset)
@@ -98,6 +102,6 @@ void LevelingComponent::updateStats(const bool& reset)
 	}
 }
 
-void LevelingComponent::update()
+void StatsComponent::update()
 {
 }

@@ -11,6 +11,7 @@ void Player::createAnimationComponent(sf::Texture& texture_sheet)
 {
 	//Regular texture
 	this->animationComponent = new AnimationComponent(this->sprite, texture_sheet);
+	this->addAnimations();
 }
 
 void Player::initComponents(sf::Texture& texture_sheet)
@@ -18,7 +19,8 @@ void Player::initComponents(sf::Texture& texture_sheet)
 	this->createHitboxComponent(this->sprite, 45.f, 48.f, 55.f, 55.f);
 	this->createMovementComponent(270.f, 1200.f, 400.f);
 	this->createAnimationComponent(texture_sheet);
-	this->createLevelingComponent(1);
+	this->createStatsComponent(1);
+	this->createSkillsComponent();
 }
 
 void Player::addAnimations()
@@ -36,7 +38,6 @@ Player::Player(const float& x, const float& y, sf::Texture& texture_sheet)
 {
 	this->setPosition(x, y);
 	this->initComponents(texture_sheet);
-	this->addAnimations();
 	this->sprite.setScale(2.8f, 2.8f);
 }
 
@@ -45,25 +46,25 @@ Player::~Player()
 }
 
 //Accessors
-LevelingComponent* Player::getLVLcomponent()
+StatsComponent* Player::getStatsComponent()
 {
-	return this->levelingComponent;
+	return this->statsComponent;
 }
 
 //Stat functions
 void Player::gainEXP(const unsigned& exp)
 {
-	this->levelingComponent->gainEXP(exp);
+	this->statsComponent->gainEXP(exp);
 }
 
 void Player::loseHP(const int& hp)
 {
-	this->levelingComponent->loseHP(hp);
+	this->statsComponent->loseHP(hp);
 }
 
 void Player::gainHP(const int& hp)
 {
-	this->levelingComponent->gainHP(hp);
+	this->statsComponent->gainHP(hp);
 }
 
 //Functions

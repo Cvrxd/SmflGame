@@ -96,11 +96,14 @@
     <ClCompile Include="GraphicsSettings.cpp">
       <Filter>Файлы ресурсов</Filter>
     </ClCompile>
-    <ClCompile Include="LevelingComponent.cpp">
+    <ClCompile Include="StatsComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="PlayerGUI.cpp">
       <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillsComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -152,7 +155,7 @@
     <ClInclude Include="GraphicsSettings.h">
       <Filter>Файлы ресурсов</Filter>
     </ClInclude>
-    <ClInclude Include="LevelingComponent.h">
+    <ClInclude Include="StatsComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="PlayerGUI.h">
@@ -160,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillsComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
