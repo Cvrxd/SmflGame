@@ -51,17 +51,14 @@ void GameState::initTextures()
 	if (!this->textures["PLAYER_SHEET"].loadFromFile("Textures/characters/player/test_sheet.png"))
 	{
 		throw("ERROR::GAMESTATE::COULD NOT LOAD PLAYER TEEXTURE");
-	
 	}
 }
 
 void GameState::initPauseMenu()
 {
-	this->pauseMenu = new PauseMenu(*this->window, this->font);
-
-	this->pauseMenu->addButton("CONTINUE", 400.f, -20.f,"Continue");
-	this->pauseMenu->addButton("SKILLS", 550.f, 20.f, "Skills");
-	this->pauseMenu->addButton("QUIT", 700.f, 40.f,"Quit");
+	this->pauseMenu.addButton("CONTINUE", 400.f, -20.f,"Continue");
+	this->pauseMenu.addButton("SKILLS", 550.f, 20.f, "Skills");
+	this->pauseMenu.addButton("QUIT", 700.f, 40.f,"Quit");
 }
 
 void GameState::initShaders()
@@ -74,23 +71,25 @@ void GameState::initShaders()
 
 void GameState::initPlayers()
 {
-	this->player = new Player(500, 500, this->textures["PLAYER_SHEET"]);
 }
 
 void GameState::initPlayerGUI()
 {
-	this->playerGUI = new PlayerGUI(*this->player, this->font);
 }
 
 void GameState::initTileMap()
 {
-	this->tileMap = new TileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg");
-	this->tileMap->loadFromFile("map/game_map.txt");
+	this->tileMap.loadFromFile("map/game_map.txt");
 }
 
 //Constructor
 GameState::GameState(StateData* state_data)
-	: State(state_data)
+	: State(state_data), skillMenuActive(false),
+	pauseMenu(*this->window, this->stateData->font), //Pause menu 
+	player(500,500, this->textures["PLAYER_SHEET"]), //Player
+	skillsMenu(this->player, this->font, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
+	playerGUI(this->player, this->font), // Player GUI
+	tileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg") //Tile map
 {
 	this->initRenderTextures();
 	this->initView();
@@ -98,26 +97,22 @@ GameState::GameState(StateData* state_data)
 	this->initKeybinds();
 	this->initTextures();
 	this->initPauseMenu();
-	this->initPlayers();
-	this->initPlayerGUI();
+	//this->initPlayers();
+	//this->initPlayerGUI();
 	this->initShaders();
 	this->initTileMap();
 }
 
 GameState::~GameState()
 {
-	delete this->pauseMenu;
-	delete this->player;
-	delete this->tileMap;
-	delete this->playerGUI;
 }
 
 // Funtions
 void GameState::updateView(const float& dt)
 {
 	this->view.setCenter(
-		std::floor(this->player->getPosition().x + (static_cast<float>(this->mousePosWindow.x) - static_cast<float>(this->stateData->gfxSettings->resolution.width / 2)) / 10.f),
-		std::floor(this->player->getPosition().y + (static_cast<float>(this->mousePosWindow.y) - static_cast<float>(this->stateData->gfxSettings->resolution.height / 2)) / 10.f)
+		std::floor(this->player.getPosition().x + (static_cast<float>(this->mousePosWindow.x) - static_cast<float>(this->stateData->gfxSettings->resolution.width / 2)) / 10.f),
+		std::floor(this->player.getPosition().y + (static_cast<float>(this->mousePosWindow.y) - static_cast<float>(this->stateData->gfxSettings->resolution.height / 2)) / 10.f)
 	);
 
 	this->viewGridPosition.x = static_cast<int>(this->view.getCenter().x / this->stateData->gridSize);
@@ -154,17 +149,17 @@ void GameState::updateView(const float& dt)
 //Pause menu update
 void GameState::updatePauseMenuButtons()
 {
-	if (this->pauseMenu->isButtonPressed("QUIT"))
+	if (this->pauseMenu.isButtonPressed("QUIT"))
 	{
 		this->endState();
 	}
-	else if (this->pauseMenu->isButtonPressed("CONTINUE"))
+	else if (this->pauseMenu.isButtonPressed("CONTINUE"))
 	{
 		this->unpausedState();
 	}
-	else if (this->pauseMenu->isButtonPressed("SKILLS"))
+	else if (this->pauseMenu.isButtonPressed("SKILLS"))
 	{
-		//
+		this->skillMenuActive = true;
 	}
 }
 
@@ -174,23 +169,23 @@ void GameState::updatePlayerInput(const float& dt)
 	//check for keyboard key player
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_LEFT"))))
 	{
-		this->player->move(-1.f, 0.f, dt);
+		this->player.move(-1.f, 0.f, dt);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_RIGHT"))))
 	{
-		this->player->move(1.f, 0.f, dt);
+		this->player.move(1.f, 0.f, dt);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_UP"))))
 	{
-		this->player->move(0.f, -1.f, dt);
+		this->player.move(0.f, -1.f, dt);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_DOWN"))))
 	{
-		this->player->move(0.f, 1.f, dt);
+		this->player.move(0.f, 1.f, dt);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
 	{
-		this->player->getStatsComponent()->gainEXP(1);
+		this->player.getStatsComponent()->gainEXP(1);
 	}
 }
 
@@ -205,13 +200,14 @@ void GameState::updateInput(const float& dt)
 		else
 		{
 			this->unpausedState();
+			this->skillMenuActive = false;
 		}
 	}
 }
 
 void GameState::updateTileMap(const float& dt)
 {
-	this->tileMap->update(this->player, this->viewGridPosition, dt);
+	this->tileMap.update(&this->player, this->viewGridPosition, dt);
 }
 
 void GameState::update(const float& dt)
@@ -225,14 +221,18 @@ void GameState::update(const float& dt)
 		this->updateView(dt);
 		this->updatePlayerInput(dt);
 		this->updateTileMap(dt);
-		this->player->update(dt, this->mousPosView);
+		this->player.update(dt, this->mousPosView);
 
 		//GUI UPDATE
-		this->playerGUI->update(dt);
+		this->playerGUI.update(dt);
 	} 
-	else //Paused
+	else if (this->paused && this->skillMenuActive)
 	{
-		this->pauseMenu->update(this->mousePosWindow);
+		this->skillsMenu.update(this->mousePosWindow, dt);
+	}
+	else//Paused
+	{
+		this->pauseMenu.update(this->mousePosWindow);
 		this->updatePauseMenuButtons();
 	}
 }
@@ -250,20 +250,22 @@ void GameState::render(sf::RenderTarget* target)
 
 	//tile map and player render
 	//Using shader
-	this->tileMap->renderGameState(this->renderTexture, this->player->getCenter(), &this->core_shader);
-	this->player->render(this->renderTexture, &this->core_shader);
-	this->tileMap->renderAbove(this->renderTexture, this->player->getCenter(), &this->core_shader);
+	this->tileMap.renderGameState(this->renderTexture, this->player.getCenter(), &this->core_shader);
+	this->player.render(this->renderTexture, &this->core_shader);
+	this->tileMap.renderAbove(this->renderTexture, this->player.getCenter(), &this->core_shader);
 
 	//player GUI render
 	this->renderTexture.setView(this->renderTexture.getDefaultView());
-	this->playerGUI->render(this->renderTexture);
+	this->playerGUI.render(this->renderTexture);
 
-	if (this->paused) //Pause menu render
+	if (this->paused && !this->skillMenuActive) //Pause menu render
 	{
-		//this->renderTexture.setView(this->renderTexture.getDefaultView());
-		this->pauseMenu->render(this->renderTexture);
+		this->pauseMenu.render(this->renderTexture);
 	}
-
+	else if(this->paused && this->skillMenuActive)
+	{
+		this->skillsMenu.render(this->renderTexture);
+	}
 
 	//Render
 	this->renderTexture.display();

@@ -1,20 +1,10 @@
 #pragma once
 
+enum Items {SWORD = 0, DAGGER, MAGIK_SWORD, STAFF, RING, NECKLASE, HELMET, ARMOR, GLOVES, BOOTS};
+
 class StatsComponent
 {
 public:
-	struct Items
-	{
-		bool sword = false;
-		bool staff = false;
-		bool ring = false;
-		bool necklase = false;
-		bool helmet = false;
-		bool armor = false;
-		bool gloves = false;
-		bool boots = false;
-	};
-
 	//Items
 	Items items;
 
@@ -41,8 +31,7 @@ public:
 	~StatsComponent();
 
 	//Functions
-	std::string debugPrint();
-	void addItem(const short& item);
+	void addItem(const Items& item);
 
 	void gainEXP(const unsigned& exp);
 	void loseHP(const int& hp);

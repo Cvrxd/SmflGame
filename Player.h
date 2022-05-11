@@ -9,7 +9,6 @@ private:
 	//Variables
 	bool isAttacking = false;
 	
-
 	//Initialisation functios
 	void initVariables();
 	void createAnimationComponent(sf::Texture& texture_sheet) override;
@@ -26,6 +25,7 @@ public:
 	void gainEXP(const unsigned& exp);
 	void loseHP(const int& hp);
 	void gainHP(const int& hp);
+	void addItem(const Items& item);
 
 	void updateAttack(const float& dt);
 	void updateRegularKeyboard(const float& dt, sf::Vector2f mouse_pos_view);

@@ -67,6 +67,11 @@ void Player::gainHP(const int& hp)
 	this->statsComponent->gainHP(hp);
 }
 
+void Player::addItem(const Items& item)
+{
+	this->statsComponent->addItem(item);
+}
+
 //Functions
 void Player::updateAttack(const float& dt)
 {

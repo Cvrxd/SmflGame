@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PlayerGUI.h"
 
+//Player GUI
 void PlayerGUI::initStatBars()
 {
 	this->textures["HP_BAR"].loadFromFile("Textures/hud/game_hud/hp.png");
@@ -14,11 +15,11 @@ void PlayerGUI::initStatBars()
 	for (int i = 0; i < 3; ++i)
 	{
 		this->bars[i].first.setTexture(&this->textures["BAR_BORDER"]);
-		this->bars[i].first.setPosition(sf::Vector2f(130, 35 + 20 * (i * 3)));
-		this->bars[i].first.setSize(sf::Vector2f(450 - (i * 80), 40));
+		this->bars[i].first.setPosition(sf::Vector2f(130.f, static_cast<float>(35 + 20 * (i * 3))));
+		this->bars[i].first.setSize(sf::Vector2f(static_cast<float>(450 - (i * 80)), 40.f));
 
-		this->bars[i].second.setPosition(sf::Vector2f(130 + 5, 2 + 35 + 20 * (i * 3)));
-		this->bars[i].second.setSize(sf::Vector2f(450 - (i * 80) - 10, 40 - 5));
+		this->bars[i].second.setPosition(sf::Vector2f(135.f, static_cast<float> (2 + 35 + 20 * (i * 3))));
+		this->bars[i].second.setSize(sf::Vector2f(static_cast<float>(450 - (i * 80) - 10), 35.f));
 	}
 
 	this->bars[0].second.setTexture(&this->textures["HP_BAR"]);
@@ -33,9 +34,9 @@ void PlayerGUI::initQuickSlotBars()
 	
 	for (int i = 0; i < 7; ++i)
 	{
-		this->quickSlotBars[i].first.setSize(sf::Vector2f(48, 48));
+		this->quickSlotBars[i].first.setSize(sf::Vector2f(48.f, 48.f));
 		this->quickSlotBars[i].first.setFillColor(sf::Color(200,200, 200, 100));
-		this->quickSlotBars[i].first.setPosition(650 + (i * 100), 920);
+		this->quickSlotBars[i].first.setPosition(static_cast<float>(650 + (i * 100)), 920.f);
 		this->quickSlotBars[i].first.setOutlineColor(sf::Color::White);
 		this->quickSlotBars[i].first.setOutlineThickness(1.f);
 	}
@@ -94,7 +95,7 @@ void PlayerGUI::initTextsIcons()
 		{
 			this->texts["SLOT" + std::to_string(i)].setString("E");
 		}
-		this->texts["SLOT" + std::to_string(i)].setPosition(650 + (i * 100)+ 5, 915);
+		this->texts["SLOT" + std::to_string(i)].setPosition(static_cast<float>(650 + (i * 100))+ 5, 915.f);
 
 	}
 }
@@ -254,11 +255,214 @@ void PlayerGUI::render(sf::RenderTarget& target)
 	}
 }
 
-//Skills Menu functions
-void PlayerGUI::updateSkillsMenu(const float& dt)
+
+//Skills Menu functions//
+
+//Init functions
+void SkillsMenu::initButtons()
 {
+	this->buttons["HP_UP"] = new GUI::Button(this->statIcons[0].getPosition().x + 200, this->statIcons[0].getPosition().y + 28,
+		70.f, 50.f,
+		&this->font, "+", 50,
+		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
+		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
+	);
+
+	this->buttons["MP_UP"] = new GUI::Button(this->statIcons[1].getPosition().x + 200, this->statIcons[1].getPosition().y + 28,
+		70.f, 50.f,
+		&this->font, "+", 50,
+		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
+		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
+	);
+
+	this->buttons["ARMOR_UP"] = new GUI::Button(this->statIcons[2].getPosition().x + 200, this->statIcons[2].getPosition().y + 28,
+		70.f, 50.f,
+		&this->font, "+", 50,
+		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
+		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
+	);
 }
 
-void PlayerGUI::renderSkillsMenu(sf::RenderTarget& traget)
+void SkillsMenu::initBackground(const float& x, const float& y)
 {
+	//Background
+	this->background.setSize(sf::Vector2f(x / 1.5f, y / 1.7f));
+	this->background.setFillColor(sf::Color(20, 20, 20, 200));
+	this->background.setPosition(x / 2.f - this->background.getSize().x / 2.f, y / 2.f - this->background.getSize().y / 2.f);
+
+	//Stat icons
+	this->statIcons.resize(6);
+	this->textures["STAT_ICONS"].loadFromFile("Textures/hud/inventory_hud/items32_simple_transparent.png");
+
+	int i = 0;
+	for (auto& el : this->statIcons)
+	{
+		el.setSize(sf::Vector2f(32, 32));
+		el.setTexture(&this->textures["STAT_ICONS"]);
+		el.setPosition(this->background.getPosition().x + 50, this->background.getPosition().y + (++i) * 55);
+	}
+	
+	this->statIcons[0].setTextureRect(sf::IntRect(64, 128, 32, 32)); //Level icon
+	this->statIcons[1].setTextureRect(sf::IntRect(96, 32, 32, 32));	 //Hp icon
+	this->statIcons[2].setTextureRect(sf::IntRect(96, 128, 32, 32)); //Mp icon
+	this->statIcons[3].setTextureRect(sf::IntRect(160, 96, 32, 32)); //Armor icon
+	this->statIcons[4].setTextureRect(sf::IntRect(64, 32, 32, 32)); //Phys damage icon
+	this->statIcons[5].setTextureRect(sf::IntRect(224, 0, 32, 32)); //Magika damage icon
+}
+
+void SkillsMenu::initTexts()
+{
+	this->texts.resize(10);
+
+	for (auto& el : this->texts)
+	{
+		el.setFont(this->font);
+		el.setCharacterSize(27);
+		el.setFillColor(sf::Color::White);
+	}
+
+	//Stats text
+	this->texts[0].setString("EXP: " + std::to_string(this->player.getStatsComponent()->exp) + "/" + std::to_string(this->player.getStatsComponent()->expNext));
+	this->texts[0].setPosition(sf::Vector2f(this->statIcons[0].getPosition().x + 50, this->statIcons[0].getPosition().y));
+
+	this->texts[1].setString("HP: " + std::to_string(this->player.getStatsComponent()->hp) + "/" + std::to_string(this->player.getStatsComponent()->hpMAX));
+	this->texts[1].setPosition(sf::Vector2f(this->statIcons[1].getPosition().x + 50, this->statIcons[1].getPosition().y));
+
+	this->texts[2].setString("MP: " + std::to_string(this->player.getStatsComponent()->magicka) + "/" + std::to_string(this->player.getStatsComponent()->magickaMAX));
+	this->texts[2].setPosition(sf::Vector2f(this->statIcons[2].getPosition().x + 50, this->statIcons[2].getPosition().y));
+
+	this->texts[3].setString("Armor: " + std::to_string(this->player.getStatsComponent()->armor) + "/" + std::to_string(this->player.getStatsComponent()->armorMAX));
+	this->texts[3].setPosition(sf::Vector2f(this->statIcons[3].getPosition().x + 50, this->statIcons[3].getPosition().y));
+
+	this->texts[4].setString("Physical damage : " + std::to_string(this->player.getStatsComponent()->damagePhysical));
+	this->texts[4].setPosition(sf::Vector2f(this->statIcons[4].getPosition().x + 50, this->statIcons[4].getPosition().y));
+
+	this->texts[5].setString("Magical damage: " + std::to_string(this->player.getStatsComponent()->damageMagical));
+	this->texts[5].setPosition(sf::Vector2f(this->statIcons[5].getPosition().x + 50, this->statIcons[5].getPosition().y));
+
+	//
+	this->texts[6].setString("Stat points: " + std::to_string(this->player.getStatsComponent()->statsPoints));
+	this->texts[6].setPosition(sf::Vector2f(this->statIcons[5].getPosition().x, this->statIcons[5].getPosition().y + 55));
+
+	this->texts[7].setString("Skill points: " + std::to_string(this->player.getStatsComponent()->skillPoints));
+	this->texts[7].setPosition(sf::Vector2f(this->texts[6].getPosition().x, this->texts[6].getPosition().y + 55));
+}
+
+//Other functions
+const bool SkillsMenu::getKeyTime()
+{
+	return this->keyTime >= this->keyTimeMax;
+}
+
+void SkillsMenu::updateKeyTime(const float& dt)
+{
+	if (this->keyTime < this->keyTimeMax)
+	{
+		this->keyTime += 100.f * dt;
+	}
+	else
+	{
+		this->keyTime = 0;
+	}
+}
+
+//Constructor
+SkillsMenu::SkillsMenu(Player& player, sf::Font& font, const float& x, const float& y)
+	:player(player), font(font), keyTime(0.f), keyTimeMax(10.f)
+{
+	this->initBackground(x, y);
+	this->initTexts();
+	this->initButtons();
+}
+
+SkillsMenu::~SkillsMenu()
+{
+	for (auto it = this->buttons.begin(); it != buttons.end(); ++it)
+	{
+		delete it->second;
+	}
+}
+
+//Functions
+void SkillsMenu::renderButtons(sf::RenderTarget& target)
+{
+	for (auto& el : this->buttons)
+	{
+		el.second->render(target);
+	}
+}
+
+void SkillsMenu::updateText()
+{
+	//Update player stats text
+	this->texts[0].setString("EXP: " + std::to_string(this->player.getStatsComponent()->exp) + "/" + std::to_string(this->player.getStatsComponent()->expNext));
+	this->texts[1].setString("HP: " + std::to_string(this->player.getStatsComponent()->hp) + "/" + std::to_string(this->player.getStatsComponent()->hpMAX));
+	this->texts[2].setString("MP: " + std::to_string(this->player.getStatsComponent()->magicka) + "/" + std::to_string(this->player.getStatsComponent()->magickaMAX));
+	this->texts[3].setString("Armor: " + std::to_string(this->player.getStatsComponent()->armor) + "/" + std::to_string(this->player.getStatsComponent()->armorMAX));
+	this->texts[4].setString("Physical damage : " + std::to_string(this->player.getStatsComponent()->damagePhysical));
+	this->texts[5].setString("Magical damage: " + std::to_string(this->player.getStatsComponent()->damageMagical));
+	
+	//Skill and Stat points
+	this->texts[6].setString("Stat points: " + std::to_string(this->player.getStatsComponent()->statsPoints));
+	this->texts[7].setString("Skill points: " + std::to_string(this->player.getStatsComponent()->skillPoints));
+
+}
+
+void SkillsMenu::updateButtons(sf::Vector2i& mousePosWindow)
+{
+	for (auto& el : this->buttons)
+	{
+		el.second->update(mousePosWindow);
+	}
+	if (this->buttons["HP_UP"]->isPressed() && this->getKeyTime())
+	{
+		if (this->player.getStatsComponent()->statsPoints > 0)
+		{
+			++this->player.getStatsComponent()->hp;
+			++this->player.getStatsComponent()->hpMAX;
+			--this->player.getStatsComponent()->statsPoints;
+		}
+	}
+	else if (this->buttons["MP_UP"]->isPressed() && this->getKeyTime())
+	{
+		if (this->player.getStatsComponent()->statsPoints > 0)
+		{
+			++this->player.getStatsComponent()->magicka;
+			++this->player.getStatsComponent()->magickaMAX;
+			--this->player.getStatsComponent()->statsPoints;
+		}
+	}
+	else if (this->buttons["ARMOR_UP"]->isPressed() && this->getKeyTime())
+	{
+		if (this->player.getStatsComponent()->statsPoints > 0)
+		{
+			++this->player.getStatsComponent()->armor;
+			++this->player.getStatsComponent()->armorMAX;
+			--this->player.getStatsComponent()->statsPoints;
+		}
+	}
+}
+
+void SkillsMenu::update(sf::Vector2i& mousePosWindow, const float& dt)
+{
+	this->updateKeyTime(dt);
+	this->updateButtons(mousePosWindow);
+	this->updateText();
+}
+
+void SkillsMenu::render(sf::RenderTarget& target)
+{
+	target.draw(this->background);
+	this->renderButtons(target);
+
+	for (auto& el : this->statIcons)
+	{
+		target.draw(el);
+	}
+	for (auto& el : this->texts)
+	{
+		target.draw(el);
+	}
+
+	
 }

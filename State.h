@@ -15,6 +15,7 @@ struct StateData
 
 	//Variables
 	float gridSize;
+	sf::Font font;
 	GraphicsSettings* gfxSettings;
 	sf::RenderWindow* window;
 	std::map<std::string, int>* supportedKeys;

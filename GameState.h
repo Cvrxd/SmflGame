@@ -23,11 +23,13 @@ private:
 	sf::RenderTexture renderTexture;
 	sf::Sprite renderSprite;
 
-	PauseMenu* pauseMenu;
+	TileMap tileMap;
+	Player player;
 
-	Player* player;
-	PlayerGUI* playerGUI;
-	TileMap* tileMap;
+	PauseMenu pauseMenu;
+	PlayerGUI playerGUI;
+	SkillsMenu skillsMenu;
+	bool skillMenuActive;
 
 	//Functions
 	void initRenderTextures();

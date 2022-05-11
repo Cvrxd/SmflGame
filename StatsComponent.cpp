@@ -25,23 +25,44 @@ StatsComponent::~StatsComponent()
 {
 }
 
-std::string StatsComponent::debugPrint()
-{
-	std::stringstream ss;
-
-	ss << "\nLevel " << this->level
-		<< "\nExp " << this->exp
-		<< "\nExpNext " << this->expNext
-		<< "\nstat points " << this->statsPoints;
-
-	return ss.str();
-}
-
-void StatsComponent::addItem(const short& item)
-{
-}
-
 //Functions
+void StatsComponent::addItem(const Items& item)
+{
+	switch (item)
+	{
+	case SWORD:
+		++this->damagePhysical;
+		break;
+	case STAFF:
+		++this->damageMagical;
+		break;
+	case DAGGER:
+		++this->damagePhysical;
+	case MAGIK_SWORD:
+		++this->damageMagical;
+	case RING:
+		++this->magickaMAX;
+		break;
+	case NECKLASE:
+		++this->magickaMAX;
+		break;
+	case HELMET:
+		++this->armorMAX;
+		break;
+	case ARMOR:
+		++this->armorMAX;
+		break;
+	case GLOVES:
+		++this->armorMAX;
+		break;
+	case BOOTS:
+		++this->armorMAX;
+		break;
+	default:
+		break;
+	}
+}
+
 void StatsComponent::gainEXP(const unsigned& exp)
 {
 	this->exp += exp;
@@ -100,6 +121,7 @@ void StatsComponent::updateStats(const bool& reset)
 		this->hp = this->hpMAX;
 		this->magicka = magickaMAX;
 	}
+
 }
 
 void StatsComponent::update()

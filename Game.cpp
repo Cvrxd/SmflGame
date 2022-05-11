@@ -63,6 +63,10 @@ void Game::initStateData()
 	this->stateData.supportedKeys = &this->supportedKeys;
 	this->stateData.gfxSettings = &this->gfxSettings;
 	this->stateData.gridSize = this->gridSize;
+	if (!this->stateData.font.loadFromFile("Fonts/Greybeard.ttf"))
+	{
+		throw("ERROR::GAMESTATE::COULD NOT LOAD FONT");
+	}
 }
 
 void Game::initStates()

@@ -1,16 +1,13 @@
 #pragma once
 #include"Player.h"
+#include"Gui.h"
 
 class Player;
+class GUI::Button;
 
 class PlayerGUI
 {
 private:
-	struct LevelingMenu
-	{
-		
-	};
-
 	//Variables
 	Player& player;
 	sf::Font& font;
@@ -51,9 +48,49 @@ public:
 
 	void update(const float& dt);
 	void render(sf::RenderTarget& target);
-
-	//Skills Menu
-	void updateSkillsMenu(const float& dt);
-	void renderSkillsMenu(sf::RenderTarget& traget);
 };
 
+class SkillsMenu
+{
+private:
+	//Variables
+	float keyTime;
+	float keyTimeMax;
+
+	Player& player;
+	sf::Font& font;
+
+	sf::RectangleShape background;
+	std::vector<sf::Text> texts;
+
+	//All textures
+	std::map<std::string, sf::Texture> textures;
+
+	//Stat icons
+	std::vector<sf::RectangleShape> statIcons;
+
+	//Buttons
+	std::map<std::string, GUI::Button*> buttons;
+
+	//Init functions
+	void initButtons();
+	void initBackground(const float& x, const float& y);
+	void initTexts();
+
+	//Other functions
+	const bool getKeyTime();
+	void updateKeyTime(const float& dt);
+public:
+	//Constructor
+	SkillsMenu(Player& player, sf::Font& font, const float& x, const float& y);
+	~SkillsMenu();
+
+	//Other functions
+	void updateText();
+
+	void updateButtons(sf::Vector2i& mousePosWindow);
+	void renderButtons(sf::RenderTarget& target);
+
+	void update(sf::Vector2i& mousePosWindow, const float& dt);
+	void render(sf::RenderTarget& target);
+};

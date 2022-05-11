@@ -10,6 +10,7 @@ class HitboxComponent;
 class MovementComponent;
 class AnimationComponent;
 class StatsComponent;
+class SkillsComponent;
 
 class Entity
 {
