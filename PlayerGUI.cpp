@@ -255,7 +255,6 @@ void PlayerGUI::render(sf::RenderTarget& target)
 	}
 }
 
-
 //Skills Menu functions//
 
 //Init functions
@@ -281,6 +280,17 @@ void SkillsMenu::initButtons()
 		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
 		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
 	);
+
+	for (auto& el : this->skillsIcons)
+	{
+		this->unclockButtons[el.first] = new GUI::Button(el.second.getPosition().x, el.second.getPosition().y,
+			48.f, 48.f,
+			&this->font, " ", 50,
+			sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
+			sf::Color(70, 70, 70, 100), sf::Color(150, 150, 150, 100), sf::Color(20, 20, 20, 100)
+		);
+	}
+	
 }
 
 void SkillsMenu::initBackground(const float& x, const float& y)
@@ -334,18 +344,67 @@ void SkillsMenu::initTexts()
 	this->texts[3].setString("Armor: " + std::to_string(this->player.getStatsComponent()->armor) + "/" + std::to_string(this->player.getStatsComponent()->armorMAX));
 	this->texts[3].setPosition(sf::Vector2f(this->statIcons[3].getPosition().x + 50, this->statIcons[3].getPosition().y));
 
-	this->texts[4].setString("Physical damage : " + std::to_string(this->player.getStatsComponent()->damagePhysical));
+	this->texts[4].setString("Physical damage: " + std::to_string(this->player.getStatsComponent()->damagePhysical));
 	this->texts[4].setPosition(sf::Vector2f(this->statIcons[4].getPosition().x + 50, this->statIcons[4].getPosition().y));
 
 	this->texts[5].setString("Magical damage: " + std::to_string(this->player.getStatsComponent()->damageMagical));
 	this->texts[5].setPosition(sf::Vector2f(this->statIcons[5].getPosition().x + 50, this->statIcons[5].getPosition().y));
 
-	//
 	this->texts[6].setString("Stat points: " + std::to_string(this->player.getStatsComponent()->statsPoints));
-	this->texts[6].setPosition(sf::Vector2f(this->statIcons[5].getPosition().x, this->statIcons[5].getPosition().y + 55));
+	this->texts[6].setPosition(sf::Vector2f(this->statIcons[5].getPosition().x, this->statIcons[5].getPosition().y + 100));
 
 	this->texts[7].setString("Skill points: " + std::to_string(this->player.getStatsComponent()->skillPoints));
 	this->texts[7].setPosition(sf::Vector2f(this->texts[6].getPosition().x, this->texts[6].getPosition().y + 55));
+
+	this->texts[8].setString("Skills");
+	this->texts[8].setCharacterSize(40);
+	this->texts[8].setPosition(sf::Vector2f(this->background.getSize().x - 100, this->texts[0].getPosition().y - 20));
+
+}
+
+void SkillsMenu::initSkillIcons()
+{
+	this->skillsIcons.resize(6);
+	
+	for (int i = 0,  x = static_cast<int>(this->texts[8].getPosition().x) + 100, y = static_cast<int>(this->texts[8].getPosition().y); 
+		i < this->skillsIcons.size(); ++i, x+=100)
+	{
+		this->skillsIcons[i].second.setSize(sf::Vector2f(48, 48));
+		this->skillsIcons[i].second.setFillColor(sf::Color::White);
+		this->skillsIcons[i].second.setOutlineThickness(1.f);
+		this->skillsIcons[i].second.setOutlineColor(sf::Color(200,200,200,200));
+
+		if (i % 4 == 0)
+		{
+			y += 100;
+			x = static_cast<int>(this->texts[8].getPosition().x) - 100;
+		}
+		this->skillsIcons[i].second.setPosition(static_cast<float>(x), static_cast<float>(y));
+	}
+
+	this->textures["RED_BLADES"].loadFromFile("Textures/skills/skill_icons43.png");
+	this->skillsIcons[0].first = RED_BLADES;
+	this->skillsIcons[0].second.setTexture(&this->textures["RED_BLADES"]);
+
+	this->textures["WATER_SPIKE"].loadFromFile("Textures/skills/skill_icons47.png");
+	this->skillsIcons[1].first = WATER_SPIKE;
+	this->skillsIcons[1].second.setTexture(&this->textures["WATER_SPIKE"]);
+
+	this->textures["THUNDER_STRIKE"].loadFromFile("Textures/skills/skill_icons2.png");
+	this->skillsIcons[2].first = THUNDER_STRIKE;
+	this->skillsIcons[2].second.setTexture(&this->textures["THUNDER_STRIKE"]);
+
+	this->textures["DARK_BOLT"].loadFromFile("Textures/skills/skill_icons51.png");
+	this->skillsIcons[3].first = DARK_BOLT;
+	this->skillsIcons[3].second.setTexture(&this->textures["DARK_BOLT"]);
+
+	this->textures["POISON_CLAW"].loadFromFile("Textures/skills/skill_icons39.png");
+	this->skillsIcons[4].first = POISON_CLAW;
+	this->skillsIcons[4].second.setTexture(&this->textures["POISON_CLAW"]);
+
+	this->textures["DARK_POSION"].loadFromFile("Textures/skills/skill_icons50.png");
+	this->skillsIcons[5].first = DARK_POSION;
+	this->skillsIcons[5].second.setTexture(&this->textures["DARK_POSION"]);
 }
 
 //Other functions
@@ -367,11 +426,12 @@ void SkillsMenu::updateKeyTime(const float& dt)
 }
 
 //Constructor
-SkillsMenu::SkillsMenu(Player& player, sf::Font& font, const float& x, const float& y)
-	:player(player), font(font), keyTime(0.f), keyTimeMax(10.f)
+SkillsMenu::SkillsMenu(Player& player, PlayerGUI& playerGUI, sf::Font& font, const float& x, const float& y)
+	:player(player), playerGUI(playerGUI), font(font), keyTime(0.f), keyTimeMax(10.f)
 {
 	this->initBackground(x, y);
 	this->initTexts();
+	this->initSkillIcons();
 	this->initButtons();
 }
 
@@ -381,15 +441,16 @@ SkillsMenu::~SkillsMenu()
 	{
 		delete it->second;
 	}
+	for (auto it = this->unclockButtons.begin(); it != unclockButtons.end(); ++it)
+	{
+		delete it->second;
+	}
 }
 
 //Functions
-void SkillsMenu::renderButtons(sf::RenderTarget& target)
+void SkillsMenu::unlockSkill(const SkillType& type)
 {
-	for (auto& el : this->buttons)
-	{
-		el.second->render(target);
-	}
+	
 }
 
 void SkillsMenu::updateText()
@@ -414,6 +475,11 @@ void SkillsMenu::updateButtons(sf::Vector2i& mousePosWindow)
 	{
 		el.second->update(mousePosWindow);
 	}
+	for (auto& el : this->unclockButtons)
+	{
+		el.second->update(mousePosWindow);
+	}
+
 	if (this->buttons["HP_UP"]->isPressed() && this->getKeyTime())
 	{
 		if (this->player.getStatsComponent()->statsPoints > 0)
@@ -441,6 +507,19 @@ void SkillsMenu::updateButtons(sf::Vector2i& mousePosWindow)
 			--this->player.getStatsComponent()->statsPoints;
 		}
 	}
+	
+	for (auto& el : this->unclockButtons)
+	{
+		if (el.second->isPressed() && this->getKeyTime())
+		{
+			if (this->player.getStatsComponent()->skillPoints > 0)
+			{
+				this->unlockSkill(el.first);
+				--this->player.getStatsComponent()->skillPoints;
+			}
+		}
+	}
+	
 }
 
 void SkillsMenu::update(sf::Vector2i& mousePosWindow, const float& dt)
@@ -450,10 +529,21 @@ void SkillsMenu::update(sf::Vector2i& mousePosWindow, const float& dt)
 	this->updateText();
 }
 
+void SkillsMenu::renderButtons(sf::RenderTarget& target)
+{
+	for (auto& el : this->buttons)
+	{
+		el.second->render(target);
+	}
+	for (auto& el : this->unclockButtons)
+	{
+		el.second->render(target);
+	}
+}
+
 void SkillsMenu::render(sf::RenderTarget& target)
 {
 	target.draw(this->background);
-	this->renderButtons(target);
 
 	for (auto& el : this->statIcons)
 	{
@@ -463,6 +553,11 @@ void SkillsMenu::render(sf::RenderTarget& target)
 	{
 		target.draw(el);
 	}
+	for (auto& el : this->skillsIcons)
+	{
+		target.draw(el.second);
+	}
 
+	this->renderButtons(target);
 	
 }

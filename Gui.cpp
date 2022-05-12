@@ -3,7 +3,7 @@
 
 ////========================Button==========================////
 
-// init funcs
+// Constructor
 GUI::Button::Button(const float& x, const float& y, const float& width, const float& height,
 	sf::Font* font, const std::string& text, const unsigned& charcter_size,
 	const sf::Color& text_idle_color, const sf::Color& text_hover_color, const sf::Color& text_active_color,
@@ -28,12 +28,89 @@ GUI::Button::Button(const float& x, const float& y, const float& width, const fl
 	this->text.setPosition(this->shape.getPosition().x + 20, this->shape.getPosition().y + 8);
 }
 
+GUI::Button::Button(const GUI::Button& other)
+{
+	this->activeColor = other.activeColor;
+	this->buttonState = other.buttonState;
+	this->font = other.font;
+	this->hoverColor = other.hoverColor;
+	this->id = other.id;
+	this->idleColor = other.idleColor;
+	this->outlineActiveColor = other.outlineActiveColor;
+	this->outlineHoverColor = other.outlineHoverColor;
+	this->idleColor = other.outlineIdleColor;
+	this->shape = other.shape;
+	this->texActiveColor = other.texActiveColor;
+	this->text = other.text;
+	this->textHoverColor = other.textHoverColor;
+	this->textIdleColor = other.textIdleColor;
+}
+
+GUI::Button::Button(GUI::Button&& other)
+{
+	this->activeColor = other.activeColor;
+	this->buttonState = other.buttonState;
+	this->font = other.font;
+	this->hoverColor = other.hoverColor;
+	this->id = other.id;
+	this->idleColor = other.idleColor;
+	this->outlineActiveColor = other.outlineActiveColor;
+	this->outlineHoverColor = other.outlineHoverColor;
+	this->idleColor = other.outlineIdleColor;
+	this->shape = other.shape;
+	this->texActiveColor = other.texActiveColor;
+	this->text = other.text;
+	this->textHoverColor = other.textHoverColor;
+	this->textIdleColor = other.textIdleColor;
+}
+
+GUI::Button& GUI::Button::operator= (const GUI::Button& other)
+{
+	if (this != &other)
+	{
+		this->activeColor = other.activeColor;
+		this->buttonState = other.buttonState;
+		this->font = other.font;
+		this->hoverColor = other.hoverColor;
+		this->id = other.id;
+		this->idleColor = other.idleColor;
+		this->outlineActiveColor = other.outlineActiveColor;
+		this->outlineHoverColor = other.outlineHoverColor;
+		this->idleColor = other.outlineIdleColor;
+		this->shape = other.shape;
+		this->texActiveColor = other.texActiveColor;
+		this->text = other.text;
+		this->textHoverColor = other.textHoverColor;
+		this->textIdleColor = other.textIdleColor;
+	}
+	return *this;
+}
+
+GUI::Button& GUI::Button::operator=(GUI::Button&& other)
+{
+	this->activeColor = other.activeColor;
+	this->buttonState = other.buttonState;
+	this->font = other.font;
+	this->hoverColor = other.hoverColor;
+	this->id = other.id;
+	this->idleColor = other.idleColor;
+	this->outlineActiveColor = other.outlineActiveColor;
+	this->outlineHoverColor = other.outlineHoverColor;
+	this->idleColor = other.outlineIdleColor;
+	this->shape = other.shape;
+	this->texActiveColor = other.texActiveColor;
+	this->text = other.text;
+	this->textHoverColor = other.textHoverColor;
+	this->textIdleColor = other.textIdleColor;
+
+	return *this;
+}
+
 GUI::Button::~Button()
 {
 }
 
 //Accessors
-
 const short unsigned& GUI::Button::getId() const
 {
 	return this->id;
@@ -155,7 +232,6 @@ GUI::DropDownList::~DropDownList()
 	delete this->activeBox;
 }
 
-
 //Accessors
 const unsigned short& GUI::DropDownList::getActiveBoxId() const
 {
@@ -176,7 +252,6 @@ const bool GUI::DropDownList::getKeyTime()
 }
 
 //Functions
-
 void GUI::DropDownList::updateKeyTime(const float& dt)
 {
 	if (this->keyTime < this->keyTimeMax)
@@ -227,7 +302,6 @@ void GUI::DropDownList::render(sf::RenderTarget& target)
 		}
 	}
 }
-
 
 ////========================TextureSelector==========================////
 
@@ -374,5 +448,4 @@ void GUI::TextureSelector::render(sf::RenderTarget& target)
 		}
 	}
 	this->hideButton->render(target);
-
 }

@@ -7,7 +7,6 @@ class Game
 {
 private:
 	// Vriables
-
 	// core
 	StateData stateData;
 

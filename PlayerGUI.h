@@ -10,6 +10,7 @@ class PlayerGUI
 private:
 	//Variables
 	Player& player;
+
 	sf::Font& font;
 
 	std::map<std::string, sf::Texture> textures;
@@ -25,7 +26,6 @@ private:
 	std::map<std::string, sf::RectangleShape> iconsSprites;
 
 	//Inventory icons
-	
 	std::map<std::string, std::pair<sf::RectangleShape, sf::RectangleShape>> inventoryIcons;
 
 	//Functions
@@ -58,6 +58,7 @@ private:
 	float keyTimeMax;
 
 	Player& player;
+	PlayerGUI& playerGUI;
 	sf::Font& font;
 
 	sf::RectangleShape background;
@@ -69,23 +70,30 @@ private:
 	//Stat icons
 	std::vector<sf::RectangleShape> statIcons;
 
+	//Skill icons
+	std::vector<std::pair<SkillType, sf::RectangleShape>> skillsIcons;
+
 	//Buttons
 	std::map<std::string, GUI::Button*> buttons;
+	std::map<SkillType, GUI::Button*> unclockButtons;
 
 	//Init functions
 	void initButtons();
 	void initBackground(const float& x, const float& y);
 	void initTexts();
+	void initSkillIcons();
 
 	//Other functions
 	const bool getKeyTime();
 	void updateKeyTime(const float& dt);
 public:
 	//Constructor
-	SkillsMenu(Player& player, sf::Font& font, const float& x, const float& y);
+	SkillsMenu(Player& player, PlayerGUI& playerGUI, sf::Font& font, const float& x, const float& y);
 	~SkillsMenu();
 
 	//Other functions
+	void unlockSkill(const SkillType& type);
+
 	void updateText();
 
 	void updateButtons(sf::Vector2i& mousePosWindow);

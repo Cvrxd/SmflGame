@@ -87,8 +87,8 @@ GameState::GameState(StateData* state_data)
 	: State(state_data), skillMenuActive(false),
 	pauseMenu(*this->window, this->stateData->font), //Pause menu 
 	player(500,500, this->textures["PLAYER_SHEET"]), //Player
-	skillsMenu(this->player, this->font, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
 	playerGUI(this->player, this->font), // Player GUI
+	skillsMenu(this->player, this->playerGUI,this->font, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
 	tileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg") //Tile map
 {
 	this->initRenderTextures();

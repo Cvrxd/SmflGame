@@ -35,6 +35,12 @@ namespace GUI
 			const sf::Color& idleColor, const sf::Color& hoverColor, const sf::Color& activeColor, 
 			const sf::Color& outlineIdleColor = sf::Color::Transparent, const sf::Color& outlineHoverColor = sf::Color::Transparent, const sf::Color& outlineActiveColor = sf::Color::Transparent,
 			short unsigned id = 0);
+
+		Button(const GUI::Button& other);
+		Button(GUI::Button&& other);
+		Button& operator=(const GUI::Button& other);
+		Button& operator=(GUI::Button&& other);
+
 		~Button();
 
 		//Accessors
