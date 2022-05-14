@@ -9,11 +9,15 @@ class PlayerGUI
 {
 private:
 	//Variables
+	sf::Clock skillTimer;
+
 	Player& player;
 
 	sf::Font& font;
 
+	//All textures
 	std::map<std::string, sf::Texture> textures;
+
 	//Stat bars 
 	std::vector<std::pair<sf::RectangleShape, sf::RectangleShape>> bars;
 
@@ -25,6 +29,9 @@ private:
 	std::map<std::string, sf::Text> texts;
 	std::map<std::string, sf::RectangleShape> iconsSprites;
 
+	int index = 0;
+	std::vector<std::pair<SkillType, sf::RectangleShape>>* skillsIcons;
+
 	//Inventory icons
 	std::map<std::string, std::pair<sf::RectangleShape, sf::RectangleShape>> inventoryIcons;
 
@@ -33,6 +40,7 @@ private:
 	void initQuickSlotBars();
 	void initTextsIcons();
 	void initItems();
+	
 public:
 	//Constructor
 	PlayerGUI(Player& player, sf::Font& font);
@@ -40,8 +48,10 @@ public:
 
 	//Functions
 	//GUI
+	void initSkillIcons(std::vector<std::pair<SkillType, sf::RectangleShape>>* skillsIcons);
+
 	void addItem();
-	void addSkill();
+	void addSkill(const SkillType& type);
 
 	void updateBars();
 	void updateTextIcons();
@@ -84,7 +94,6 @@ private:
 	void initSkillIcons();
 
 	//Other functions
-	const bool getKeyTime();
 	void updateKeyTime(const float& dt);
 public:
 	//Constructor
@@ -92,6 +101,8 @@ public:
 	~SkillsMenu();
 
 	//Other functions
+	const bool getKeyTime() const;
+
 	void unlockSkill(const SkillType& type);
 
 	void updateText();

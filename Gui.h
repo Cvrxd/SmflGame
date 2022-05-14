@@ -113,6 +113,8 @@ namespace GUI
 		TextureSelector(const float& x, const float& y, const float& width_bounds, const float& hight_bounds, 
 			const unsigned& gridSize, const sf::Texture& texture_sheet, sf::Font& font);
 
+		//TextureSelector(TextureSelector&& other);
+
 		~TextureSelector();
 
 		//Accessors

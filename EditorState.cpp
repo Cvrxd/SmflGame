@@ -5,7 +5,6 @@
 
 void EditorState::initVariables()
 {
-	this->pauseMenu = NULL;
 	this->textureRect = sf::IntRect(0, 0, static_cast<int>(this->stateData->gridSize), static_cast<int>(this->stateData->gridSize));
 	this->collision = false;
 	this->tileType = TileTypes::DEFAULT;
@@ -56,17 +55,12 @@ void EditorState::initGUI()
 	this->selectorRect.setFillColor(sf::Color(255, 255, 255, 150)); 
 	this->selectorRect.setOutlineThickness(2.f);
 	this->selectorRect.setOutlineColor(sf::Color::Green);
-	this->selectorRect.setTexture(&this->tileMap->getTileTextureSheet());
+	this->selectorRect.setTexture(&this->tileMap.getTileTextureSheet());
 	this->selectorRect.setTextureRect(this->textureRect);
 
-	this->textureSelector = new GUI::TextureSelector(
+	/*this->textureSelector = new GUI::TextureSelector(
 		100.f, 20.f, 1280.f, 640.f, static_cast<unsigned int>(this->stateData->gridSize), 
-		this->tileMap->getTileTextureSheet(), this->font);
-}
-
-void EditorState::initTileMap()
-{
-	this->tileMap = new TileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg");
+		this->tileMap.getTileTextureSheet(), this->font);*/
 }
 
 void EditorState::initFonts()
@@ -91,17 +85,19 @@ void EditorState::initButtons()
 
 void EditorState::initPauseMenu()
 {
-	this->pauseMenu = new PauseMenu(*this->window, this->font);
-
-	this->pauseMenu->addButton("SAVE", 350.f, 40.f, "Save");
-	this->pauseMenu->addButton("LOAD", 470.f, 40.f, "Load");
-	this->pauseMenu->addButton("CLEAR", 590.f, 40.f, "Clear");
-	this->pauseMenu->addButton("QUIT", 710.f, 40.f, "Quit");
+	this->pauseMenu.addButton("SAVE", 350.f, 40.f, "Save");
+	this->pauseMenu.addButton("LOAD", 470.f, 40.f, "Load");
+	this->pauseMenu.addButton("CLEAR", 590.f, 40.f, "Clear");
+	this->pauseMenu.addButton("QUIT", 710.f, 40.f, "Quit");
 }
 
 //Constructor
 EditorState::EditorState(StateData* state_data)
-	: State(state_data)
+	: State(state_data),
+	tileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg"),
+	pauseMenu(*this->stateData->window, this->stateData->font),
+	textureSelector(100.f, 20.f, 1280.f, 640.f, static_cast<unsigned int>(this->stateData->gridSize),
+		this->tileMap.getTileTextureSheet(), this->font)
 {
 	this->initVariables();
 	this->initView();
@@ -111,7 +107,6 @@ EditorState::EditorState(StateData* state_data)
 	this->initKeybinds(); 
 	this->initPauseMenu();
 	this->initButtons(); 
-	this->initTileMap();
 	this->initGUI();
 }
 
@@ -121,10 +116,7 @@ EditorState::~EditorState()
 	{
 		delete it->second;
 	}
-
-	delete this->tileMap;
-	delete this->pauseMenu;
-	delete this->textureSelector;
+	//delete this->textureSelector;
 }
 
 // Functions 
@@ -172,13 +164,13 @@ void EditorState::updateEditorInput(const float& dt)
 	{
 		if (!this->sidebar.getGlobalBounds().contains(sf::Vector2f(this->mousePosWindow)))
 		{
-			if (!this->textureSelector->getActive())
+			if (!this->textureSelector.getActive())
 			{
-				this->tileMap->addTile(this->mousePosGrid.x, this->mousePosGrid.y, this->textureRect, this->collision, this->tileType);
+				this->tileMap.addTile(this->mousePosGrid.x, this->mousePosGrid.y, this->textureRect, this->collision, this->tileType);
 			}
 			else
 			{
-				this->textureRect = this->textureSelector->getTextureRect();
+				this->textureRect = this->textureSelector.getTextureRect();
 			}
 		}
 	}
@@ -187,9 +179,9 @@ void EditorState::updateEditorInput(const float& dt)
 	{
 		if (!this->sidebar.getGlobalBounds().contains(sf::Vector2f(this->mousePosWindow)))
 		{
-			if (!this->textureSelector->getActive())
+			if (!this->textureSelector.getActive())
 			{
-				this->tileMap->removeTile(this->mousePosGrid.x, this->mousePosGrid.y);
+				this->tileMap.removeTile(this->mousePosGrid.x, this->mousePosGrid.y);
 			}
 		}
 	}
@@ -221,9 +213,9 @@ void EditorState::updateButtons()
 void EditorState::updateGUI(const float& dt)
 {
 	//TextureSelector
-	this->textureSelector->update(this->mousePosWindow, dt);
+	this->textureSelector.update(this->mousePosWindow, dt);
 
-	if (!this->textureSelector->getActive())
+	if (!this->textureSelector.getActive())
 	{
 		//Selector rect
 		this->selectorRect.setPosition(this->mousePosGrid.x * this->stateData->gridSize, this->mousePosGrid.y * this->stateData->gridSize);
@@ -242,24 +234,22 @@ void EditorState::updateGUI(const float& dt)
 
 void EditorState::updatePauseMenuButtons()
 {
-	if (this->pauseMenu->isButtonPressed("QUIT"))
+	if (this->pauseMenu.isButtonPressed("QUIT"))
 	{
 		this->endState();
 	}
-	else if (this->pauseMenu->isButtonPressed("SAVE") && this->getKeyTime())
+	else if (this->pauseMenu.isButtonPressed("SAVE") && this->getKeyTime())
 	{
-		this->tileMap->saveToFile("map/game_map.txt");
+		this->tileMap.saveToFile("map/game_map.txt");
 		this->paused = false;
 	}
-	else if (this->pauseMenu->isButtonPressed("LOAD") && this->getKeyTime())
+	else if (this->pauseMenu.isButtonPressed("LOAD") && this->getKeyTime())
 	{
-		this->tileMap->loadFromFile("map/game_map.txt");
+		this->tileMap.loadFromFile("map/game_map.txt");
 		this->paused = false;
 	}
-	else if (this->pauseMenu->isButtonPressed("CLEAR") && this->getKeyTime())
+	else if (this->pauseMenu.isButtonPressed("CLEAR") && this->getKeyTime())
 	{
-		//this->tileMap->clear();
-
 		this->paused = false;
 	}
 }
@@ -279,7 +269,7 @@ void EditorState::update(const float& dt)
 	}
 	else //Paused
 	{
-		this->pauseMenu->update(this->mousePosWindow);
+		this->pauseMenu.update(this->mousePosWindow);
 		this->updatePauseMenuButtons();
 	}
 
@@ -297,14 +287,14 @@ void EditorState::renderButtons(sf::RenderTarget& target)
 
 void EditorState::renderGUI(sf::RenderTarget& target)
 {
-	if (!this->textureSelector->getActive())
+	if (!this->textureSelector.getActive())
 	{
 		target.setView(this->view);
 		target.draw(this->selectorRect);
 	}
 
 	target.setView(this->window->getDefaultView());
-	this->textureSelector->render(target);
+	this->textureSelector.render(target);
 	target.draw(this->sidebar);
 
 	target.setView(this->view);
@@ -319,7 +309,7 @@ void EditorState::render(sf::RenderTarget* target)
 	}
 
 	target->setView(this->view);
-	this->tileMap->renderEditorState(*target);
+	this->tileMap.renderEditorState(*target);
 
 	target->setView(this->window->getDefaultView());
 	this->renderButtons(*target);
@@ -329,6 +319,6 @@ void EditorState::render(sf::RenderTarget* target)
 	if (this->paused)
 	{
 		target->setView(this->window->getDefaultView());
-		this->pauseMenu->render(*target);
+		this->pauseMenu.render(*target);
 	}
 }

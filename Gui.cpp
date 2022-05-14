@@ -359,6 +359,23 @@ GUI::TextureSelector::TextureSelector(const float& x, const float& y, const floa
 	);
 }
 
+//GUI::TextureSelector::TextureSelector(TextureSelector&& other)
+//{
+//	this->active = other.active;
+//	this->bounds = std::move(other.bounds);
+//	this->gridSize = other.gridSize;
+//	this->hideButton = other.hideButton;
+//	other.hideButton = nullptr;
+//
+//	this->hiden = other.hiden;
+//	this->keyTime = other.keyTime;
+//	this->keyTimeMax = other.keyTimeMax;
+//	this->mousePosGrid = std::move(other.mousePosGrid);
+//	this->selector = std::move(other.selector);
+//	this->sheet = std::move(other.sheet);
+//	this->textureRect = std::move(other.textureRect);
+//}
+
 GUI::TextureSelector::~TextureSelector()
 {
 	delete this->hideButton;

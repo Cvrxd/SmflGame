@@ -34,8 +34,12 @@ public:
 	void addItem(const Items& item);
 
 	void gainEXP(const unsigned& exp);
-	void loseHP(const int& hp);
 	void gainHP(const int& hp);
+	void loseHP(const int& hp);
+	void gainArmor(const int& armor);
+	void loseArmor(const int& armor);
+	void gainMP(const int& mp);
+	void loseMP(const int& mp);
 
 	void updateLevel();
 	void updateStats(const bool& reset = false);

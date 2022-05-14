@@ -1,10 +1,30 @@
 #include "stdafx.h"
 #include "AnimationComponent.h"
 
-AnimationComponent::AnimationComponent(sf::Sprite& sprite, sf::Texture& textureSheet)
+
+AnimationComponent::AnimationComponent(sf::Sprite* sprite, sf::Texture* textureSheet)
 	:sprite(sprite), textureSheet(textureSheet), lastAnimation(NULL), priorityAnimation(NULL)
 {
 
+}
+
+AnimationComponent::AnimationComponent(const AnimationComponent& other)
+	:sprite(other.sprite), textureSheet(other.textureSheet)
+{
+	this->animations = other.animations;
+	this->priorityAnimation = other.priorityAnimation;
+	this->lastAnimation = other.lastAnimation;
+}
+
+AnimationComponent& AnimationComponent::operator=(const AnimationComponent& other)
+{
+	this->textureSheet = other.textureSheet;
+	this->sprite = other.sprite;
+	this->animations = other.animations;
+	this->priorityAnimation = other.priorityAnimation;
+	this->lastAnimation = other.lastAnimation;
+
+	return *this;
 }
 
 
@@ -26,7 +46,7 @@ const bool& AnimationComponent::isDone(const std::string& key)
 void AnimationComponent::addAnimation(const std::string key,
 	const int& start_frame_x, const int& start_frame_y,
 	const int& frame_x, const int& frame_y,
-	const int& width, const int& height, const float& animationTimer) // -__-
+	const int& width, const int& height, const float& animationTimer)
 {
 	this->animations[key] = new Animation(this->sprite, this->textureSheet, 
 		start_frame_x, start_frame_y, frame_x, start_frame_y, 

@@ -8,10 +8,15 @@ class Player : public Entity
 private:
 	//Variables
 	bool isAttacking = false;
-	
+
+	//Components
+	AnimationComponent animationComponent;
+	StatsComponent statsComponent;
+	SkillsComponent skillsComponent;
+
 	//Initialisation functios
 	void initVariables();
-	void createAnimationComponent(sf::Texture& texture_sheet) override;
+	void createAnimationComponent(sf::Texture& texture_sheet);
 	void addAnimations();
 	void initComponents(sf::Texture& texture_sheet);
 public:
@@ -20,11 +25,13 @@ public:
 
 	//Accessors
 	StatsComponent* getStatsComponent();
+	SkillsComponent* getSkillComponent();
 
 	//Functions
 	void gainEXP(const unsigned& exp);
 	void loseHP(const int& hp);
 	void gainHP(const int& hp);
+
 	void addItem(const Items& item);
 
 	void updateAttack(const float& dt);

@@ -11,8 +11,8 @@ private:
 	{
 	public:
 		//Variables core
-		sf::Texture& textureSheet;
-		sf::Sprite& sprite;
+		sf::Texture* textureSheet;
+		sf::Sprite* sprite;
 
 		float animationTimer;
 		float timer;
@@ -26,7 +26,9 @@ private:
 		sf::IntRect endRect;
 
 		//Constructor
-		Animation(sf::Sprite& sprite, sf::Texture& textureSheet, 
+		Animation(){}
+
+		Animation(sf::Sprite* sprite, sf::Texture* textureSheet, 
 			const int& start_frame_x, const int& start_frame_y, 
 			const int& frame_x, const int& frame_y,
 			const int& width, const int& height, const float& animationTimer)
@@ -39,12 +41,26 @@ private:
 			this->currentRect = this->startRect;
 			this->endRect = sf::IntRect(frame_x * width, frame_y * height, width, height);
 
-			this->sprite.setTexture(this->textureSheet);
-			this->sprite.setTextureRect(this->startRect);
+			this->sprite->setTexture(*this->textureSheet);
+			this->sprite->setTextureRect(this->startRect);
+		}
+
+		Animation& operator= (const Animation& other)
+		{
+			this->animationTimer = other.animationTimer;
+			this->currentRect = std::move(other.currentRect);
+			this->done = other.done;
+			this->endRect = std::move(other.endRect);
+			this->height = other.height;
+			this->sprite = other.sprite;
+			this->textureSheet = other.textureSheet;
+			this->timer = other.timer;
+			this->width = other.width;
+
+			return *this;
 		}
 
 		//Functions
-
 		const bool& isDone()
 		{
 			return this->done;
@@ -73,7 +89,7 @@ private:
 					this->done = true;
 				}
 			}
-			this->sprite.setTextureRect(this->currentRect);
+			this->sprite->setTextureRect(this->currentRect);
 			
 			return this->done;
 		}
@@ -106,7 +122,7 @@ private:
 					this->done = true;
 				}
 			}
-			this->sprite.setTextureRect(this->currentRect);
+			this->sprite->setTextureRect(this->currentRect);
 
 			return this->done;
 		}
@@ -119,15 +135,22 @@ private:
 	};
 	//////////////////
 
-	sf::Sprite& sprite;
-	sf::Texture& textureSheet;
+	sf::Sprite* sprite;
+	sf::Texture* textureSheet;
 
 	std::map<std::string, Animation*> animations;
 	Animation* lastAnimation;
 	Animation* priorityAnimation;
 
 public:
-	AnimationComponent(sf::Sprite& sprite, sf::Texture& textureSheet);
+	AnimationComponent() {};
+	AnimationComponent(sf::Sprite* sprite, sf::Texture* textureSheet);
+	AnimationComponent(const AnimationComponent& other);
+
+
+	//AnimationComponent& operator=(AnimationComponent&& other);
+	AnimationComponent& operator=(const AnimationComponent& other);
+
 	virtual ~AnimationComponent();
 
 	//Functions

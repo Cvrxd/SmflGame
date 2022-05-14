@@ -23,12 +23,12 @@ private:
 	sf::RectangleShape sidebar;
 	sf::RectangleShape selectorRect;
 	sf::IntRect textureRect;
-	GUI::TextureSelector* textureSelector;
+	GUI::TextureSelector textureSelector;
 
-	PauseMenu* pauseMenu;
+	PauseMenu pauseMenu;
 	std::map<std::string, GUI::Button*> buttons;
 
-	TileMap* tileMap;
+	TileMap tileMap;
 	bool collision;
 	short tileType;
 
@@ -42,7 +42,6 @@ private:
 	void initPauseMenu();
 	void initKeybinds() override;
 	void initGUI();
-	void initTileMap();
 
 public:
 	EditorState(StateData* state_data);

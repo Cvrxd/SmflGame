@@ -151,6 +151,11 @@ void PlayerGUI::initItems()
 	inventoryIcons["NECKLASE"].first.setOutlineThickness(1.f);
 }
 
+void PlayerGUI::initSkillIcons(std::vector<std::pair<SkillType, sf::RectangleShape>>* skillsIcons)
+{
+	this->skillsIcons = skillsIcons;
+}
+
 //Constructor
 PlayerGUI::PlayerGUI(Player& player, sf::Font& font)
 	:player(player), font(font)
@@ -170,8 +175,18 @@ void PlayerGUI::addItem()
 {
 }
 
-void PlayerGUI::addSkill()
+void PlayerGUI::addSkill(const SkillType& type)
 {
+	if (this->index > 3) index = 0;
+
+	this->quickSlotBars[index].second = std::find_if(this->skillsIcons->begin(), this->skillsIcons->end(),
+		[&type](std::pair<SkillType, sf::RectangleShape>& temp) {return temp.first == type; }).operator*().second;
+
+	this->quickSlotBars[index].second.setPosition(this->quickSlotBars[index].first.getPosition());
+
+	this->player.getSkillComponent()->addSkill(type, index);
+
+	++this->index;
 }
 
 void PlayerGUI::updateBars()
@@ -234,17 +249,22 @@ void PlayerGUI::render(sf::RenderTarget& target)
 		target.draw(el.second);
 	}
 
-	//Render text
-	for (auto& el : this->texts)
-	{
-		target.draw(el.second);
-	}
-
 	//Render quick slots
-	for (auto& el : this->quickSlotBars)
+	if (this->player.getSkillComponent()->getKeyTime())
 	{
-		target.draw(el.first);
-		target.draw(el.second);
+		for (auto& el : this->quickSlotBars)
+		{
+			target.draw(el.first);
+			target.draw(el.second);
+		}
+	}
+	else
+	{
+		for (auto& el : this->quickSlotBars)
+		{
+			target.draw(el.second);
+			target.draw(el.first);
+		}
 	}
 
 	//Render Inventory
@@ -252,6 +272,12 @@ void PlayerGUI::render(sf::RenderTarget& target)
 	{
 		target.draw(el.second.first);
 		target.draw(el.second.second);
+	}
+
+	//Render text
+	for (auto& el : this->texts)
+	{
+		target.draw(el.second);
 	}
 }
 
@@ -408,7 +434,7 @@ void SkillsMenu::initSkillIcons()
 }
 
 //Other functions
-const bool SkillsMenu::getKeyTime()
+const bool SkillsMenu::getKeyTime() const 
 {
 	return this->keyTime >= this->keyTimeMax;
 }
@@ -433,6 +459,7 @@ SkillsMenu::SkillsMenu(Player& player, PlayerGUI& playerGUI, sf::Font& font, con
 	this->initTexts();
 	this->initSkillIcons();
 	this->initButtons();
+	this->playerGUI.initSkillIcons(&this->skillsIcons);
 }
 
 SkillsMenu::~SkillsMenu()
@@ -450,7 +477,7 @@ SkillsMenu::~SkillsMenu()
 //Functions
 void SkillsMenu::unlockSkill(const SkillType& type)
 {
-	
+	this->playerGUI.addSkill(type);
 }
 
 void SkillsMenu::updateText()
@@ -471,6 +498,7 @@ void SkillsMenu::updateText()
 
 void SkillsMenu::updateButtons(sf::Vector2i& mousePosWindow)
 {
+	//Update all buttons
 	for (auto& el : this->buttons)
 	{
 		el.second->update(mousePosWindow);
@@ -480,6 +508,7 @@ void SkillsMenu::updateButtons(sf::Vector2i& mousePosWindow)
 		el.second->update(mousePosWindow);
 	}
 
+	//Is button pressed
 	if (this->buttons["HP_UP"]->isPressed() && this->getKeyTime())
 	{
 		if (this->player.getStatsComponent()->statsPoints > 0)
@@ -508,17 +537,25 @@ void SkillsMenu::updateButtons(sf::Vector2i& mousePosWindow)
 		}
 	}
 	
-	for (auto& el : this->unclockButtons)
+	int i = 0;
+	for (auto it = this->unclockButtons.begin(); it != this->unclockButtons.end(); ++it, ++i)
 	{
-		if (el.second->isPressed() && this->getKeyTime())
+		if (it.operator*().second->isPressed() && this->getKeyTime())
 		{
 			if (this->player.getStatsComponent()->skillPoints > 0)
 			{
-				this->unlockSkill(el.first);
+				this->unlockSkill(it.operator*().first);
 				--this->player.getStatsComponent()->skillPoints;
+
+				if (it != --this->unclockButtons.end())
+				{
+					delete it.operator*().second;
+					it = this->unclockButtons.erase(it);
+				}
 			}
 		}
 	}
+	
 	
 }
 

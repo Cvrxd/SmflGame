@@ -23,9 +23,6 @@ protected:
 	
 	HitboxComponent* hitboxComponent;
 	MovementComponent* movementComponent;
-	AnimationComponent* animationComponent;
-	StatsComponent* statsComponent;
-	SkillsComponent* skillsComponent;
 
 public:
 	Entity();
@@ -34,11 +31,8 @@ public:
 	//component functions
 	void setTexture(sf::Texture& texture);
 
-	void createSkillsComponent();
-	void createStatsComponent(const unsigned& level);
 	void createHitboxComponent(sf::Sprite& sprite, const float& offset_x, const float& offset_y, const float& width, const float& height);
 	void createMovementComponent(const float& maxVelocity, const float& acceleration, const float& deceleration);
-	virtual void createAnimationComponent(sf::Texture& texture_sheet);
 
 	//Accessors 
 	virtual const sf::Vector2f& getPosition() const;

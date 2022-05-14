@@ -69,23 +69,67 @@ void StatsComponent::gainEXP(const unsigned& exp)
 	this->updateLevel();
 }
 
-void StatsComponent::loseHP(const int& hp)
-{
-	this->hp -= hp;
-	if (this->hp < 0)
-	{
-		this->hp = 0;
-
-		//GameOVer
-	}
-}
-
 void StatsComponent::gainHP(const int& hp)
 {
 	this->hp += hp;
 	if (this->hp > this->hpMAX)
 	{
 		this->hp = this->hpMAX;
+	}
+}
+
+void StatsComponent::loseHP(const int& hp)
+{
+	if (this->armor != 0)
+	{
+		this->loseArmor(hp);
+	}
+	else
+	{
+		this->hp -= hp;
+		if (this->hp < 0)
+		{
+			this->hp = 0;
+
+			//GameOVer
+		}
+	}
+}
+
+void StatsComponent::gainArmor(const int& armor)
+{
+	if (this->armor < this->armorMAX)
+	{
+		++this->armor;
+	}
+}
+
+void StatsComponent::loseArmor(const int& armor)
+{
+	if (this->armor - armor >= 0)
+	{
+		this->armor -= armor;
+	}
+	else
+	{
+		this->armor = 0;
+		this->loseHP(armor - this->armor);
+	}
+}
+
+void StatsComponent::gainMP(const int& mp)
+{
+	if (this->magicka < this->magickaMAX)
+	{
+		++this->magicka;
+	}
+}
+
+void StatsComponent::loseMP(const int& mp)
+{
+	if (this->magicka > 0)
+	{
+		--this->magicka;
 	}
 }
 
