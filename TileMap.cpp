@@ -2,7 +2,7 @@
 #include "TileMap.h"
 
 //Initialization
-void TileMap::initTextureSheet()
+inline void TileMap::initTextureSheet()
 {
 	sf::Image image;
 	image.loadFromFile(this->textureFile);
@@ -221,7 +221,7 @@ void TileMap::updateLevelCollision(Entity* entity, const float& dt)
 	}
 }
 
-void TileMap::updateTilesCollision(Entity* entity, const sf::Vector2i& gridPosition, const float& dt)
+inline void TileMap::updateTilesCollision(Entity* entity, const sf::Vector2i& gridPosition, const float& dt)
 {
 	//Tiles Collision
 	this->fromX = gridPosition.x - 20;

@@ -2,20 +2,19 @@
 #include "Game.h"
 
 //Itialisation
-
-void Game::initVariables()
+inline void Game::initVariables()
 {
 	this->window = NULL;
 	this->dt = 0.f;
 	this->gridSize = 54.f;
 }
 
-void Game::initGraphicsSettings()
+inline void Game::initGraphicsSettings()
 {
 	this->gfxSettings.loadFromFile("Configs/graphics.ini");
 }
 
-void Game::initWnodow()
+inline void Game::initWnodow()
 {
 	if (this->gfxSettings.fullscreen)
 	{
@@ -32,7 +31,7 @@ void Game::initWnodow()
 	this->window->setVerticalSyncEnabled(this->gfxSettings.vertucalSync);
 }
 
-void Game::initKeys()
+inline void Game::initKeys()
 {
 	std::ifstream ifs("Configs/supported_keys.ini");
 
@@ -56,7 +55,7 @@ void Game::initKeys()
 	}
 }
 
-void Game::initStateData()
+inline void Game::initStateData()
 {
 	this->stateData.window = this->window;
 	this->stateData.states = &this->states;
@@ -69,11 +68,12 @@ void Game::initStateData()
 	}
 }
 
-void Game::initStates()
+inline void Game::initStates()
 {
 	this->states.push(new MainMenuState(&this->stateData));
 }
 
+//Constructor
 Game::Game()
 {
 	this->initVariables();
@@ -96,20 +96,18 @@ Game::~Game()
 }
 
 //Functions
-
 void Game::endAplication()
 {
 
 }
 
-//update
-void Game::updateDt()
+inline void Game::updateDt()
 {
 	// updates dt
 	this->dt = this->dtClock.restart().asSeconds();
 }
 
-void Game::updateSFMLEvents()
+inline void Game::updateSFMLEvents()
 {
 	while (this->window->pollEvent(this->sfEvent))
 	{
@@ -120,7 +118,7 @@ void Game::updateSFMLEvents()
 	}
 }
 
-void Game::update()
+inline void Game::update()
 {
 	this->updateSFMLEvents();
 
@@ -148,8 +146,7 @@ void Game::update()
 	}
 }
 
-//render
-void Game::render()
+inline void Game::render()
 {
 	this->window->clear();
 	

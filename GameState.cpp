@@ -2,7 +2,7 @@
 #include "GameState.h"
 
 //Initialisation
-void GameState::initKeybinds()
+inline void GameState::initKeybinds()
 {
 	std::ifstream ifs("Configs/gamestate_keybinds.ini");
 
@@ -20,7 +20,7 @@ void GameState::initKeybinds()
 	ifs.close();
 }
 
-void GameState::initRenderTextures()
+inline void GameState::initRenderTextures()
 {
 	this->renderTexture.create(this->stateData->gfxSettings->resolution.width, this->stateData->gfxSettings->resolution.height);
 
@@ -28,7 +28,7 @@ void GameState::initRenderTextures()
 	this->renderSprite.setTextureRect(sf::IntRect(0, 0, this->stateData->gfxSettings->resolution.width, this->stateData->gfxSettings->resolution.height));
 }
 
-void GameState::initView()
+inline void GameState::initView()
 {
 	this->view.setSize(sf::Vector2f(
 		static_cast<float>(this->stateData->gfxSettings->resolution.width), 
@@ -38,7 +38,7 @@ void GameState::initView()
 	//this->view.zoom(0.f);
 }
 
-void GameState::initFonts()
+inline void GameState::initFonts()
 {
 	if (!this->font.loadFromFile("Fonts/Greybeard.ttf"))
 	{
@@ -46,7 +46,7 @@ void GameState::initFonts()
 	}
 }
 
-void GameState::initTextures()
+inline void GameState::initTextures()
 {
 	if (!this->textures["PLAYER_SHEET"].loadFromFile("Textures/characters/player/test_sheet.png"))
 	{
@@ -54,14 +54,14 @@ void GameState::initTextures()
 	}
 }
 
-void GameState::initPauseMenu()
+inline void GameState::initPauseMenu()
 {
 	this->pauseMenu.addButton("CONTINUE", 400.f, -20.f,"Continue");
 	this->pauseMenu.addButton("SKILLS", 550.f, 20.f, "Skills");
 	this->pauseMenu.addButton("QUIT", 700.f, 40.f,"Quit");
 }
 
-void GameState::initShaders()
+inline void GameState::initShaders()
 {
 	if (!this->core_shader.loadFromFile("vertex_shader.vert", "fragment_shader.frag"))
 	{
@@ -69,15 +69,16 @@ void GameState::initShaders()
 	}
 }
 
-void GameState::initPlayers()
+inline void GameState::initPlayers()
 {
 }
 
-void GameState::initPlayerGUI()
+inline void GameState::initPlayerGUI()
 {
+
 }
 
-void GameState::initTileMap()
+inline void GameState::initTileMap()
 {
 	this->tileMap.loadFromFile("map/game_map.txt");
 }
@@ -108,7 +109,7 @@ GameState::~GameState()
 }
 
 // Funtions
-void GameState::updateView(const float& dt)
+inline void GameState::updateView(const float& dt)
 {
 	this->view.setCenter(
 		std::floor(this->player.getPosition().x + (static_cast<float>(this->mousePosWindow.x) - static_cast<float>(this->stateData->gfxSettings->resolution.width / 2)) / 10.f),
@@ -147,7 +148,7 @@ void GameState::updateView(const float& dt)
 }
 
 //Pause menu update
-void GameState::updatePauseMenuButtons()
+inline void GameState::updatePauseMenuButtons()
 {
 	if (this->pauseMenu.isButtonPressed("QUIT"))
 	{
@@ -164,7 +165,7 @@ void GameState::updatePauseMenuButtons()
 }
 
 //Update functions
-void GameState::updatePlayerInput(const float& dt)
+inline void GameState::updatePlayerInput(const float& dt)
 {
 	//check for keyboard key player
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_LEFT"))))
@@ -189,7 +190,7 @@ void GameState::updatePlayerInput(const float& dt)
 	}
 }
 
-void GameState::updateInput(const float& dt)
+inline void GameState::updateInput(const float& dt)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("CLOSE"))) && this->getKeyTime())
 	{
@@ -205,7 +206,7 @@ void GameState::updateInput(const float& dt)
 	}
 }
 
-void GameState::updateTileMap(const float& dt)
+inline void GameState::updateTileMap(const float& dt)
 {
 	this->tileMap.update(&this->player, this->viewGridPosition, dt);
 }

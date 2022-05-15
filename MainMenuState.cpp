@@ -2,12 +2,11 @@
 #include "MainMenuState.h"
 
 //Initialisation
-
-void MainMenuState::initVariables()
+inline void MainMenuState::initVariables()
 {
 }
 
-void MainMenuState::initBackground()
+inline void MainMenuState::initBackground()
 {
 	this->background.setSize(sf::Vector2f(static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)));
 	if (!this->backgroundTexture.loadFromFile("Textures/background/mainmenu_background.png"))
@@ -17,8 +16,7 @@ void MainMenuState::initBackground()
 	this->background.setTexture(&this->backgroundTexture); 
 }
 
-// Keybinds init from ini
-void MainMenuState::initKeybinds()
+inline void MainMenuState::initKeybinds()
 {
 	std::ifstream ifs("Configs/mainmenustate_keybinds.ini");
 
@@ -36,7 +34,7 @@ void MainMenuState::initKeybinds()
 	ifs.close();
 }
 
-void MainMenuState::initFonts()
+inline void MainMenuState::initFonts()
 {
 	if (!this->font.loadFromFile("Fonts/Greybeard.ttf"))
 	{
@@ -44,7 +42,7 @@ void MainMenuState::initFonts()
 	}
 }
 
-void MainMenuState::initButtons()
+inline void MainMenuState::initButtons()
 {
 	this->buttons["GAME_STATE"] = new GUI::Button(100.f, 100.f, 300.f, 70.f,
 		&this->font, "New Game", 70,
@@ -91,13 +89,12 @@ MainMenuState::~MainMenuState()
 }
 
 // Functions 
- 
-void MainMenuState::updateInput(const float& dt)
+inline void MainMenuState::updateInput(const float& dt)
 { 
 	
 }
 
-void MainMenuState::updateButtons()
+inline void MainMenuState::updateButtons()
 {
 	//updates all buttons
 	for (auto& el : this->buttons)
@@ -137,7 +134,7 @@ void MainMenuState::update(const float& dt)
 	this->updateButtons();
 }
 
-void MainMenuState::renderButtons(sf::RenderTarget& target)
+inline void MainMenuState::renderButtons(sf::RenderTarget& target)
 {
 	for (auto& el : this->buttons)
 	{

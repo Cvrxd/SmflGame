@@ -67,7 +67,7 @@ private:
 		}
 
 		//Play animation without modifier
-		const bool& play(const float& dt)
+		inline const bool& play(const float& dt)
 		{
 			this->done = false;
 
@@ -95,7 +95,7 @@ private:
 		}
 
 		//Play animation with modifiers
-		const bool& play(const float& dt, float percentage)
+		inline const bool& play(const float& dt, float percentage)
 		{
 			if (percentage < 0.5f)
 			{

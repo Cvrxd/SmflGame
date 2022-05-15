@@ -8,8 +8,14 @@ class Player : public Entity
 private:
 	//Variables
 	bool isAttacking = false;
+	bool isHit = false;
+	int currentHitAnimation;
+
+	std::vector<std::pair<sf::Texture, sf::Sprite>> sprites;
 
 	//Components
+	std::vector<AnimationComponent> hitAnimations;
+
 	AnimationComponent animationComponent;
 	StatsComponent statsComponent;
 	SkillsComponent skillsComponent;
@@ -27,14 +33,21 @@ public:
 	StatsComponent* getStatsComponent();
 	SkillsComponent* getSkillComponent();
 
-	//Functions
+	//Stats functions
 	void gainEXP(const unsigned& exp);
-	void loseHP(const int& hp);
 	void gainHP(const int& hp);
+	void loseHP(const int& hp);
+	void gainMP(const int& mp);
+	void loseMP(const int& mp);
+	void gainArmor(const int& armor);
 
 	void addItem(const Items& item);
 
-	void updateAttack(const float& dt);
+	void addPotions(const Potions& potion_type);
+	void usePotions(const Potions& potion_type);
+
+	//Functions
+	void updateAttack(const float& dt, sf::Vector2f mouse_pos_view);
 	void updateRegularKeyboard(const float& dt, sf::Vector2f mouse_pos_view);
 	void update(const float& dt, sf::Vector2f mouse_pos_view) override;
 	void render(sf::RenderTarget& target, sf::Shader* shader = NULL) override;

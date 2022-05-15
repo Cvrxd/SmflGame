@@ -27,7 +27,6 @@ AnimationComponent& AnimationComponent::operator=(const AnimationComponent& othe
 	return *this;
 }
 
-
 AnimationComponent::~AnimationComponent()
 {
 	for (auto& el : this->animations)
@@ -37,7 +36,6 @@ AnimationComponent::~AnimationComponent()
 }
 
 //Functions
-
 const bool& AnimationComponent::isDone(const std::string& key)
 {
 	return this->animations[key]->isDone();

@@ -119,9 +119,13 @@ void StatsComponent::loseArmor(const int& armor)
 
 void StatsComponent::gainMP(const int& mp)
 {
-	if (this->magicka < this->magickaMAX)
+	if (this->magicka + mp < this->magickaMAX)
 	{
-		++this->magicka;
+		this->magicka += mp;
+	}
+	else
+	{
+		this->magicka = this->magickaMAX;
 	}
 }
 
@@ -165,7 +169,6 @@ void StatsComponent::updateStats(const bool& reset)
 		this->hp = this->hpMAX;
 		this->magicka = magickaMAX;
 	}
-
 }
 
 void StatsComponent::update()

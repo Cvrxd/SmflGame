@@ -1,13 +1,21 @@
 #include "stdafx.h"
 #include "PlayerGUI.h"
 
+inline void PlayerGUI::initVariables()
+{
+	this->mpPotions = &this->player.getSkillComponent()->getMpPotions();
+	this->hpPotions = &this->player.getSkillComponent()->getHpPotions();
+}
+
 //Player GUI
-void PlayerGUI::initStatBars()
+inline void PlayerGUI::initStatBars()
 {
 	this->textures["HP_BAR"].loadFromFile("Textures/hud/game_hud/hp.png");
 	this->textures["MANA_BAR"].loadFromFile("Textures/hud/game_hud/mana.png");
 	this->textures["ARMOR_BAR"].loadFromFile("Textures/hud/game_hud/armor.png");
 	this->textures["BAR_BORDER"].loadFromFile("Textures/hud/game_hud/border.png");
+
+	this->textures["POTIONS"].loadFromFile("Textures/hud/inventory_hud/items32_simple_transparent2.png");
 	
 	//Borders
 	this->bars.resize(3);
@@ -27,7 +35,7 @@ void PlayerGUI::initStatBars()
 	this->bars[2].second.setTexture(&this->textures["ARMOR_BAR"]);
 }
 
-void PlayerGUI::initQuickSlotBars()
+inline void PlayerGUI::initQuickSlotBars()
 {
 	//Quick slot bars textures
 	this->quickSlotBars.resize(7);
@@ -40,9 +48,23 @@ void PlayerGUI::initQuickSlotBars()
 		this->quickSlotBars[i].first.setOutlineColor(sf::Color::White);
 		this->quickSlotBars[i].first.setOutlineThickness(1.f);
 	}
+
+	for (int i = 5; i < 7; ++i)
+	{
+		this->quickSlotBars[i].second.setPosition(this->quickSlotBars[i].first.getPosition().x + 3, this->quickSlotBars[i].first.getPosition().y + 3);
+		this->quickSlotBars[i].first.setFillColor(sf::Color::Transparent);
+		//this->quickSlotBars[i].second.setOutlineColor(sf::Color::White);
+		//this->quickSlotBars[i].second.setOutlineThickness(1.f);
+		this->quickSlotBars[i].second.setSize(sf::Vector2f(44.f, 44.f));
+		this->quickSlotBars[i].second.setTexture(&this->textures["POTIONS"]);
+
+	}
+	this->quickSlotBars[5].second.setTextureRect(sf::IntRect(224, 0, 32, 32));
+	this->quickSlotBars[6].second.setTextureRect(sf::IntRect(192, 0, 32, 32));
+
 }
 
-void PlayerGUI::initTextsIcons()
+inline void PlayerGUI::initTextsIcons()
 {
 	//Game icons
 	this->textures["ICON_SHEET"].loadFromFile("Textures/hud/game_hud/icons.png");
@@ -80,6 +102,19 @@ void PlayerGUI::initTextsIcons()
 	this->texts["EXP"].setCharacterSize(27);
 	this->texts["EXP"].setPosition(55, 122);
 
+	//Potions count
+	this->texts["MP_POTIONS"].setFont(this->font);
+	this->texts["MP_POTIONS"].setFillColor(sf::Color::White);
+	this->texts["MP_POTIONS"].setCharacterSize(30);
+	this->texts["MP_POTIONS"].setPosition(this->quickSlotBars[5].first.getPosition().x + 20, this->quickSlotBars[5].first.getPosition().y - 50);
+	this->texts["MP_POTIONS"].setString(std::to_string(*this->mpPotions));
+
+	this->texts["HP_POTIONS"].setFont(this->font);
+	this->texts["HP_POTIONS"].setFillColor(sf::Color::White);
+	this->texts["HP_POTIONS"].setCharacterSize(30);
+	this->texts["HP_POTIONS"].setPosition(this->quickSlotBars[6].first.getPosition().x + 20, this->quickSlotBars[6].first.getPosition().y - 50);
+	this->texts["HP_POTIONS"].setString(std::to_string(*this->hpPotions));
+
 	//Quick slot text
 	for (int i = 0; i < 7; ++i)
 	{
@@ -100,7 +135,7 @@ void PlayerGUI::initTextsIcons()
 	}
 }
 
-void PlayerGUI::initItems()
+inline void PlayerGUI::initItems()
 {
 	inventoryIcons["HELMET"].first.setSize(sf::Vector2f(32, 32));
 	inventoryIcons["HELMET"].first.setFillColor(sf::Color(200, 200, 200, 100));
@@ -151,6 +186,12 @@ void PlayerGUI::initItems()
 	inventoryIcons["NECKLASE"].first.setOutlineThickness(1.f);
 }
 
+void PlayerGUI::setPotionsCount(int& hp, int& mp)
+{
+	this->hpPotions = &hp;
+	this->mpPotions = &mp;
+}
+
 void PlayerGUI::initSkillIcons(std::vector<std::pair<SkillType, sf::RectangleShape>>* skillsIcons)
 {
 	this->skillsIcons = skillsIcons;
@@ -158,11 +199,12 @@ void PlayerGUI::initSkillIcons(std::vector<std::pair<SkillType, sf::RectangleSha
 
 //Constructor
 PlayerGUI::PlayerGUI(Player& player, sf::Font& font)
-	:player(player), font(font)
+	:player(player), font(font), statsComponent(*this->player.getStatsComponent())
 {
+	this->initVariables();
 	this->initStatBars();
-	this->initTextsIcons();
 	this->initQuickSlotBars();
+	this->initTextsIcons();
 	this->initItems();
 }
 
@@ -189,7 +231,7 @@ void PlayerGUI::addSkill(const SkillType& type)
 	++this->index;
 }
 
-void PlayerGUI::updateBars()
+inline void PlayerGUI::updateBars()
 {
 	this->bars[0].second.setSize(sf::Vector2f(
 		this->bars[0].first.getSize().x / this->player.getStatsComponent()->hpMAX * this->player.getStatsComponent()->hp - 10,
@@ -204,7 +246,7 @@ void PlayerGUI::updateBars()
 		this->bars[2].second.getSize().y));
 }
 
-void PlayerGUI::updateTextIcons()
+inline void PlayerGUI::updateTextIcons()
 {
 	if (this->player.getStatsComponent()->level == 10)
 	{
@@ -226,6 +268,9 @@ void PlayerGUI::updateTextIcons()
 
 	this->texts["LEVEL"].setString(std::to_string(this->player.getStatsComponent()->level));
 	this->texts["EXP"].setString(std::to_string(this->player.getStatsComponent()->exp));
+
+	this->texts["MP_POTIONS"].setString(std::to_string(*this->mpPotions));
+	this->texts["HP_POTIONS"].setString(std::to_string(*this->hpPotions));
 }
 
 void PlayerGUI::update(const float& dt)
@@ -250,7 +295,7 @@ void PlayerGUI::render(sf::RenderTarget& target)
 	}
 
 	//Render quick slots
-	if (this->player.getSkillComponent()->getKeyTime())
+	if (this->player.getSkillComponent()->getKeyTime() && this->statsComponent.magicka != 0)
 	{
 		for (auto& el : this->quickSlotBars)
 		{
@@ -281,45 +326,10 @@ void PlayerGUI::render(sf::RenderTarget& target)
 	}
 }
 
-//Skills Menu functions//
+//Skills Menu functions
 
 //Init functions
-void SkillsMenu::initButtons()
-{
-	this->buttons["HP_UP"] = new GUI::Button(this->statIcons[0].getPosition().x + 200, this->statIcons[0].getPosition().y + 28,
-		70.f, 50.f,
-		&this->font, "+", 50,
-		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
-		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
-	);
-
-	this->buttons["MP_UP"] = new GUI::Button(this->statIcons[1].getPosition().x + 200, this->statIcons[1].getPosition().y + 28,
-		70.f, 50.f,
-		&this->font, "+", 50,
-		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
-		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
-	);
-
-	this->buttons["ARMOR_UP"] = new GUI::Button(this->statIcons[2].getPosition().x + 200, this->statIcons[2].getPosition().y + 28,
-		70.f, 50.f,
-		&this->font, "+", 50,
-		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
-		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
-	);
-
-	for (auto& el : this->skillsIcons)
-	{
-		this->unclockButtons[el.first] = new GUI::Button(el.second.getPosition().x, el.second.getPosition().y,
-			48.f, 48.f,
-			&this->font, " ", 50,
-			sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
-			sf::Color(70, 70, 70, 100), sf::Color(150, 150, 150, 100), sf::Color(20, 20, 20, 100)
-		);
-	}
-	
-}
-
-void SkillsMenu::initBackground(const float& x, const float& y)
+inline void SkillsMenu::initBackground(const float& x, const float& y)
 {
 	//Background
 	this->background.setSize(sf::Vector2f(x / 1.5f, y / 1.7f));
@@ -346,7 +356,7 @@ void SkillsMenu::initBackground(const float& x, const float& y)
 	this->statIcons[5].setTextureRect(sf::IntRect(224, 0, 32, 32)); //Magika damage icon
 }
 
-void SkillsMenu::initTexts()
+inline void SkillsMenu::initTexts()
 {
 	this->texts.resize(10);
 
@@ -388,9 +398,9 @@ void SkillsMenu::initTexts()
 
 }
 
-void SkillsMenu::initSkillIcons()
+inline void SkillsMenu::initSkillIcons()
 {
-	this->skillsIcons.resize(6);
+	this->skillsIcons.resize(7);
 	
 	for (int i = 0,  x = static_cast<int>(this->texts[8].getPosition().x) + 100, y = static_cast<int>(this->texts[8].getPosition().y); 
 		i < this->skillsIcons.size(); ++i, x+=100)
@@ -431,6 +441,44 @@ void SkillsMenu::initSkillIcons()
 	this->textures["DARK_POSION"].loadFromFile("Textures/skills/skill_icons50.png");
 	this->skillsIcons[5].first = DARK_POSION;
 	this->skillsIcons[5].second.setTexture(&this->textures["DARK_POSION"]);
+
+	this->textures["BLOOD_SPIKE"].loadFromFile("Textures/skills/skill_icons42.png");
+	this->skillsIcons[6].first = BLOOD_SPIKE;
+	this->skillsIcons[6].second.setTexture(&this->textures["BLOOD_SPIKE"]);
+}
+
+inline void SkillsMenu::initButtons()
+{
+	this->buttons["HP_UP"] = new GUI::Button(this->statIcons[0].getPosition().x + 200, this->statIcons[0].getPosition().y + 28,
+		70.f, 50.f,
+		&this->font, "+", 50,
+		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
+		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
+	);
+
+	this->buttons["MP_UP"] = new GUI::Button(this->statIcons[1].getPosition().x + 200, this->statIcons[1].getPosition().y + 28,
+		70.f, 50.f,
+		&this->font, "+", 50,
+		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
+		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
+	);
+
+	this->buttons["ARMOR_UP"] = new GUI::Button(this->statIcons[2].getPosition().x + 200, this->statIcons[2].getPosition().y + 28,
+		70.f, 50.f,
+		&this->font, "+", 50,
+		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
+		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
+	);
+
+	for (auto& el : this->skillsIcons)
+	{
+		this->unclockButtons[el.first] = new GUI::Button(el.second.getPosition().x, el.second.getPosition().y,
+			48.f, 48.f,
+			&this->font, " ", 50,
+			sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
+			sf::Color(70, 70, 70, 100), sf::Color(150, 150, 150, 100), sf::Color(20, 20, 20, 100)
+		);
+	}
 }
 
 //Other functions
@@ -439,7 +487,7 @@ const bool SkillsMenu::getKeyTime() const
 	return this->keyTime >= this->keyTimeMax;
 }
 
-void SkillsMenu::updateKeyTime(const float& dt)
+inline void SkillsMenu::updateKeyTime(const float& dt)
 {
 	if (this->keyTime < this->keyTimeMax)
 	{
@@ -480,7 +528,7 @@ void SkillsMenu::unlockSkill(const SkillType& type)
 	this->playerGUI.addSkill(type);
 }
 
-void SkillsMenu::updateText()
+inline void SkillsMenu::updateText()
 {
 	//Update player stats text
 	this->texts[0].setString("EXP: " + std::to_string(this->player.getStatsComponent()->exp) + "/" + std::to_string(this->player.getStatsComponent()->expNext));
@@ -496,7 +544,7 @@ void SkillsMenu::updateText()
 
 }
 
-void SkillsMenu::updateButtons(sf::Vector2i& mousePosWindow)
+inline void SkillsMenu::updateButtons(sf::Vector2i& mousePosWindow)
 {
 	//Update all buttons
 	for (auto& el : this->buttons)
@@ -547,7 +595,14 @@ void SkillsMenu::updateButtons(sf::Vector2i& mousePosWindow)
 				this->unlockSkill(it.operator*().first);
 				--this->player.getStatsComponent()->skillPoints;
 
-				if (it != --this->unclockButtons.end())
+				if (it == --this->unclockButtons.end())
+				{
+					std::cout << 1;
+					delete it.operator*().second;
+					this->unclockButtons.erase(it);
+					break;
+				}
+				else
 				{
 					delete it.operator*().second;
 					it = this->unclockButtons.erase(it);
@@ -566,7 +621,7 @@ void SkillsMenu::update(sf::Vector2i& mousePosWindow, const float& dt)
 	this->updateText();
 }
 
-void SkillsMenu::renderButtons(sf::RenderTarget& target)
+inline void SkillsMenu::renderButtons(sf::RenderTarget& target)
 {
 	for (auto& el : this->buttons)
 	{

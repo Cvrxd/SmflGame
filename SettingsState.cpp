@@ -2,13 +2,12 @@
 #include "SettingsState.h"
 
 //Initialisation functions
-
-void SettingsState::initVariables()
+inline void SettingsState::initVariables()
 {
 	this->videoModes = std::move(sf::VideoMode::getFullscreenModes());
 }
 
-void SettingsState::initText()
+inline void SettingsState::initText()
 {
 	this->optionsText.setFont(this->font);
 	this->optionsText.setPosition(sf::Vector2f(100.f, 250.f)); 
@@ -20,7 +19,7 @@ void SettingsState::initText()
 	);
 }
 
-void SettingsState::initBackground()
+inline void SettingsState::initBackground()
 {
 	this->background.setSize(sf::Vector2f(static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)));
 	if (!this->backgroundTexture.loadFromFile("Textures/background/mainmenu_background.png"))
@@ -30,8 +29,7 @@ void SettingsState::initBackground()
 	this->background.setTexture(&this->backgroundTexture);
 }
 
-// Keybinds init from ini
-void SettingsState::initKeybinds()
+inline void SettingsState::initKeybinds()
 {
 	std::ifstream ifs("Configs/mainmenustate_keybinds.ini");
 
@@ -49,8 +47,7 @@ void SettingsState::initKeybinds()
 	ifs.close();
 }
 
-//fonts
-void SettingsState::initFonts()
+inline void SettingsState::initFonts()
 {
 	if (!this->font.loadFromFile("Fonts/Greybeard.ttf"))
 	{
@@ -58,8 +55,7 @@ void SettingsState::initFonts()
 	}
 }
 
-//buttons init
-void SettingsState::initGUI()
+inline void SettingsState::initGUI()
 {
 	this->buttons["EXIT_STATE"] = new GUI::Button(815.f, 850.f, 180.f, 75.f,
 		&this->font, "Quit", 50,
@@ -117,12 +113,12 @@ SettingsState::~SettingsState()
 //Accessors
 
 //Functions
-void SettingsState::updateInput(const float& dt)
+inline void SettingsState::updateInput(const float& dt)
 {
 
 }
 
-void SettingsState::updateGUI(const float& dt)
+inline void SettingsState::updateGUI(const float& dt)
 {
 	//updates all buttons
 	for (auto& el : this->buttons)
@@ -160,7 +156,7 @@ void SettingsState::update(const float& dt)
 }
 
 //render
-void SettingsState::renderGUI(sf::RenderTarget& target)
+inline void SettingsState::renderGUI(sf::RenderTarget& target)
 {
 	//render buttons
 	for (auto& el : this->buttons)

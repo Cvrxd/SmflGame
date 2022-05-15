@@ -252,7 +252,7 @@ const bool GUI::DropDownList::getKeyTime()
 }
 
 //Functions
-void GUI::DropDownList::updateKeyTime(const float& dt)
+inline void GUI::DropDownList::updateKeyTime(const float& dt)
 {
 	if (this->keyTime < this->keyTimeMax)
 	{
@@ -306,7 +306,7 @@ void GUI::DropDownList::render(sf::RenderTarget& target)
 ////========================TextureSelector==========================////
 
 //Initialisation
-void GUI::TextureSelector::initBounds(const float& x, const float& y, const float& width_bounds, const float& height_bounds)
+inline void GUI::TextureSelector::initBounds(const float& x, const float& y, const float& width_bounds, const float& height_bounds)
 {
 	this->bounds.setSize(sf::Vector2f(width_bounds, height_bounds));
 	this->bounds.setPosition(x + gridSize, y);
@@ -315,7 +315,7 @@ void GUI::TextureSelector::initBounds(const float& x, const float& y, const floa
 	this->bounds.setOutlineColor(sf::Color(255, 255, 255, 200));
 }
 
-void GUI::TextureSelector::initSpriteSheet(const float& x, const float& y, const sf::Texture& texture_sheet)
+inline void GUI::TextureSelector::initSpriteSheet(const float& x, const float& y, const sf::Texture& texture_sheet)
 {
 	this->sheet.setTexture(texture_sheet);
 	this->sheet.setPosition(x + this->gridSize, y);
@@ -329,7 +329,7 @@ void GUI::TextureSelector::initSpriteSheet(const float& x, const float& y, const
 	}
 }
 
-void GUI::TextureSelector::initSelector_TextureRect(const float& x, const float& y)
+inline void GUI::TextureSelector::initSelector_TextureRect(const float& x, const float& y)
 {
 	//Selector
 	this->selector.setPosition(x + gridSize, y);
@@ -406,7 +406,7 @@ const bool GUI::TextureSelector::getKeyTime()
 }
 
 //Functions
-void GUI::TextureSelector::updateKeyTime(const float& dt)
+inline void GUI::TextureSelector::updateKeyTime(const float& dt)
 {
 	if (this->keyTime < this->keyTimeMax)
 	{

@@ -23,7 +23,7 @@ private:
 	sf::RectangleShape sidebar;
 	sf::RectangleShape selectorRect;
 	sf::IntRect textureRect;
-	GUI::TextureSelector textureSelector;
+	GUI::TextureSelector* textureSelector;
 
 	PauseMenu pauseMenu;
 	std::map<std::string, GUI::Button*> buttons;

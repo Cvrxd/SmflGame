@@ -11,7 +11,11 @@ private:
 	//Variables
 	sf::Clock skillTimer;
 
+	//Player variables
 	Player& player;
+	StatsComponent& statsComponent;
+	int* hpPotions;
+	int* mpPotions;
 
 	sf::Font& font;
 
@@ -36,6 +40,7 @@ private:
 	std::map<std::string, std::pair<sf::RectangleShape, sf::RectangleShape>> inventoryIcons;
 
 	//Functions
+	void initVariables();
 	void initStatBars();
 	void initQuickSlotBars();
 	void initTextsIcons();
@@ -47,7 +52,7 @@ public:
 	~PlayerGUI();
 
 	//Functions
-	//GUI
+	void setPotionsCount(int& hp, int& mp);
 	void initSkillIcons(std::vector<std::pair<SkillType, sf::RectangleShape>>* skillsIcons);
 
 	void addItem();
