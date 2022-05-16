@@ -5,19 +5,21 @@
 							this->sprite.setScale(-2.8f, 2.8f);\
 							this->sprites[0].second.setOrigin(50.f, 0.f);\
 							this->sprites[0].second.setScale(-4.f, 4.f);\
-							this->sprites[1].second.setScale(-4.f, 4.f)
+							this->sprites[1].second.setScale(-4.f, 4.f);\
+							this->sprites[2].second.setScale(-4.f, 4.f)
 
 #define SPTIRES_SETSCALE_RIGHT this->sprite.setOrigin(0.f, 0.f);\
 							this->sprite.setScale(2.8f, 2.8f);\
 							this->sprites[0].second.setOrigin(0.f, 0.f);\
 							this->sprites[0].second.setScale(4.f, 4.f);\
-							this->sprites[1].second.setScale(4.f, 4.f)
+							this->sprites[1].second.setScale(4.f, 4.f);\
+							this->sprites[2].second.setScale(4.f, 4.f)
 
 //Initialasation functions
 inline void Player::initVariables()
 {
-	this->sprites.resize(2);
-	this->hitAnimations.resize(2);
+	this->sprites.resize(3);
+	this->hitAnimations.resize(3);
 
 	this->sprites[0].first.loadFromFile("Textures/animations/hit/swing02.png");
 	this->sprites[0].second.setScale(4.f, 4.f);
@@ -25,8 +27,8 @@ inline void Player::initVariables()
 	this->sprites[1].first.loadFromFile("Textures/animations/hit/hit01.png");
 	this->sprites[1].second.setScale(4.f, 4.f);
 
-	/*this->sprites[2].first.loadFromFile("Textures/animations/hit/circle02.png");
-	this->sprites[2].second.setScale(4.f, 4.f);*/
+	this->sprites[2].first.loadFromFile("Textures/animations/hit/circle02.png");
+	this->sprites[2].second.setScale(4.f, 4.f);
 }
 
 inline void Player::createAnimationComponent(sf::Texture& texture_sheet)
@@ -54,17 +56,16 @@ inline void Player::addAnimations()
 	this->animationComponent.addAnimation("IDLE", 0, 0, 3, 0, 50, 40, 13.f);
 	this->animationComponent.addAnimation("MOVE", 0, 1, 5, 1, 50, 37, 9.f);
 	this->animationComponent.addAnimation("ATTACK_FIRST", 0, 4, 8, 4, 50, 37, 6.f);
-	this->animationComponent.addAnimation("ATTACK_SECOND", 0, 5, 8, 5, 50, 37, 6.f);
 	this->animationComponent.addAnimation("CAST_SPELL", 0, 3, 8, 3, 50, 37, 10.f);
 
 	//Hit sprites
-	this->hitAnimations[0].addAnimation("HIT", 0, 0, 10, 0, 64, 64, 4.f);
+	this->hitAnimations[0].addAnimation("HIT", 0, 0, 10, 0, 64, 64, 5.f);
 
 	this->hitAnimations[1].addAnimation("HIT1", 0, 0, 4, 0, 64, 64, 6.f);
 	this->hitAnimations[1].addAnimation("HIT2", 0, 1, 4, 1, 64, 64, 6.f);
 
-	/*this->hitAnimations[2].addAnimation("HIT1", 0, 0, 3, 0, 64, 64, 6.f);
-	this->hitAnimations[2].addAnimation("HIT2", 0, 1, 3, 1, 64, 64, 6.f);*/
+	this->hitAnimations[2].addAnimation("HIT1", 0, 0, 3, 0, 64, 64, 6.f);
+	this->hitAnimations[2].addAnimation("HIT2", 0, 1, 3, 1, 64, 64, 6.f);
 }
 
 //Constructor
@@ -161,8 +162,7 @@ inline void Player::updateAttack(const float& dt, sf::Vector2f mouse_pos_view)
 		}
 		if (this->animationComponent.play("ATTACK_FIRST", dt, true))
 		{
-			if(this->animationComponent.play("ATTACK_SECOND", dt, true))
-					this->isAttacking = false;
+			this->isAttacking = false;
 		}
 	}
 	if (this->isHit)

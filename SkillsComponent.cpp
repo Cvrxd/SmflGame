@@ -2,11 +2,15 @@
 #include "SkillsComponent.h"
 
 #define _SKILLS_COMPONENT_USE_SKILL_CHECK this->keyTime >= this->keyTimeMax && this->statsComponent.magicka > 0
+
+#define _SKILLS_COMPONENT_SET_SKILL_POSITION this->skillTextures[playerSkills[currentRender].first].first.setPosition(skill_position.x - 100, skill_position.y - 150);\
+										this->skillsEndingSprite.first.setPosition(skill_position.x - 100, skill_position.y - 150)
+
 //Init fuctions
 inline void SkillsComponent::initAllSkills()
 {
 	//Skills
-	this->allSkills.resize(7);
+	this->allSkills.resize(this->skillsSize);
 	this->playerSkills.resize(4);
 
 	this->allSkills[0].first = RED_BLADES;
@@ -16,6 +20,10 @@ inline void SkillsComponent::initAllSkills()
 	this->allSkills[4].first = POISON_CLAW;
 	this->allSkills[5].first = DARK_POSION;
 	this->allSkills[6].first = BLOOD_SPIKE;
+	this->allSkills[7].first = FIRE_EXPLOSION;
+	this->allSkills[8].first = LIGHTNING_STRIKE;
+	this->allSkills[9].first = HOLY_STRIKE;
+
 	//Items
 	this->healthPotions.first = HEALTH;
 	this->manaPotions.first = MANA;
@@ -34,15 +42,22 @@ inline void SkillsComponent::initAllAnimations()
 	this->skillTextures[POISON_CLAW].second.loadFromFile("Textures/Animations/poison/poison_claw.png");
 	this->skillTextures[DARK_POSION].second.loadFromFile("Textures/Animations/dark/dark_poison.png");
 	this->skillTextures[BLOOD_SPIKE].second.loadFromFile("Textures/Animations/blood/blood.png");
+	this->skillTextures[FIRE_EXPLOSION].second.loadFromFile("Textures/Animations/fire/fire.png");
+	this->skillTextures[LIGHTNING_STRIKE].second.loadFromFile("Textures/Animations/thunder/Lightning.png");
+	this->skillTextures[HOLY_STRIKE].second.loadFromFile("Textures/Animations/holy/holy_strike.png");
 
 	this->potionSprite.second.loadFromFile("Textures/Animations/healing.png");
 	this->potionSprite.first.setScale(3.f, 3.f);
 
+	this->skillsEndingSprite.second.loadFromFile("Textures/Animations/hit/circle02.png");
+	this->skillsEndingSprite.first.setScale(3.f, 3.f);
+
 	//Init animations
 	this->potionAnimation = AnimationComponent(&this->potionSprite.first, &this->potionSprite.second);
+	this->skillsEndingAnimation = AnimationComponent(&this->skillsEndingSprite.first, &this->skillsEndingSprite.second);
 
 	SkillType type;
-	for(int i = 0; i < this->allSkills.size(); ++i)
+	for(int i = 0; i < this->skillsSize; ++i)
 	{
 		type = this->allSkills[i].first;
 		this->skillsAnimations[type] = AnimationComponent(&this->skillTextures[type].first, &this->skillTextures[type].second);
@@ -54,6 +69,10 @@ inline void SkillsComponent::initAllAnimations()
 	this->potionAnimation.addAnimation("USE2", 0, 1, 3, 1, 128, 128, 11.f);
 	this->potionAnimation.addAnimation("USE3", 0, 2, 3, 2, 128, 128, 11.f);
 	this->potionAnimation.addAnimation("USE4", 0, 3, 2, 3, 128, 128, 11.f);
+
+	//Skills ending animation
+	this->skillsEndingAnimation.addAnimation("USE1", 0, 0, 3, 0, 64, 64, 11.f);
+	this->skillsEndingAnimation.addAnimation("USE2", 0, 1, 3, 1, 64, 64, 11.f);
 
 	//Skills animation
 	this->skillsAnimations[RED_BLADES].addAnimation("USE", 0, 0, 4, 0, 52, 58, 12.f);
@@ -69,16 +88,26 @@ inline void SkillsComponent::initAllAnimations()
 	this->skillTextures[POISON_CLAW].first.setScale(4.f, 4.f);
 
 	this->skillsAnimations[DARK_POSION].addAnimation("USE", 0, 0, 13, 0, 48, 64, 8.f);
-	this->skillTextures[DARK_POSION].first.setScale(4.f, 4.f);
+	this->skillTextures[DARK_POSION].first.setScale(5.f, 5.f);
 
 	this->skillsAnimations[BLOOD_SPIKE].addAnimation("USE", 0, 0, 17, 0, 48, 32, 8.f);
-	this->skillTextures[BLOOD_SPIKE].first.setScale(5.f, 5.f);
+	this->skillTextures[BLOOD_SPIKE].first.setScale(5.5f, 5.5f);
+
+	this->skillsAnimations[FIRE_EXPLOSION].addAnimation("USE", 0, 0, 17, 0, 48, 48, 8.f);
+	this->skillTextures[FIRE_EXPLOSION].first.setScale(5.f, 5.f);
+
+	this->skillsAnimations[LIGHTNING_STRIKE].addAnimation("USE", 0, 0, 9, 0, 64, 128, 8.f);
+	this->skillTextures[LIGHTNING_STRIKE].first.setScale(3.5f, 3.5f);
+
+	this->skillsAnimations[HOLY_STRIKE].addAnimation("USE", 0, 0, 15, 0, 48, 48, 8.f);
+	this->skillTextures[HOLY_STRIKE].first.setScale(5.f, 5.f);
 }
 
 //Constructor
 SkillsComponent::SkillsComponent(StatsComponent& statsComponent)
 	: statsComponent(statsComponent) ,currentRender(-1), playAnimation(false), usingPotion(false),
-	keyTime(0.f), keyTimeMax(20.f), potionKeyTime(0.f), potionKeyTimeMax(10.f)
+	keyTime(0.f), keyTimeMax(20.f), potionKeyTime(0.f), potionKeyTimeMax(10.f),
+	skillsSize(10)
 {
 	this->initAllSkills();
 	this->initAllAnimations();
@@ -166,28 +195,28 @@ void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
 		{
 			currentRender = 0;
-			this->skillTextures[playerSkills[currentRender].first].first.setPosition(skill_position.x - 100, skill_position.y - 150);
+			_SKILLS_COMPONENT_SET_SKILL_POSITION;
 			this->playAnimation = true;
 			skillTimer.restart();
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
 		{
 			currentRender = 1;
-			this->skillTextures[playerSkills[currentRender].first].first.setPosition(skill_position.x - 100, skill_position.y - 150);
+			_SKILLS_COMPONENT_SET_SKILL_POSITION;
 			this->playAnimation = true;
 			skillTimer.restart();
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
 		{
 			currentRender = 2;
-			this->skillTextures[playerSkills[currentRender].first].first.setPosition(skill_position.x - 100, skill_position.y - 150);
+			_SKILLS_COMPONENT_SET_SKILL_POSITION;
 			this->playAnimation = true;
 			skillTimer.restart();
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
 		{
 			currentRender = 3;
-			this->skillTextures[playerSkills[currentRender].first].first.setPosition(skill_position.x - 100, skill_position.y - 150);
+			_SKILLS_COMPONENT_SET_SKILL_POSITION;
 			this->playAnimation = true;
 			skillTimer.restart();
 		}
@@ -235,7 +264,7 @@ void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position
 		this->keyTime = 0;
 		if (this->skillsAnimations[playerSkills[currentRender].first].play("USE", dt, true))
 		{
-			if (this->time > 4)
+			if (this->time > 3)
 			{
 				this->playAnimation = false;
 				this->useSkill(playerSkills[currentRender].first);

@@ -69,6 +69,8 @@ class SkillsMenu
 {
 private:
 	//Variables
+	const int skillsSize;
+
 	float keyTime;
 	float keyTimeMax;
 

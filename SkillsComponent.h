@@ -5,7 +5,11 @@
 class AnimationComponent;
 class StatsComponent;
 
-enum SkillType {EMPTY = 0, RED_BLADES ,WATER_SPIKE , THUNDER_STRIKE, DARK_BOLT, POISON_CLAW, DARK_POSION, BLOOD_SPIKE};
+enum SkillType
+{
+	EMPTY = 0, RED_BLADES, WATER_SPIKE, THUNDER_STRIKE, DARK_BOLT,
+	POISON_CLAW, DARK_POSION, BLOOD_SPIKE, FIRE_EXPLOSION, LIGHTNING_STRIKE, HOLY_STRIKE
+};
 
 enum Potions{HEALTH = 0, MANA};
 
@@ -32,16 +36,25 @@ private:
 	AnimationComponent potionAnimation;
 
 	//Skills
+	const int skillsSize;
+
 	std::vector<std::pair<SkillType, int>> allSkills;
 	std::vector<std::pair<SkillType, int>> playerSkills;
 
+	std::pair<sf::Sprite, sf::Texture> skillsEndingSprite;
+	AnimationComponent skillsEndingAnimation;
+
+	//Regular animation
+	std::map<SkillType, std::pair<sf::Sprite, sf::Texture>> skillTextures;
 	std::map<SkillType, AnimationComponent> skillsAnimations;
+
+	//Skills impact animation
+	std::map<SkillType, std::pair<sf::Sprite, sf::Texture>> skillsImpactSprites;
+	std::map<SkillType, AnimationComponent> skillsImpactAnimations;
 
 	int currentRender;
 	bool playAnimation;
 	bool usingPotion;
-
-	std::map<SkillType, std::pair<sf::Sprite, sf::Texture>> skillTextures;
 	
 	//Init functions
 	void initAllSkills();

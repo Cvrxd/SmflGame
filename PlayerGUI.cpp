@@ -326,7 +326,8 @@ void PlayerGUI::render(sf::RenderTarget& target)
 	}
 }
 
-//Skills Menu functions
+
+//Skills Menu 
 
 //Init functions
 inline void SkillsMenu::initBackground(const float& x, const float& y)
@@ -400,7 +401,7 @@ inline void SkillsMenu::initTexts()
 
 inline void SkillsMenu::initSkillIcons()
 {
-	this->skillsIcons.resize(7);
+	this->skillsIcons.resize(this->skillsSize);
 	
 	for (int i = 0,  x = static_cast<int>(this->texts[8].getPosition().x) + 100, y = static_cast<int>(this->texts[8].getPosition().y); 
 		i < this->skillsIcons.size(); ++i, x+=100)
@@ -445,6 +446,18 @@ inline void SkillsMenu::initSkillIcons()
 	this->textures["BLOOD_SPIKE"].loadFromFile("Textures/skills/skill_icons42.png");
 	this->skillsIcons[6].first = BLOOD_SPIKE;
 	this->skillsIcons[6].second.setTexture(&this->textures["BLOOD_SPIKE"]);
+
+	this->textures["FIRE_EXPLOSION"].loadFromFile("Textures/skills/skill_icons3.png");
+	this->skillsIcons[7].first = FIRE_EXPLOSION;
+	this->skillsIcons[7].second.setTexture(&this->textures["FIRE_EXPLOSION"]);
+
+	this->textures["LIGHTNING_STRIKE"].loadFromFile("Textures/skills/skill_icons23.png");
+	this->skillsIcons[8].first = LIGHTNING_STRIKE;
+	this->skillsIcons[8].second.setTexture(&this->textures["LIGHTNING_STRIKE"]);
+
+	this->textures["HOLY_STRIKE"].loadFromFile("Textures/skills/skill_icons6.png");
+	this->skillsIcons[9].first = HOLY_STRIKE;
+	this->skillsIcons[9].second.setTexture(&this->textures["HOLY_STRIKE"]);
 }
 
 inline void SkillsMenu::initButtons()
@@ -501,7 +514,7 @@ inline void SkillsMenu::updateKeyTime(const float& dt)
 
 //Constructor
 SkillsMenu::SkillsMenu(Player& player, PlayerGUI& playerGUI, sf::Font& font, const float& x, const float& y)
-	:player(player), playerGUI(playerGUI), font(font), keyTime(0.f), keyTimeMax(10.f)
+	:player(player), playerGUI(playerGUI), font(font), keyTime(0.f), keyTimeMax(10.f), skillsSize(10)
 {
 	this->initBackground(x, y);
 	this->initTexts();
