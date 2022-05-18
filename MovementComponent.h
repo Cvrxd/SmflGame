@@ -6,7 +6,7 @@ class MovementComponent
 {
 private:
 	//Variables
-	sf::Sprite& sprite;
+	sf::Sprite* sprite;
 
 	float maxVelocity;
 	float acceleration;
@@ -17,6 +17,7 @@ private:
 	//Initialisation functions
 
 public:
+	MovementComponent() {};
 	MovementComponent(sf::Sprite& sprite, const float& maxVelocity, const float& acceleration, const float& deceleration);
 	virtual ~MovementComponent();
 

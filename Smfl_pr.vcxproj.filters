@@ -31,6 +31,9 @@
     <Filter Include="Map\Tiles">
       <UniqueIdentifier>{78802346-cdaa-4b0d-9c83-a6eec50f8808}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities\Enemies">
+      <UniqueIdentifier>{19660820-cb7b-47b9-b518-38903baa46da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -105,6 +108,18 @@
     <ClCompile Include="SkillsComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="BossEnemy.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="MageEnemy.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="MeleEnemy.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -166,6 +181,18 @@
     </ClInclude>
     <ClInclude Include="SkillsComponent.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="MeleEnemy.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="MageEnemy.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="BossEnemy.h">
+      <Filter>Entities\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

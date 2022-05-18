@@ -5,7 +5,7 @@
 
 //Constructor
 MovementComponent::MovementComponent(sf::Sprite& sprite, const float& maxVelocity, const float& acceleration, const float& deceleration)
-	:sprite(sprite), maxVelocity(maxVelocity), acceleration(acceleration), deceleration(deceleration)
+	:sprite(&sprite), maxVelocity(maxVelocity), acceleration(acceleration), deceleration(deceleration)
 {
 	
 }
@@ -147,5 +147,5 @@ void MovementComponent::update(const float& dt)
 	}
 
 	//Final move
-	this->sprite.move(this->velocity * dt);  //Uses velocity
+	this->sprite->move(this->velocity * dt);  //Uses velocity
 }

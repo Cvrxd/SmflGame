@@ -1,5 +1,4 @@
 
-
 //Core
 #include<algorithm>
 #include<stack>

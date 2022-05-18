@@ -26,7 +26,7 @@ private:
 		sf::IntRect endRect;
 
 		//Constructor
-		Animation(){}
+		Animation() {};
 
 		Animation(sf::Sprite* sprite, sf::Texture* textureSheet, 
 			const int& start_frame_x, const int& start_frame_y, 
@@ -48,9 +48,9 @@ private:
 		Animation& operator= (const Animation& other)
 		{
 			this->animationTimer = other.animationTimer;
-			this->currentRect = std::move(other.currentRect);
+			this->currentRect = other.currentRect;
 			this->done = other.done;
-			this->endRect = std::move(other.endRect);
+			this->endRect = other.endRect;
 			this->height = other.height;
 			this->sprite = other.sprite;
 			this->textureSheet = other.textureSheet;

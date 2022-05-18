@@ -7,10 +7,18 @@ class Player : public Entity
 {
 private:
 	//Variables
+	sf::Clock damageTimer;
+
 	bool isAttacking = false;
 	bool isHit = false;
+	bool dealDMG = false;
+	bool isTakingHit = false;
+	bool isUsingSkill = false;
+
 	int currentHitAnimation;
 
+	sf::CircleShape hitRange;
+	sf::RectangleShape damageRange;
 	std::vector<std::pair<sf::Texture, sf::Sprite>> sprites;
 
 	//Components
@@ -30,8 +38,11 @@ public:
 	virtual ~Player();
 
 	//Accessors
+	const bool& isDealingDmg();
 	StatsComponent* getStatsComponent();
 	SkillsComponent* getSkillComponent();
+	const sf::CircleShape& getHitRange();
+	const sf::RectangleShape& getDamageRange();
 
 	//Stats functions
 	void gainEXP(const unsigned& exp);

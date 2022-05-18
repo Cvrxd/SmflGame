@@ -3,15 +3,22 @@
 #include "PauseMenu.h"
 #include "TileMap.h"
 #include "PlayerGUI.h"
+#include "BossEnemy.h"
 
 class State;
 class PauseMenu;
 class TileMap;
 class PlayerGUI;
+class Enemy;
+class BossEnemy;
 
 class GameState : public State
 {
 private:
+	//Entities
+	//std::vector<Enemy> enemies;
+	BossEnemy test_enemy;
+
 	//variables 
 	sf::Shader core_shader;
 
@@ -40,6 +47,7 @@ private:
 	void initPauseMenu();
 	void initShaders();
 	void initPlayers();
+	void initEnemies();
 	void initPlayerGUI();
 	void initTileMap();
 public:
@@ -49,10 +57,12 @@ public:
 	//functions
 	void updateView(const float& dt);
 	void updatePauseMenuButtons();
+	void updateEnemies(const float& dt);
 	void updatePlayerInput(const float& dt);
 	void updateInput(const float& dt) override;
 	void updateTileMap(const float& dt);
 	void update(const float& dt) override;
+	void renderEnemies(sf::RenderTarget* target);
 	void render(sf::RenderTarget* target = nullptr) override;
 };
 

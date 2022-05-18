@@ -48,10 +48,9 @@ inline void GameState::initFonts()
 
 inline void GameState::initTextures()
 {
-	if (!this->textures["PLAYER_SHEET"].loadFromFile("Textures/characters/player/test_sheet.png"))
-	{
-		throw("ERROR::GAMESTATE::COULD NOT LOAD PLAYER TEEXTURE");
-	}
+	this->textures["PLAYER_SHEET"].loadFromFile("Textures/characters/player/test_sheet.png");
+	this->textures["ENEMY_NIGHT_BORN"].loadFromFile("Textures/enemies/NightBorne.png");
+	
 }
 
 inline void GameState::initPauseMenu()
@@ -73,6 +72,11 @@ inline void GameState::initPlayers()
 {
 }
 
+void GameState::initEnemies()
+{
+	//
+}
+
 inline void GameState::initPlayerGUI()
 {
 
@@ -90,7 +94,8 @@ GameState::GameState(StateData* state_data)
 	player(500,500, this->textures["PLAYER_SHEET"]), //Player
 	playerGUI(this->player, this->font), // Player GUI
 	skillsMenu(this->player, this->playerGUI,this->font, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
-	tileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg") //Tile map
+	tileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg"), //Tile map
+	test_enemy(NIGHTBORN, 1, 600, 600, this->textures["ENEMY_NIGHT_BORN"], &this->player)
 {
 	this->initRenderTextures();
 	this->initView();
@@ -98,8 +103,6 @@ GameState::GameState(StateData* state_data)
 	this->initKeybinds();
 	this->initTextures();
 	this->initPauseMenu();
-	//this->initPlayers();
-	//this->initPlayerGUI();
 	this->initShaders();
 	this->initTileMap();
 }
@@ -164,6 +167,11 @@ inline void GameState::updatePauseMenuButtons()
 	}
 }
 
+void GameState::updateEnemies(const float& dt)
+{
+	this->test_enemy.update(dt, mousPosView);
+}
+
 //Update functions
 inline void GameState::updatePlayerInput(const float& dt)
 {
@@ -220,6 +228,9 @@ void GameState::update(const float& dt)
 	if (!this->paused) //Unpaused
 	{
 		this->updateView(dt);
+
+		this->updateEnemies(dt);
+
 		this->updatePlayerInput(dt);
 		this->updateTileMap(dt);
 		this->player.update(dt, this->mousPosView);
@@ -238,6 +249,11 @@ void GameState::update(const float& dt)
 	}
 }
 
+inline void GameState::renderEnemies(sf::RenderTarget* target)
+{
+	this->test_enemy.render(this->renderTexture, &this->core_shader);
+}
+
 void GameState::render(sf::RenderTarget* target)
 {
 	if (!target)
@@ -252,7 +268,10 @@ void GameState::render(sf::RenderTarget* target)
 	//tile map and player render
 	//Using shader
 	this->tileMap.renderGameState(this->renderTexture, this->player.getCenter(), &this->core_shader);
+
+	this->renderEnemies(target);
 	this->player.render(this->renderTexture, &this->core_shader);
+
 	this->tileMap.renderAbove(this->renderTexture, this->player.getCenter(), &this->core_shader);
 
 	//player GUI render
