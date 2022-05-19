@@ -37,6 +37,7 @@ private:
 
 	//Skills
 	const int skillsSize;
+	sf::CircleShape damageArea;
 
 	std::vector<std::pair<SkillType, int>> allSkills;
 	std::vector<std::pair<SkillType, int>> playerSkills;
@@ -53,18 +54,21 @@ private:
 	std::map<SkillType, AnimationComponent> skillsImpactAnimations;
 
 	int currentRender;
+
 	bool playAnimation;
 	bool usingPotion;
-	
+	bool& usingSkill;
+
 	//Init functions
 	void initAllSkills();
 	void initAllAnimations();
 
 public:
-	SkillsComponent(StatsComponent& statsComponent);
+	SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill);
 	~SkillsComponent();
 
 	//Accessors
+	const sf::CircleShape& getDamageArea();
 	const bool getKeyTime() const;
 	int& getMpPotions();
 	int& getHpPotions();

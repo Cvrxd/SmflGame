@@ -74,7 +74,10 @@ inline void GameState::initPlayers()
 
 void GameState::initEnemies()
 {
-	//
+	this->bosses.reserve(3);
+	this->bosses.emplace_back(NIGHTBORN, 1, 700, 700, this->textures["ENEMY_NIGHT_BORN"], &this->player);
+	this->bosses.emplace_back(NIGHTBORN, 1, 100, 100, this->textures["ENEMY_NIGHT_BORN"], &this->player);
+	this->bosses.emplace_back(NIGHTBORN, 1, 100, 900, this->textures["ENEMY_NIGHT_BORN"], &this->player);
 }
 
 inline void GameState::initPlayerGUI()
@@ -94,8 +97,7 @@ GameState::GameState(StateData* state_data)
 	player(500,500, this->textures["PLAYER_SHEET"]), //Player
 	playerGUI(this->player, this->font), // Player GUI
 	skillsMenu(this->player, this->playerGUI,this->font, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
-	tileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg"), //Tile map
-	test_enemy(NIGHTBORN, 1, 600, 600, this->textures["ENEMY_NIGHT_BORN"], &this->player)
+	tileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg") //Tile map
 {
 	this->initRenderTextures();
 	this->initView();
@@ -103,6 +105,7 @@ GameState::GameState(StateData* state_data)
 	this->initKeybinds();
 	this->initTextures();
 	this->initPauseMenu();
+	this->initEnemies();
 	this->initShaders();
 	this->initTileMap();
 }
@@ -169,7 +172,13 @@ inline void GameState::updatePauseMenuButtons()
 
 void GameState::updateEnemies(const float& dt)
 {
-	this->test_enemy.update(dt, mousPosView);
+	for (auto& el : this->bosses)
+	{
+		if (!el.dead())
+		{
+			el.update(dt, this->mousPosView);
+		}
+	}
 }
 
 //Update functions
@@ -251,7 +260,13 @@ void GameState::update(const float& dt)
 
 inline void GameState::renderEnemies(sf::RenderTarget* target)
 {
-	this->test_enemy.render(this->renderTexture, &this->core_shader);
+	for (auto& el : this->bosses)
+	{
+		if (!el.dead())
+		{
+			el.render(this->renderTexture, &this->core_shader);
+		}
+	}
 }
 
 void GameState::render(sf::RenderTarget* target)

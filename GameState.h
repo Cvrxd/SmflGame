@@ -16,8 +16,7 @@ class GameState : public State
 {
 private:
 	//Entities
-	//std::vector<Enemy> enemies;
-	BossEnemy test_enemy;
+	std::vector<BossEnemy> bosses;
 
 	//variables 
 	sf::Shader core_shader;

@@ -38,6 +38,7 @@ public:
 	virtual ~Player();
 
 	//Accessors
+	const bool& usingSkill();
 	const bool& isDealingDmg();
 	StatsComponent* getStatsComponent();
 	SkillsComponent* getSkillComponent();

@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp" />
     <ClCompile Include="BossEnemy.cpp" />
+    <ClCompile Include="DropComponent.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GraphicsSettings.cpp" />
     <ClCompile Include="Gui.cpp" />
@@ -178,6 +179,7 @@
   <ItemGroup>
     <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="BossEnemy.h" />
+    <ClInclude Include="DropComponent.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GraphicsSettings.h" />
     <ClInclude Include="Gui.h" />

@@ -4,11 +4,18 @@
 #define _SKILLS_COMPONENT_USE_SKILL_CHECK this->keyTime >= this->keyTimeMax && this->statsComponent.magicka > 0
 
 #define _SKILLS_COMPONENT_SET_SKILL_POSITION this->skillTextures[playerSkills[currentRender].first].first.setPosition(skill_position.x - 100, skill_position.y - 150);\
-										this->skillsEndingSprite.first.setPosition(skill_position.x - 100, skill_position.y - 150)
+										     this->skillsEndingSprite.first.setPosition(skill_position.x - 100, skill_position.y - 150);\
+											 this->damageArea.setPosition(skill_position.x - 300, skill_position.y - 300)
 
 //Init fuctions
 inline void SkillsComponent::initAllSkills()
 {
+	//SKill damage radius
+	this->damageArea.setRadius(300.f);
+	this->damageArea.setFillColor(sf::Color::Transparent);
+	this->damageArea.setOutlineThickness(1.f);
+	this->damageArea.setOutlineColor(sf::Color::Red);
+
 	//Skills
 	this->allSkills.resize(this->skillsSize);
 	this->playerSkills.resize(4);
@@ -104,10 +111,10 @@ inline void SkillsComponent::initAllAnimations()
 }
 
 //Constructor
-SkillsComponent::SkillsComponent(StatsComponent& statsComponent)
+SkillsComponent::SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill)
 	: statsComponent(statsComponent) ,currentRender(-1), playAnimation(false), usingPotion(false),
 	keyTime(0.f), keyTimeMax(15.f), potionKeyTime(0.f), potionKeyTimeMax(10.f),
-	skillsSize(10)
+	skillsSize(10), usingSkill(isUsingSkill)
 {
 	this->initAllSkills();
 	this->initAllAnimations();
@@ -115,6 +122,11 @@ SkillsComponent::SkillsComponent(StatsComponent& statsComponent)
 
 SkillsComponent::~SkillsComponent()
 {
+}
+
+const sf::CircleShape& SkillsComponent::getDamageArea()
+{
+	return this->damageArea;
 }
 
 //Accessors
@@ -190,6 +202,8 @@ void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position
 	this->updateClock(dt);
 
 	//Skills
+	this->usingSkill = false;
+
 	if (_SKILLS_COMPONENT_USE_SKILL_CHECK)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
@@ -265,6 +279,8 @@ void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position
 		if (this->skillsAnimations[playerSkills[currentRender].first].play("USE", dt, true))
 		{
 			this->playAnimation = false;
+			this->usingSkill = true;
+
 			this->useSkill(playerSkills[currentRender].first);
 			currentRender = -1;
 		}

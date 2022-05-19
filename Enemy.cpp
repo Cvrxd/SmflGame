@@ -12,13 +12,18 @@ void Enemy::initStats()
 
 //Constructor
 Enemy::Enemy(const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player)
-	:statsComponent(1), animationComponent(&this->sprite, &texture_sheet), player(player)
+	:statsComponent(1), animationComponent(&this->sprite, &texture_sheet), player(player), textureSheet(&texture_sheet)
 {
 
 }
 
 Enemy::~Enemy()
 {
+}
+
+const bool& Enemy::dead()
+{
+	return this->isDead;
 }
 
 

@@ -75,7 +75,7 @@ Player::Player(const float& x, const float& y, sf::Texture& texture_sheet)
 	: currentHitAnimation(0),
 	statsComponent(1),
 	animationComponent(&this->sprite, &texture_sheet),
-	skillsComponent(this->statsComponent)
+	skillsComponent(this->statsComponent, this->isUsingSkill)
 {
 	this->initVariables();
 	this->initComponents(texture_sheet);
@@ -85,6 +85,11 @@ Player::Player(const float& x, const float& y, sf::Texture& texture_sheet)
 
 Player::~Player()
 {
+}
+
+const bool& Player::usingSkill()
+{
+	return this->isUsingSkill;
 }
 
 const bool& Player::isDealingDmg()
@@ -279,7 +284,7 @@ void Player::render(sf::RenderTarget& target, sf::Shader* shader)
 		if (this->isHit)
 		{
 			target.draw(this->sprites[currentHitAnimation].second);
-			target.draw(this->damageRange);
+			//target.draw(this->damageRange);
 		}
 
 		if (this->isTakingHit)
@@ -294,7 +299,7 @@ void Player::render(sf::RenderTarget& target, sf::Shader* shader)
 		target.draw(this->sprite);
 	}
 	
-	this->hitboxComponent.render(target);
+	//this->hitboxComponent.render(target);
 
-	target.draw(this->hitRange);
+	//target.draw(this->hitRange);
 }
