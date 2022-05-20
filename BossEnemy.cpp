@@ -6,17 +6,15 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 {
 	switch (this->type)
 	{
-	case NIGHTBORN:
-		this->sprite.setScale(4.f, 4.f);
+	case BossType::NIGHTBORN:
 
-		//Take hit sprites
-		this->takeHitSprite.first.loadFromFile("Textures/animations/hit/hit02.png");
-		this->takeHitSprite.second.setScale(3.f, 3.f);
+		this->sprite.setScale(4.f, 4.f);
 
 		//Init components
 		this->createHitboxComponent(this->sprite, 100.f, 100.f, 100.f, 100.f);
 		this->createMovementComponent(150.f, 900.f, 250.f);
 		this->createAnimationComponent(texture_sheet);
+		this->initImpactAnimations();
 
 		//Sets origins
 		this->setOriginLeft = [&sprite]() 
@@ -32,6 +30,30 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		};
 
 		break;
+	case BossType::FIRE_DEMON:
+		this->sprite.setScale(4.f, 4.f);
+
+		//Init components
+		this->createHitboxComponent(this->sprite, 300.f, 300.f, 300.f, 350.f);
+		this->createMovementComponent(100.f, 800.f, 230.f);
+		this->createAnimationComponent(texture_sheet);
+		this->initImpactAnimations();
+
+		//Sets origins
+		this->setOriginLeft = [&sprite]()
+		{
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setScale(4.f, 4.f);
+		};
+
+		this->setOriginRight = [&sprite]()
+		{
+			sprite.setOrigin(250.f, 0.f);
+			sprite.setScale(-4.f, 4.f);
+		};
+
+
+		break;
 	default:
 		break;
 	}
@@ -39,8 +61,6 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 
 inline void BossEnemy::createAnimationComponent(sf::Texture& texture_sheet)
 {
-	this->takeHitAnimation = { &this->takeHitSprite.second, &this->takeHitSprite.first };
-
 	this->addAnimations();
 }
 
@@ -48,17 +68,19 @@ inline void BossEnemy::addAnimations()
 {
 	switch (this->type)
 	{
-	case NIGHTBORN:
+	case BossType::NIGHTBORN:
 		//Regular animations
-		this->animationComponent.addAnimation("IDLE", 0, 0, 8, 0, 80, 80, 10.f);
 		this->animationComponent.addAnimation("MOVE", 0, 1, 5, 1, 80, 80, 20.f);
 		this->animationComponent.addAnimation("ATTACK", 0, 2, 11, 2, 80, 80, 10.f);
-		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 4, 3, 80, 80, 8.f);
+		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 4, 3, 80, 80, 10.f);
 		this->animationComponent.addAnimation("DEATH", 0, 4, 22, 4, 80, 80, 8.f);
+		break;
 
-		//Take hit animations
-		this->takeHitAnimation.addAnimation("TAKE_HIT1", 0, 0, 4, 0, 64, 64, 7.f);
-		this->takeHitAnimation.addAnimation("TAKE_HIT2", 0, 1, 4, 1, 64, 64, 7.f);
+	case BossType::FIRE_DEMON:
+		this->animationComponent.addAnimation("MOVE", 0, 1, 11, 1, 288, 160, 20.f);
+		this->animationComponent.addAnimation("ATTACK", 0, 2, 14, 2, 288, 160, 10.f);
+		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 4, 3, 288, 160, 10.f);
+		this->animationComponent.addAnimation("DEATH", 0, 4, 21, 4, 288, 160, 10.f);
 
 		break;
 	default:
@@ -89,8 +111,11 @@ BossEnemy::BossEnemy(BossEnemy&& other)
 	this->setOriginRight = other.setOriginRight;
 	this->sprite = other.sprite;
 	this->statsComponent = other.statsComponent;
-	this->takingHit = other.takingHit;
+	this->hitImpact = other.hitImpact;
+	this->skillImpact = other.skillImpact;
 	this->type = other.type;
+	this->skillImpactAnimation = other.skillImpactAnimation;
+	this->skillImpactSprite = other.skillImpactSprite;
 	this->takeHitAnimation = other.takeHitAnimation;
 	this->takeHitSprite = other.takeHitSprite;
 
@@ -144,20 +169,38 @@ inline void BossEnemy::updateMovement(const float& dt)
 
 inline void BossEnemy::updateAnimations(const float& dt)
 {
-	if (this->takingHit)
+	if (this->isTakingDamage)
 	{
-		this->takeHitSprite.second.setPosition(this->getPosition());
-
 		this->stopVelocity();
 
 		if (this->animationComponent.play("TAKE_HIT", dt, true))
 		{
-			this->takingHit = false;
+			this->isTakingDamage = false;
 		}
+	}
+
+	//Player hit
+	if (this->hitImpact)
+	{
+		this->takeHitSprite.second.setPosition(this->getPosition());
 
 		if (this->takeHitAnimation.play("TAKE_HIT1", dt, true))
 		{
-			this->takeHitAnimation.play("TAKE_HIT2", dt, true);
+			if (this->takeHitAnimation.play("TAKE_HIT2", dt, true))
+			{
+				this->hitImpact = false;
+			}
+		}
+	}
+
+	//Plyaer skill
+	if (this->skillImpact)
+	{
+		this->skillImpactSprite.second.setPosition(this->getPosition());
+
+		if (this->skillImpactAnimation.play("SKILL_IMPACT", dt, true))
+		{
+			this->skillImpact = false;
 		}
 	}
 
@@ -201,7 +244,8 @@ inline void BossEnemy::updatePlayerImpact(const float& dt)
 	{
 		if (this->player->isDealingDmg())
 		{
-			this->takingHit = true;
+			this->isTakingDamage = true;
+			this->hitImpact = true;
 
 			this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical);
 		}
@@ -211,7 +255,8 @@ inline void BossEnemy::updatePlayerImpact(const float& dt)
 	{
 		if (this->player->getSkillComponent()->getDamageArea().getGlobalBounds().intersects(this->getGlobalBounds()))
 		{
-			this->takingHit = true;
+			this->isTakingDamage = true;
+			this->skillImpact = true;
 
 			this->statsComponent.loseHP(this->player->getStatsComponent()->damageMagical);
 		}
@@ -239,9 +284,13 @@ void BossEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 {
 	target.draw(this->sprite, shader);
 
-	if (this->takingHit)
+	if (this->hitImpact)
 	{
 		target.draw(this->takeHitSprite.second);
+	}
+	if (this->skillImpact)
+	{
+		target.draw(this->skillImpactSprite.second);
 	}
 
 	//this->hitboxComponent.render(target);

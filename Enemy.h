@@ -5,11 +5,20 @@
 
 class Entity;
 class Player;
+class DropComponent;
+class AnimationComponent;
+class StatsComponent;
 
 class Enemy : public Entity
 {
 protected:
 	//Variables
+	std::pair<sf::Texture, sf::Sprite> takeHitSprite;
+	std::pair<sf::Texture, sf::Sprite> skillImpactSprite;
+
+	AnimationComponent takeHitAnimation;
+	AnimationComponent skillImpactAnimation;
+
 	Player* player;
 	sf::Texture* textureSheet;
 
@@ -17,7 +26,10 @@ protected:
 	std::function<void()> setOriginRight;
 
 	bool isAttaking = false;
-	bool takingHit = false;
+	bool isTakingDamage = false;
+
+	bool hitImpact = false;
+	bool skillImpact = false;
 	bool isDead = false;
 
 	//Components
@@ -26,6 +38,7 @@ protected:
 	DropComponent dropComponent;
 
 	//init functions
+	virtual void initImpactAnimations();
 	virtual void initStats();
 	virtual void initComponents(sf::Texture& texture_sheet, sf::Sprite& sprite) = 0;
 	virtual void createAnimationComponent(sf::Texture& texture_sheet) = 0;

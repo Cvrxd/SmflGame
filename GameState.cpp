@@ -50,7 +50,10 @@ inline void GameState::initTextures()
 {
 	this->textures["PLAYER_SHEET"].loadFromFile("Textures/characters/player/test_sheet.png");
 	this->textures["ENEMY_NIGHT_BORN"].loadFromFile("Textures/enemies/NightBorne.png");
-	
+	this->textures["ENEMY_MIMIC"].loadFromFile("Textures/enemies/mimic.png");
+	this->textures["ENEMY_FIRE_DEMON"].loadFromFile("Textures/enemies/fire_demon.png");
+	this->textures["ENEMY_BRINGER_OF_DEATH"].loadFromFile("Textures/enemies/bringer_of_death.png");
+	this->textures["ENEMY_KNIGHT1"].loadFromFile("Textures/enemies/knight1.png");
 }
 
 inline void GameState::initPauseMenu()
@@ -75,9 +78,12 @@ inline void GameState::initPlayers()
 void GameState::initEnemies()
 {
 	this->bosses.reserve(3);
-	this->bosses.emplace_back(NIGHTBORN, 1, 700, 700, this->textures["ENEMY_NIGHT_BORN"], &this->player);
-	this->bosses.emplace_back(NIGHTBORN, 1, 100, 100, this->textures["ENEMY_NIGHT_BORN"], &this->player);
-	this->bosses.emplace_back(NIGHTBORN, 1, 100, 900, this->textures["ENEMY_NIGHT_BORN"], &this->player);
+	
+	this->bosses.emplace_back(BossType::FIRE_DEMON, 1, 100, 900, this->textures["ENEMY_FIRE_DEMON"], &this->player);
+
+	this->meleEnemies.reserve(2);
+	this->meleEnemies.emplace_back(MeleEnemyType::MIMIC, 1, 700, 700, this->textures["ENEMY_MIMIC"], &this->player);
+	this->meleEnemies.emplace_back(MeleEnemyType::KNIGHT1, 1, 700, 700, this->textures["ENEMY_KNIGHT1"], &this->player);
 }
 
 inline void GameState::initPlayerGUI()
@@ -179,6 +185,13 @@ void GameState::updateEnemies(const float& dt)
 			el.update(dt, this->mousPosView);
 		}
 	}
+	for (auto& el : this->meleEnemies)
+	{
+		if (!el.dead())
+		{
+			el.update(dt, this->mousPosView);
+		}
+	}
 }
 
 //Update functions
@@ -261,6 +274,14 @@ void GameState::update(const float& dt)
 inline void GameState::renderEnemies(sf::RenderTarget* target)
 {
 	for (auto& el : this->bosses)
+	{
+		if (!el.dead())
+		{
+			el.render(this->renderTexture, &this->core_shader);
+		}
+	}
+
+	for (auto& el : this->meleEnemies)
 	{
 		if (!el.dead())
 		{

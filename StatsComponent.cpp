@@ -30,32 +30,32 @@ void StatsComponent::addItem(const Items& item)
 {
 	switch (item)
 	{
-	case SWORD:
+	case Items::SWORD:
 		++this->damagePhysical;
 		break;
-	case STAFF:
+	case Items::STAFF:
 		++this->damageMagical;
 		break;
-	case DAGGER:
+	case Items::DAGGER:
 		++this->damagePhysical;
-	case MAGIK_SWORD:
+	case Items::MAGIK_SWORD:
 		++this->damageMagical;
-	case RING:
+	case Items::RING:
 		++this->magickaMAX;
 		break;
-	case NECKLASE:
+	case Items::NECKLASE:
 		++this->magickaMAX;
 		break;
-	case HELMET:
+	case Items::HELMET:
 		++this->armorMAX;
 		break;
-	case ARMOR:
+	case Items::ARMOR:
 		++this->armorMAX;
 		break;
-	case GLOVES:
+	case Items::GLOVES:
 		++this->armorMAX;
 		break;
-	case BOOTS:
+	case Items::BOOTS:
 		++this->armorMAX;
 		break;
 	default:

@@ -420,43 +420,43 @@ inline void SkillsMenu::initSkillIcons()
 	}
 
 	this->textures["RED_BLADES"].loadFromFile("Textures/skills/skill_icons43.png");
-	this->skillsIcons[0].first = RED_BLADES;
+	this->skillsIcons[0].first = SkillType::RED_BLADES;
 	this->skillsIcons[0].second.setTexture(&this->textures["RED_BLADES"]);
 
 	this->textures["WATER_SPIKE"].loadFromFile("Textures/skills/skill_icons47.png");
-	this->skillsIcons[1].first = WATER_SPIKE;
+	this->skillsIcons[1].first = SkillType::WATER_SPIKE;
 	this->skillsIcons[1].second.setTexture(&this->textures["WATER_SPIKE"]);
 
 	this->textures["THUNDER_STRIKE"].loadFromFile("Textures/skills/skill_icons2.png");
-	this->skillsIcons[2].first = THUNDER_STRIKE;
+	this->skillsIcons[2].first = SkillType::THUNDER_STRIKE;
 	this->skillsIcons[2].second.setTexture(&this->textures["THUNDER_STRIKE"]);
 
 	this->textures["DARK_BOLT"].loadFromFile("Textures/skills/skill_icons51.png");
-	this->skillsIcons[3].first = DARK_BOLT;
+	this->skillsIcons[3].first = SkillType::DARK_BOLT;
 	this->skillsIcons[3].second.setTexture(&this->textures["DARK_BOLT"]);
 
 	this->textures["POISON_CLAW"].loadFromFile("Textures/skills/skill_icons39.png");
-	this->skillsIcons[4].first = POISON_CLAW;
+	this->skillsIcons[4].first = SkillType::POISON_CLAW;
 	this->skillsIcons[4].second.setTexture(&this->textures["POISON_CLAW"]);
 
 	this->textures["DARK_POSION"].loadFromFile("Textures/skills/skill_icons50.png");
-	this->skillsIcons[5].first = DARK_POSION;
+	this->skillsIcons[5].first = SkillType::DARK_POSION;
 	this->skillsIcons[5].second.setTexture(&this->textures["DARK_POSION"]);
 
 	this->textures["BLOOD_SPIKE"].loadFromFile("Textures/skills/skill_icons42.png");
-	this->skillsIcons[6].first = BLOOD_SPIKE;
+	this->skillsIcons[6].first = SkillType::BLOOD_SPIKE;
 	this->skillsIcons[6].second.setTexture(&this->textures["BLOOD_SPIKE"]);
 
 	this->textures["FIRE_EXPLOSION"].loadFromFile("Textures/skills/skill_icons3.png");
-	this->skillsIcons[7].first = FIRE_EXPLOSION;
+	this->skillsIcons[7].first = SkillType::FIRE_EXPLOSION;
 	this->skillsIcons[7].second.setTexture(&this->textures["FIRE_EXPLOSION"]);
 
 	this->textures["LIGHTNING_STRIKE"].loadFromFile("Textures/skills/skill_icons23.png");
-	this->skillsIcons[8].first = LIGHTNING_STRIKE;
+	this->skillsIcons[8].first = SkillType::LIGHTNING_STRIKE;
 	this->skillsIcons[8].second.setTexture(&this->textures["LIGHTNING_STRIKE"]);
 
 	this->textures["HOLY_STRIKE"].loadFromFile("Textures/skills/skill_icons6.png");
-	this->skillsIcons[9].first = HOLY_STRIKE;
+	this->skillsIcons[9].first = SkillType::HOLY_STRIKE;
 	this->skillsIcons[9].second.setTexture(&this->textures["HOLY_STRIKE"]);
 }
 

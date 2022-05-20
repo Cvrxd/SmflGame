@@ -5,7 +5,7 @@
 class AnimationComponent;
 class StatsComponent;
 
-enum SkillType
+enum class SkillType
 {
 	EMPTY = 0, RED_BLADES, WATER_SPIKE, THUNDER_STRIKE, DARK_BOLT,
 	POISON_CLAW, DARK_POSION, BLOOD_SPIKE, FIRE_EXPLOSION, LIGHTNING_STRIKE, HOLY_STRIKE

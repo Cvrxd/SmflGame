@@ -1,14 +1,13 @@
 #pragma once
 #include "Enemy.h"
-enum BossType { NIGHTBORN = 0 };
+enum class BossType { NIGHTBORN = 0, FIRE_DEMON };
 
 class BossEnemy : public Enemy
 {
 private:
 	BossType type;
 
-	std::pair<sf::Texture, sf::Sprite> takeHitSprite;
-	AnimationComponent takeHitAnimation;
+	
 
 	//Init functions
 	void initComponents(sf::Texture& texture_sheet, sf::Sprite& sprite) override;

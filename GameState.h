@@ -4,6 +4,8 @@
 #include "TileMap.h"
 #include "PlayerGUI.h"
 #include "BossEnemy.h"
+#include "MeleEnemy.h"
+#include "MageEnemy.h"
 
 class State;
 class PauseMenu;
@@ -11,12 +13,15 @@ class TileMap;
 class PlayerGUI;
 class Enemy;
 class BossEnemy;
+class MeleEnemy;
+class MageEnemy;
 
 class GameState : public State
 {
 private:
 	//Entities
 	std::vector<BossEnemy> bosses;
+	std::vector<MeleEnemy> meleEnemies;
 
 	//variables 
 	sf::Shader core_shader;
