@@ -14,10 +14,11 @@ class Enemy : public Entity
 protected:
 	//Variables
 	std::pair<sf::Texture, sf::Sprite> takeHitSprite;
-	std::pair<sf::Texture, sf::Sprite> skillImpactSprite;
-
 	AnimationComponent takeHitAnimation;
-	AnimationComponent skillImpactAnimation;
+
+	//Skills impact
+	std::map<SkillType, std::pair<sf::Sprite, sf::Texture>> skillsImpactSprites;
+	std::map<SkillType, AnimationComponent> skillsImpactAnimations;
 
 	Player* player;
 	sf::Texture* textureSheet;
@@ -39,6 +40,7 @@ protected:
 
 	//init functions
 	virtual void initImpactAnimations();
+	virtual void initSkillsImpactTextures();
 	virtual void initStats();
 	virtual void initComponents(sf::Texture& texture_sheet, sf::Sprite& sprite) = 0;
 	virtual void createAnimationComponent(sf::Texture& texture_sheet) = 0;

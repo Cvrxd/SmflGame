@@ -49,22 +49,19 @@ private:
 	std::map<SkillType, std::pair<sf::Sprite, sf::Texture>> skillTextures;
 	std::map<SkillType, AnimationComponent> skillsAnimations;
 
-	//Skills impact animation
-	std::map<SkillType, std::pair<sf::Sprite, sf::Texture>> skillsImpactSprites;
-	std::map<SkillType, AnimationComponent> skillsImpactAnimations;
-
 	int currentRender;
 
 	bool playAnimation;
 	bool usingPotion;
 	bool& usingSkill;
+	SkillType& usingSkillType;
 
 	//Init functions
 	void initAllSkills();
 	void initAllAnimations();
 
 public:
-	SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill);
+	SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill, SkillType& usingSkillType);
 	~SkillsComponent();
 
 	//Accessors

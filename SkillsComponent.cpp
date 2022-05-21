@@ -111,10 +111,10 @@ inline void SkillsComponent::initAllAnimations()
 }
 
 //Constructor
-SkillsComponent::SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill)
+SkillsComponent::SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill, SkillType& usingSkillType)
 	: statsComponent(statsComponent) ,currentRender(-1), playAnimation(false), usingPotion(false),
-	keyTime(0.f), keyTimeMax(15.f), potionKeyTime(0.f), potionKeyTimeMax(10.f),
-	skillsSize(10), usingSkill(isUsingSkill)
+	keyTime(0.f), keyTimeMax(15.f), potionKeyTime(0.f), potionKeyTimeMax(5.f),
+	skillsSize(10), usingSkill(isUsingSkill), usingSkillType(usingSkillType)
 {
 	this->initAllSkills();
 	this->initAllAnimations();
@@ -279,8 +279,12 @@ void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position
 		if (this->skillsAnimations[playerSkills[currentRender].first].play("USE", dt, true))
 		{
 			this->playAnimation = false;
-			this->usingSkill = true;
 
+			//Player variables
+			this->usingSkill = true;
+			this->usingSkillType = this->playerSkills[currentRender].first;
+
+			//Using skill
 			this->useSkill(playerSkills[currentRender].first);
 			currentRender = -1;
 		}

@@ -14,6 +14,7 @@ private:
 	bool dealDMG = false;
 	bool isTakingHit = false;
 	bool isUsingSkill = false;
+	SkillType usingSkilltype = SkillType::EMPTY;
 
 	int currentHitAnimation;
 
@@ -38,6 +39,7 @@ public:
 	virtual ~Player();
 
 	//Accessors
+	const SkillType& getUsingSkilltype();
 	const bool& usingSkill();
 	const bool& isDealingDmg();
 	StatsComponent* getStatsComponent();

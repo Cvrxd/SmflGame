@@ -264,57 +264,61 @@ inline void TileMap::updateTilesCollision(Entity* entity, const sf::Vector2i& gr
 		this->toY = this->maxSizeLevelGrid.y;
 	}
 
-	//Collision for loup
-	for (auto& el_x : this->map)
+	//Collision
+	//Update collision if needed
+	if (this->updateCollision)
 	{
-		for (auto& el_y : el_x)
+		for (auto& el_x : this->map)
 		{
-			sf::FloatRect playerBounds = entity->getGlobalBounds();
-			sf::FloatRect wallBounds = el_y.getGlobalBounds();
-			sf::FloatRect nextPositionBounds = entity->getNextPosition(dt);
-
-			if (el_y.getX() < toX && el_y.getY() < toY && el_y.getX() > fromX && el_y.getY() > fromY)
+			for (auto& el_y : el_x)
 			{
-				if (el_y.getCollision() && el_y.inersects(nextPositionBounds))
-				{ 
-					//Bottom collision
-					if (playerBounds.top < wallBounds.top
-						&& playerBounds.top + playerBounds.height < wallBounds.top + wallBounds.height
-						&& playerBounds.left < wallBounds.left + wallBounds.width
-						&& playerBounds.left + playerBounds.width > wallBounds.left)
-					{
-						entity->stopVelocityY();
-						entity->setPosition(playerBounds.left, wallBounds.top - playerBounds.height);
-					}
+				this->playerBounds = entity->getGlobalBounds();
+				this->wallBounds = el_y.getGlobalBounds();
+				this->nextPositionBounds = entity->getNextPosition(dt);
 
-					//Top collision
-					else if (playerBounds.top > wallBounds.top
-						&& playerBounds.top + playerBounds.height > wallBounds.top + wallBounds.height
-						&& playerBounds.left < wallBounds.left + wallBounds.width
-						&& playerBounds.left + playerBounds.width > wallBounds.left)
+				if (el_y.getX() < toX && el_y.getY() < toY && el_y.getX() > fromX && el_y.getY() > fromY)
+				{
+					if (el_y.getCollision() && el_y.inersects(nextPositionBounds))
 					{
-						entity->stopVelocityY();
-						entity->setPosition(playerBounds.left, wallBounds.top + wallBounds.height);
-					}
+						//Bottom collision
+						if (playerBounds.top < wallBounds.top
+							&& playerBounds.top + playerBounds.height < wallBounds.top + wallBounds.height
+							&& playerBounds.left < wallBounds.left + wallBounds.width
+							&& playerBounds.left + playerBounds.width > wallBounds.left)
+						{
+							entity->stopVelocityY();
+							entity->setPosition(playerBounds.left, wallBounds.top - playerBounds.height);
+						}
 
-					//Right collision
-					if (playerBounds.left < wallBounds.left
-						&& playerBounds.left + playerBounds.width < wallBounds.left + wallBounds.width
-						&& playerBounds.top < wallBounds.top + wallBounds.height
-						&& playerBounds.top + playerBounds.height > wallBounds.top)
-					{
-						entity->stopVelocityX();
-						entity->setPosition(wallBounds.left - playerBounds.width, playerBounds.top);
-					}
+						//Top collision
+						else if (playerBounds.top > wallBounds.top
+							&& playerBounds.top + playerBounds.height > wallBounds.top + wallBounds.height
+							&& playerBounds.left < wallBounds.left + wallBounds.width
+							&& playerBounds.left + playerBounds.width > wallBounds.left)
+						{
+							entity->stopVelocityY();
+							entity->setPosition(playerBounds.left, wallBounds.top + wallBounds.height);
+						}
 
-					//Left collision
-					else if (playerBounds.left > wallBounds.left
-						&& playerBounds.left + playerBounds.width > wallBounds.left + wallBounds.width
-						&& playerBounds.top < wallBounds.top + wallBounds.height
-						&& playerBounds.top + playerBounds.height > wallBounds.top)
-					{
-						entity->stopVelocityX();
-						entity->setPosition(wallBounds.left + wallBounds.width, playerBounds.top);
+						//Right collision
+						if (playerBounds.left < wallBounds.left
+							&& playerBounds.left + playerBounds.width < wallBounds.left + wallBounds.width
+							&& playerBounds.top < wallBounds.top + wallBounds.height
+							&& playerBounds.top + playerBounds.height > wallBounds.top)
+						{
+							entity->stopVelocityX();
+							entity->setPosition(wallBounds.left - playerBounds.width, playerBounds.top);
+						}
+
+						//Left collision
+						else if (playerBounds.left > wallBounds.left
+							&& playerBounds.left + playerBounds.width > wallBounds.left + wallBounds.width
+							&& playerBounds.top < wallBounds.top + wallBounds.height
+							&& playerBounds.top + playerBounds.height > wallBounds.top)
+						{
+							entity->stopVelocityX();
+							entity->setPosition(wallBounds.left + wallBounds.width, playerBounds.top);
+						}
 					}
 				}
 			}
@@ -325,33 +329,26 @@ inline void TileMap::updateTilesCollision(Entity* entity, const sf::Vector2i& gr
 
 //Regular update
 void TileMap::update(Entity* entity, const sf::Vector2i& gridPosition, const float& dt)
-{
-	//updateLevelCollision(entity, dt);
-	updateTilesCollision(entity, gridPosition, dt);
+{	
+	this->updateTilesCollision(entity, gridPosition, dt);
 }
 
 void TileMap::renderGameState(sf::RenderTarget& target, const sf::Vector2f& player_position, sf::Shader* shader)
 {
+	this->updateCollision = false;
+
 	for (auto& el_x : this->map)
 	{
 		for (auto& el_y : el_x)
 		{
 			if (el_y.getX() < toX && el_y.getY() < toY && el_y.getX() > fromX && el_y.getY() > fromY && el_y.getType() != TileTypes::ABOVE)
 			{
-				if (shader)
+				el_y.render(target, player_position, shader);
+
+				if (el_y.getCollision())
 				{
-					el_y.render(target, player_position, shader);
+					this->updateCollision = true; // if need to update collision
 				}
-				else
-				{
-					el_y.render(target);
-				}
-				//DEBUG
-				/*if (el_y.getCollision())
-				{
-					this->collisionBox.setPosition(el_y.getPositionF());
-					target.draw(this->collisionBox);
-				}*/
 			}
 		}
 	}	

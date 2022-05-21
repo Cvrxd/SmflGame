@@ -7,14 +7,12 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 	switch (this->type)
 	{
 	case BossType::NIGHTBORN:
-
 		this->sprite.setScale(4.f, 4.f);
 
 		//Init components
 		this->createHitboxComponent(this->sprite, 100.f, 100.f, 100.f, 100.f);
 		this->createMovementComponent(150.f, 900.f, 250.f);
 		this->createAnimationComponent(texture_sheet);
-		this->initImpactAnimations();
 
 		//Sets origins
 		this->setOriginLeft = [&sprite]() 
@@ -22,7 +20,6 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 			sprite.setOrigin(80.f, 0.f);
 			sprite.setScale(-4.f, 4.f);
 		};
-
 		this->setOriginRight = [&sprite]()
 		{
 			sprite.setOrigin(0.f, 0.f);
@@ -37,7 +34,6 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		this->createHitboxComponent(this->sprite, 300.f, 300.f, 300.f, 350.f);
 		this->createMovementComponent(100.f, 800.f, 230.f);
 		this->createAnimationComponent(texture_sheet);
-		this->initImpactAnimations();
 
 		//Sets origins
 		this->setOriginLeft = [&sprite]()
@@ -45,13 +41,11 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 			sprite.setOrigin(0.f, 0.f);
 			sprite.setScale(4.f, 4.f);
 		};
-
 		this->setOriginRight = [&sprite]()
 		{
 			sprite.setOrigin(250.f, 0.f);
 			sprite.setScale(-4.f, 4.f);
 		};
-
 
 		break;
 	default:
@@ -114,8 +108,7 @@ BossEnemy::BossEnemy(BossEnemy&& other)
 	this->hitImpact = other.hitImpact;
 	this->skillImpact = other.skillImpact;
 	this->type = other.type;
-	this->skillImpactAnimation = other.skillImpactAnimation;
-	this->skillImpactSprite = other.skillImpactSprite;
+	//
 	this->takeHitAnimation = other.takeHitAnimation;
 	this->takeHitSprite = other.takeHitSprite;
 
@@ -169,6 +162,7 @@ inline void BossEnemy::updateMovement(const float& dt)
 
 inline void BossEnemy::updateAnimations(const float& dt)
 {
+	//taking damage animation
 	if (this->isTakingDamage)
 	{
 		this->stopVelocity();
@@ -196,14 +190,15 @@ inline void BossEnemy::updateAnimations(const float& dt)
 	//Plyaer skill
 	if (this->skillImpact)
 	{
-		this->skillImpactSprite.second.setPosition(this->getPosition());
+		this->skillsImpactSprites[this->player->getUsingSkilltype()].first.setPosition(this->getPosition().x - 40, this->getPosition().y - 40);
 
-		if (this->skillImpactAnimation.play("SKILL_IMPACT", dt, true))
+		if (this->skillsImpactAnimations[this->player->getUsingSkilltype()].play("SKILL_IMPACT", dt, true))
 		{
 			this->skillImpact = false;
 		}
 	}
 
+	//Death
 	if (this->statsComponent.hp == 0)
 	{
 		this->stopVelocity();
@@ -217,6 +212,7 @@ inline void BossEnemy::updateAnimations(const float& dt)
 		}
 	}
 
+	//Movement animations
 	if (this->movementComponent.getState(MOVING_RIGHT))
 	{
 		this->setOriginRight();
@@ -290,7 +286,7 @@ void BossEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 	}
 	if (this->skillImpact)
 	{
-		target.draw(this->skillImpactSprite.second);
+		target.draw(this->skillsImpactSprites[this->player->getUsingSkilltype()].first);
 	}
 
 	//this->hitboxComponent.render(target);

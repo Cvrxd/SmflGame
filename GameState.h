@@ -22,6 +22,7 @@ private:
 	//Entities
 	std::vector<BossEnemy> bosses;
 	std::vector<MeleEnemy> meleEnemies;
+	std::vector<MageEnemy> mageEnemies;
 
 	//variables 
 	sf::Shader core_shader;

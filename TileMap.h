@@ -23,10 +23,16 @@ private:
 	std::vector<Tile*> mapAbove;
 
 	//Collision variables
+	sf::FloatRect playerBounds;
+	sf::FloatRect wallBounds;
+	sf::FloatRect nextPositionBounds;
+
 	int fromX;
 	int toX;
 	int fromY;
 	int toY;
+
+	bool updateCollision;
 
 	//Functions
 	void initTextureSheet();

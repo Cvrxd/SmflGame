@@ -1,3 +1,4 @@
+
 #include "stdafx.h"
 #include "MageEnemy.h"
 
@@ -7,29 +8,72 @@ inline void MageEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 	switch (this->type)
 	{
 	case MageEnemyType::DARK_MAGE:
-		this->sprite.setScale(3.f, 3.f);
+		this->offsetX = 0;
+		this->offsetY = 0;
+
+		this->sprite.setScale(2.f, 2.f);
 		
 		//Init spell cast range
-		this->castRange.setRadius(300.f);
+		this->castR = 500.f;
+		this->ineerR = 350.f;
+
+		this->castRange.setRadius(this->castR);
 		this->castRange.setFillColor(sf::Color::Transparent);
 		this->castRange.setOutlineColor(sf::Color::Red);
 		this->castRange.setOutlineThickness(1.f);
 
-		this->innerRange.setRadius(150.f);
+		this->innerRange.setRadius(this->ineerR);
 		this->innerRange.setFillColor(sf::Color::Transparent);
 		this->innerRange.setOutlineColor(sf::Color::Green);
 		this->innerRange.setOutlineThickness(1.f);
 
 		//Init components
-		this->createHitboxComponent(this->sprite, 70.f, 120.f, 100.f, 100.f);
-		this->createMovementComponent(80.f, 600.f, 100.f);
+		this->createHitboxComponent(this->sprite, 150.f, 150.f, 150.f, 150.f);
+		this->createMovementComponent(120.f, 750.f, 150.f);
 		this->createAnimationComponent(texture_sheet);
-		this->initImpactAnimations();
 
 		//Sets origins
 		this->setOriginLeft = [&sprite]()
 		{
-			sprite.setOrigin(100.f, 0.f);
+			sprite.setOrigin(230.f, 0.f);
+			sprite.setScale(-2.f, 2.f);
+		};
+		this->setOriginRight = [&sprite]()
+		{
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setScale(2.f, 2.f);
+		};
+		break;
+
+	case MageEnemyType::FIRE_MAGE:
+		this->offsetX = 70;
+		this->offsetY = 70;
+
+		this->sprite.setScale(3.f, 3.f);
+
+		//Init spell cast range
+		this->castR = 200.f;
+		this->ineerR = 170.f;
+
+		this->castRange.setRadius(this->castR);
+		this->castRange.setFillColor(sf::Color::Transparent);
+		this->castRange.setOutlineColor(sf::Color::Red);
+		this->castRange.setOutlineThickness(1.f);
+
+		this->innerRange.setRadius(this->ineerR);
+		this->innerRange.setFillColor(sf::Color::Transparent);
+		this->innerRange.setOutlineColor(sf::Color::Green);
+		this->innerRange.setOutlineThickness(1.f);
+
+		//Init components
+		this->createHitboxComponent(this->sprite, 150.f, 150.f, 150.f, 150.f);
+		this->createMovementComponent(120.f, 750.f, 150.f);
+		this->createAnimationComponent(texture_sheet);
+
+		//Sets origins
+		this->setOriginLeft = [&sprite]()
+		{
+			sprite.setOrigin(160.f, 0.f);
 			sprite.setScale(-3.f, 3.f);
 		};
 		this->setOriginRight = [&sprite]()
@@ -53,10 +97,16 @@ inline void MageEnemy::addAnimations()
 	switch (this->type)
 	{
 	case MageEnemyType::DARK_MAGE:
-		this->animationComponent.addAnimation("MOVE", 0, 1, 3, 1, 108, 108, 20.f);
-		this->animationComponent.addAnimation("CAST", 0, 0, 3, 0, 108, 108, 10.f);
-		this->animationComponent.addAnimation("TAKE_HIT", 0, 2, 1, 2, 108, 108, 20.f);
-		this->animationComponent.addAnimation("DEATH", 0, 2, 3, 2, 108, 108, 20.f);
+		this->animationComponent.addAnimation("MOVE", 0, 1, 7, 1, 250, 250, 20.f);
+		this->animationComponent.addAnimation("CAST", 0, 3, 15, 3, 250, 250, 10.f);
+		this->animationComponent.addAnimation("TAKE_HIT", 0, 2, 2, 2, 250, 250, 20.f);
+		this->animationComponent.addAnimation("DEATH", 0, 0, 6, 0, 250, 250, 15.f);
+		break;
+	case MageEnemyType::FIRE_MAGE:
+		this->animationComponent.addAnimation("MOVE", 0, 2, 7, 2, 150, 150, 20.f);
+		this->animationComponent.addAnimation("CAST", 0, 0, 7, 0, 150, 150, 15.f);
+		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 3, 3, 150, 150, 20.f);
+		this->animationComponent.addAnimation("DEATH", 0, 1, 6, 1, 150, 150, 15.f);
 		break;
 	default:
 		break;
@@ -89,10 +139,13 @@ MageEnemy::MageEnemy(MageEnemy&& other)
 	this->hitImpact = other.hitImpact;
 	this->skillImpact = other.skillImpact;
 	this->type = other.type;
-	this->skillImpactAnimation = other.skillImpactAnimation;
-	this->skillImpactSprite = other.skillImpactSprite;
+	//
 	this->takeHitAnimation = other.takeHitAnimation;
 	this->takeHitSprite = other.takeHitSprite;
+	this->castR = other.castR;
+	this->castRange = other.castRange;
+	this->ineerR = other.ineerR;
+	this->innerRange = other.innerRange;
 
 	other.player = nullptr;
 }
@@ -104,13 +157,16 @@ MageEnemy::~MageEnemy()
 //Functions
 inline void MageEnemy::updateAttack(const float& dt)
 {
-	if (this->player->getHitRange().getGlobalBounds().intersects(this->castRange.getGlobalBounds()) && !this->isDead)
+	if (this->player->getHitRange().getGlobalBounds().intersects(this->castRange.getGlobalBounds()) && 
+		!this->player->getHitRange().getGlobalBounds().intersects(this->innerRange.getGlobalBounds()) && !this->isDead)
 	{
 		this->isAttaking = true;
 	}
 
 	if (this->isAttaking)
 	{
+		this->stopVelocity();
+
 		if (this->animationComponent.play("CAST", dt, true))
 		{
 			if (this->player->getHitRange().getGlobalBounds().intersects(this->castRange.getGlobalBounds()))
@@ -124,25 +180,64 @@ inline void MageEnemy::updateAttack(const float& dt)
 
 inline void MageEnemy::updateMovement(const float& dt)
 {
-	if (this->player->getHitRange().getGlobalBounds().intersects(this->innerRange.getGlobalBounds()) && this->player->getPosition().x < this->getPosition().x)
+	//Ranges
+	this->castRange.setPosition(this->getPosition().x - this->castR + offsetX, this->getPosition().y - this->castR + offsetY);
+	this->innerRange.setPosition(this->getPosition().x - this->ineerR + offsetX, this->getPosition().y - this->ineerR + offsetY);
+
+	//Inner range intersects
+	if (this->player->getHitRange().getGlobalBounds().intersects(this->innerRange.getGlobalBounds()))
 	{
-		this->move(1.f, 0.f, dt);
+		if (this->player->getPosition().x > this->getPosition().x)
+		{	
+			this->move(-1.f, 0.f, dt);
+		}
+		else if (this->player->getPosition().x < this->getPosition().x)
+		{
+			this->move(1.f, 0.f, dt);
+		}
+		if (this->player->getPosition().y < this->getPosition().y)
+		{
+			this->move(0.f, 1.f, dt);
+		}
+		else if (this->player->getPosition().y > this->getPosition().y)
+		{
+			this->move(0, -1.f, dt);
+		}
 	}
-	else if (this->player->getPosition().x < this->getPosition().x)
+	//Cast range intersects
+	if (!this->player->getHitRange().getGlobalBounds().intersects(this->castRange.getGlobalBounds()))
 	{
-		this->move(-1.f, 0.f, dt);
-	}
-	if (this->player->getPosition().y < this->getPosition().y)
-	{
-		this->move(0.f, -1.f, dt);
-	}
-	else if (this->player->getPosition().y > this->getPosition().y)
-	{
-		this->move(0, 1.f, dt);
+		if (this->player->getPosition().x > this->getPosition().x)
+		{
+			this->move(1.f, 0.f, dt);
+		}
+		else if (this->player->getPosition().x < this->getPosition().x)
+		{
+			this->move(-1.f, 0.f, dt);
+		}
+		if (this->player->getPosition().y < this->getPosition().y)
+		{
+			this->move(0.f, -1.f, dt);
+		}
+		else if (this->player->getPosition().y > this->getPosition().y)
+		{
+			this->move(0, 1.f, dt);
+		}
 	}
 
-	this->castRange.setPosition(this->getPosition().x - 300, this->getPosition().y - 300);
-	this->innerRange.setPosition(this->getPosition().x - 150, this->getPosition().y - 150);
+	//Set attack origin
+	if (this->player->getHitRange().getGlobalBounds().intersects(this->castRange.getGlobalBounds()) && 
+		!this->player->getHitRange().getGlobalBounds().intersects(this->innerRange.getGlobalBounds()))
+	{
+		if (this->player->getPosition().x > this->getPosition().x)
+		{
+			this->setOriginRight();
+		}
+		else if (this->player->getPosition().x < this->getPosition().x)
+		{
+			this->setOriginLeft();
+		}
+	}
 }
 
 inline void MageEnemy::updateAnimations(const float& dt)
@@ -174,9 +269,9 @@ inline void MageEnemy::updateAnimations(const float& dt)
 	//Plyaer skill
 	if (this->skillImpact)
 	{
-		this->skillImpactSprite.second.setPosition(this->getPosition().x - 40, this->getPosition().y - 50);
+		this->skillsImpactSprites[this->player->getUsingSkilltype()].first.setPosition(this->getPosition().x - 40, this->getPosition().y - 50);
 
-		if (this->skillImpactAnimation.play("SKILL_IMPACT", dt, true))
+		if (this->skillsImpactAnimations[this->player->getUsingSkilltype()].play("SKILL_IMPACT", dt, true))
 		{
 			this->skillImpact = false;
 		}
@@ -259,8 +354,8 @@ void MageEnemy::update(const float& dt, sf::Vector2f mouse_pos_view)
 void MageEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 {
 	target.draw(this->sprite, shader);
-	target.draw(this->castRange);
-	target.draw(this->innerRange);
+	//target.draw(this->castRange);
+	//target.draw(this->innerRange);
 
 	if (this->hitImpact)
 	{
@@ -268,8 +363,8 @@ void MageEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 	}
 	if (this->skillImpact)
 	{
-		target.draw(this->skillImpactSprite.second);
+		target.draw(this->skillsImpactSprites[this->player->getUsingSkilltype()].first);
 	}
 
-	this->hitboxComponent.render(target);
+	//this->hitboxComponent.render(target);
 }

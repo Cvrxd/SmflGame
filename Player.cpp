@@ -75,7 +75,7 @@ Player::Player(const float& x, const float& y, sf::Texture& texture_sheet)
 	: currentHitAnimation(0),
 	statsComponent(1),
 	animationComponent(&this->sprite, &texture_sheet),
-	skillsComponent(this->statsComponent, this->isUsingSkill)
+	skillsComponent(this->statsComponent, this->isUsingSkill, this->usingSkilltype)
 {
 	this->initVariables();
 	this->initComponents(texture_sheet);
@@ -85,6 +85,11 @@ Player::Player(const float& x, const float& y, sf::Texture& texture_sheet)
 
 Player::~Player()
 {
+}
+
+const SkillType& Player::getUsingSkilltype()
+{
+	return this->usingSkilltype;
 }
 
 const bool& Player::usingSkill()

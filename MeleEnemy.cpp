@@ -13,7 +13,6 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		this->createHitboxComponent(this->sprite, 70.f, 120.f, 100.f, 100.f);
 		this->createMovementComponent(80.f, 600.f, 100.f);
 		this->createAnimationComponent(texture_sheet);
-		this->initImpactAnimations();
 
 		//Sets origins
 		this->setOriginLeft = [&sprite]()
@@ -34,7 +33,6 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		this->createHitboxComponent(this->sprite, 250.f, 120.f, 100.f, 200.f);
 		this->createMovementComponent(150.f, 850.f, 200.f);
 		this->createAnimationComponent(texture_sheet);
-		this->initImpactAnimations();
 
 		//Sets origins
 		this->setOriginLeft = [&sprite]()
@@ -55,7 +53,6 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		this->createHitboxComponent(this->sprite, 200.f, 150.f, 120.f, 150.f);
 		this->createMovementComponent(200.f, 1000.f, 350.f);
 		this->createAnimationComponent(texture_sheet);
-		this->initImpactAnimations();
 
 		//Sets origins
 		this->setOriginLeft = [&sprite]()
@@ -132,8 +129,7 @@ MeleEnemy::MeleEnemy(MeleEnemy&& other)
 	this->hitImpact = other.hitImpact;
 	this->skillImpact = other.skillImpact;
 	this->type = other.type;
-	this->skillImpactAnimation = other.skillImpactAnimation;
-	this->skillImpactSprite = other.skillImpactSprite;
+	//
 	this->takeHitAnimation = other.takeHitAnimation;
 	this->takeHitSprite = other.takeHitSprite;
 
@@ -214,9 +210,9 @@ inline void MeleEnemy::updateAnimations(const float& dt)
 	//Plyaer skill
 	if (this->skillImpact)
 	{
-		this->skillImpactSprite.second.setPosition(this->getPosition().x - 40, this->getPosition().y - 50);
+		this->skillsImpactSprites[this->player->getUsingSkilltype()].first.setPosition(this->getPosition().x - 40, this->getPosition().y - 40);
 
-		if (this->skillImpactAnimation.play("SKILL_IMPACT", dt, true))
+		if (this->skillsImpactAnimations[this->player->getUsingSkilltype()].play("SKILL_IMPACT", dt, true))
 		{
 			this->skillImpact = false;
 		}
@@ -306,7 +302,7 @@ void MeleEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 	}
 	if (this->skillImpact)
 	{
-		target.draw(this->skillImpactSprite.second);
+		target.draw(this->skillsImpactSprites[this->player->getUsingSkilltype()].first);
 	}
 
 	//this->hitboxComponent.render(target);
