@@ -1,13 +1,14 @@
 #include "stdafx.h"
 #include "PlayerGUI.h"
 
+//Initialisation
 inline void PlayerGUI::initVariables()
 {
 	this->mpPotions = &this->player.getSkillComponent()->getMpPotions();
 	this->hpPotions = &this->player.getSkillComponent()->getHpPotions();
+	this->coins = &this->statsComponent.coins;
 }
 
-//Player GUI
 inline void PlayerGUI::initStatBars()
 {
 	this->textures["HP_BAR"].loadFromFile("Textures/hud/game_hud/hp.png");
@@ -66,10 +67,12 @@ inline void PlayerGUI::initQuickSlotBars()
 
 inline void PlayerGUI::initTextsIcons()
 {
-	//Game icons
+	//Textures
 	this->textures["ICON_SHEET"].loadFromFile("Textures/hud/game_hud/icons.png");
 	this->textures["QUICK_SLOT_HUD"].loadFromFile("Textures/hud/game_hud/arrows.png");
+	this->textures["COIN"].loadFromFile("Textures/hud/game_hud/coin.png");
 
+	//Game icons
 	this->iconsSprites["QUICK_SLOT_ARROW_LEFT"].setTexture(&this->textures["QUICK_SLOT_HUD"]);
 	this->iconsSprites["QUICK_SLOT_ARROW_LEFT"].setTextureRect(sf::IntRect(0, 0, 50, 84));
 	this->iconsSprites["QUICK_SLOT_ARROW_LEFT"].setSize(sf::Vector2f(60, 100));
@@ -90,7 +93,7 @@ inline void PlayerGUI::initTextsIcons()
 	this->iconsSprites["EXP"].setSize(sf::Vector2f(120, 50));
 	this->iconsSprites["EXP"].setPosition(1, 120);
 
-	//Exp and LVL text
+	//Exp, LVL, coins text
 	this->texts["LEVEL"].setFont(this->font);
 	this->texts["LEVEL"].setString(std::to_string(this->player.getStatsComponent()->level));
 	this->texts["LEVEL"].setCharacterSize(65);
@@ -101,6 +104,12 @@ inline void PlayerGUI::initTextsIcons()
 	this->texts["EXP"].setString(std::to_string(this->player.getStatsComponent()->exp));
 	this->texts["EXP"].setCharacterSize(27);
 	this->texts["EXP"].setPosition(55, 122);
+
+	this->texts["COIN"].setFont(this->font);
+	this->texts["COIN"].setFillColor(sf::Color::White);
+	this->texts["COIN"].setString(std::to_string(*this->coins));
+	this->texts["COIN"].setCharacterSize(35);
+	this->texts["COIN"].setPosition(65, 220);
 
 	//Potions count
 	this->texts["MP_POTIONS"].setFont(this->font);
@@ -137,53 +146,61 @@ inline void PlayerGUI::initTextsIcons()
 
 inline void PlayerGUI::initItems()
 {
-	inventoryIcons["HELMET"].first.setSize(sf::Vector2f(32, 32));
-	inventoryIcons["HELMET"].first.setFillColor(sf::Color(200, 200, 200, 100));
-	inventoryIcons["HELMET"].first.setPosition(1700, 100);
-	inventoryIcons["HELMET"].first.setOutlineColor(sf::Color::White);
-	inventoryIcons["HELMET"].first.setOutlineThickness(1.f);
+	itemsIcons["HELMET"].first.setSize(sf::Vector2f(32, 32));
+	itemsIcons["HELMET"].first.setFillColor(sf::Color(200, 200, 200, 100));
+	itemsIcons["HELMET"].first.setPosition(1700, 100);
+	itemsIcons["HELMET"].first.setOutlineColor(sf::Color::White);
+	itemsIcons["HELMET"].first.setOutlineThickness(1.f);
 
-	inventoryIcons["ARMOR"].first.setSize(sf::Vector2f(32, 32));
-	inventoryIcons["ARMOR"].first.setFillColor(sf::Color(200, 200, 200, 100));
-	inventoryIcons["ARMOR"].first.setPosition(1700, 100 + 64);
-	inventoryIcons["ARMOR"].first.setOutlineColor(sf::Color::White);
-	inventoryIcons["ARMOR"].first.setOutlineThickness(1.f);
+	itemsIcons["ARMOR"].first.setSize(sf::Vector2f(32, 32));
+	itemsIcons["ARMOR"].first.setFillColor(sf::Color(200, 200, 200, 100));
+	itemsIcons["ARMOR"].first.setPosition(1700, 100 + 64);
+	itemsIcons["ARMOR"].first.setOutlineColor(sf::Color::White);
+	itemsIcons["ARMOR"].first.setOutlineThickness(1.f);
 
-	inventoryIcons["GLOVES"].first.setSize(sf::Vector2f(32, 32));
-	inventoryIcons["GLOVES"].first.setFillColor(sf::Color(200, 200, 200, 100));
-	inventoryIcons["GLOVES"].first.setPosition(1700, 100 + 64 * 2);
-	inventoryIcons["GLOVES"].first.setOutlineColor(sf::Color::White);
-	inventoryIcons["GLOVES"].first.setOutlineThickness(1.f);
+	itemsIcons["GLOVES"].first.setSize(sf::Vector2f(32, 32));
+	itemsIcons["GLOVES"].first.setFillColor(sf::Color(200, 200, 200, 100));
+	itemsIcons["GLOVES"].first.setPosition(1700, 100 + 64 * 2);
+	itemsIcons["GLOVES"].first.setOutlineColor(sf::Color::White);
+	itemsIcons["GLOVES"].first.setOutlineThickness(1.f);
 
-	inventoryIcons["BOOTS"].first.setSize(sf::Vector2f(32, 32));
-	inventoryIcons["BOOTS"].first.setFillColor(sf::Color(200, 200, 200, 100));
-	inventoryIcons["BOOTS"].first.setPosition(1700, 100 + 64 * 3);
-	inventoryIcons["BOOTS"].first.setOutlineColor(sf::Color::White);
-	inventoryIcons["BOOTS"].first.setOutlineThickness(1.f);
+	itemsIcons["BOOTS"].first.setSize(sf::Vector2f(32, 32));
+	itemsIcons["BOOTS"].first.setFillColor(sf::Color(200, 200, 200, 100));
+	itemsIcons["BOOTS"].first.setPosition(1700, 100 + 64 * 3);
+	itemsIcons["BOOTS"].first.setOutlineColor(sf::Color::White);
+	itemsIcons["BOOTS"].first.setOutlineThickness(1.f);
 
-	inventoryIcons["SWORD"].first.setSize(sf::Vector2f(32, 32));
-	inventoryIcons["SWORD"].first.setFillColor(sf::Color(200, 200, 200, 100));
-	inventoryIcons["SWORD"].first.setPosition(1700 - 64, 100 + 64 * 2);
-	inventoryIcons["SWORD"].first.setOutlineColor(sf::Color::White);
-	inventoryIcons["SWORD"].first.setOutlineThickness(1.f);
+	itemsIcons["SWORD"].first.setSize(sf::Vector2f(32, 32));
+	itemsIcons["SWORD"].first.setFillColor(sf::Color(200, 200, 200, 100));
+	itemsIcons["SWORD"].first.setPosition(1700 - 64, 100 + 64 * 2);
+	itemsIcons["SWORD"].first.setOutlineColor(sf::Color::White);
+	itemsIcons["SWORD"].first.setOutlineThickness(1.f);
 
-	inventoryIcons["STAFF"].first.setSize(sf::Vector2f(32, 32));
-	inventoryIcons["STAFF"].first.setFillColor(sf::Color(200, 200, 200, 100));
-	inventoryIcons["STAFF"].first.setPosition(1700 + 64, 100 + 64 * 2);
-	inventoryIcons["STAFF"].first.setOutlineColor(sf::Color::White);
-	inventoryIcons["STAFF"].first.setOutlineThickness(1.f);
+	itemsIcons["STAFF"].first.setSize(sf::Vector2f(32, 32));
+	itemsIcons["STAFF"].first.setFillColor(sf::Color(200, 200, 200, 100));
+	itemsIcons["STAFF"].first.setPosition(1700 + 64, 100 + 64 * 2);
+	itemsIcons["STAFF"].first.setOutlineColor(sf::Color::White);
+	itemsIcons["STAFF"].first.setOutlineThickness(1.f);
 
-	inventoryIcons["RING"].first.setSize(sf::Vector2f(32, 32));
-	inventoryIcons["RING"].first.setFillColor(sf::Color(200, 200, 200, 100));
-	inventoryIcons["RING"].first.setPosition(1700 - 64, 100 + 64);
-	inventoryIcons["RING"].first.setOutlineColor(sf::Color::White);
-	inventoryIcons["RING"].first.setOutlineThickness(1.f);
+	itemsIcons["RING"].first.setSize(sf::Vector2f(32, 32));
+	itemsIcons["RING"].first.setFillColor(sf::Color(200, 200, 200, 100));
+	itemsIcons["RING"].first.setPosition(1700 - 64, 100 + 64);
+	itemsIcons["RING"].first.setOutlineColor(sf::Color::White);
+	itemsIcons["RING"].first.setOutlineThickness(1.f);
 
-	inventoryIcons["NECKLASE"].first.setSize(sf::Vector2f(32, 32));
-	inventoryIcons["NECKLASE"].first.setFillColor(sf::Color(200, 200, 200, 100));
-	inventoryIcons["NECKLASE"].first.setPosition(1700 + 64, 100 + 64);
-	inventoryIcons["NECKLASE"].first.setOutlineColor(sf::Color::White);
-	inventoryIcons["NECKLASE"].first.setOutlineThickness(1.f);
+	itemsIcons["NECKLASE"].first.setSize(sf::Vector2f(32, 32));
+	itemsIcons["NECKLASE"].first.setFillColor(sf::Color(200, 200, 200, 100));
+	itemsIcons["NECKLASE"].first.setPosition(1700 + 64, 100 + 64);
+	itemsIcons["NECKLASE"].first.setOutlineColor(sf::Color::White);
+	itemsIcons["NECKLASE"].first.setOutlineThickness(1.f);
+}
+
+inline void PlayerGUI::initAniamtions()
+{
+	this->sprites["COIN"].setScale(2.f, 2.f);
+	this->sprites["COIN"].setPosition(this->texts["COIN"].getPosition().x - 40, this->texts["COIN"].getPosition().y + 7);
+	this->animationComponent["COIN"] = { &this->sprites["COIN"], &this->textures["COIN"] };
+	this->animationComponent["COIN"].addAnimation("PLAY", 0, 0, 4, 0, 16, 16, 15.f);
 }
 
 void PlayerGUI::setPotionsCount(int& hp, int& mp)
@@ -206,6 +223,7 @@ PlayerGUI::PlayerGUI(Player& player, sf::Font& font)
 	this->initQuickSlotBars();
 	this->initTextsIcons();
 	this->initItems();
+	this->initAniamtions();
 }
 
 PlayerGUI::~PlayerGUI()
@@ -229,6 +247,11 @@ void PlayerGUI::addSkill(const SkillType& type)
 	this->player.getSkillComponent()->addSkill(type, index);
 
 	++this->index;
+}
+
+inline void PlayerGUI::updateAnimations(const float& dt)
+{
+	this->animationComponent["COIN"].play("PLAY", dt, true);
 }
 
 inline void PlayerGUI::updateBars()
@@ -268,6 +291,7 @@ inline void PlayerGUI::updateTextIcons()
 
 	this->texts["LEVEL"].setString(std::to_string(this->player.getStatsComponent()->level));
 	this->texts["EXP"].setString(std::to_string(this->player.getStatsComponent()->exp));
+	this->texts["COIN"].setString(std::to_string(this->statsComponent.coins));
 
 	this->texts["MP_POTIONS"].setString(std::to_string(*this->mpPotions));
 	this->texts["HP_POTIONS"].setString(std::to_string(*this->hpPotions));
@@ -275,12 +299,19 @@ inline void PlayerGUI::updateTextIcons()
 
 void PlayerGUI::update(const float& dt)
 {
+	this->updateAnimations(dt);
 	this->updateBars();
 	this->updateTextIcons();
 }
 
 void PlayerGUI::render(sf::RenderTarget& target)
 {
+	//Render sprites
+	for (auto& el : this->sprites)
+	{
+		target.draw(el.second);
+	}
+
 	//Render bars
 	for (auto& el : this->bars)
 	{
@@ -312,8 +343,8 @@ void PlayerGUI::render(sf::RenderTarget& target)
 		}
 	}
 
-	//Render Inventory
-	for (auto& el : this->inventoryIcons)
+	//Render items
+	for (auto& el : this->itemsIcons)
 	{
 		target.draw(el.second.first);
 		target.draw(el.second.second);
@@ -326,9 +357,7 @@ void PlayerGUI::render(sf::RenderTarget& target)
 	}
 }
 
-
 //Skills Menu 
-
 //Init functions
 inline void SkillsMenu::initBackground(const float& x, const float& y)
 {
@@ -419,45 +448,37 @@ inline void SkillsMenu::initSkillIcons()
 		this->skillsIcons[i].second.setPosition(static_cast<float>(x), static_cast<float>(y));
 	}
 
-	this->textures["RED_BLADES"].loadFromFile("Textures/skills/skill_icons43.png");
-	this->skillsIcons[0].first = SkillType::RED_BLADES;
-	this->skillsIcons[0].second.setTexture(&this->textures["RED_BLADES"]);
-
-	this->textures["WATER_SPIKE"].loadFromFile("Textures/skills/skill_icons47.png");
-	this->skillsIcons[1].first = SkillType::WATER_SPIKE;
-	this->skillsIcons[1].second.setTexture(&this->textures["WATER_SPIKE"]);
-
 	this->textures["THUNDER_STRIKE"].loadFromFile("Textures/skills/skill_icons2.png");
-	this->skillsIcons[2].first = SkillType::THUNDER_STRIKE;
-	this->skillsIcons[2].second.setTexture(&this->textures["THUNDER_STRIKE"]);
+	this->skillsIcons[0].first = SkillType::THUNDER_STRIKE;
+	this->skillsIcons[0].second.setTexture(&this->textures["THUNDER_STRIKE"]);
 
 	this->textures["DARK_BOLT"].loadFromFile("Textures/skills/skill_icons51.png");
-	this->skillsIcons[3].first = SkillType::DARK_BOLT;
-	this->skillsIcons[3].second.setTexture(&this->textures["DARK_BOLT"]);
+	this->skillsIcons[1].first = SkillType::DARK_BOLT;
+	this->skillsIcons[1].second.setTexture(&this->textures["DARK_BOLT"]);
 
 	this->textures["POISON_CLAW"].loadFromFile("Textures/skills/skill_icons39.png");
-	this->skillsIcons[4].first = SkillType::POISON_CLAW;
-	this->skillsIcons[4].second.setTexture(&this->textures["POISON_CLAW"]);
+	this->skillsIcons[2].first = SkillType::POISON_CLAW;
+	this->skillsIcons[2].second.setTexture(&this->textures["POISON_CLAW"]);
 
 	this->textures["DARK_POSION"].loadFromFile("Textures/skills/skill_icons50.png");
-	this->skillsIcons[5].first = SkillType::DARK_POSION;
-	this->skillsIcons[5].second.setTexture(&this->textures["DARK_POSION"]);
+	this->skillsIcons[3].first = SkillType::DARK_POSION;
+	this->skillsIcons[3].second.setTexture(&this->textures["DARK_POSION"]);
 
 	this->textures["BLOOD_SPIKE"].loadFromFile("Textures/skills/skill_icons42.png");
-	this->skillsIcons[6].first = SkillType::BLOOD_SPIKE;
-	this->skillsIcons[6].second.setTexture(&this->textures["BLOOD_SPIKE"]);
+	this->skillsIcons[4].first = SkillType::BLOOD_SPIKE;
+	this->skillsIcons[4].second.setTexture(&this->textures["BLOOD_SPIKE"]);
 
 	this->textures["FIRE_EXPLOSION"].loadFromFile("Textures/skills/skill_icons3.png");
-	this->skillsIcons[7].first = SkillType::FIRE_EXPLOSION;
-	this->skillsIcons[7].second.setTexture(&this->textures["FIRE_EXPLOSION"]);
+	this->skillsIcons[5].first = SkillType::FIRE_EXPLOSION;
+	this->skillsIcons[5].second.setTexture(&this->textures["FIRE_EXPLOSION"]);
 
 	this->textures["LIGHTNING_STRIKE"].loadFromFile("Textures/skills/skill_icons23.png");
-	this->skillsIcons[8].first = SkillType::LIGHTNING_STRIKE;
-	this->skillsIcons[8].second.setTexture(&this->textures["LIGHTNING_STRIKE"]);
+	this->skillsIcons[6].first = SkillType::LIGHTNING_STRIKE;
+	this->skillsIcons[6].second.setTexture(&this->textures["LIGHTNING_STRIKE"]);
 
 	this->textures["HOLY_STRIKE"].loadFromFile("Textures/skills/skill_icons6.png");
-	this->skillsIcons[9].first = SkillType::HOLY_STRIKE;
-	this->skillsIcons[9].second.setTexture(&this->textures["HOLY_STRIKE"]);
+	this->skillsIcons[7].first = SkillType::HOLY_STRIKE;
+	this->skillsIcons[7].second.setTexture(&this->textures["HOLY_STRIKE"]);
 }
 
 inline void SkillsMenu::initButtons()
@@ -514,7 +535,7 @@ inline void SkillsMenu::updateKeyTime(const float& dt)
 
 //Constructor
 SkillsMenu::SkillsMenu(Player& player, PlayerGUI& playerGUI, sf::Font& font, const float& x, const float& y)
-	:player(player), playerGUI(playerGUI), font(font), keyTime(0.f), keyTimeMax(10.f), skillsSize(10)
+	:player(player), playerGUI(playerGUI), font(font), keyTime(0.f), keyTimeMax(10.f), skillsSize(8)
 {
 	this->initBackground(x, y);
 	this->initTexts();
@@ -560,15 +581,19 @@ inline void SkillsMenu::updateText()
 inline void SkillsMenu::updateButtons(sf::Vector2i& mousePosWindow)
 {
 	//Update all buttons
-	for (auto& el : this->buttons)
+	if (this->player.getStatsComponent()->statsPoints != 0)
 	{
-		el.second->update(mousePosWindow);
+		for (auto& el : this->buttons)
+		{
+			el.second->update(mousePosWindow);
+		}
 	}
+
 	for (auto& el : this->unclockButtons)
 	{
 		el.second->update(mousePosWindow);
 	}
-
+	
 	//Is button pressed
 	if (this->buttons["HP_UP"]->isPressed() && this->getKeyTime())
 	{
@@ -599,32 +624,35 @@ inline void SkillsMenu::updateButtons(sf::Vector2i& mousePosWindow)
 	}
 	
 	int i = 0;
-	for (auto it = this->unclockButtons.begin(); it != this->unclockButtons.end(); ++it, ++i)
-	{
-		if (it.operator*().second->isPressed() && this->getKeyTime())
-		{
-			if (this->player.getStatsComponent()->skillPoints > 0)
-			{
-				this->unlockSkill(it.operator*().first);
-				--this->player.getStatsComponent()->skillPoints;
 
-				if (it == --this->unclockButtons.end())
+	if (this->unlockSkillsCount != 4)
+	{
+		for (auto it = this->unclockButtons.begin(); it != this->unclockButtons.end(); ++it, ++i)
+		{
+			if (it.operator*().second->isPressed() && this->getKeyTime())
+			{
+				if (this->player.getStatsComponent()->skillPoints > 0)
 				{
-					std::cout << 1;
-					delete it.operator*().second;
-					this->unclockButtons.erase(it);
-					break;
-				}
-				else
-				{
-					delete it.operator*().second;
-					it = this->unclockButtons.erase(it);
+					this->unlockSkill(it.operator*().first);
+					--this->player.getStatsComponent()->skillPoints;
+
+					if (it == --this->unclockButtons.end())
+					{
+						delete it.operator*().second;
+						this->unclockButtons.erase(it);
+						break;
+					}
+					else
+					{
+						delete it.operator*().second;
+						it = this->unclockButtons.erase(it);
+					}
+
+					++this->unlockSkillsCount;
 				}
 			}
 		}
 	}
-	
-	
 }
 
 void SkillsMenu::update(sf::Vector2i& mousePosWindow, const float& dt)
@@ -636,9 +664,12 @@ void SkillsMenu::update(sf::Vector2i& mousePosWindow, const float& dt)
 
 inline void SkillsMenu::renderButtons(sf::RenderTarget& target)
 {
-	for (auto& el : this->buttons)
+	if (this->player.getStatsComponent()->statsPoints != 0)
 	{
-		el.second->render(target);
+		for (auto& el : this->buttons)
+		{
+			el.second->render(target);
+		}
 	}
 	for (auto& el : this->unclockButtons)
 	{

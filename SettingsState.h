@@ -15,11 +15,10 @@ private:
 	sf::Font font;
 	sf::Text optionsText;
 
-	std::map<std::string, GUI::Button*> buttons;
-	std::map<std::string, GUI::DropDownList*> dropDownLists;
-
 	std::vector<sf::VideoMode> videoModes;
-	
+
+	std::unordered_map<std::string, GUI::Button*> buttons;
+	std::unordered_map<std::string, GUI::DropDownList*> dropDownLists;
 
 	//Functions
 	void initVariables();

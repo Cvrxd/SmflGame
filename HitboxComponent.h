@@ -6,11 +6,12 @@ private:
 	//Variables
 	//Core
 	sf::Sprite* sprite;
-	sf::RectangleShape hitbox;
-	sf::FloatRect nextPosition;
 
 	float offsetX;
 	float offsetY;
+
+	sf::RectangleShape hitbox;
+	sf::FloatRect nextPosition;
 
 public:
 	HitboxComponent() {};

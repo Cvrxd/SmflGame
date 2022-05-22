@@ -60,6 +60,8 @@ inline void GameState::initTextures()
 	//Mages
 	this->textures["ENEMY_DARK_MAGE"].loadFromFile("Textures/enemies/dark_mage.png");
 	this->textures["ENEMY_FIRE_MAGE"].loadFromFile("Textures/enemies/fire_mage.png");
+	//Destroying enemies
+	this->textures["ENEMY_FIRE_SKULL"].loadFromFile("Textures/enemies/fire-skull.png");
 }
 
 inline void GameState::initPauseMenu()
@@ -81,17 +83,20 @@ inline void GameState::initPlayers()
 {
 }
 
-void GameState::initEnemies()
+inline void GameState::initEnemies()
 {
 	this->bosses.reserve(3);
-	this->bosses.emplace_back(BossType::FIRE_DEMON, 1, 100, 900, this->textures["ENEMY_FIRE_DEMON"], &this->player);
+	//this->bosses.emplace_back(BossType::FIRE_DEMON, 1, 100, 900, this->textures["ENEMY_FIRE_DEMON"], &this->player);
 
 	this->meleEnemies.reserve(2);
 	this->meleEnemies.emplace_back(MeleEnemyType::MIMIC, 1, 700, 700, this->textures["ENEMY_MIMIC"], &this->player);
-	this->meleEnemies.emplace_back(MeleEnemyType::KNIGHT1, 1, 700, 700, this->textures["ENEMY_KNIGHT1"], &this->player);
+	//this->meleEnemies.emplace_back(MeleEnemyType::KNIGHT1, 1, 700, 700, this->textures["ENEMY_KNIGHT1"], &this->player);
 
 	this->mageEnemies.reserve(2);
-	this->mageEnemies.emplace_back(MageEnemyType::FIRE_MAGE, 1, 400, 400, this->textures["ENEMY_FIRE_MAGE"], &this->player);
+	//this->mageEnemies.emplace_back(MageEnemyType::FIRE_MAGE, 1, 400, 400, this->textures["ENEMY_FIRE_MAGE"], &this->player);
+
+	//this->destroyingEnemies.reserve(2);
+	//this->destroyingEnemies.emplace_back(DestroyingEnemyType::FIRE_SKULL, 1, 0, 0, this->textures["ENEMY_FIRE_SKULL"], &this->player);
 }
 
 inline void GameState::initPlayerGUI()
@@ -184,7 +189,7 @@ inline void GameState::updatePauseMenuButtons()
 	}
 }
 
-void GameState::updateEnemies(const float& dt)
+inline void GameState::updateEnemies(const float& dt)
 {
 	for (auto& el : this->bosses)
 	{
@@ -201,6 +206,13 @@ void GameState::updateEnemies(const float& dt)
 		}
 	}
 	for (auto& el : this->mageEnemies)
+	{
+		if (!el.dead())
+		{
+			el.update(dt, this->mousPosView);
+		}
+	}
+	for (auto& el : this->destroyingEnemies)
 	{
 		if (!el.dead())
 		{
@@ -303,6 +315,13 @@ inline void GameState::renderEnemies(sf::RenderTarget* target)
 		}
 	}
 	for (auto& el : this->mageEnemies)
+	{
+		if (!el.dead())
+		{
+			el.render(this->renderTexture, &this->core_shader);
+		}
+	}
+	for (auto& el : this->destroyingEnemies)
 	{
 		if (!el.dead())
 		{

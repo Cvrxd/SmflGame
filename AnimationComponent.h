@@ -5,7 +5,6 @@ class AnimationComponent
 {
 private:
 	// core variables
-
 	//////////////////
 	class Animation
 	{
@@ -13,13 +12,12 @@ private:
 		//Variables core
 		sf::Texture* textureSheet;
 		sf::Sprite* sprite;
-
-		float animationTimer;
-		float timer;
+		
+		bool done;
 		int width;
 		int height;
-
-		bool done;
+		float animationTimer;
+		float timer;
 
 		sf::IntRect startRect;
 		sf::IntRect currentRect;
@@ -138,9 +136,10 @@ private:
 	sf::Sprite* sprite;
 	sf::Texture* textureSheet;
 
-	std::map<std::string, Animation*> animations;
 	Animation* lastAnimation;
 	Animation* priorityAnimation;
+
+	std::unordered_map<std::string, Animation*> animations;
 
 public:
 	AnimationComponent() {};

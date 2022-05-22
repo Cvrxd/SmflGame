@@ -20,16 +20,19 @@ inline void SkillsComponent::initAllSkills()
 	this->allSkills.resize(this->skillsSize);
 	this->playerSkills.resize(4);
 
-	this->allSkills[0].first = SkillType::RED_BLADES;
-	this->allSkills[1].first = SkillType::WATER_SPIKE;
-	this->allSkills[2].first = SkillType::THUNDER_STRIKE;
-	this->allSkills[3].first = SkillType::DARK_BOLT;
-	this->allSkills[4].first = SkillType::POISON_CLAW;
-	this->allSkills[5].first = SkillType::DARK_POSION;
-	this->allSkills[6].first = SkillType::BLOOD_SPIKE;
-	this->allSkills[7].first = SkillType::FIRE_EXPLOSION;
-	this->allSkills[8].first = SkillType::LIGHTNING_STRIKE;
-	this->allSkills[9].first = SkillType::HOLY_STRIKE;
+	this->allSkills[0].first = SkillType::THUNDER_STRIKE;
+	this->allSkills[1].first = SkillType::DARK_BOLT;
+	this->allSkills[2].first = SkillType::POISON_CLAW;
+	this->allSkills[3].first = SkillType::DARK_POSION;
+	this->allSkills[4].first = SkillType::BLOOD_SPIKE;
+	this->allSkills[5].first = SkillType::FIRE_EXPLOSION;
+	this->allSkills[6].first = SkillType::LIGHTNING_STRIKE;
+	this->allSkills[7].first = SkillType::HOLY_STRIKE;
+
+	for (auto& el : this->allSkills)
+	{
+		el.second = 1;
+	}
 
 	//Items
 	this->healthPotions.first = HEALTH;
@@ -42,8 +45,6 @@ inline void SkillsComponent::initAllSkills()
 inline void SkillsComponent::initAllAnimations()
 {
 	//Init textures
-	this->skillTextures[SkillType::RED_BLADES].second.loadFromFile("Textures/Animations/blades/red_blades.png");
-	this->skillTextures[SkillType::WATER_SPIKE].second.loadFromFile("Textures/Animations/red_blades.png");
 	this->skillTextures[SkillType::THUNDER_STRIKE].second.loadFromFile("Textures/Animations/thunder/thunder_strike.png");
 	this->skillTextures[SkillType::DARK_BOLT].second.loadFromFile("Textures/Animations/dark/dark_bolt.png");
 	this->skillTextures[SkillType::POISON_CLAW].second.loadFromFile("Textures/Animations/poison/poison_claw.png");
@@ -82,9 +83,6 @@ inline void SkillsComponent::initAllAnimations()
 	this->skillsEndingAnimation.addAnimation("USE2", 0, 1, 3, 1, 64, 64, 11.f);
 
 	//Skills animation
-	this->skillsAnimations[SkillType::RED_BLADES].addAnimation("USE", 0, 0, 4, 0, 52, 58, 12.f);
-	this->skillTextures[SkillType::RED_BLADES].first.setScale(4.f, 4.f);
-
 	this->skillsAnimations[SkillType::THUNDER_STRIKE].addAnimation("USE", 0, 0, 11, 0, 64, 64, 8.f);
 	this->skillTextures[SkillType::THUNDER_STRIKE].first.setScale(5.f, 5.f);
 
@@ -111,10 +109,10 @@ inline void SkillsComponent::initAllAnimations()
 }
 
 //Constructor
-SkillsComponent::SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill, SkillType& usingSkillType)
+SkillsComponent::SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill, SkillType& currentSkillType, int& currentSkillDamage)
 	: statsComponent(statsComponent) ,currentRender(-1), playAnimation(false), usingPotion(false),
 	keyTime(0.f), keyTimeMax(15.f), potionKeyTime(0.f), potionKeyTimeMax(5.f),
-	skillsSize(10), usingSkill(isUsingSkill), usingSkillType(usingSkillType)
+	skillsSize(8), usingSkill(isUsingSkill), currentSkillType(currentSkillType), currentSkillDamage(currentSkillDamage)
 {
 	this->initAllSkills();
 	this->initAllAnimations();
@@ -185,6 +183,12 @@ void SkillsComponent::useSkill(const SkillType& skill_type)
 void SkillsComponent::addSkill(const SkillType& skill_type, const short& slot)
 {
 	this->playerSkills[slot].first = skill_type;
+
+	this->playerSkills[slot].second = 1;
+}
+
+void SkillsComponent::updateSkill(const SkillType& skill_type)
+{
 }
 
 inline void SkillsComponent::updateClock(const float& dt)
@@ -282,7 +286,9 @@ void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position
 
 			//Player variables
 			this->usingSkill = true;
-			this->usingSkillType = this->playerSkills[currentRender].first;
+
+			this->currentSkillType = this->playerSkills[currentRender].first;
+			this->statsComponent.currentSkillDamage = this->playerSkills[currentRender].second;
 
 			//Using skill
 			this->useSkill(playerSkills[currentRender].first);

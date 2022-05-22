@@ -8,18 +8,18 @@ class Game
 private:
 	// Vriables
 	// core
-	StateData stateData;
-
-	GraphicsSettings gfxSettings;
-	sf::RenderWindow* window = nullptr;
-	sf::Event sfEvent;
-		
 	sf::Clock dtClock;
+
 	float dt;
 	float gridSize;
 
+	GraphicsSettings gfxSettings;
+	StateData stateData;
+	sf::Event sfEvent;
+
+	sf::RenderWindow* window = nullptr;
 	std::stack<State*> states;
-	std::map<std::string, int> supportedKeys;
+	std::unordered_map<std::string, int> supportedKeys;
 
 	// functions
 	void initVariables();

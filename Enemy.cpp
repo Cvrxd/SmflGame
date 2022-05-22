@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Enemy.h"
 
+//Initialisation
 void Enemy::initSkillsImpactTextures()
 {
 	//Take hit sprites
@@ -12,38 +13,44 @@ void Enemy::initSkillsImpactTextures()
 	this->skillsImpactSprites[SkillType::BLOOD_SPIKE].second.loadFromFile("Textures/animations/hit/skill_hit.png");;
 	this->skillsImpactSprites[SkillType::BLOOD_SPIKE].first.setScale(4.f, 4.f);
 	this->skillsImpactAnimations[SkillType::BLOOD_SPIKE] = { &this->skillsImpactSprites[SkillType::BLOOD_SPIKE].first, &this->skillsImpactSprites[SkillType::BLOOD_SPIKE].second };
+	this->offsets[SkillType::BLOOD_SPIKE] = 40;
 
 	this->skillsImpactSprites[SkillType::POISON_CLAW].second.loadFromFile("Textures/animations/hit/poison_hit.png");;
 	this->skillsImpactSprites[SkillType::POISON_CLAW].first.setScale(4.f, 4.f);
 	this->skillsImpactAnimations[SkillType::POISON_CLAW] = { &this->skillsImpactSprites[SkillType::POISON_CLAW].first, &this->skillsImpactSprites[SkillType::POISON_CLAW].second };
+	this->offsets[SkillType::POISON_CLAW] = 120;
 
 	this->skillsImpactSprites[SkillType::DARK_BOLT].second.loadFromFile("Textures/animations/hit/dark_hit.png");;
 	this->skillsImpactSprites[SkillType::DARK_BOLT].first.setScale(4.5f, 4.5f);
 	this->skillsImpactAnimations[SkillType::DARK_BOLT] = { &this->skillsImpactSprites[SkillType::DARK_BOLT].first, &this->skillsImpactSprites[SkillType::DARK_BOLT].second };
+	this->offsets[SkillType::DARK_BOLT] = 40;
 
 	this->skillsImpactSprites[SkillType::THUNDER_STRIKE].second.loadFromFile("Textures/animations/hit/thunder_hit.png");;
 	this->skillsImpactSprites[SkillType::THUNDER_STRIKE].first.setScale(5.5f, 5.5f);
 	this->skillsImpactAnimations[SkillType::THUNDER_STRIKE] = { &this->skillsImpactSprites[SkillType::THUNDER_STRIKE].first, &this->skillsImpactSprites[SkillType::THUNDER_STRIKE].second };
+	this->offsets[SkillType::THUNDER_STRIKE] = 40;
 
 	this->skillsImpactSprites[SkillType::DARK_POSION].second.loadFromFile("Textures/animations/hit/dark_hit2.png");;
-	this->skillsImpactSprites[SkillType::DARK_POSION].first.setScale(3.f, 3.f);
+	this->skillsImpactSprites[SkillType::DARK_POSION].first.setScale(4.f, 4.f);
 	this->skillsImpactAnimations[SkillType::DARK_POSION] = { &this->skillsImpactSprites[SkillType::DARK_POSION].first, &this->skillsImpactSprites[SkillType::DARK_POSION].second };
+	this->offsets[SkillType::DARK_POSION] = 150;
 
 	this->skillsImpactSprites[SkillType::FIRE_EXPLOSION].second.loadFromFile("Textures/animations/hit/fire_hit.png");;
 	this->skillsImpactSprites[SkillType::FIRE_EXPLOSION].first.setScale(4.f, 4.f);
 	this->skillsImpactAnimations[SkillType::FIRE_EXPLOSION] = { &this->skillsImpactSprites[SkillType::FIRE_EXPLOSION].first, &this->skillsImpactSprites[SkillType::FIRE_EXPLOSION].second };
+	this->offsets[SkillType::FIRE_EXPLOSION] = 40;
 
 	this->skillsImpactSprites[SkillType::HOLY_STRIKE].second.loadFromFile("Textures/animations/hit/holy_hit.png");;
 	this->skillsImpactSprites[SkillType::HOLY_STRIKE].first.setScale(4.f, 4.f);
 	this->skillsImpactAnimations[SkillType::HOLY_STRIKE] = { &this->skillsImpactSprites[SkillType::HOLY_STRIKE].first, &this->skillsImpactSprites[SkillType::HOLY_STRIKE].second };
-
+	this->offsets[SkillType::HOLY_STRIKE] = 110;
 }
 
 void Enemy::initImpactAnimations()
 {	
 	//Take hit animations
-	this->takeHitAnimation.addAnimation("TAKE_HIT1", 0, 0, 4, 0, 64, 64, 7.f);
-	this->takeHitAnimation.addAnimation("TAKE_HIT2", 0, 1, 4, 1, 64, 64, 7.f);
+	this->takeHitAnimation.addAnimation("TAKE_HIT1", 0, 0, 4, 0, 64, 64, 5.f);
+	this->takeHitAnimation.addAnimation("TAKE_HIT2", 0, 1, 4, 1, 64, 64, 5.f);
 
 	//Skills impact animations
 	this->skillsImpactAnimations[SkillType::BLOOD_SPIKE].addAnimation("SKILL_IMPACT", 0, 0, 14, 0, 64, 49, 5.f);
@@ -59,15 +66,21 @@ void Enemy::initImpactAnimations()
 //Init functions
 void Enemy::initStats()
 {
-	this->statsComponent.hp = 2 * this->statsComponent.level;
+	this->statsComponent.hp = 3 * this->statsComponent.level;
+	this->statsComponent.armor = 0;
+
 	this->statsComponent.damagePhysical = 1 * this->statsComponent.level;
 	this->statsComponent.damageMagical = 1 * this->statsComponent.level;
 }
 
 //Constructor
 Enemy::Enemy(const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player)
-	:statsComponent(1), animationComponent(&this->sprite, &texture_sheet), player(player), textureSheet(&texture_sheet)
+	:statsComponent(level), animationComponent(&this->sprite, &texture_sheet), player(player), textureSheet(&texture_sheet)
 {
+	this->playerUsingSkill = &this->player->getUsingSkilltype();
+	this->playerUsingSkillDmg = &this->player->getUsingSkilldamage();
+
+	this->initStats();
 	this->initSkillsImpactTextures();
 	this->initImpactAnimations();
 }
@@ -80,5 +93,3 @@ const bool& Enemy::dead()
 {
 	return this->isDead;
 }
-
-

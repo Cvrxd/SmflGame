@@ -16,14 +16,14 @@ private:
 	sf::RectangleShape background;
 	sf::RectangleShape container;
 
-	std::map<std::string, GUI::Button*> buttons;
+	std::unordered_map<std::string, GUI::Button*> buttons;
 
 public:
 	PauseMenu(sf::RenderWindow& window, sf::Font& font);
 	~PauseMenu();
 
 	//Accessors
-	std::map<std::string, GUI::Button*>& getButtons();
+	std::unordered_map<std::string, GUI::Button*>& getButtons();
 
 	//Functions
 	const bool isButtonPressed(const std::string& key);

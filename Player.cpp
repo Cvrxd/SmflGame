@@ -29,14 +29,17 @@ inline void Player::initVariables()
 	this->hitRange.setFillColor(sf::Color::Transparent);
 
 	//Player sprites
-	this->sprites.resize(2);
-	this->hitAnimations.resize(2);
+	this->sprites.resize(3);
+	this->hitAnimations.resize(3);
 
 	this->sprites[0].first.loadFromFile("Textures/animations/hit/magick_hit.png");
 	this->sprites[0].second.setScale(4.f, 4.f);
 
 	this->sprites[1].first.loadFromFile("Textures/animations/hit/take_hit.png");
 	this->sprites[1].second.setScale(4.f, 4.f);
+
+	this->sprites[2].first.loadFromFile("Textures/animations/hit/hit03.png");
+	this->sprites[2].second.setScale(3.f, 3.f);
 }
 
 inline void Player::createAnimationComponent(sf::Texture& texture_sheet)
@@ -68,6 +71,9 @@ inline void Player::addAnimations()
 	//Hit sprites
 	this->hitAnimations[0].addAnimation("HIT", 0, 0, 32, 0, 64, 64, 1.6f);
 	this->hitAnimations[1].addAnimation("TAKE_HIT", 0, 0, 9, 0, 64, 24, 6.f);
+
+	this->hitAnimations[2].addAnimation("TAKE_HIT1", 0, 0, 4, 0, 64, 64, 3.f);
+	this->hitAnimations[2].addAnimation("TAKE_HIT2", 0, 1, 4, 1, 64, 64, 3.f);
 }
 
 //Constructor
@@ -75,7 +81,7 @@ Player::Player(const float& x, const float& y, sf::Texture& texture_sheet)
 	: currentHitAnimation(0),
 	statsComponent(1),
 	animationComponent(&this->sprite, &texture_sheet),
-	skillsComponent(this->statsComponent, this->isUsingSkill, this->usingSkilltype)
+	skillsComponent(this->statsComponent, this->isUsingSkill, this->currentSkilltype, this->currentskillDamage)
 {
 	this->initVariables();
 	this->initComponents(texture_sheet);
@@ -89,7 +95,12 @@ Player::~Player()
 
 const SkillType& Player::getUsingSkilltype()
 {
-	return this->usingSkilltype;
+	return this->currentSkilltype;
+}
+
+const int& Player::getUsingSkilldamage()
+{
+	return this->currentskillDamage;
 }
 
 const bool& Player::usingSkill()
@@ -155,6 +166,16 @@ void Player::gainArmor(const int& armor)
 	this->statsComponent.gainArmor(armor);
 }
 
+void Player::gainCoins(const int& coins)
+{
+	this->statsComponent.gainCoins(coins);
+}
+
+void Player::loseCoins(const int& coins)
+{
+	this->statsComponent.loseCoins(coins);
+}
+
 void Player::addItem(const Items& item)
 {
 	this->statsComponent.addItem(item);
@@ -207,6 +228,7 @@ inline void Player::updateAttack(const float& dt, sf::Vector2f mouse_pos_view)
 			this->isAttacking = false;
 		}
 	}
+
 	if (this->isHit)
 	{
 		if (this->hitAnimations[currentHitAnimation].play("HIT", dt, true))
@@ -216,10 +238,24 @@ inline void Player::updateAttack(const float& dt, sf::Vector2f mouse_pos_view)
 	}
 	if (this->isTakingHit)
 	{
-		this->sprites[1].second.setPosition(this->getCenter().x - 100, this->getCenter().y - 70);
-		if (this->hitAnimations[1].play("TAKE_HIT", dt, true))
+		if (this->statsComponent.armor != 0)
 		{
-			this->isTakingHit = false;
+			this->sprites[2].second.setPosition(this->getCenter().x - 120, this->getCenter().y - 100);
+			if (this->hitAnimations[2].play("TAKE_HIT1", dt, true))
+			{
+				if (this->hitAnimations[2].play("TAKE_HIT2", dt, true))
+				{
+					this->isTakingHit = false;
+				}
+			}
+		}
+		else
+		{
+			this->sprites[1].second.setPosition(this->getCenter().x - 100, this->getCenter().y - 70);
+			if (this->hitAnimations[1].play("TAKE_HIT", dt, true))
+			{
+				this->isTakingHit = false;
+			}
 		}
 	}
 
@@ -289,10 +325,13 @@ void Player::render(sf::RenderTarget& target, sf::Shader* shader)
 		if (this->isHit)
 		{
 			target.draw(this->sprites[currentHitAnimation].second);
-			//target.draw(this->damageRange);
 		}
 
-		if (this->isTakingHit)
+		if (this->isTakingHit && this->statsComponent.armor != 0)
+		{
+			target.draw(this->sprites[2].second);
+		}
+		else if (this->isTakingHit && this->statsComponent.armor == 0)
 		{
 			target.draw(this->sprites[1].second);
 		}

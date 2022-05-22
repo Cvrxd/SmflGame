@@ -14,8 +14,8 @@ class EditorState : public State
 {
 private:
 	//Variables 
-	sf::View view;
 	float cameraSpeed;
+	sf::View view;
 
 	sf::Font font;
 	sf::Text cursorText;
@@ -26,7 +26,7 @@ private:
 	GUI::TextureSelector* textureSelector;
 
 	PauseMenu pauseMenu;
-	std::map<std::string, GUI::Button*> buttons;
+	std::unordered_map<std::string, GUI::Button*> buttons;
 
 	TileMap tileMap;
 	bool collision;

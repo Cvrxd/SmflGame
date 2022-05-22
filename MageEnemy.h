@@ -1,19 +1,25 @@
 #pragma once
 #include "Enemy.h"
 
+class Enemy;
+
 enum class MageEnemyType {DARK_MAGE = 0, FIRE_MAGE};
 
 class MageEnemy : public Enemy
 {
+	//Core variables
 	MageEnemyType type;
-	sf::CircleShape castRange;
-	sf::CircleShape innerRange;
 
 	float castR;
 	float ineerR;
 
 	float offsetY;
 	float offsetX;
+
+	sf::CircleShape castRange;
+	sf::CircleShape innerRange;
+
+	EnemyHealthBar healthBar;
 
 	//Init functions
 	void initComponents(sf::Texture& texture_sheet, sf::Sprite& sprite) override;

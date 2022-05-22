@@ -7,27 +7,31 @@ class Player : public Entity
 {
 private:
 	//Variables
-	sf::Clock damageTimer;
-
 	bool isAttacking = false;
 	bool isHit = false;
 	bool dealDMG = false;
 	bool isTakingHit = false;
 	bool isUsingSkill = false;
-	SkillType usingSkilltype = SkillType::EMPTY;
-
 	int currentHitAnimation;
+
+	int currentskillDamage = 1;
+	SkillType currentSkilltype = SkillType::EMPTY;
+
 
 	sf::CircleShape hitRange;
 	sf::RectangleShape damageRange;
-	std::vector<std::pair<sf::Texture, sf::Sprite>> sprites;
+
+	sf::Clock damageTimer;
 
 	//Components
-	std::vector<AnimationComponent> hitAnimations;
-
 	AnimationComponent animationComponent;
 	StatsComponent statsComponent;
 	SkillsComponent skillsComponent;
+
+	//Animations
+	std::vector<std::pair<sf::Texture, sf::Sprite>> sprites;
+	std::vector<AnimationComponent> hitAnimations;
+
 
 	//Initialisation functios
 	void initVariables();
@@ -40,6 +44,8 @@ public:
 
 	//Accessors
 	const SkillType& getUsingSkilltype();
+	const int& getUsingSkilldamage();
+
 	const bool& usingSkill();
 	const bool& isDealingDmg();
 	StatsComponent* getStatsComponent();
@@ -54,6 +60,8 @@ public:
 	void gainMP(const int& mp);
 	void loseMP(const int& mp);
 	void gainArmor(const int& armor);
+	void gainCoins(const int& coins);
+	void loseCoins(const int& coins);
 
 	void addItem(const Items& item);
 

@@ -3,7 +3,7 @@
 
 //Constructor
 StatsComponent::StatsComponent(const int& level)
-	:level(level), exp(0), statsPoints(3), skillPoints(1)
+	:level(level), exp(0), statsPoints(3), skillPoints(1), coins(0)
 {
 	//Exp
 	this->expNext = static_cast<unsigned>(this->level * 20 - (this->level * 5));
@@ -90,7 +90,6 @@ void StatsComponent::loseHP(const int& hp)
 		if (this->hp < 0)
 		{
 			this->hp = 0;
-
 			//GameOVer
 		}
 	}
@@ -134,6 +133,19 @@ void StatsComponent::loseMP(const int& mp)
 	if (this->magicka > 0)
 	{
 		--this->magicka;
+	}
+}
+
+void StatsComponent::gainCoins(const int& coins)
+{
+	this->coins += coins;
+}
+
+void StatsComponent::loseCoins(const int& coins)
+{
+	if (this->coins -= coins < 0)
+	{
+		this->coins == 0;
 	}
 }
 

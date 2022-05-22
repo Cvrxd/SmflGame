@@ -12,10 +12,6 @@ namespace GUI
 		short unsigned buttonState;
 		short unsigned id;
 
-		sf::RectangleShape shape;
-		sf::Font* font;
-		sf::Text text;
-
 		sf::Color textIdleColor;
 		sf::Color textHoverColor;
 		sf::Color texActiveColor;
@@ -27,6 +23,10 @@ namespace GUI
 		sf::Color outlineIdleColor;
 		sf::Color outlineHoverColor;
 		sf::Color outlineActiveColor;
+
+		sf::RectangleShape shape;
+		sf::Font* font;
+		sf::Text text;
 
 	public:
 		Button(const float& x, const float& y, const float& width, const float& height,
@@ -62,13 +62,13 @@ namespace GUI
 	{
 	private:
 		//Variables
+		bool showDropBox;
 		sf::Font& font;
 		GUI::Button* activeBox;
-		std::vector<GUI::Button*> dropBox;
 
-		bool showDropBox;
 		float keyTime;
 		float keyTimeMax;
+		std::vector<GUI::Button*> dropBox;
 		 
 	public:
 		DropDownList(const float& x, const float& y, const float& width, const float& hight, 
@@ -92,11 +92,10 @@ namespace GUI
 		bool active;
 		bool hiden;
 		unsigned gridSize;
+		GUI::Button* hideButton;
 
 		float keyTime;
 		float keyTimeMax;
-
-		GUI::Button* hideButton;
 
 		sf::IntRect textureRect;
 		sf::RectangleShape selector;

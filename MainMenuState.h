@@ -13,11 +13,12 @@ class MainMenuState : public State
 {
 private:
 	//variables 
-	sf::Texture backgroundTexture;
-	sf::RectangleShape background;
 	sf::Font font;
 
-	std::map<std::string, GUI::Button*> buttons;
+	sf::Texture backgroundTexture;
+	sf::RectangleShape background;
+
+	std::unordered_map<std::string, GUI::Button*> buttons;
 
 	//Functions
 	void initVariables();

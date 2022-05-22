@@ -1,81 +1,64 @@
 #include "stdafx.h"
-#include "BossEnemy.h"
+#include "DestroyingEnemy.h"
 
 //Init functions
-inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sprite)
+inline void DestroyingEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sprite)
 {
 	switch (this->type)
 	{
-	case BossType::NIGHTBORN:
-		this->sprite.setScale(4.f, 4.f);
+	case DestroyingEnemyType::FIRE_SKULL:
+		this->sprite.setScale(3.f, 3.f);
 
 		//Init components
-		this->createHitboxComponent(this->sprite, 100.f, 100.f, 100.f, 100.f);
-		this->createMovementComponent(150.f, 900.f, 250.f);
-		this->createAnimationComponent(texture_sheet);
-
-		//Sets origins
-		this->setOriginLeft = [&sprite]() 
-		{
-			sprite.setOrigin(80.f, 0.f);
-			sprite.setScale(-4.f, 4.f);
-		};
-		this->setOriginRight = [&sprite]()
-		{
-			sprite.setOrigin(0.f, 0.f);
-			sprite.setScale(4.f, 4.f);
-		};
-
-		break;
-	case BossType::FIRE_DEMON:
-		this->sprite.setScale(4.f, 4.f);
-
-		//Init components
-		this->createHitboxComponent(this->sprite, 300.f, 300.f, 300.f, 350.f);
-		this->createMovementComponent(100.f, 800.f, 230.f);
+		this->createHitboxComponent(this->sprite, 70.f, 120.f, 200.f, 200.f);
+		this->createMovementComponent(80.f, 600.f, 100.f);
 		this->createAnimationComponent(texture_sheet);
 
 		//Sets origins
 		this->setOriginLeft = [&sprite]()
 		{
 			sprite.setOrigin(0.f, 0.f);
-			sprite.setScale(4.f, 4.f);
+			sprite.setScale(3.f, 3.f);
 		};
 		this->setOriginRight = [&sprite]()
 		{
-			sprite.setOrigin(250.f, 0.f);
-			sprite.setScale(-4.f, 4.f);
+			sprite.setOrigin(100.f, 0.f);
+			sprite.setScale(-3.f, 3.f);
 		};
-
 		break;
 	default:
 		break;
 	}
 }
 
-inline void BossEnemy::createAnimationComponent(sf::Texture& texture_sheet)
+inline void DestroyingEnemy::createAnimationComponent(sf::Texture& texture_sheet)
 {
+	//Init destroying animations
+	switch (this->type)
+	{
+	case DestroyingEnemyType::FIRE_SKULL:
+		this->destroyingSprite.first.setScale(4.f, 4.f);
+		this->destroyingSprite.second.loadFromFile("Textures/animations/hit/destroying1.png");
+		this->destroyingAnimation = { &this->destroyingSprite.first, &this->destroyingSprite.second };
+		break;
+	default:
+		break;
+	}
+
 	this->addAnimations();
 }
 
-inline void BossEnemy::addAnimations()
+inline void DestroyingEnemy::addAnimations()
 {
 	switch (this->type)
 	{
-	case BossType::NIGHTBORN:
-		//Regular animations
-		this->animationComponent.addAnimation("MOVE", 0, 1, 5, 1, 80, 80, 20.f);
-		this->animationComponent.addAnimation("ATTACK", 0, 2, 11, 2, 80, 80, 10.f);
-		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 4, 3, 80, 80, 10.f);
-		this->animationComponent.addAnimation("DEATH", 0, 4, 22, 4, 80, 80, 8.f);
-		break;
+	case DestroyingEnemyType::FIRE_SKULL:
+		this->animationComponent.addAnimation("MOVE", 0, 0, 7, 0, 96, 112, 15.f);
+		this->animationComponent.addAnimation("ATTACK", 0, 0, 7, 0, 96, 112, 20.f);
+		this->animationComponent.addAnimation("TAKE_HIT", 0, 0, 7, 0, 96, 112, 20.f);
+		this->animationComponent.addAnimation("DEATH", 0, 0, 7, 0, 96, 112, 20.f);
 
-	case BossType::FIRE_DEMON:
-		this->animationComponent.addAnimation("MOVE", 0, 1, 11, 1, 288, 160, 20.f);
-		this->animationComponent.addAnimation("ATTACK", 0, 2, 14, 2, 288, 160, 10.f);
-		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 4, 3, 288, 160, 10.f);
-		this->animationComponent.addAnimation("DEATH", 0, 4, 21, 4, 288, 160, 10.f);
-
+		this->destroyingAnimation.addAnimation("DESTROY", 0, 0, 6, 0, 81, 66, 10.f);
 		break;
 	default:
 		break;
@@ -83,8 +66,8 @@ inline void BossEnemy::addAnimations()
 }
 
 //Constructors
-BossEnemy::BossEnemy(const BossType& type, const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player)
-	:Enemy(level, x, y, texture_sheet, player), 
+DestroyingEnemy::DestroyingEnemy(const DestroyingEnemyType& type, const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player)
+	:Enemy(level, x, y, texture_sheet, player),
 	type(type)
 {
 	this->initStats();
@@ -92,7 +75,7 @@ BossEnemy::BossEnemy(const BossType& type, const int& level, const float& x, con
 	this->setPosition(x, y);
 }
 
-BossEnemy::BossEnemy(BossEnemy&& other)
+DestroyingEnemy::DestroyingEnemy(DestroyingEnemy&& other)
 	:Enemy(this->statsComponent.level, this->getPosition().x, this->getPosition().y, *this->textureSheet, this->player)
 {
 	this->animationComponent = other.animationComponent;
@@ -114,32 +97,20 @@ BossEnemy::BossEnemy(BossEnemy&& other)
 	other.player = nullptr;
 }
 
-BossEnemy::~BossEnemy()
+DestroyingEnemy::~DestroyingEnemy()
 {
 }
 
 //Functions
-inline void BossEnemy::updateAttack(const float& dt)
+inline void DestroyingEnemy::updateAttack(const float& dt)
 {
 	if (this->player->getHitRange().getGlobalBounds().intersects(this->getGlobalBounds()) && !this->isDead)
 	{
-		this->isAttaking = true;
-	}
-
-	if (this->isAttaking)
-	{
-		if (this->animationComponent.play("ATTACK", dt, true))
-		{
-			if (this->player->getHitRange().getGlobalBounds().intersects(this->getGlobalBounds()))
-			{
-				this->player->loseHP(this->statsComponent.damagePhysical);
-			}
-			this->isAttaking = false;
-		}
+		this->statsComponent.hp = 0;
 	}
 }
 
-inline void BossEnemy::updateMovement(const float& dt)
+inline void DestroyingEnemy::updateMovement(const float& dt)
 {
 	if (this->player->getPosition().x > this->getPosition().x)
 	{
@@ -159,19 +130,8 @@ inline void BossEnemy::updateMovement(const float& dt)
 	}
 }
 
-inline void BossEnemy::updateAnimations(const float& dt)
+inline void DestroyingEnemy::updateAnimations(const float& dt)
 {
-	//taking damage animation
-	if (this->isTakingDamage)
-	{
-		this->stopVelocity();
-
-		if (this->animationComponent.play("TAKE_HIT", dt, true))
-		{
-			this->isTakingDamage = false;
-		}
-	}
-
 	//Player hit
 	if (this->hitImpact)
 	{
@@ -199,22 +159,24 @@ inline void BossEnemy::updateAnimations(const float& dt)
 		}
 	}
 
-	//Death
 	if (this->statsComponent.hp == 0)
 	{
 		this->stopVelocity();
-		if (this->animationComponent.play("DEATH", dt, true))
-		{
-			this->player->addPotions(HEALTH);
-			this->player->addPotions(MANA);
-			this->player->gainCoins(5 * this->statsComponent.level);
-			this->player->gainEXP(this->statsComponent.level * 5);
+		
+		this->destroyingSprite.first.setPosition(this->getPosition().x - 50, this->getPosition().y - 50);
 
+		if (this->destroyingAnimation.play("DESTROY", dt, true))
+		{
+			if (this->player->getHitRange().getGlobalBounds().intersects(this->getGlobalBounds()))
+			{
+				this->player->loseHP(this->statsComponent.damageMagical * 2);
+			}
+
+			this->player->gainEXP(this->statsComponent.level * 2);
 			this->isDead = true;
 		}
 	}
 
-	//Movement animations
 	if (this->movementComponent.getState(MOVING_RIGHT))
 	{
 		this->setOriginRight();
@@ -235,7 +197,7 @@ inline void BossEnemy::updateAnimations(const float& dt)
 	}
 }
 
-inline void BossEnemy::updatePlayerImpact(const float& dt)
+inline void DestroyingEnemy::updatePlayerImpact(const float& dt)
 {
 	//Player damage impact
 	if (this->player->getDamageRange().getGlobalBounds().intersects(this->getGlobalBounds()))
@@ -262,12 +224,12 @@ inline void BossEnemy::updatePlayerImpact(const float& dt)
 	}
 }
 
-void BossEnemy::enemyDead(const float& dt)
+void DestroyingEnemy::enemyDead(const float& dt)
 {
 
 }
 
-void BossEnemy::update(const float& dt, sf::Vector2f mouse_pos_view)
+void DestroyingEnemy::update(const float& dt, sf::Vector2f mouse_pos_view)
 {
 	this->movementComponent.update(dt);
 
@@ -279,9 +241,16 @@ void BossEnemy::update(const float& dt, sf::Vector2f mouse_pos_view)
 	this->hitboxComponent.update();
 }
 
-void BossEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
+void DestroyingEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 {
-	target.draw(this->sprite, shader);
+	if (this->statsComponent.hp == 0 && !this->isDead)
+	{
+		target.draw(this->destroyingSprite.first);
+	}
+	else if(!this->isDead)
+	{
+		target.draw(this->sprite, shader);
+	}
 
 	if (this->hitImpact)
 	{
@@ -292,5 +261,5 @@ void BossEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 		target.draw(this->skillsImpactSprites[*this->playerUsingSkill].first);
 	}
 
-	//this->hitboxComponent.render(target);
+	this->hitboxComponent.render(target);
 }

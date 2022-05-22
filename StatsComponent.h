@@ -9,11 +9,13 @@ public:
 	Items items;
 
 	//Leveling
-	int level;
 	unsigned exp;
 	unsigned expNext;
 	unsigned statsPoints;
 	unsigned skillPoints;
+
+	int level;
+	int coins;
 
 	//Stats
 	int hp;
@@ -25,6 +27,7 @@ public:
 
 	int damagePhysical;
 	int damageMagical;
+	int currentSkillDamage;
 
 	//Constructor
 	StatsComponent(const int& level);
@@ -40,6 +43,8 @@ public:
 	void loseArmor(const int& armor);
 	void gainMP(const int& mp);
 	void loseMP(const int& mp);
+	void gainCoins(const int& coins);
+	void loseCoins(const int& coins);
 
 	void updateLevel();
 	void updateStats(const bool& reset = false);

@@ -8,17 +8,13 @@ class State;
 
 struct StateData
 {
-	StateData()
-	{
-
-	}
-
+	StateData(){}
 	//Variables
 	float gridSize;
 	sf::Font font;
 	GraphicsSettings* gfxSettings;
 	sf::RenderWindow* window;
-	std::map<std::string, int>* supportedKeys;
+	std::unordered_map<std::string, int>* supportedKeys;
 	std::stack<State*>* states;
 };
 
@@ -26,26 +22,25 @@ class State
 {
 protected:
 	//Core variables
-	std::stack<State*>* states;
-	
-	StateData* stateData;
-	
-	sf::RenderWindow* window = nullptr;
-	std::map<std::string, int>* supportedKeys;
-	std::map<std::string, int> keybinds;
-
-	float gridSize;
-
 	bool quit;
 	bool paused;
 
 	float keyTime;
 	float keyTimeMax;
+	float gridSize;
 
 	sf::Vector2i mousePosScreen;
 	sf::Vector2i mousePosWindow;
-	sf::Vector2f mousPosView; 
 	sf::Vector2i mousePosGrid;
+	sf::Vector2f mousPosView;
+
+	std::stack<State*>* states;
+	
+	StateData* stateData;
+	
+	sf::RenderWindow* window = nullptr;
+	std::unordered_map<std::string, int>* supportedKeys;
+	std::unordered_map<std::string, int> keybinds;
 
 	//Resourses
 	std::map<std::string, sf::Texture> textures;

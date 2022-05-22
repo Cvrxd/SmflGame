@@ -123,6 +123,12 @@
     <ClCompile Include="DropComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="DestroyingEnemy.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyHealthBar.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -199,6 +205,12 @@
     </ClInclude>
     <ClInclude Include="DropComponent.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="DestroyingEnemy.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyHealthBar.h">
+      <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

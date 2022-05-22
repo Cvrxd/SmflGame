@@ -27,7 +27,7 @@ PauseMenu::~PauseMenu()
 }
 
 //Accessors
-std::map<std::string, GUI::Button*>& PauseMenu::getButtons()
+std::unordered_map<std::string, GUI::Button*>& PauseMenu::getButtons()
 {
 	return this->buttons;
 }

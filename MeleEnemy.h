@@ -1,10 +1,13 @@
 #pragma once
 #include "Enemy.h"
+
 enum class MeleEnemyType { MIMIC = 0, BRINGER_OF_DEATH, KNIGHT1 };
 
 class MeleEnemy : public Enemy
 {
 	MeleEnemyType type;
+
+	EnemyHealthBar healthBar;
 
 	//Init functions
 	void initComponents(sf::Texture& texture_sheet, sf::Sprite& sprite) override;

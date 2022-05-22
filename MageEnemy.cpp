@@ -1,4 +1,3 @@
-
 #include "stdafx.h"
 #include "MageEnemy.h"
 
@@ -116,18 +115,17 @@ inline void MageEnemy::addAnimations()
 //Constructors
 MageEnemy::MageEnemy(const MageEnemyType& type, const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player)
 	:Enemy(level, x, y, texture_sheet, player),
-	type(type)
+	type(type), healthBar(&this->statsComponent.hp)
 {
-	this->initStats();
 	this->initComponents(texture_sheet, this->sprite);
 	this->setPosition(x, y);
 }
 
 MageEnemy::MageEnemy(MageEnemy&& other)
-	:Enemy(this->statsComponent.level, this->getPosition().x, this->getPosition().y, *this->textureSheet, this->player)
+	:Enemy(this->statsComponent.level, this->getPosition().x, this->getPosition().y, *this->textureSheet, this->player),
+	healthBar(&other.statsComponent.hp)
 {
 	this->animationComponent = other.animationComponent;
-	this->dropComponent = other.dropComponent;
 	this->hitboxComponent = other.hitboxComponent;
 	this->isAttaking = other.isAttaking;
 	this->isDead = other.isDead;
@@ -269,9 +267,11 @@ inline void MageEnemy::updateAnimations(const float& dt)
 	//Plyaer skill
 	if (this->skillImpact)
 	{
-		this->skillsImpactSprites[this->player->getUsingSkilltype()].first.setPosition(this->getPosition().x - 40, this->getPosition().y - 50);
+		this->skillsImpactSprites[*this->playerUsingSkill].first.setPosition(
+			this->getPosition().x - this->offsets[*this->playerUsingSkill], 
+			this->getPosition().y - this->offsets[*this->playerUsingSkill]);
 
-		if (this->skillsImpactAnimations[this->player->getUsingSkilltype()].play("SKILL_IMPACT", dt, true))
+		if (this->skillsImpactAnimations[*this->playerUsingSkill].play("SKILL_IMPACT", dt, true))
 		{
 			this->skillImpact = false;
 		}
@@ -282,6 +282,7 @@ inline void MageEnemy::updateAnimations(const float& dt)
 		this->stopVelocity();
 		if (this->animationComponent.play("DEATH", dt, true))
 		{
+			this->player->gainCoins(3 * this->statsComponent.level);
 			this->player->gainEXP(this->statsComponent.level * 2);
 
 			this->isDead = true;
@@ -329,7 +330,8 @@ inline void MageEnemy::updatePlayerImpact(const float& dt)
 			this->isTakingDamage = true;
 			this->skillImpact = true;
 
-			this->statsComponent.loseHP(this->player->getStatsComponent()->damageMagical);
+			this->statsComponent.loseHP(this->player->getStatsComponent()->damageMagical +
+				this->player->getStatsComponent()->currentSkillDamage);
 		}
 	}
 }
@@ -363,7 +365,7 @@ void MageEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 	}
 	if (this->skillImpact)
 	{
-		target.draw(this->skillsImpactSprites[this->player->getUsingSkilltype()].first);
+		target.draw(this->skillsImpactSprites[*this->playerUsingSkill].first);
 	}
 
 	//this->hitboxComponent.render(target);

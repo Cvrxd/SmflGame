@@ -106,18 +106,17 @@ inline void MeleEnemy::addAnimations()
 //Constructors
 MeleEnemy::MeleEnemy(const MeleEnemyType& type, const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player)
 	:Enemy(level, x, y, texture_sheet, player),
-	type(type)
+	type(type), healthBar(&this->statsComponent.hp)
 {
-	this->initStats();
 	this->initComponents(texture_sheet, this->sprite);
 	this->setPosition(x, y);
 }
 
 MeleEnemy::MeleEnemy(MeleEnemy&& other)
-	:Enemy(this->statsComponent.level, this->getPosition().x, this->getPosition().y, *this->textureSheet, this->player)
+	:Enemy(other.statsComponent.level, this->getPosition().x, this->getPosition().y, *this->textureSheet, this->player),
+	healthBar(&other.statsComponent.hp)
 {
 	this->animationComponent = other.animationComponent;
-	this->dropComponent = other.dropComponent;
 	this->hitboxComponent = other.hitboxComponent;
 	this->isAttaking = other.isAttaking;
 	this->isDead = other.isDead;
@@ -210,9 +209,11 @@ inline void MeleEnemy::updateAnimations(const float& dt)
 	//Plyaer skill
 	if (this->skillImpact)
 	{
-		this->skillsImpactSprites[this->player->getUsingSkilltype()].first.setPosition(this->getPosition().x - 40, this->getPosition().y - 40);
+		this->skillsImpactSprites[*this->playerUsingSkill].first.setPosition(
+			this->getPosition().x - this->offsets[*this->playerUsingSkill],
+			this->getPosition().y - this->offsets[*this->playerUsingSkill]);
 
-		if (this->skillsImpactAnimations[this->player->getUsingSkilltype()].play("SKILL_IMPACT", dt, true))
+		if (this->skillsImpactAnimations[*this->playerUsingSkill].play("SKILL_IMPACT", dt, true))
 		{
 			this->skillImpact = false;
 		}
@@ -223,6 +224,7 @@ inline void MeleEnemy::updateAnimations(const float& dt)
 		this->stopVelocity();
 		if (this->animationComponent.play("DEATH", dt, true))
 		{
+			this->player->gainCoins(3 * this->statsComponent.level);
 			this->player->gainEXP(this->statsComponent.level * 2);
 
 			this->isDead = true;
@@ -260,6 +262,7 @@ inline void MeleEnemy::updatePlayerImpact(const float& dt)
 			this->hitImpact = true;
 
 			this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical);
+			this->healthBar.updateOffsetX();
 		}
 	}
 	//Skill damage impact
@@ -270,7 +273,10 @@ inline void MeleEnemy::updatePlayerImpact(const float& dt)
 			this->isTakingDamage = true;
 			this->skillImpact = true;
 
-			this->statsComponent.loseHP(this->player->getStatsComponent()->damageMagical);
+			this->statsComponent.loseHP(this->player->getStatsComponent()->damageMagical + 
+				this->player->getStatsComponent()->currentSkillDamage);
+
+			this->healthBar.updateOffsetX();
 		}
 	}
 }
@@ -289,6 +295,7 @@ void MeleEnemy::update(const float& dt, sf::Vector2f mouse_pos_view)
 	this->updateMovement(dt);
 	this->updateAnimations(dt);
 
+	this->healthBar.update(dt, this->getPosition());
 	this->hitboxComponent.update();
 }
 
@@ -302,8 +309,9 @@ void MeleEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 	}
 	if (this->skillImpact)
 	{
-		target.draw(this->skillsImpactSprites[this->player->getUsingSkilltype()].first);
+		target.draw(this->skillsImpactSprites[*this->playerUsingSkill].first);
 	}
 
+	this->healthBar.render(target);
 	//this->hitboxComponent.render(target);
 }

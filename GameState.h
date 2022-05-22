@@ -6,6 +6,7 @@
 #include "BossEnemy.h"
 #include "MeleEnemy.h"
 #include "MageEnemy.h"
+#include "DestroyingEnemy.h"
 
 class State;
 class PauseMenu;
@@ -15,33 +16,34 @@ class Enemy;
 class BossEnemy;
 class MeleEnemy;
 class MageEnemy;
+class DestroyingEnemy;
 
 class GameState : public State
 {
 private:
-	//Entities
-	std::vector<BossEnemy> bosses;
-	std::vector<MeleEnemy> meleEnemies;
-	std::vector<MageEnemy> mageEnemies;
-
 	//variables 
-	sf::Shader core_shader;
-
-	sf::View view;
+	bool skillMenuActive;
 	sf::Vector2i viewGridPosition;
 
+	sf::View view;
 	sf::Font font;
+	sf::Shader core_shader;
 
 	sf::RenderTexture renderTexture;
 	sf::Sprite renderSprite;
 
+	PlayerGUI playerGUI;
+	SkillsMenu skillsMenu;
+	PauseMenu pauseMenu;
+
 	TileMap tileMap;
 	Player player;
 
-	PauseMenu pauseMenu;
-	PlayerGUI playerGUI;
-	SkillsMenu skillsMenu;
-	bool skillMenuActive;
+	//Entities
+	std::vector<BossEnemy> bosses;
+	std::vector<MeleEnemy> meleEnemies;
+	std::vector<MageEnemy> mageEnemies;
+	std::vector<DestroyingEnemy> destroyingEnemies;
 
 	//Functions
 	void initRenderTextures();

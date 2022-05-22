@@ -9,18 +9,25 @@ class PlayerGUI
 {
 private:
 	//Variables
+	int* hpPotions;
+	int* mpPotions;
+	int* coins;
+
+	int index = 0;
+
 	sf::Clock skillTimer;
 
+	sf::Font& font;
 	//Player variables
 	Player& player;
 	StatsComponent& statsComponent;
-	int* hpPotions;
-	int* mpPotions;
 
-	sf::Font& font;
+	//Animations
+	std::unordered_map<std::string, sf::Sprite> sprites;
+	std::unordered_map<std::string, AnimationComponent> animationComponent;
 
 	//All textures
-	std::map<std::string, sf::Texture> textures;
+	std::unordered_map<std::string, sf::Texture> textures;
 
 	//Stat bars 
 	std::vector<std::pair<sf::RectangleShape, sf::RectangleShape>> bars;
@@ -30,14 +37,13 @@ private:
 
 	//Text and icons
 	sf::Texture iconsSheet;
-	std::map<std::string, sf::Text> texts;
-	std::map<std::string, sf::RectangleShape> iconsSprites;
+	std::unordered_map<std::string, sf::Text> texts;
+	std::unordered_map<std::string, sf::RectangleShape> iconsSprites;
 
-	int index = 0;
 	std::vector<std::pair<SkillType, sf::RectangleShape>>* skillsIcons;
 
 	//Inventory icons
-	std::map<std::string, std::pair<sf::RectangleShape, sf::RectangleShape>> inventoryIcons;
+	std::unordered_map<std::string, std::pair<sf::RectangleShape, sf::RectangleShape>> itemsIcons;
 
 	//Functions
 	void initVariables();
@@ -45,7 +51,8 @@ private:
 	void initQuickSlotBars();
 	void initTextsIcons();
 	void initItems();
-	
+	void initAniamtions();
+
 public:
 	//Constructor
 	PlayerGUI(Player& player, sf::Font& font);
@@ -58,6 +65,7 @@ public:
 	void addItem();
 	void addSkill(const SkillType& type);
 
+	void updateAnimations(const float& dt);
 	void updateBars();
 	void updateTextIcons();
 
@@ -70,19 +78,20 @@ class SkillsMenu
 private:
 	//Variables
 	const int skillsSize;
-
-	float keyTime;
-	float keyTimeMax;
+	int unlockSkillsCount = 0;
 
 	Player& player;
 	PlayerGUI& playerGUI;
 	sf::Font& font;
 
+	float keyTime;
+	float keyTimeMax;
+
 	sf::RectangleShape background;
 	std::vector<sf::Text> texts;
 
 	//All textures
-	std::map<std::string, sf::Texture> textures;
+	std::unordered_map<std::string, sf::Texture> textures;
 
 	//Stat icons
 	std::vector<sf::RectangleShape> statIcons;
@@ -91,8 +100,8 @@ private:
 	std::vector<std::pair<SkillType, sf::RectangleShape>> skillsIcons;
 
 	//Buttons
-	std::map<std::string, GUI::Button*> buttons;
-	std::map<SkillType, GUI::Button*> unclockButtons;
+	std::unordered_map<std::string, GUI::Button*> buttons;
+	std::unordered_map<SkillType, GUI::Button*> unclockButtons;
 
 	//Init functions
 	void initButtons();

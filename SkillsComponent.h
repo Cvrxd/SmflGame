@@ -7,7 +7,7 @@ class StatsComponent;
 
 enum class SkillType
 {
-	EMPTY = 0, RED_BLADES, WATER_SPIKE, THUNDER_STRIKE, DARK_BOLT,
+	EMPTY = 0, THUNDER_STRIKE, DARK_BOLT,
 	POISON_CLAW, DARK_POSION, BLOOD_SPIKE, FIRE_EXPLOSION, LIGHTNING_STRIKE, HOLY_STRIKE
 };
 
@@ -46,22 +46,23 @@ private:
 	AnimationComponent skillsEndingAnimation;
 
 	//Regular animation
-	std::map<SkillType, std::pair<sf::Sprite, sf::Texture>> skillTextures;
-	std::map<SkillType, AnimationComponent> skillsAnimations;
-
-	int currentRender;
+	std::unordered_map<SkillType, std::pair<sf::Sprite, sf::Texture>> skillTextures;
+	std::unordered_map<SkillType, AnimationComponent> skillsAnimations;
 
 	bool playAnimation;
 	bool usingPotion;
 	bool& usingSkill;
-	SkillType& usingSkillType;
+	int currentRender;
+
+	int& currentSkillDamage;
+	SkillType& currentSkillType;
 
 	//Init functions
 	void initAllSkills();
 	void initAllAnimations();
 
 public:
-	SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill, SkillType& usingSkillType);
+	SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill, SkillType& usingSkillType, int& currentSkillDamage);
 	~SkillsComponent();
 
 	//Accessors
@@ -76,6 +77,7 @@ public:
 
 	void useSkill(const SkillType& skill_type);
 	void addSkill(const SkillType& skill_type, const short& slot);
+	void updateSkill(const SkillType& skill_type);
 
 	void updateClock(const float& dt);
 	void update(const float& dt, const sf::Vector2f& skill_position, const sf::Vector2f& player_position);

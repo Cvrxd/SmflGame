@@ -1,11 +1,16 @@
 #pragma once
 #include "Enemy.h"
-enum class BossType { NIGHTBORN = 0, FIRE_DEMON };
 
-class BossEnemy : public Enemy
+class Enemy;
+
+enum class DestroyingEnemyType { FIRE_SKULL = 0};
+
+class DestroyingEnemy : public Enemy
 {
-private:
-	BossType type;
+	DestroyingEnemyType type;
+
+	std::pair<sf::Sprite, sf::Texture> destroyingSprite;
+	AnimationComponent destroyingAnimation;
 
 	//Init functions
 	void initComponents(sf::Texture& texture_sheet, sf::Sprite& sprite) override;
@@ -15,10 +20,10 @@ private:
 	//Other fuctions
 	void enemyDead(const float& dt) override;
 public:
-	BossEnemy(const BossType& type, const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player);
-	BossEnemy(BossEnemy&& other);
+	DestroyingEnemy(const DestroyingEnemyType& type, const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player);
+	DestroyingEnemy(DestroyingEnemy&& other);
 
-	~BossEnemy();
+	~DestroyingEnemy();
 
 	//Functions
 	void updateAttack(const float& dt) override;

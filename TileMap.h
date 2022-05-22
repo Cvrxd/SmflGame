@@ -8,9 +8,10 @@ class Tile;
 class TileMap
 {
 private:
-	//Variavles
-	float gridSizeF;
+	//Variables
 	int gridSizeI;
+	float gridSizeF;
+
 	sf::Vector2i maxSizeLevelGrid;
 	sf::Vector2f maxSizeLevelF;
 
