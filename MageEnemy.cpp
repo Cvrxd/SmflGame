@@ -115,37 +115,10 @@ inline void MageEnemy::addAnimations()
 //Constructors
 MageEnemy::MageEnemy(const MageEnemyType& type, const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player)
 	:Enemy(level, x, y, texture_sheet, player),
-	type(type), healthBar(&this->statsComponent.hp)
+	type(type), healthBar(&this->statsComponent.hp), levelIcon(&level, &this->player->getStatsComponent()->level, this->player->getFont())
 {
 	this->initComponents(texture_sheet, this->sprite);
 	this->setPosition(x, y);
-}
-
-MageEnemy::MageEnemy(MageEnemy&& other)
-	:Enemy(this->statsComponent.level, this->getPosition().x, this->getPosition().y, *this->textureSheet, this->player),
-	healthBar(&other.statsComponent.hp)
-{
-	this->animationComponent = other.animationComponent;
-	this->hitboxComponent = other.hitboxComponent;
-	this->isAttaking = other.isAttaking;
-	this->isDead = other.isDead;
-	this->movementComponent = other.movementComponent;
-	this->setOriginLeft = other.setOriginLeft;
-	this->setOriginRight = other.setOriginRight;
-	this->sprite = other.sprite;
-	this->statsComponent = other.statsComponent;
-	this->hitImpact = other.hitImpact;
-	this->skillImpact = other.skillImpact;
-	this->type = other.type;
-	//
-	this->takeHitAnimation = other.takeHitAnimation;
-	this->takeHitSprite = other.takeHitSprite;
-	this->castR = other.castR;
-	this->castRange = other.castRange;
-	this->ineerR = other.ineerR;
-	this->innerRange = other.innerRange;
-
-	other.player = nullptr;
 }
 
 MageEnemy::~MageEnemy()
@@ -320,6 +293,7 @@ inline void MageEnemy::updatePlayerImpact(const float& dt)
 			this->hitImpact = true;
 
 			this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical);
+			this->healthBar.updateOffsetX();
 		}
 	}
 	//Skill damage impact
@@ -332,6 +306,7 @@ inline void MageEnemy::updatePlayerImpact(const float& dt)
 
 			this->statsComponent.loseHP(this->player->getStatsComponent()->damageMagical +
 				this->player->getStatsComponent()->currentSkillDamage);
+			this->healthBar.updateOffsetX();
 		}
 	}
 }
@@ -349,6 +324,9 @@ void MageEnemy::update(const float& dt, sf::Vector2f mouse_pos_view)
 	this->updateAttack(dt);
 	this->updateMovement(dt);
 	this->updateAnimations(dt);
+
+	this->healthBar.update(dt, this->getPosition());
+	this->levelIcon.update(dt, this->getPosition());
 
 	this->hitboxComponent.update();
 }
@@ -368,5 +346,7 @@ void MageEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 		target.draw(this->skillsImpactSprites[*this->playerUsingSkill].first);
 	}
 
+	this->healthBar.render(target);
+	this->levelIcon.render(target);
 	//this->hitboxComponent.render(target);
 }

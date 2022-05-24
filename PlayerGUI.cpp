@@ -11,10 +11,18 @@ inline void PlayerGUI::initVariables()
 
 inline void PlayerGUI::initStatBars()
 {
+	this->textures["BAR_BORDER"].loadFromFile("Textures/hud/game_hud/background3.png");
 	this->textures["HP_BAR"].loadFromFile("Textures/hud/game_hud/hp.png");
-	this->textures["MANA_BAR"].loadFromFile("Textures/hud/game_hud/mana.png");
-	this->textures["ARMOR_BAR"].loadFromFile("Textures/hud/game_hud/armor.png");
-	this->textures["BAR_BORDER"].loadFromFile("Textures/hud/game_hud/border.png");
+	
+	sf::Image image;
+
+	image.loadFromFile("Textures/hud/game_hud/mana.png");
+	image.createMaskFromColor(sf::Color::White);
+	this->textures["MANA_BAR"].loadFromImage(image);
+
+	image.loadFromFile("Textures/hud/game_hud/armor.png");
+	image.createMaskFromColor(sf::Color::White);
+	this->textures["ARMOR_BAR"].loadFromImage(image);
 
 	this->textures["POTIONS"].loadFromFile("Textures/hud/inventory_hud/items32_simple_transparent2.png");
 	
@@ -25,10 +33,10 @@ inline void PlayerGUI::initStatBars()
 	{
 		this->bars[i].first.setTexture(&this->textures["BAR_BORDER"]);
 		this->bars[i].first.setPosition(sf::Vector2f(130.f, static_cast<float>(35 + 20 * (i * 3))));
-		this->bars[i].first.setSize(sf::Vector2f(static_cast<float>(450 - (i * 80)), 40.f));
+		this->bars[i].first.setSize(sf::Vector2f(static_cast<float>(450 - (i * 60)), 45.f));
 
-		this->bars[i].second.setPosition(sf::Vector2f(135.f, static_cast<float> (2 + 35 + 20 * (i * 3))));
-		this->bars[i].second.setSize(sf::Vector2f(static_cast<float>(450 - (i * 80) - 10), 35.f));
+		this->bars[i].second.setPosition(sf::Vector2f(135.f, static_cast<float> (35 + 20 * (i * 3))));
+		this->bars[i].second.setSize(sf::Vector2f(static_cast<float>(450 - (i * 60)), 45.f));
 	}
 
 	this->bars[0].second.setTexture(&this->textures["HP_BAR"]);
@@ -228,6 +236,23 @@ PlayerGUI::PlayerGUI(Player& player, sf::Font& font)
 
 PlayerGUI::~PlayerGUI()
 {
+}
+
+//Offsets updates
+void PlayerGUI::updateHpOffset()
+{
+	this->hpOffset += 10.f / float(this->player.getStatsComponent()->hpMAX / 3.f) + 0.1f;
+	this->bars[0].second.setPosition(this->bars[0].second.getPosition().x + this->hpOffset, this->bars[0].second.getPosition().y);
+}
+void PlayerGUI::updateMpOffset()
+{
+	this->mpOffset += 10.f / float(this->player.getStatsComponent()->hpMAX / 3.f) + 0.1f;
+	this->bars[1].second.setPosition(this->bars[1].second.getPosition().x + this->mpOffset, this->bars[1].second.getPosition().y);
+}
+void PlayerGUI::updateArmorOffset()
+{
+	this->armorOffset += 10.f / float(this->player.getStatsComponent()->hpMAX / 3.f) + 0.1f;
+	this->bars[2].second.setPosition(this->bars[2].second.getPosition().x + this->hpOffset, this->bars[2].second.getPosition().y);
 }
 
 //Functions

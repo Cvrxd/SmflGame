@@ -72,4 +72,3 @@ public:
 	void renderEnemies(sf::RenderTarget* target);
 	void render(sf::RenderTarget* target = nullptr) override;
 };
-

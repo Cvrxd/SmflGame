@@ -147,7 +147,7 @@ public:
 	AnimationComponent(const AnimationComponent& other);
 
 
-	//AnimationComponent& operator=(AnimationComponent&& other);
+	AnimationComponent& operator=(AnimationComponent&& other);
 	AnimationComponent& operator=(const AnimationComponent& other);
 
 	virtual ~AnimationComponent();

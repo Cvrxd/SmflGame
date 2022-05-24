@@ -19,7 +19,8 @@ class MageEnemy : public Enemy
 	sf::CircleShape castRange;
 	sf::CircleShape innerRange;
 
-	EnemyHealthBar healthBar;
+	EnemyGUI::EnemyHealthBar healthBar;
+	EnemyGUI::EnemyLevelIcon levelIcon;
 
 	//Init functions
 	void initComponents(sf::Texture& texture_sheet, sf::Sprite& sprite) override;
@@ -30,7 +31,6 @@ class MageEnemy : public Enemy
 	void enemyDead(const float& dt) override;
 public:
 	MageEnemy(const MageEnemyType& type, const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player);
-	MageEnemy(MageEnemy&& other);
 
 	~MageEnemy();
 

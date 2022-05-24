@@ -126,7 +126,7 @@
     <ClCompile Include="DestroyingEnemy.cpp">
       <Filter>Entities\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyHealthBar.cpp">
+    <ClCompile Include="EnemyGUI.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
   </ItemGroup>
@@ -209,7 +209,7 @@
     <ClInclude Include="DestroyingEnemy.h">
       <Filter>Entities\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyHealthBar.h">
+    <ClInclude Include="EnemyGUI.h">
       <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,7 +1,7 @@
 #pragma once
 #include "Entity.h"
 #include "Player.h"
-#include"EnemyHealthBar.h"
+#include "EnemyGUI.h"
 
 class Entity;
 class Player;

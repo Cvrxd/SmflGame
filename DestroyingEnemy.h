@@ -9,6 +9,9 @@ class DestroyingEnemy : public Enemy
 {
 	DestroyingEnemyType type;
 
+	EnemyGUI::EnemyHealthBar healthBar;
+	EnemyGUI::EnemyLevelIcon levelIcon;
+
 	std::pair<sf::Sprite, sf::Texture> destroyingSprite;
 	AnimationComponent destroyingAnimation;
 
@@ -21,7 +24,6 @@ class DestroyingEnemy : public Enemy
 	void enemyDead(const float& dt) override;
 public:
 	DestroyingEnemy(const DestroyingEnemyType& type, const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player);
-	DestroyingEnemy(DestroyingEnemy&& other);
 
 	~DestroyingEnemy();
 

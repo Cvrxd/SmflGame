@@ -68,33 +68,11 @@ inline void DestroyingEnemy::addAnimations()
 //Constructors
 DestroyingEnemy::DestroyingEnemy(const DestroyingEnemyType& type, const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player)
 	:Enemy(level, x, y, texture_sheet, player),
-	type(type)
+	type(type), healthBar(&this->statsComponent.hp), levelIcon(&level, &this->player->getStatsComponent()->level, this->player->getFont())
 {
 	this->initStats();
 	this->initComponents(texture_sheet, this->sprite);
 	this->setPosition(x, y);
-}
-
-DestroyingEnemy::DestroyingEnemy(DestroyingEnemy&& other)
-	:Enemy(this->statsComponent.level, this->getPosition().x, this->getPosition().y, *this->textureSheet, this->player)
-{
-	this->animationComponent = other.animationComponent;
-	this->hitboxComponent = other.hitboxComponent;
-	this->isAttaking = other.isAttaking;
-	this->isDead = other.isDead;
-	this->movementComponent = other.movementComponent;
-	this->setOriginLeft = other.setOriginLeft;
-	this->setOriginRight = other.setOriginRight;
-	this->sprite = other.sprite;
-	this->statsComponent = other.statsComponent;
-	this->hitImpact = other.hitImpact;
-	this->skillImpact = other.skillImpact;
-	this->type = other.type;
-	//
-	this->takeHitAnimation = other.takeHitAnimation;
-	this->takeHitSprite = other.takeHitSprite;
-
-	other.player = nullptr;
 }
 
 DestroyingEnemy::~DestroyingEnemy()
@@ -208,6 +186,7 @@ inline void DestroyingEnemy::updatePlayerImpact(const float& dt)
 			this->hitImpact = true;
 
 			this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical);
+			this->healthBar.updateOffsetX();
 		}
 	}
 	//Skill damage impact
@@ -220,6 +199,7 @@ inline void DestroyingEnemy::updatePlayerImpact(const float& dt)
 
 			this->statsComponent.loseHP(this->player->getStatsComponent()->damageMagical +
 				this->player->getStatsComponent()->currentSkillDamage);
+			this->healthBar.updateOffsetX();
 		}
 	}
 }
@@ -237,6 +217,9 @@ void DestroyingEnemy::update(const float& dt, sf::Vector2f mouse_pos_view)
 	this->updateAttack(dt);
 	this->updateMovement(dt);
 	this->updateAnimations(dt);
+
+	this->healthBar.update(dt, this->getPosition());
+	this->levelIcon.update(dt, this->getPosition());
 
 	this->hitboxComponent.update();
 }
@@ -261,5 +244,8 @@ void DestroyingEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 		target.draw(this->skillsImpactSprites[*this->playerUsingSkill].first);
 	}
 
-	this->hitboxComponent.render(target);
+	this->healthBar.render(target);
+	this->levelIcon.render(target);
+
+	//this->hitboxComponent.render(target);
 }

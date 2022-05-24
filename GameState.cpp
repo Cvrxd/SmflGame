@@ -40,10 +40,7 @@ inline void GameState::initView()
 
 inline void GameState::initFonts()
 {
-	if (!this->font.loadFromFile("Fonts/Greybeard.ttf"))
-	{
-		throw("ERROR::GAMESTATE::COULD NOT LOAD FONT");
-	}
+	this->font.loadFromFile("Fonts/Greybeard.ttf");
 }
 
 inline void GameState::initTextures()
@@ -89,19 +86,19 @@ inline void GameState::initEnemies()
 	//this->bosses.emplace_back(BossType::FIRE_DEMON, 1, 100, 900, this->textures["ENEMY_FIRE_DEMON"], &this->player);
 
 	this->meleEnemies.reserve(2);
-	this->meleEnemies.emplace_back(MeleEnemyType::MIMIC, 1, 700, 700, this->textures["ENEMY_MIMIC"], &this->player);
-	//this->meleEnemies.emplace_back(MeleEnemyType::KNIGHT1, 1, 700, 700, this->textures["ENEMY_KNIGHT1"], &this->player);
+	//this->meleEnemies.emplace_back(MeleEnemyType::MIMIC, 11, 700, 700, this->textures["ENEMY_MIMIC"], &this->player);
+	this->meleEnemies.emplace_back(MeleEnemyType::BRINGER_OF_DEATH, 1, 700, 700, this->textures["ENEMY_BRINGER_OF_DEATH"], &this->player);
 
 	this->mageEnemies.reserve(2);
 	//this->mageEnemies.emplace_back(MageEnemyType::FIRE_MAGE, 1, 400, 400, this->textures["ENEMY_FIRE_MAGE"], &this->player);
 
-	//this->destroyingEnemies.reserve(2);
-	//this->destroyingEnemies.emplace_back(DestroyingEnemyType::FIRE_SKULL, 1, 0, 0, this->textures["ENEMY_FIRE_SKULL"], &this->player);
+	this->destroyingEnemies.reserve(2);
+	this->destroyingEnemies.emplace_back(DestroyingEnemyType::FIRE_SKULL, 1, 0, 0, this->textures["ENEMY_FIRE_SKULL"], &this->player);
 }
 
 inline void GameState::initPlayerGUI()
 {
-
+	this->player.setPlayerGUI(this->playerGUI);
 }
 
 inline void GameState::initTileMap()
@@ -113,7 +110,7 @@ inline void GameState::initTileMap()
 GameState::GameState(StateData* state_data)
 	: State(state_data), skillMenuActive(false),
 	pauseMenu(*this->window, this->stateData->font), //Pause menu 
-	player(500,500, this->textures["PLAYER_SHEET"]), //Player
+	player(500,500, this->textures["PLAYER_SHEET"], this->font), //Player
 	playerGUI(this->player, this->font), // Player GUI
 	skillsMenu(this->player, this->playerGUI,this->font, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
 	tileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg") //Tile map
@@ -127,6 +124,7 @@ GameState::GameState(StateData* state_data)
 	this->initEnemies();
 	this->initShaders();
 	this->initTileMap();
+	this->initPlayerGUI();
 }
 
 GameState::~GameState()
@@ -145,7 +143,6 @@ inline void GameState::updateView(const float& dt)
 	this->viewGridPosition.y = static_cast<int>(this->view.getCenter().y / this->stateData->gridSize);
 
 	//World view
-	
 	/*if (this->tileMap->getMaxSizeF().x >= this->view.getSize().x)
 	{
 		if (this->view.getCenter().x - this->view.getSize().x / 2.f < 0.f)

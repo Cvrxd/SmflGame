@@ -7,6 +7,9 @@ class BossEnemy : public Enemy
 private:
 	BossType type;
 
+	EnemyGUI::EnemyHealthBar healthBar;
+	EnemyGUI::EnemyLevelIcon levelIcon;
+
 	//Init functions
 	void initComponents(sf::Texture& texture_sheet, sf::Sprite& sprite) override;
 	void createAnimationComponent(sf::Texture& texture_sheet) override;
@@ -16,8 +19,7 @@ private:
 	void enemyDead(const float& dt) override;
 public:
 	BossEnemy(const BossType& type, const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player);
-	BossEnemy(BossEnemy&& other);
-
+	
 	~BossEnemy();
 
 	//Functions

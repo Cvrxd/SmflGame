@@ -7,7 +7,8 @@ class MeleEnemy : public Enemy
 {
 	MeleEnemyType type;
 
-	EnemyHealthBar healthBar;
+	EnemyGUI::EnemyHealthBar healthBar;
+	EnemyGUI::EnemyLevelIcon levelIcon;
 
 	//Init functions
 	void initComponents(sf::Texture& texture_sheet, sf::Sprite& sprite) override;
@@ -17,8 +18,8 @@ class MeleEnemy : public Enemy
 	//Other fuctions
 	void enemyDead(const float& dt) override;
 public:
-	MeleEnemy(const MeleEnemyType& type, const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player);
-	MeleEnemy(MeleEnemy&& other);
+	MeleEnemy(const MeleEnemyType& type, const int& level, const float& x, const float& y, 
+		sf::Texture& texture_sheet, Player* player);
 
 	~MeleEnemy();
 

@@ -104,35 +104,13 @@ inline void MeleEnemy::addAnimations()
 }
 
 //Constructors
-MeleEnemy::MeleEnemy(const MeleEnemyType& type, const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player)
+MeleEnemy::MeleEnemy(const MeleEnemyType& type, const int& level, const float& x, const float& y, 
+	sf::Texture& texture_sheet, Player* player)
 	:Enemy(level, x, y, texture_sheet, player),
-	type(type), healthBar(&this->statsComponent.hp)
+	type(type), healthBar(&this->statsComponent.hp), levelIcon(&level, &this->player->getStatsComponent()->level, this->player->getFont())
 {
 	this->initComponents(texture_sheet, this->sprite);
 	this->setPosition(x, y);
-}
-
-MeleEnemy::MeleEnemy(MeleEnemy&& other)
-	:Enemy(other.statsComponent.level, this->getPosition().x, this->getPosition().y, *this->textureSheet, this->player),
-	healthBar(&other.statsComponent.hp)
-{
-	this->animationComponent = other.animationComponent;
-	this->hitboxComponent = other.hitboxComponent;
-	this->isAttaking = other.isAttaking;
-	this->isDead = other.isDead;
-	this->movementComponent = other.movementComponent;
-	this->setOriginLeft = other.setOriginLeft;
-	this->setOriginRight = other.setOriginRight;
-	this->sprite = other.sprite;
-	this->statsComponent = other.statsComponent;
-	this->hitImpact = other.hitImpact;
-	this->skillImpact = other.skillImpact;
-	this->type = other.type;
-	//
-	this->takeHitAnimation = other.takeHitAnimation;
-	this->takeHitSprite = other.takeHitSprite;
-
-	other.player = nullptr;
 }
 
 MeleEnemy::~MeleEnemy()
@@ -226,7 +204,7 @@ inline void MeleEnemy::updateAnimations(const float& dt)
 		{
 			this->player->gainCoins(3 * this->statsComponent.level);
 			this->player->gainEXP(this->statsComponent.level * 2);
-
+			
 			this->isDead = true;
 		}
 	}
@@ -262,6 +240,7 @@ inline void MeleEnemy::updatePlayerImpact(const float& dt)
 			this->hitImpact = true;
 
 			this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical);
+
 			this->healthBar.updateOffsetX();
 		}
 	}
@@ -296,6 +275,8 @@ void MeleEnemy::update(const float& dt, sf::Vector2f mouse_pos_view)
 	this->updateAnimations(dt);
 
 	this->healthBar.update(dt, this->getPosition());
+	this->levelIcon.update(dt, this->getPosition());
+
 	this->hitboxComponent.update();
 }
 
@@ -313,5 +294,6 @@ void MeleEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 	}
 
 	this->healthBar.render(target);
+	this->levelIcon.render(target);
 	//this->hitboxComponent.render(target);
 }

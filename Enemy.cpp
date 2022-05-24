@@ -44,13 +44,18 @@ void Enemy::initSkillsImpactTextures()
 	this->skillsImpactSprites[SkillType::HOLY_STRIKE].first.setScale(4.f, 4.f);
 	this->skillsImpactAnimations[SkillType::HOLY_STRIKE] = { &this->skillsImpactSprites[SkillType::HOLY_STRIKE].first, &this->skillsImpactSprites[SkillType::HOLY_STRIKE].second };
 	this->offsets[SkillType::HOLY_STRIKE] = 110;
+
+	this->skillsImpactSprites[SkillType::LIGHTNING_STRIKE].second.loadFromFile("Textures/animations/hit/spark.png");;
+	this->skillsImpactSprites[SkillType::LIGHTNING_STRIKE].first.setScale(5.f, 5.f);
+	this->skillsImpactAnimations[SkillType::LIGHTNING_STRIKE] = { &this->skillsImpactSprites[SkillType::LIGHTNING_STRIKE].first, &this->skillsImpactSprites[SkillType::LIGHTNING_STRIKE].second };
+	this->offsets[SkillType::LIGHTNING_STRIKE] = 0;
 }
 
 void Enemy::initImpactAnimations()
 {	
 	//Take hit animations
-	this->takeHitAnimation.addAnimation("TAKE_HIT1", 0, 0, 4, 0, 64, 64, 5.f);
-	this->takeHitAnimation.addAnimation("TAKE_HIT2", 0, 1, 4, 1, 64, 64, 5.f);
+	this->takeHitAnimation.addAnimation("TAKE_HIT1", 0, 0, 4, 0, 64, 64, 4.f);
+	this->takeHitAnimation.addAnimation("TAKE_HIT2", 0, 1, 4, 1, 64, 64, 4.f);
 
 	//Skills impact animations
 	this->skillsImpactAnimations[SkillType::BLOOD_SPIKE].addAnimation("SKILL_IMPACT", 0, 0, 14, 0, 64, 49, 5.f);
@@ -60,7 +65,7 @@ void Enemy::initImpactAnimations()
 	this->skillsImpactAnimations[SkillType::DARK_POSION].addAnimation("SKILL_IMPACT", 0, 0, 15, 0, 140, 93, 8.f);
 	this->skillsImpactAnimations[SkillType::FIRE_EXPLOSION].addAnimation("SKILL_IMPACT", 0, 0, 3, 0, 48, 48, 9.f);
 	this->skillsImpactAnimations[SkillType::HOLY_STRIKE].addAnimation("SKILL_IMPACT", 0, 0, 27, 0, 96, 96, 4.f);
-	
+	this->skillsImpactAnimations[SkillType::LIGHTNING_STRIKE].addAnimation("SKILL_IMPACT", 0, 0, 6, 0, 32, 32, 7.f);
 }
 
 //Init functions

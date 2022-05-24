@@ -14,10 +14,14 @@ private:
 	int* coins;
 
 	int index = 0;
+	float hpOffset = 0.f;
+	float mpOffset = 0.f;
+	float armorOffset = 0.f;
 
 	sf::Clock skillTimer;
 
 	sf::Font& font;
+
 	//Player variables
 	Player& player;
 	StatsComponent& statsComponent;
@@ -57,6 +61,11 @@ public:
 	//Constructor
 	PlayerGUI(Player& player, sf::Font& font);
 	~PlayerGUI();
+
+	//Update offsets
+	void updateHpOffset();
+	void updateMpOffset();
+	void updateArmorOffset();
 
 	//Functions
 	void setPotionsCount(int& hp, int& mp);

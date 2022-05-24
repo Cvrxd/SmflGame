@@ -16,6 +16,17 @@ AnimationComponent::AnimationComponent(const AnimationComponent& other)
 	this->lastAnimation = other.lastAnimation;
 }
 
+AnimationComponent& AnimationComponent::operator=(AnimationComponent&& other)
+{
+	this->textureSheet = std::move(other.textureSheet);
+	this->sprite = std::move(other.sprite);
+	this->animations = std::move(other.animations);
+	this->priorityAnimation = std::move(other.priorityAnimation);
+	this->lastAnimation = std::move(other.lastAnimation);
+
+	return *this;
+}
+
 AnimationComponent& AnimationComponent::operator=(const AnimationComponent& other)
 {
 	this->textureSheet = other.textureSheet;

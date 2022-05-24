@@ -1,7 +1,9 @@
 #pragma once
 #include "Entity.h"
+#include "PlayerGUI.h"
 
 class Entity;
+class PlayerGUI;
 
 class Player : public Entity
 {
@@ -15,12 +17,15 @@ private:
 	int currentHitAnimation;
 
 	int currentskillDamage = 1;
-	SkillType currentSkilltype = SkillType::EMPTY;
 
+	PlayerGUI* playerGUI = nullptr;
+
+	SkillType currentSkilltype = SkillType::EMPTY;
 
 	sf::CircleShape hitRange;
 	sf::RectangleShape damageRange;
-
+	
+	const sf::Font& font;
 	sf::Clock damageTimer;
 
 	//Components
@@ -39,12 +44,14 @@ private:
 	void addAnimations();
 	void initComponents(sf::Texture& texture_sheet);
 public:
-	Player(const float& x, const float& y, sf::Texture& texture_sheet);
+	Player(const float& x, const float& y, sf::Texture& texture_sheet, const sf::Font& font);
 	virtual ~Player();
 
 	//Accessors
 	const SkillType& getUsingSkilltype();
 	const int& getUsingSkilldamage();
+	const sf::Font& getFont();
+	void setPlayerGUI(PlayerGUI& playerGUI);
 
 	const bool& usingSkill();
 	const bool& isDealingDmg();

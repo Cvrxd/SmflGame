@@ -77,8 +77,8 @@ inline void Player::addAnimations()
 }
 
 //Constructor
-Player::Player(const float& x, const float& y, sf::Texture& texture_sheet)
-	: currentHitAnimation(0),
+Player::Player(const float& x, const float& y, sf::Texture& texture_sheet, const sf::Font& font)
+	: currentHitAnimation(0), font(font),
 	statsComponent(1),
 	animationComponent(&this->sprite, &texture_sheet),
 	skillsComponent(this->statsComponent, this->isUsingSkill, this->currentSkilltype, this->currentskillDamage)
@@ -101,6 +101,16 @@ const SkillType& Player::getUsingSkilltype()
 const int& Player::getUsingSkilldamage()
 {
 	return this->currentskillDamage;
+}
+
+const sf::Font& Player::getFont()
+{
+	return this->font;
+}
+
+void Player::setPlayerGUI(PlayerGUI& playerGUI)
+{
+	this->playerGUI = &playerGUI;
 }
 
 const bool& Player::usingSkill()
@@ -344,6 +354,5 @@ void Player::render(sf::RenderTarget& target, sf::Shader* shader)
 	}
 	
 	//this->hitboxComponent.render(target);
-
 	//target.draw(this->hitRange);
 }
