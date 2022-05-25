@@ -67,6 +67,9 @@ public:
 	void gainMP(const int& mp);
 	void loseMP(const int& mp);
 	void gainArmor(const int& armor);
+
+	void gainCrystals(const int& crystals);
+	void loseCrystals(const int& crystals);
 	void gainCoins(const int& coins);
 	void loseCoins(const int& coins);
 

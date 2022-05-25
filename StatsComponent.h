@@ -16,6 +16,7 @@ public:
 
 	int level;
 	int coins;
+	int crystals;
 
 	//Stats
 	int hp;
@@ -43,6 +44,9 @@ public:
 	void loseArmor(const int& armor);
 	void gainMP(const int& mp);
 	void loseMP(const int& mp);
+
+	void gainCrystals(const int& crystals);
+	void loseCrystals(const int& crystals);
 	void gainCoins(const int& coins);
 	void loseCoins(const int& coins);
 

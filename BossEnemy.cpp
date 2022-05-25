@@ -185,7 +185,10 @@ inline void BossEnemy::updateAnimations(const float& dt)
 		{
 			this->player->addPotions(HEALTH);
 			this->player->addPotions(MANA);
+
 			this->player->gainCoins(5 * this->statsComponent.level);
+			this->player->gainCrystals(5 * this->statsComponent.level);
+
 			this->player->gainEXP(this->statsComponent.level * 5);
 
 			this->isDead = true;

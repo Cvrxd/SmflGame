@@ -255,7 +255,7 @@ inline void MageEnemy::updateAnimations(const float& dt)
 		this->stopVelocity();
 		if (this->animationComponent.play("DEATH", dt, true))
 		{
-			this->player->gainCoins(3 * this->statsComponent.level);
+			this->player->gainCrystals(3 * this->statsComponent.level);
 			this->player->gainEXP(this->statsComponent.level * 2);
 
 			this->isDead = true;

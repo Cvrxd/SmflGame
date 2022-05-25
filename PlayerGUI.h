@@ -11,7 +11,9 @@ private:
 	//Variables
 	int* hpPotions;
 	int* mpPotions;
+
 	int* coins;
+	int* crystals;
 
 	int index = 0;
 	float hpOffset = 0.f;
@@ -62,11 +64,6 @@ public:
 	PlayerGUI(Player& player, sf::Font& font);
 	~PlayerGUI();
 
-	//Update offsets
-	void updateHpOffset();
-	void updateMpOffset();
-	void updateArmorOffset();
-
 	//Functions
 	void setPotionsCount(int& hp, int& mp);
 	void initSkillIcons(std::vector<std::pair<SkillType, sf::RectangleShape>>* skillsIcons);
@@ -82,6 +79,33 @@ public:
 	void render(sf::RenderTarget& target);
 };
 
+class SkillsLevelingComponent
+{
+private:
+	//Variables
+	SkillsComponent& skillsComponent;
+	std::vector<std::pair<SkillType, sf::RectangleShape>>& originalSkillsIcons;
+
+	//Core
+	std::unordered_map<std::string, GUI::Button*> buttons;
+	std::unordered_map<SkillType, sf::RectangleShape> skillsIcons;
+
+	//Functions
+	void initVariables();
+	void initSkill(const SkillType& type);
+
+public:
+	SkillsLevelingComponent(SkillsComponent& skillsComponent, std::vector<std::pair<SkillType, sf::RectangleShape>>& originalSkillsIcons);
+	~SkillsLevelingComponent();
+
+	//Functions
+
+	void update(sf::Vector2i& mousePosWindow, const float& dt);
+	void render(sf::RenderTarget& target);
+
+	friend class SkillsMenu;
+};
+
 class SkillsMenu
 {
 private:
@@ -91,6 +115,8 @@ private:
 
 	Player& player;
 	PlayerGUI& playerGUI;
+	SkillsLevelingComponent skillsLevelingComponent;
+
 	sf::Font& font;
 
 	float keyTime;
@@ -137,4 +163,6 @@ public:
 
 	void update(sf::Vector2i& mousePosWindow, const float& dt);
 	void render(sf::RenderTarget& target);
+
+	friend class SkillsLevelingMenu;
 };

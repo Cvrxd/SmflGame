@@ -176,6 +176,16 @@ void Player::gainArmor(const int& armor)
 	this->statsComponent.gainArmor(armor);
 }
 
+void Player::gainCrystals(const int& crystals)
+{
+	this->statsComponent.gainCrystals(crystals);
+}
+
+void Player::loseCrystals(const int& crystals)
+{
+	this->statsComponent.loseCrystals(crystals);
+}
+
 void Player::gainCoins(const int& coins)
 {
 	this->statsComponent.gainCoins(coins);

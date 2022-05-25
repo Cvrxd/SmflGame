@@ -6,12 +6,14 @@ inline void PlayerGUI::initVariables()
 {
 	this->mpPotions = &this->player.getSkillComponent()->getMpPotions();
 	this->hpPotions = &this->player.getSkillComponent()->getHpPotions();
+
 	this->coins = &this->statsComponent.coins;
+	this->crystals = &this->statsComponent.crystals;
 }
 
 inline void PlayerGUI::initStatBars()
 {
-	this->textures["BAR_BORDER"].loadFromFile("Textures/hud/game_hud/background3.png");
+	this->textures["BAR_BORDER"].loadFromFile("Textures/hud/game_hud/border.png");
 	this->textures["HP_BAR"].loadFromFile("Textures/hud/game_hud/hp.png");
 	
 	sf::Image image;
@@ -35,8 +37,8 @@ inline void PlayerGUI::initStatBars()
 		this->bars[i].first.setPosition(sf::Vector2f(130.f, static_cast<float>(35 + 20 * (i * 3))));
 		this->bars[i].first.setSize(sf::Vector2f(static_cast<float>(450 - (i * 60)), 45.f));
 
-		this->bars[i].second.setPosition(sf::Vector2f(135.f, static_cast<float> (35 + 20 * (i * 3))));
-		this->bars[i].second.setSize(sf::Vector2f(static_cast<float>(450 - (i * 60)), 45.f));
+		this->bars[i].second.setPosition(sf::Vector2f(135.f, static_cast<float> (5 + 35 + 20 * (i * 3))));
+		this->bars[i].second.setSize(sf::Vector2f(static_cast<float>(450 - (i * 60)), 35.f));
 	}
 
 	this->bars[0].second.setTexture(&this->textures["HP_BAR"]);
@@ -79,6 +81,7 @@ inline void PlayerGUI::initTextsIcons()
 	this->textures["ICON_SHEET"].loadFromFile("Textures/hud/game_hud/icons.png");
 	this->textures["QUICK_SLOT_HUD"].loadFromFile("Textures/hud/game_hud/arrows.png");
 	this->textures["COIN"].loadFromFile("Textures/hud/game_hud/coin.png");
+	this->textures["CRYSTAL"].loadFromFile("Textures/hud/game_hud/crystals.png");
 
 	//Game icons
 	this->iconsSprites["QUICK_SLOT_ARROW_LEFT"].setTexture(&this->textures["QUICK_SLOT_HUD"]);
@@ -118,6 +121,12 @@ inline void PlayerGUI::initTextsIcons()
 	this->texts["COIN"].setString(std::to_string(*this->coins));
 	this->texts["COIN"].setCharacterSize(35);
 	this->texts["COIN"].setPosition(65, 220);
+
+	this->texts["CRYSTAL"].setFont(this->font);
+	this->texts["CRYSTAL"].setFillColor(sf::Color::White);
+	this->texts["CRYSTAL"].setString(std::to_string(*this->crystals));
+	this->texts["CRYSTAL"].setCharacterSize(35);
+	this->texts["CRYSTAL"].setPosition(65, 300);
 
 	//Potions count
 	this->texts["MP_POTIONS"].setFont(this->font);
@@ -209,6 +218,11 @@ inline void PlayerGUI::initAniamtions()
 	this->sprites["COIN"].setPosition(this->texts["COIN"].getPosition().x - 40, this->texts["COIN"].getPosition().y + 7);
 	this->animationComponent["COIN"] = { &this->sprites["COIN"], &this->textures["COIN"] };
 	this->animationComponent["COIN"].addAnimation("PLAY", 0, 0, 4, 0, 16, 16, 15.f);
+
+	this->sprites["CRYSTAL"].setScale(2.f, 2.f);
+	this->sprites["CRYSTAL"].setPosition(this->texts["CRYSTAL"].getPosition().x - 40, this->texts["CRYSTAL"].getPosition().y + 7);
+	this->animationComponent["CRYSTAL"] = { &this->sprites["CRYSTAL"], &this->textures["CRYSTAL"] };
+	this->animationComponent["CRYSTAL"].addAnimation("PLAY", 0, 0, 3, 0, 16, 16, 15.f);
 }
 
 void PlayerGUI::setPotionsCount(int& hp, int& mp)
@@ -238,23 +252,6 @@ PlayerGUI::~PlayerGUI()
 {
 }
 
-//Offsets updates
-void PlayerGUI::updateHpOffset()
-{
-	this->hpOffset += 10.f / float(this->player.getStatsComponent()->hpMAX / 3.f) + 0.1f;
-	this->bars[0].second.setPosition(this->bars[0].second.getPosition().x + this->hpOffset, this->bars[0].second.getPosition().y);
-}
-void PlayerGUI::updateMpOffset()
-{
-	this->mpOffset += 10.f / float(this->player.getStatsComponent()->hpMAX / 3.f) + 0.1f;
-	this->bars[1].second.setPosition(this->bars[1].second.getPosition().x + this->mpOffset, this->bars[1].second.getPosition().y);
-}
-void PlayerGUI::updateArmorOffset()
-{
-	this->armorOffset += 10.f / float(this->player.getStatsComponent()->hpMAX / 3.f) + 0.1f;
-	this->bars[2].second.setPosition(this->bars[2].second.getPosition().x + this->hpOffset, this->bars[2].second.getPosition().y);
-}
-
 //Functions
 void PlayerGUI::addItem()
 {
@@ -276,7 +273,10 @@ void PlayerGUI::addSkill(const SkillType& type)
 
 inline void PlayerGUI::updateAnimations(const float& dt)
 {
-	this->animationComponent["COIN"].play("PLAY", dt, true);
+	for (auto& el : this->animationComponent)
+	{
+		el.second.play("PLAY", dt, true);
+	}
 }
 
 inline void PlayerGUI::updateBars()
@@ -382,7 +382,53 @@ void PlayerGUI::render(sf::RenderTarget& target)
 	}
 }
 
-//Skills Menu 
+//SkillsLevelingComponent=======================================
+
+//Init functions
+inline void SkillsLevelingComponent::initVariables()
+{
+
+}
+
+void SkillsLevelingComponent::initSkill(const SkillType& type)
+{
+	
+}
+
+//Constructors
+SkillsLevelingComponent::SkillsLevelingComponent(SkillsComponent& skillsComponent, std::vector<std::pair<SkillType, sf::RectangleShape>>& originalSkillsIcons)
+	:skillsComponent(skillsComponent), originalSkillsIcons(originalSkillsIcons)
+{
+	this->initVariables();
+}
+
+SkillsLevelingComponent::~SkillsLevelingComponent()
+{
+	for (auto& el : this->buttons)
+	{
+		delete el.second;
+	}
+}
+
+//Functions
+void SkillsLevelingComponent::update(sf::Vector2i& mousePosWindow, const float& dt)
+{
+	for (auto& el : this->buttons)
+	{
+		el.second->update(mousePosWindow);
+	}
+}
+
+void SkillsLevelingComponent::render(sf::RenderTarget& target)
+{
+	for (auto& el : this->buttons)
+	{
+		el.second->render(target);
+	}
+}
+
+//Skills Menu=======================================
+
 //Init functions
 inline void SkillsMenu::initBackground(const float& x, const float& y)
 {
@@ -560,7 +606,8 @@ inline void SkillsMenu::updateKeyTime(const float& dt)
 
 //Constructor
 SkillsMenu::SkillsMenu(Player& player, PlayerGUI& playerGUI, sf::Font& font, const float& x, const float& y)
-	:player(player), playerGUI(playerGUI), font(font), keyTime(0.f), keyTimeMax(10.f), skillsSize(8)
+	:player(player), playerGUI(playerGUI), font(font), keyTime(0.f), keyTimeMax(10.f), skillsSize(8),
+	skillsLevelingComponent(*this->player.getSkillComponent(), this->skillsIcons)
 {
 	this->initBackground(x, y);
 	this->initTexts();
@@ -585,6 +632,7 @@ SkillsMenu::~SkillsMenu()
 void SkillsMenu::unlockSkill(const SkillType& type)
 {
 	this->playerGUI.addSkill(type);
+	this->skillsLevelingComponent.initSkill(type);
 }
 
 inline void SkillsMenu::updateText()

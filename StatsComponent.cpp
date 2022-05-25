@@ -3,7 +3,7 @@
 
 //Constructor
 StatsComponent::StatsComponent(const int& level)
-	:level(level), exp(0), statsPoints(3), skillPoints(1), coins(0)
+	:level(level), exp(0), statsPoints(3), skillPoints(1), coins(0), crystals(0)
 {
 	//Exp
 	this->expNext = static_cast<unsigned>(this->level * 20 - (this->level * 5));
@@ -136,6 +136,19 @@ void StatsComponent::loseMP(const int& mp)
 	}
 }
 
+void StatsComponent::gainCrystals(const int& crystals)
+{
+	this->crystals += crystals;
+}
+
+void StatsComponent::loseCrystals(const int& crystals)
+{
+	if (this->crystals -= crystals < 0)
+	{
+		this->crystals = 0;
+	}
+}
+
 void StatsComponent::gainCoins(const int& coins)
 {
 	this->coins += coins;
@@ -145,7 +158,7 @@ void StatsComponent::loseCoins(const int& coins)
 {
 	if (this->coins -= coins < 0)
 	{
-		this->coins == 0;
+		this->coins = 0;
 	}
 }
 
