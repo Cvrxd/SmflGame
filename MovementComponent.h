@@ -8,6 +8,7 @@ private:
 	//Variables
 	sf::Sprite* sprite;
 
+	float maxVelocityOriginal;
 	float maxVelocity;
 	float acceleration;
 	float deceleration;
@@ -31,7 +32,7 @@ public:
 	void stopVelocityX();
 	void stopVelocityY();
 
-	void move(const float& dir_x, const float& dir_y, const float& dt);
+	void move(const float& dir_x, const float& dir_y, const float& dt, const bool& dash = false);
 	void update(const float& dt);
 };
 

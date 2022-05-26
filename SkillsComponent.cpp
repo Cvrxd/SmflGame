@@ -18,7 +18,9 @@ inline void SkillsComponent::initAllSkills()
 
 	//Skills
 	this->allSkills.resize(this->skillsSize);
-	this->playerSkills.resize(4);
+	this->playerSkills.resize(5);
+
+	this->playerSkills[4].first = SkillType::BUFF;
 
 	this->allSkills[0].first = SkillType::THUNDER_STRIKE;
 	this->allSkills[1].first = SkillType::DARK_BOLT;
@@ -53,6 +55,7 @@ inline void SkillsComponent::initAllAnimations()
 	this->skillTextures[SkillType::FIRE_EXPLOSION].second.loadFromFile("Textures/Animations/fire/fire.png");
 	this->skillTextures[SkillType::LIGHTNING_STRIKE].second.loadFromFile("Textures/Animations/thunder/Lightning.png");
 	this->skillTextures[SkillType::HOLY_STRIKE].second.loadFromFile("Textures/Animations/holy/holy_strike.png");
+	this->skillTextures[SkillType::BUFF].second.loadFromFile("Textures/animations/buff.png");
 
 	this->potionSprite.second.loadFromFile("Textures/Animations/healing.png");
 	this->potionSprite.first.setScale(3.f, 3.f);
@@ -63,6 +66,7 @@ inline void SkillsComponent::initAllAnimations()
 	//Init animations
 	this->potionAnimation = AnimationComponent(&this->potionSprite.first, &this->potionSprite.second);
 	this->skillsEndingAnimation = AnimationComponent(&this->skillsEndingSprite.first, &this->skillsEndingSprite.second);
+	this->skillsAnimations[SkillType::BUFF] = AnimationComponent(&this->skillTextures[SkillType::BUFF].first, &this->skillTextures[SkillType::BUFF].second);
 
 	SkillType type;
 	for(int i = 0; i < this->skillsSize; ++i)
@@ -71,6 +75,7 @@ inline void SkillsComponent::initAllAnimations()
 		this->skillsAnimations[type] = AnimationComponent(&this->skillTextures[type].first, &this->skillTextures[type].second);
 	}
 	
+
 	//Add animations
 	//Potion animations
 	this->potionAnimation.addAnimation("USE1", 1, 0, 3, 0, 128, 128, 11.f);
@@ -106,12 +111,15 @@ inline void SkillsComponent::initAllAnimations()
 
 	this->skillsAnimations[SkillType::HOLY_STRIKE].addAnimation("USE", 0, 0, 15, 0, 48, 48, 8.f);
 	this->skillTextures[SkillType::HOLY_STRIKE].first.setScale(5.f, 5.f);
+
+	this->skillsAnimations[SkillType::BUFF].addAnimation("USE", 0, 0, 5, 0, 32, 32, 15.f);
+	this->skillTextures[SkillType::BUFF].first.setScale(5.f, 5.f);
 }
 
 //Constructor
-SkillsComponent::SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill, SkillType& currentSkillType, int& currentSkillDamage)
-	: statsComponent(statsComponent) ,currentRender(-1), playAnimation(false), usingPotion(false),
-	keyTime(0.f), keyTimeMax(15.f), potionKeyTime(0.f), potionKeyTimeMax(5.f),
+SkillsComponent::SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill, SkillType& currentSkillType, int& currentSkillDamage, bool& isBuffed)
+	: statsComponent(statsComponent) ,currentRender(-1), playAnimation(false), usingPotion(false), isBuffed(isBuffed), usingBuff(false),
+	keyTime(0.f), keyTimeMax(15.f), potionKeyTime(0.f), potionKeyTimeMax(5.f), buffDuration(5.f),
 	skillsSize(8), usingSkill(isUsingSkill), currentSkillType(currentSkillType), currentSkillDamage(currentSkillDamage)
 {
 	this->initAllSkills();
@@ -131,6 +139,11 @@ const sf::CircleShape& SkillsComponent::getDamageArea()
 const bool SkillsComponent::getKeyTime() const
 {
 	return this->keyTime >= this->keyTimeMax;
+}
+
+const bool SkillsComponent::getBuffKeyTime() const
+{
+	return this->buffTimer.getElapsedTime().asSeconds() > 20.f;
 }
 
 int& SkillsComponent::getMpPotions()
@@ -187,8 +200,24 @@ void SkillsComponent::addSkill(const SkillType& skill_type, const short& slot)
 	this->playerSkills[slot].second = 1;
 }
 
-void SkillsComponent::updateSkill(const SkillType& skill_type)
+inline void SkillsComponent::updatePlayerBuff(const float& dt, const sf::Vector2f& player_position)
 {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5) && this->buffTimer.getElapsedTime().asSeconds() > 15.f && this->statsComponent.magicka != 0)
+	{
+		this->statsComponent.loseMP(1);
+		this->isBuffed = true;
+		this->usingBuff = true;
+		this->buffTimer.restart();
+	}
+	
+	if (this->isBuffed)
+	{
+		if (this->buffTimer.getElapsedTime().asSeconds() > this->buffDuration)
+		{
+			this->isBuffed = false;
+			this->buffTimer.restart();
+		}
+	}
 }
 
 inline void SkillsComponent::updateClock(const float& dt)
@@ -204,6 +233,7 @@ inline void SkillsComponent::updateClock(const float& dt)
 void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position, const sf::Vector2f& player_position)
 {
 	this->updateClock(dt);
+	this->updatePlayerBuff(dt, player_position);
 
 	//Skills
 	this->usingSkill = false;
@@ -276,11 +306,22 @@ void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position
 		}
 	}
 
+	//Using buff
+	if (this->usingBuff)
+	{
+		this->skillTextures[SkillType::BUFF].first.setPosition(player_position.x - 50.f, player_position.y - 50.f);
+
+		if (this->skillsAnimations[SkillType::BUFF].play("USE", dt, true))
+		{
+			this->usingBuff = false;
+		}
+	}
+
 	//Skills animation
 	if (this->playAnimation && this->playerSkills[currentRender].first != SkillType::EMPTY)
 	{
 		this->keyTime = 0;
-		if (this->skillsAnimations[playerSkills[currentRender].first].play("USE", dt, true))
+		if (this->skillsAnimations[this->playerSkills[currentRender].first].play("USE", dt, true))
 		{
 			this->playAnimation = false;
 
@@ -292,19 +333,23 @@ void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position
 
 			//Using skill
 			this->useSkill(playerSkills[currentRender].first);
-			currentRender = -1;
+			this->currentRender = -1;
 		}
 	}
 }
 
 void SkillsComponent::render(sf::RenderTarget& target)
 {
-	if (currentRender != -1)
+	if (this->currentRender != -1)
 	{
 		target.draw(this->skillTextures[playerSkills[currentRender].first].first);
 	}
 	if (this->usingPotion)
 	{
 		target.draw(this->potionSprite.first);
+	}
+	if (this->usingBuff)
+	{
+		target.draw(this->skillTextures[SkillType::BUFF].first);
 	}
 }

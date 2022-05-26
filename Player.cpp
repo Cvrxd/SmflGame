@@ -65,6 +65,9 @@ inline void Player::addAnimations()
 	//Regular sprite
 	this->animationComponent.addAnimation("IDLE", 0, 0, 3, 0, 50, 40, 13.f);
 	this->animationComponent.addAnimation("MOVE", 0, 1, 5, 1, 50, 37, 9.f);
+	this->animationComponent.addAnimation("DASH", 1, 8, 4, 8, 50, 37, 9.f);
+	this->animationComponent.addAnimation("DEATH", 0, 9, 4, 9, 50, 37, 9.f);
+
 	this->animationComponent.addAnimation("ATTACK_FIRST", 0, 4, 8, 4, 50, 37, 8.f);
 	this->animationComponent.addAnimation("CAST_SPELL", 0, 3, 8, 3, 50, 37, 10.f);
 
@@ -77,11 +80,12 @@ inline void Player::addAnimations()
 }
 
 //Constructor
-Player::Player(const float& x, const float& y, sf::Texture& texture_sheet, const sf::Font& font)
-	: currentHitAnimation(0), font(font),
+Player::Player(const float& x, const float& y, sf::Texture& texture_sheet, const sf::Font& font, bool& isBuffed)
+	: currentHitAnimation(0), font(font), isBuffed(isBuffed),
 	statsComponent(1),
 	animationComponent(&this->sprite, &texture_sheet),
-	skillsComponent(this->statsComponent, this->isUsingSkill, this->currentSkilltype, this->currentskillDamage)
+	skillsComponent(this->statsComponent, this->isUsingSkill, this->currentSkilltype, this->currentskillDamage, this->isBuffed),
+	moveKey("MOVE"), dashKey("DASH"), currentKey(&moveKey)
 {
 	this->initVariables();
 	this->initComponents(texture_sheet);
@@ -93,6 +97,7 @@ Player::~Player()
 {
 }
 
+//Accessors
 const SkillType& Player::getUsingSkilltype()
 {
 	return this->currentSkilltype;
@@ -123,7 +128,6 @@ const bool& Player::isDealingDmg()
 	return this->dealDMG;
 }
 
-//Accessors
 StatsComponent* Player::getStatsComponent()
 {
 	return &this->statsComponent;
@@ -281,9 +285,18 @@ inline void Player::updateAttack(const float& dt, sf::Vector2f mouse_pos_view)
 
 }
 
-inline void Player::updateRegularKeyboard(const float& dt, sf::Vector2f mouse_pos_view)
+inline void Player::updateAnimations(const float& dt, sf::Vector2f mouse_pos_view)
 {
-	//Regular keyboardupdate
+	if (this->isBuffed)
+	{
+		this->currentKey = &this->dashKey;
+	}
+	else
+	{
+		this->currentKey = &this->moveKey;
+	}	
+
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F))
 	{
 		this->animationComponent.play("CAST_SPELL", dt);
@@ -304,22 +317,20 @@ inline void Player::updateRegularKeyboard(const float& dt, sf::Vector2f mouse_po
 	else if (this->movementComponent.getState(MOVING_RIGHT))
 	{
 		SPTIRES_SETSCALE_RIGHT;
-
-		this->animationComponent.play("MOVE", dt, this->movementComponent.getVelocity().x, this->movementComponent.getMaxVelocity());
+		this->animationComponent.play(*this->currentKey, dt, this->movementComponent.getVelocity().x, this->movementComponent.getMaxVelocity());
 	}
 	else if (this->movementComponent.getState(MOVING_LEFT))
 	{
 		SPTIRES_SETSCALE_LEFT;
-
-		this->animationComponent.play("MOVE", dt, this->movementComponent.getVelocity().x, this->movementComponent.getMaxVelocity());
+		this->animationComponent.play(*this->currentKey, dt, this->movementComponent.getVelocity().x, this->movementComponent.getMaxVelocity());
 	}
 	else if (this->movementComponent.getState(MOVE_UP))
 	{
-		this->animationComponent.play("MOVE", dt, this->movementComponent.getVelocity().y, this->movementComponent.getMaxVelocity());
+		this->animationComponent.play(*this->currentKey, dt, this->movementComponent.getVelocity().y, this->movementComponent.getMaxVelocity());
 	}
 	else if (this->movementComponent.getState(MOVE_DOWN))
 	{
-		this->animationComponent.play("MOVE", dt, this->movementComponent.getVelocity().y, this->movementComponent.getMaxVelocity());
+		this->animationComponent.play(*this->currentKey, dt, this->movementComponent.getVelocity().y, this->movementComponent.getMaxVelocity());
 	}
 }
 
@@ -328,7 +339,7 @@ void Player::update(const float& dt, sf::Vector2f mouse_pos_view)
 	this->hitRange.setPosition(this->getCenter().x - 80, this->getCenter().y - 80);
 
 	this->movementComponent.update(dt);
-	this->updateRegularKeyboard(dt, mouse_pos_view);
+	this->updateAnimations(dt, mouse_pos_view);
 	this->updateAttack(dt, mouse_pos_view);
 	this->skillsComponent.update(dt, mouse_pos_view, this->getCenter());
 	this->hitboxComponent.update();

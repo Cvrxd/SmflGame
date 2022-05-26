@@ -87,7 +87,7 @@ void Entity::setPosition(const float& x, const float& y)
 	this->hitboxComponent.setPosition(x, y);
 }	
 
-void Entity::move(const float& dir_x, const float& dir_y, const float& dt)
+void Entity::move(const float& dir_x, const float& dir_y, const float& dt, const bool& dash)
 {
-	this->movementComponent.move(dir_x, dir_y, dt);
+	this->movementComponent.move(dir_x, dir_y, dt, dash);
 }

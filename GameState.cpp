@@ -48,17 +48,25 @@ inline void GameState::initTextures()
 	this->textures["PLAYER_SHEET"].loadFromFile("Textures/characters/player/test_sheet.png");
 
 	//Monsters
-	this->textures["ENEMY_NIGHT_BORN"].loadFromFile("Textures/enemies/NightBorne.png");
-	this->textures["ENEMY_MIMIC"].loadFromFile("Textures/enemies/mimic.png");
-	this->textures["ENEMY_FIRE_DEMON"].loadFromFile("Textures/enemies/fire_demon.png");
-	this->textures["ENEMY_BRINGER_OF_DEATH"].loadFromFile("Textures/enemies/bringer_of_death.png");
+	this->textures["ENEMY_NIGHT_BORN"].loadFromFile("Textures/enemies/boses/NightBorne.png");
+	this->textures["ENEMY_MIMIC"].loadFromFile("Textures/enemies/mele/mimic.png");
+	this->textures["ENEMY_FIRE_DEMON"].loadFromFile("Textures/enemies/boses/fire_demon.png");
+	this->textures["ENEMY_BRINGER_OF_DEATH"].loadFromFile("Textures/enemies/mele/bringer_of_death.png");
+	this->textures["ENEMY_NOMAND"].loadFromFile("Textures/enemies/boses/nomand.png");
+
 	//Humans
-	this->textures["ENEMY_KNIGHT1"].loadFromFile("Textures/enemies/knight1.png");
+	this->textures["ENEMY_KNIGHT1"].loadFromFile("Textures/enemies/mele/knight1.png");
+	this->textures["ENEMY_HUNTRESS"].loadFromFile("Textures/enemies/mele/huntress.png");
+	this->textures["ENEMY_MARTIAL_HERO1"].loadFromFile("Textures/enemies/mele/martial_hero1.png");
+	this->textures["ENEMY_MARTIAL_HERO2"].loadFromFile("Textures/enemies/mele/martial_hero2.png");
+	this->textures["ENEMY_MARTIAL_HERO3"].loadFromFile("Textures/enemies/mele/martial_hero3.png");
+
 	//Mages
-	this->textures["ENEMY_DARK_MAGE"].loadFromFile("Textures/enemies/dark_mage.png");
-	this->textures["ENEMY_FIRE_MAGE"].loadFromFile("Textures/enemies/fire_mage.png");
+	this->textures["ENEMY_DARK_MAGE"].loadFromFile("Textures/enemies/mages/dark_mage.png");
+	this->textures["ENEMY_FIRE_MAGE"].loadFromFile("Textures/enemies/mages/fire_mage.png");
+
 	//Destroying enemies
-	this->textures["ENEMY_FIRE_SKULL"].loadFromFile("Textures/enemies/fire-skull.png");
+	this->textures["ENEMY_FIRE_SKULL"].loadFromFile("Textures/enemies/destroying/fire-skull.png");
 }
 
 inline void GameState::initPauseMenu()
@@ -83,17 +91,18 @@ inline void GameState::initPlayers()
 inline void GameState::initEnemies()
 {
 	this->bosses.reserve(3);
-	//this->bosses.emplace_back(BossType::FIRE_DEMON, 1, 100, 900, this->textures["ENEMY_FIRE_DEMON"], &this->player);
+	this->bosses.emplace_back(BossType::NOMAND, 1, 100, 900, this->textures["ENEMY_NOMAND"], &this->player);
 
 	this->meleEnemies.reserve(2);
 	//this->meleEnemies.emplace_back(MeleEnemyType::MIMIC, 11, 700, 700, this->textures["ENEMY_MIMIC"], &this->player);
-	this->meleEnemies.emplace_back(MeleEnemyType::BRINGER_OF_DEATH, 1, 700, 700, this->textures["ENEMY_BRINGER_OF_DEATH"], &this->player);
+	this->meleEnemies.emplace_back(MeleEnemyType::MARTIAL_HERO3, 1, 700, 700, this->textures["ENEMY_MARTIAL_HERO3"], &this->player);
+	//this->meleEnemies.emplace_back(MeleEnemyType::BRINGER_OF_DEATH, 1, 700, 700, this->textures["ENEMY_BRINGER_OF_DEATH"], &this->player);
 
 	this->mageEnemies.reserve(2);
 	//this->mageEnemies.emplace_back(MageEnemyType::FIRE_MAGE, 1, 400, 400, this->textures["ENEMY_FIRE_MAGE"], &this->player);
 
 	this->destroyingEnemies.reserve(2);
-	this->destroyingEnemies.emplace_back(DestroyingEnemyType::FIRE_SKULL, 1, 0, 0, this->textures["ENEMY_FIRE_SKULL"], &this->player);
+	//this->destroyingEnemies.emplace_back(DestroyingEnemyType::FIRE_SKULL, 1, 0, 0, this->textures["ENEMY_FIRE_SKULL"], &this->player);
 }
 
 inline void GameState::initPlayerGUI()
@@ -110,7 +119,7 @@ inline void GameState::initTileMap()
 GameState::GameState(StateData* state_data)
 	: State(state_data), skillMenuActive(false),
 	pauseMenu(*this->window, this->stateData->font), //Pause menu 
-	player(500,500, this->textures["PLAYER_SHEET"], this->font), //Player
+	player(500,500, this->textures["PLAYER_SHEET"], this->font, this->isBuffed), //Player
 	playerGUI(this->player, this->font), // Player GUI
 	skillsMenu(this->player, this->playerGUI,this->font, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
 	tileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg") //Tile map
@@ -224,19 +233,19 @@ inline void GameState::updatePlayerInput(const float& dt)
 	//check for keyboard key player
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_LEFT"))))
 	{
-		this->player.move(-1.f, 0.f, dt);
+		this->player.move(-1.f, 0.f, dt, this->isBuffed);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_RIGHT"))))
 	{
-		this->player.move(1.f, 0.f, dt);
+		this->player.move(1.f, 0.f, dt, this->isBuffed);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_UP"))))
 	{
-		this->player.move(0.f, -1.f, dt);
+		this->player.move(0.f, -1.f, dt, this->isBuffed);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_DOWN"))))
 	{
-		this->player.move(0.f, 1.f, dt);
+		this->player.move(0.f, 1.f, dt, this->isBuffed);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
 	{

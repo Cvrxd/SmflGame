@@ -23,6 +23,8 @@ class GameState : public State
 private:
 	//variables 
 	bool skillMenuActive;
+	bool isBuffed = false;
+
 	sf::Vector2i viewGridPosition;
 
 	sf::View view;
@@ -57,6 +59,7 @@ private:
 	void initEnemies();
 	void initPlayerGUI();
 	void initTileMap();
+
 public:
 	GameState(StateData* state_data);
 	virtual ~GameState() override;

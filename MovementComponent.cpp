@@ -5,7 +5,7 @@
 
 //Constructor
 MovementComponent::MovementComponent(sf::Sprite& sprite, const float& maxVelocity, const float& acceleration, const float& deceleration)
-	:sprite(&sprite), maxVelocity(maxVelocity), acceleration(acceleration), deceleration(deceleration)
+	:sprite(&sprite), maxVelocity(maxVelocity), acceleration(acceleration), deceleration(deceleration), maxVelocityOriginal(maxVelocity)
 {
 	
 }
@@ -71,9 +71,17 @@ void MovementComponent::stopVelocityY()
 	this->velocity.y = 0;
 }
 
-void MovementComponent::move(const float& dir_x, const float& dir_y, const float& dt)
+void MovementComponent::move(const float& dir_x, const float& dir_y, const float& dt, const bool& dash)
 {
 	//Accelerating sprite untill it reaches his max velocity
+	if (dash)
+	{
+		this->maxVelocity = this->maxVelocityOriginal * 1.5f;
+	}
+	else
+	{
+		this->maxVelocity = this->maxVelocityOriginal;
+	}
 
 	this->velocity.x += this->acceleration * dir_x * dt;
 	

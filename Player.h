@@ -9,14 +9,21 @@ class Player : public Entity
 {
 private:
 	//Variables
+	bool& isBuffed;
+
 	bool isAttacking = false;
 	bool isHit = false;
 	bool dealDMG = false;
 	bool isTakingHit = false;
 	bool isUsingSkill = false;
+
 	int currentHitAnimation;
 
 	int currentskillDamage = 1;
+
+	std::string moveKey;
+	std::string dashKey;
+	std::string* currentKey;
 
 	PlayerGUI* playerGUI = nullptr;
 
@@ -44,7 +51,7 @@ private:
 	void addAnimations();
 	void initComponents(sf::Texture& texture_sheet);
 public:
-	Player(const float& x, const float& y, sf::Texture& texture_sheet, const sf::Font& font);
+	Player(const float& x, const float& y, sf::Texture& texture_sheet, const sf::Font& font, bool& isBuffed);
 	virtual ~Player();
 
 	//Accessors
@@ -80,7 +87,7 @@ public:
 
 	//Functions
 	void updateAttack(const float& dt, sf::Vector2f mouse_pos_view);
-	void updateRegularKeyboard(const float& dt, sf::Vector2f mouse_pos_view);
+	void updateAnimations(const float& dt, sf::Vector2f mouse_pos_view);
 	void update(const float& dt, sf::Vector2f mouse_pos_view) override;
 	void render(sf::RenderTarget& target, sf::Shader* shader = NULL) override;
 };

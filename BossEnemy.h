@@ -1,6 +1,6 @@
 #pragma once
 #include "Enemy.h"
-enum class BossType { NIGHTBORN = 0, FIRE_DEMON };
+enum class BossType { NIGHTBORN = 0, FIRE_DEMON, NOMAND };
 
 class BossEnemy : public Enemy
 {

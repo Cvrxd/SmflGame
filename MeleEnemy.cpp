@@ -10,7 +10,7 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		this->sprite.setScale(3.f, 3.f);
 
 		//Init components
-		this->createHitboxComponent(this->sprite, 70.f, 120.f, 100.f, 100.f);
+		this->createHitboxComponent(this->sprite, 70.f, 120.f, 130.f, 100.f);
 		this->createMovementComponent(80.f, 600.f, 100.f);
 		this->createAnimationComponent(texture_sheet);
 
@@ -66,6 +66,87 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 			sprite.setScale(2.5f, 2.5f);
 		};
 		break;
+	case MeleEnemyType::HUNTRESS:
+		this->sprite.setScale(3.f, 3.f);
+
+		//Init components
+		this->createHitboxComponent(this->sprite, 170.f, 150.f, 100.f, 150.f);
+		this->createMovementComponent(180.f, 1000.f, 200.f);
+		this->createAnimationComponent(texture_sheet);
+
+		//Sets origins
+		this->setOriginLeft = [&sprite]()
+		{
+			sprite.setOrigin(150.f, 0.f);
+			sprite.setScale(-3.f, 3.f);
+		};
+		this->setOriginRight = [&sprite]()
+		{
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setScale(3.f, 3.f);
+		};
+		break;
+
+	case MeleEnemyType::MARTIAL_HERO1:
+		this->sprite.setScale(2.7f, 2.7f);
+
+		//Init components
+		this->createHitboxComponent(this->sprite, 200.f, 150.f, 100.f, 150.f);
+		this->createMovementComponent(200.f, 1200.f, 230.f);
+		this->createAnimationComponent(texture_sheet);
+
+		//Sets origins
+		this->setOriginLeft = [&sprite]()
+		{
+			sprite.setOrigin(200.f, 0.f);
+			sprite.setScale(-2.7f, 2.7f);
+		};
+		this->setOriginRight = [&sprite]()
+		{
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setScale(2.7f, 2.7f);
+		};
+		break;
+	case MeleEnemyType::MARTIAL_HERO2:
+		this->sprite.setScale(2.6f, 2.6f);
+
+		//Init components
+		this->createHitboxComponent(this->sprite, 200.f, 180.f, 100.f, 150.f);
+		this->createMovementComponent(170.f, 1000.f, 200.f);
+		this->createAnimationComponent(texture_sheet);
+
+		//Sets origins
+		this->setOriginLeft = [&sprite]()
+		{
+			sprite.setOrigin(200.f, 0.f);
+			sprite.setScale(-2.6f, 2.6f);
+		};
+		this->setOriginRight = [&sprite]()
+		{
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setScale(2.6f, 2.6f);
+		};
+		break;
+	case MeleEnemyType::MARTIAL_HERO3:
+		this->sprite.setScale(3.f, 3.f);
+
+		//Init components
+		this->createHitboxComponent(this->sprite, 180.f, 100.f, 150.f, 160.f);
+		this->createMovementComponent(170.f, 1000.f, 200.f);
+		this->createAnimationComponent(texture_sheet);
+
+		//Sets origins
+		this->setOriginLeft = [&sprite]()
+		{
+			sprite.setOrigin(150.f, 0.f);
+			sprite.setScale(-3.f, 3.f);
+		};
+		this->setOriginRight = [&sprite]()
+		{
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setScale(3.f, 3.f);
+		};
+	break;
 	default:
 		break;
 	}
@@ -98,6 +179,29 @@ inline void MeleEnemy::addAnimations()
 		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 3, 3, 180, 180, 14.f);
 		this->animationComponent.addAnimation("DEATH", 0, 1, 10, 1, 180, 180, 11.f);
 		break;
+	case MeleEnemyType::HUNTRESS:
+		this->animationComponent.addAnimation("MOVE", 0, 2, 7, 2, 150, 150, 13.f);
+		this->animationComponent.addAnimation("ATTACK", 0, 0, 4, 0, 150, 150, 11.f);
+		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 2, 3, 150, 150, 14.f);
+		this->animationComponent.addAnimation("DEATH", 0, 1, 7, 1, 150, 150, 11.f);
+		break;
+	case MeleEnemyType::MARTIAL_HERO1:
+		this->animationComponent.addAnimation("MOVE", 0, 2, 7, 2, 200, 200, 10.f);
+		this->animationComponent.addAnimation("ATTACK", 0, 0, 5, 0, 200, 200, 13.f);
+		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 3, 3, 200, 200, 14.f);
+		this->animationComponent.addAnimation("DEATH", 0, 1, 5, 1, 200, 200, 15.f);
+		break;
+	case MeleEnemyType::MARTIAL_HERO2:
+		this->animationComponent.addAnimation("MOVE", 0, 2, 7, 2, 200, 200, 10.f);
+		this->animationComponent.addAnimation("ATTACK", 0, 0, 3, 0, 200, 200, 19.f);
+		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 2, 3, 200, 200, 14.f);
+		this->animationComponent.addAnimation("DEATH", 0, 1, 6, 1, 200, 200, 15.f);
+		break;
+	case MeleEnemyType::MARTIAL_HERO3:
+		this->animationComponent.addAnimation("MOVE", 0, 2, 7, 2, 126, 126, 10.f);
+		this->animationComponent.addAnimation("ATTACK", 0, 0, 6, 0, 126, 126, 16.f);
+		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 2, 3, 126, 126, 14.f);
+		this->animationComponent.addAnimation("DEATH", 0, 1, 10, 1, 126, 126, 15.f);
 	default:
 		break;
 	}
@@ -295,5 +399,5 @@ void MeleEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 
 	this->healthBar.render(target);
 	this->levelIcon.render(target);
-	//this->hitboxComponent.render(target);
+	this->hitboxComponent.render(target);
 }

@@ -225,6 +225,15 @@ inline void PlayerGUI::initAniamtions()
 	this->animationComponent["CRYSTAL"].addAnimation("PLAY", 0, 0, 3, 0, 16, 16, 15.f);
 }
 
+void PlayerGUI::initBuffSkill()
+{
+	this->quickSlotBars[4].second.setTexture(this->skillsIcons->at(8).second.getTexture());
+	this->quickSlotBars[4].second.setPosition(this->quickSlotBars[4].first.getPosition());
+	this->quickSlotBars[4].second.setSize(sf::Vector2f(48, 48));
+
+	this->quickSlotBars[4].first.setFillColor(sf::Color::Transparent);
+}
+
 void PlayerGUI::setPotionsCount(int& hp, int& mp)
 {
 	this->hpPotions = &hp;
@@ -350,7 +359,6 @@ void PlayerGUI::render(sf::RenderTarget& target)
 		target.draw(el.second);
 	}
 
-	//Render quick slots
 	if (this->player.getSkillComponent()->getKeyTime() && this->statsComponent.magicka != 0)
 	{
 		for (auto& el : this->quickSlotBars)
@@ -367,7 +375,6 @@ void PlayerGUI::render(sf::RenderTarget& target)
 			target.draw(el.first);
 		}
 	}
-
 	//Render items
 	for (auto& el : this->itemsIcons)
 	{
@@ -504,7 +511,7 @@ inline void SkillsMenu::initSkillIcons()
 	this->skillsIcons.resize(this->skillsSize);
 	
 	for (int i = 0,  x = static_cast<int>(this->texts[8].getPosition().x) + 100, y = static_cast<int>(this->texts[8].getPosition().y); 
-		i < this->skillsIcons.size(); ++i, x+=100)
+		i < this->skillsIcons.size() - 1; ++i, x+=100)
 	{
 		this->skillsIcons[i].second.setSize(sf::Vector2f(48, 48));
 		this->skillsIcons[i].second.setFillColor(sf::Color::White);
@@ -550,6 +557,10 @@ inline void SkillsMenu::initSkillIcons()
 	this->textures["HOLY_STRIKE"].loadFromFile("Textures/skills/skill_icons6.png");
 	this->skillsIcons[7].first = SkillType::HOLY_STRIKE;
 	this->skillsIcons[7].second.setTexture(&this->textures["HOLY_STRIKE"]);
+
+	this->textures["BUFF"].loadFromFile("Textures/skills/skill_icons30.png");
+	this->skillsIcons[8].first = SkillType::BUFF;
+	this->skillsIcons[8].second.setTexture(&this->textures["BUFF"]);
 }
 
 inline void SkillsMenu::initButtons()
@@ -606,14 +617,16 @@ inline void SkillsMenu::updateKeyTime(const float& dt)
 
 //Constructor
 SkillsMenu::SkillsMenu(Player& player, PlayerGUI& playerGUI, sf::Font& font, const float& x, const float& y)
-	:player(player), playerGUI(playerGUI), font(font), keyTime(0.f), keyTimeMax(10.f), skillsSize(8),
+	:player(player), playerGUI(playerGUI), font(font), keyTime(0.f), keyTimeMax(10.f), skillsSize(9),
 	skillsLevelingComponent(*this->player.getSkillComponent(), this->skillsIcons)
 {
 	this->initBackground(x, y);
 	this->initTexts();
 	this->initSkillIcons();
 	this->initButtons();
+
 	this->playerGUI.initSkillIcons(&this->skillsIcons);
+	this->playerGUI.initBuffSkill();
 }
 
 SkillsMenu::~SkillsMenu()

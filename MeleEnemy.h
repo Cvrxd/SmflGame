@@ -1,7 +1,8 @@
 #pragma once
 #include "Enemy.h"
 
-enum class MeleEnemyType { MIMIC = 0, BRINGER_OF_DEATH, KNIGHT1 };
+enum class MeleEnemyType { MIMIC = 0, BRINGER_OF_DEATH, 
+	KNIGHT1, HUNTRESS, MARTIAL_HERO1, MARTIAL_HERO2, MARTIAL_HERO3};
 
 class MeleEnemy : public Enemy
 {

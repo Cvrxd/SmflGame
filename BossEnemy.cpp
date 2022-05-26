@@ -48,6 +48,27 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		};
 
 		break;
+	case BossType::NOMAND:
+		this->sprite.setScale(4.f, 4.f);
+
+		//Init components
+		this->createHitboxComponent(this->sprite, 80.f, 100.f, 150.f, 180.f);
+		this->createMovementComponent(200.f, 1200.f, 250.f);
+		this->createAnimationComponent(texture_sheet);
+
+		//Sets origins
+		this->setOriginLeft = [&sprite]()
+		{
+			sprite.setOrigin(70.f, 0.f);
+			sprite.setScale(-4.f, 4.f);
+		};
+		this->setOriginRight = [&sprite]()
+		{
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setScale(4.f, 4.f);
+		};
+
+		break;
 	default:
 		break;
 	}
@@ -63,19 +84,22 @@ inline void BossEnemy::addAnimations()
 	switch (this->type)
 	{
 	case BossType::NIGHTBORN:
-		//Regular animations
 		this->animationComponent.addAnimation("MOVE", 0, 1, 5, 1, 80, 80, 20.f);
 		this->animationComponent.addAnimation("ATTACK", 0, 2, 11, 2, 80, 80, 10.f);
 		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 4, 3, 80, 80, 10.f);
 		this->animationComponent.addAnimation("DEATH", 0, 4, 22, 4, 80, 80, 8.f);
 		break;
-
 	case BossType::FIRE_DEMON:
 		this->animationComponent.addAnimation("MOVE", 0, 1, 11, 1, 288, 160, 20.f);
 		this->animationComponent.addAnimation("ATTACK", 0, 2, 14, 2, 288, 160, 10.f);
 		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 4, 3, 288, 160, 10.f);
 		this->animationComponent.addAnimation("DEATH", 0, 4, 21, 4, 288, 160, 10.f);
-
+		break;
+	case BossType::NOMAND:
+		this->animationComponent.addAnimation("MOVE", 0, 1, 7, 1, 64, 64, 20.f);
+		this->animationComponent.addAnimation("ATTACK", 0, 2, 10, 2, 64, 64, 10.f);
+		this->animationComponent.addAnimation("TAKE_HIT", 0, 5, 1, 5, 64, 64, 10.f);
+		this->animationComponent.addAnimation("DEATH", 0, 5, 7, 5, 64, 64, 15.f);
 		break;
 	default:
 		break;

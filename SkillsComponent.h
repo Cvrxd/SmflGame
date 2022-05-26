@@ -8,7 +8,7 @@ class StatsComponent;
 enum class SkillType
 {
 	EMPTY = 0, THUNDER_STRIKE, DARK_BOLT,
-	POISON_CLAW, DARK_POSION, BLOOD_SPIKE, FIRE_EXPLOSION, LIGHTNING_STRIKE, HOLY_STRIKE
+	POISON_CLAW, DARK_POSION, BLOOD_SPIKE, FIRE_EXPLOSION, LIGHTNING_STRIKE, HOLY_STRIKE, BUFF
 };
 
 enum Potions{HEALTH = 0, MANA};
@@ -18,15 +18,20 @@ class SkillsComponent
 private:
 	//Variables
 	sf::Clock skillTimer;
+	sf::Clock buffTimer;
 
 	StatsComponent& statsComponent;
 
 	float time;
+
 	float keyTime;
 	float keyTimeMax;
+	float buffKeyTime;
 
 	float potionKeyTime;
 	float potionKeyTimeMax;
+
+	float buffDuration;
 
 	//Potions
 	std::pair<Potions, int> healthPotions;
@@ -51,7 +56,11 @@ private:
 
 	bool playAnimation;
 	bool usingPotion;
+	bool usingBuff;
+
 	bool& usingSkill;
+	bool& isBuffed;
+
 	int currentRender;
 
 	int& currentSkillDamage;
@@ -60,14 +69,14 @@ private:
 	//Init functions
 	void initAllSkills();
 	void initAllAnimations();
-
 public:
-	SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill, SkillType& usingSkillType, int& currentSkillDamage);
+	SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill, SkillType& usingSkillType, int& currentSkillDamage, bool& isBuffed);
 	~SkillsComponent();
 
 	//Accessors
 	const sf::CircleShape& getDamageArea();
 	const bool getKeyTime() const;
+	const bool getBuffKeyTime() const;
 	int& getMpPotions();
 	int& getHpPotions();
 
@@ -77,9 +86,10 @@ public:
 
 	void useSkill(const SkillType& skill_type);
 	void addSkill(const SkillType& skill_type, const short& slot);
-	void updateSkill(const SkillType& skill_type);
+	void upgradeSkill(const SkillType& skill_type);
 
 	void updateClock(const float& dt);
+	void updatePlayerBuff(const float& dt, const sf::Vector2f& player_position);
 	void update(const float& dt, const sf::Vector2f& skill_position, const sf::Vector2f& player_position);
 	void render(sf::RenderTarget& target);
 };

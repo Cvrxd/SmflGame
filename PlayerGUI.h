@@ -58,13 +58,13 @@ private:
 	void initTextsIcons();
 	void initItems();
 	void initAniamtions();
-
 public:
 	//Constructor
 	PlayerGUI(Player& player, sf::Font& font);
 	~PlayerGUI();
 
 	//Functions
+	void initBuffSkill();
 	void setPotionsCount(int& hp, int& mp);
 	void initSkillIcons(std::vector<std::pair<SkillType, sf::RectangleShape>>* skillsIcons);
 
@@ -165,4 +165,5 @@ public:
 	void render(sf::RenderTarget& target);
 
 	friend class SkillsLevelingMenu;
+	friend void PlayerGUI::initBuffSkill();
 };
