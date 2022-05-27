@@ -26,12 +26,12 @@ private:
 
 	float keyTime;
 	float keyTimeMax;
-	float buffKeyTime;
 
 	float potionKeyTime;
 	float potionKeyTimeMax;
 
 	float buffDuration;
+	float buffCooldown;
 
 	//Potions
 	std::pair<Potions, int> healthPotions;
@@ -74,6 +74,7 @@ public:
 	~SkillsComponent();
 
 	//Accessors
+	const std::vector<std::pair<SkillType, int>>& getPlayerSkills();
 	const sf::CircleShape& getDamageArea();
 	const bool getKeyTime() const;
 	const bool getBuffKeyTime() const;

@@ -296,12 +296,7 @@ inline void Player::updateAnimations(const float& dt, sf::Vector2f mouse_pos_vie
 		this->currentKey = &this->moveKey;
 	}	
 
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F))
-	{
-		this->animationComponent.play("CAST_SPELL", dt);
-	}
-	else if (this->movementComponent.getState(IDLE))
+	if (this->movementComponent.getState(IDLE))
 	{
 		if (mouse_pos_view.x < this->hitboxComponent.getPositionHitbox().x)
 		{

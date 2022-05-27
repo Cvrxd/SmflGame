@@ -47,6 +47,8 @@ namespace GUI
 		const short unsigned& getId() const;
 		const bool isPressed() const;
 		std::string getText();
+		sf::FloatRect getGlobalBounds();
+		sf::Text& getSfText();
 
 		//Seters
 		void setText(std::string text);

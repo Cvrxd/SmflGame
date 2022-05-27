@@ -129,6 +129,16 @@ std::string GUI::Button::getText()
 	return this->text.getString();
 }
 
+sf::FloatRect GUI::Button::getGlobalBounds()
+{
+	return this->shape.getGlobalBounds();
+}
+
+sf::Text& GUI::Button::getSfText()
+{
+	return this->text;
+}
+
 //Seters
 void GUI::Button::setText(std::string text)
 {

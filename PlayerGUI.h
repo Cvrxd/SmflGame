@@ -27,6 +27,7 @@ private:
 	//Player variables
 	Player& player;
 	StatsComponent& statsComponent;
+	SkillsComponent* skillComponent;
 
 	//Animations
 	std::unordered_map<std::string, sf::Sprite> sprites;
@@ -63,6 +64,10 @@ public:
 	PlayerGUI(Player& player, sf::Font& font);
 	~PlayerGUI();
 
+	//Accessors
+	sf::Texture& getCrystalsTexture();
+	sf::Texture& getCoinsTexture();
+
 	//Functions
 	void initBuffSkill();
 	void setPotionsCount(int& hp, int& mp);
@@ -74,9 +79,15 @@ public:
 	void updateAnimations(const float& dt);
 	void updateBars();
 	void updateTextIcons();
-
 	void update(const float& dt);
+
+	void renderQuickSlotBars(sf::RenderTarget& target);
 	void render(sf::RenderTarget& target);
+
+	void skillsMenUpdate(const float& dt);
+	
+	friend class SkillsLevelingComponent;
+	friend class SkillsMenu;
 };
 
 class SkillsLevelingComponent
@@ -84,26 +95,56 @@ class SkillsLevelingComponent
 private:
 	//Variables
 	SkillsComponent& skillsComponent;
-	std::vector<std::pair<SkillType, sf::RectangleShape>>& originalSkillsIcons;
+	PlayerGUI& playerGUI;
+
+	sf::Font& font;
+
+	std::vector<std::pair<SkillType, sf::RectangleShape>>* originalSkillsIcons;
+	std::vector<std::pair<sf::RectangleShape, sf::RectangleShape>>* quickSlotBars;
+	const std::vector<std::pair<SkillType, int>>* playerSkills;
 
 	//Core
-	std::unordered_map<std::string, GUI::Button*> buttons;
+	int unlockSkillsCount = 0;
+	short unsigned skillMaxLevel = 5;
+
+	float offsetY = 30.f;
+	float keyTime = 0.f;
+	float keyTimeMax = 20.f;
+
+	std::unordered_map<SkillType, sf::Sprite> crystalsSprites;
+	std::unordered_map<SkillType, AnimationComponent> crystalsAnimations;
+
+
+	std::unordered_map<SkillType, int> skillLevels;
+	std::unordered_map<SkillType, GUI::Button*> buttons;
 	std::unordered_map<SkillType, sf::RectangleShape> skillsIcons;
+	std::unordered_map<SkillType, sf::Text> texts;
 
 	//Functions
-	void initVariables();
+	void initVariables(std::vector<std::pair<SkillType, sf::RectangleShape>>& originalSkillsIcons, 
+		std::vector<std::pair<sf::RectangleShape, sf::RectangleShape>>& quickSlotBars);
+
 	void initSkill(const SkillType& type);
+	void updateKeyTime(const float& dt);
+	void updateSkillColor(const SkillType& type, const sf::Color& color);
 
 public:
-	SkillsLevelingComponent(SkillsComponent& skillsComponent, std::vector<std::pair<SkillType, sf::RectangleShape>>& originalSkillsIcons);
+	SkillsLevelingComponent(SkillsComponent& skillsComponent, PlayerGUI& playerGUI, sf::Font& font);
 	~SkillsLevelingComponent();
 
 	//Functions
+	void upgradeSkill(const SkillType& type);
+
+	void updateButtons(sf::Vector2i& mousePosWindow, const float& dt);
+	void updateTexts();
+	void updateAnimations(const float& dt);
 
 	void update(sf::Vector2i& mousePosWindow, const float& dt);
-	void render(sf::RenderTarget& target);
+
+	void render(sf::RenderTarget& target, sf::Vector2i& mousePosWindow);
 
 	friend class SkillsMenu;
+	friend class PlayerGUI;
 };
 
 class SkillsMenu
@@ -162,8 +203,9 @@ public:
 	void renderButtons(sf::RenderTarget& target);
 
 	void update(sf::Vector2i& mousePosWindow, const float& dt);
-	void render(sf::RenderTarget& target);
+	void render(sf::RenderTarget& target, sf::Vector2i& mousePosWindow);
 
 	friend class SkillsLevelingMenu;
+
 	friend void PlayerGUI::initBuffSkill();
 };

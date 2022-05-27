@@ -16,6 +16,7 @@ StatsComponent::StatsComponent(const int& level)
 	//Atributes
 	this->damagePhysical = 1;
 	this->damageMagical = 1;
+	this->critRate = 10.f;
 
 	//Update stats
 	this->updateStats(true);
@@ -143,7 +144,8 @@ void StatsComponent::gainCrystals(const int& crystals)
 
 void StatsComponent::loseCrystals(const int& crystals)
 {
-	if (this->crystals -= crystals < 0)
+	this->crystals -= crystals;
+	if (this->crystals < 0)
 	{
 		this->crystals = 0;
 	}

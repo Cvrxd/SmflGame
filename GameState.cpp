@@ -247,9 +247,13 @@ inline void GameState::updatePlayerInput(const float& dt)
 	{
 		this->player.move(0.f, 1.f, dt, this->isBuffed);
 	}
+
+	//For Testing
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
 	{
 		this->player.getStatsComponent()->gainEXP(1);
+		this->player.getStatsComponent()->gainCoins(1);
+		this->player.getStatsComponent()->gainCrystals(1);
 	}
 }
 
@@ -295,6 +299,7 @@ void GameState::update(const float& dt)
 	} 
 	else if (this->paused && this->skillMenuActive)
 	{
+		this->playerGUI.skillsMenUpdate(dt);
 		this->skillsMenu.update(this->mousePosWindow, dt);
 	}
 	else//Paused
@@ -360,13 +365,14 @@ void GameState::render(sf::RenderTarget* target)
 	this->renderTexture.setView(this->renderTexture.getDefaultView());
 	this->playerGUI.render(this->renderTexture);
 
+
 	if (this->paused && !this->skillMenuActive) //Pause menu render
 	{
 		this->pauseMenu.render(this->renderTexture);
 	}
 	else if(this->paused && this->skillMenuActive)
 	{
-		this->skillsMenu.render(this->renderTexture);
+		this->skillsMenu.render(this->renderTexture, this->mousePosWindow);
 	}
 
 	//Render

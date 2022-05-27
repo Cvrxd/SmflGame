@@ -119,7 +119,7 @@ inline void SkillsComponent::initAllAnimations()
 //Constructor
 SkillsComponent::SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill, SkillType& currentSkillType, int& currentSkillDamage, bool& isBuffed)
 	: statsComponent(statsComponent) ,currentRender(-1), playAnimation(false), usingPotion(false), isBuffed(isBuffed), usingBuff(false),
-	keyTime(0.f), keyTimeMax(15.f), potionKeyTime(0.f), potionKeyTimeMax(5.f), buffDuration(5.f),
+	keyTime(0.f), keyTimeMax(15.f), potionKeyTime(0.f), potionKeyTimeMax(5.f), buffDuration(5.f), buffCooldown(15.f),
 	skillsSize(8), usingSkill(isUsingSkill), currentSkillType(currentSkillType), currentSkillDamage(currentSkillDamage)
 {
 	this->initAllSkills();
@@ -128,6 +128,11 @@ SkillsComponent::SkillsComponent(StatsComponent& statsComponent, bool& isUsingSk
 
 SkillsComponent::~SkillsComponent()
 {
+}
+
+const std::vector<std::pair<SkillType, int>>& SkillsComponent::getPlayerSkills()
+{
+	return this->playerSkills;
 }
 
 const sf::CircleShape& SkillsComponent::getDamageArea()
@@ -143,7 +148,7 @@ const bool SkillsComponent::getKeyTime() const
 
 const bool SkillsComponent::getBuffKeyTime() const
 {
-	return this->buffTimer.getElapsedTime().asSeconds() > 20.f;
+	return this->buffTimer.getElapsedTime().asSeconds() > this->buffCooldown;
 }
 
 int& SkillsComponent::getMpPotions()
@@ -188,7 +193,7 @@ void SkillsComponent::usePotion(const Potions& potion_type)
 }
 
 //Functions
-void SkillsComponent::useSkill(const SkillType& skill_type)
+inline void SkillsComponent::useSkill(const SkillType& skill_type)
 {
 	this->statsComponent.loseMP(1);
 }
@@ -200,9 +205,25 @@ void SkillsComponent::addSkill(const SkillType& skill_type, const short& slot)
 	this->playerSkills[slot].second = 1;
 }
 
+void SkillsComponent::upgradeSkill(const SkillType& skill_type)
+{
+	if (skill_type == SkillType::BUFF)
+	{
+		this->buffDuration += 1.f;
+		this->buffCooldown -= 0.5f;
+	}
+	else
+	{
+		std::find_if(this->playerSkills.begin(), this->playerSkills.end(), [&skill_type](const std::pair<SkillType, int>& temp) 
+			{
+				return temp.first == skill_type;
+			}).operator*().second++;
+	}
+}
+
 inline void SkillsComponent::updatePlayerBuff(const float& dt, const sf::Vector2f& player_position)
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5) && this->buffTimer.getElapsedTime().asSeconds() > 15.f && this->statsComponent.magicka != 0)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F) && this->buffTimer.getElapsedTime().asSeconds() > this->buffCooldown && this->statsComponent.magicka != 0)
 	{
 		this->statsComponent.loseMP(1);
 		this->isBuffed = true;
@@ -309,7 +330,7 @@ void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position
 	//Using buff
 	if (this->usingBuff)
 	{
-		this->skillTextures[SkillType::BUFF].first.setPosition(player_position.x - 50.f, player_position.y - 50.f);
+		this->skillTextures[SkillType::BUFF].first.setPosition(player_position.x - 90.f, player_position.y - 90.f);
 
 		if (this->skillsAnimations[SkillType::BUFF].play("USE", dt, true))
 		{

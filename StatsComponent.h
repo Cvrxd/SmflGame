@@ -26,6 +26,7 @@ public:
 	int armor;
 	int armorMAX;
 
+	float critRate;
 	int damagePhysical;
 	int damageMagical;
 	int currentSkillDamage;

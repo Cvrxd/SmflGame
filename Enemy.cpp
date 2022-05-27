@@ -23,7 +23,7 @@ void Enemy::initSkillsImpactTextures()
 	this->skillsImpactSprites[SkillType::DARK_BOLT].second.loadFromFile("Textures/animations/hit/dark_hit.png");;
 	this->skillsImpactSprites[SkillType::DARK_BOLT].first.setScale(4.5f, 4.5f);
 	this->skillsImpactAnimations[SkillType::DARK_BOLT] = { &this->skillsImpactSprites[SkillType::DARK_BOLT].first, &this->skillsImpactSprites[SkillType::DARK_BOLT].second };
-	this->offsets[SkillType::DARK_BOLT] = 40;
+	this->offsets[SkillType::DARK_BOLT] = 80;
 
 	this->skillsImpactSprites[SkillType::THUNDER_STRIKE].second.loadFromFile("Textures/animations/hit/thunder_hit.png");;
 	this->skillsImpactSprites[SkillType::THUNDER_STRIKE].first.setScale(5.5f, 5.5f);
@@ -33,7 +33,7 @@ void Enemy::initSkillsImpactTextures()
 	this->skillsImpactSprites[SkillType::DARK_POSION].second.loadFromFile("Textures/animations/hit/dark_hit2.png");;
 	this->skillsImpactSprites[SkillType::DARK_POSION].first.setScale(4.f, 4.f);
 	this->skillsImpactAnimations[SkillType::DARK_POSION] = { &this->skillsImpactSprites[SkillType::DARK_POSION].first, &this->skillsImpactSprites[SkillType::DARK_POSION].second };
-	this->offsets[SkillType::DARK_POSION] = 150;
+	this->offsets[SkillType::DARK_POSION] = 170;
 
 	this->skillsImpactSprites[SkillType::FIRE_EXPLOSION].second.loadFromFile("Textures/animations/hit/fire_hit.png");;
 	this->skillsImpactSprites[SkillType::FIRE_EXPLOSION].first.setScale(4.f, 4.f);
