@@ -8,6 +8,18 @@
 											 this->damageArea.setPosition(skill_position.x - 300, skill_position.y - 300)
 
 //Init fuctions
+inline void SkillsComponent::initSounds()
+{
+	this->sounds[SkillType::BUFF].first.loadFromFile("Sounds/game_state/spell_sounds/buff.wav");
+	this->sounds[SkillType::BUFF].second.setBuffer(this->sounds[SkillType::BUFF].first);
+	this->sounds[SkillType::BUFF].second.setVolume(20.f);
+
+	this->sounds[SkillType::DARK_BOLT].first.loadFromFile("Sounds/game_state/spell_sounds/dark_bolt.ogg");
+	this->sounds[SkillType::DARK_BOLT].second.setBuffer(this->sounds[SkillType::DARK_BOLT].first);
+	this->sounds[SkillType::DARK_BOLT].second.setVolume(20.f);
+
+}
+
 inline void SkillsComponent::initAllSkills()
 {
 	//SKill damage radius
@@ -122,6 +134,7 @@ SkillsComponent::SkillsComponent(StatsComponent& statsComponent, bool& isUsingSk
 	keyTime(0.f), keyTimeMax(15.f), potionKeyTime(0.f), potionKeyTimeMax(5.f), buffDuration(5.f), buffCooldown(15.f),
 	skillsSize(8), usingSkill(isUsingSkill), currentSkillType(currentSkillType), currentSkillDamage(currentSkillDamage)
 {
+	this->initSounds();
 	this->initAllSkills();
 	this->initAllAnimations();
 }
@@ -161,6 +174,11 @@ int& SkillsComponent::getHpPotions()
 	return this->healthPotions.second;
 }
 
+inline void SkillsComponent::playSkillSound(const SkillType& type)
+{
+	this->sounds[type].second.play();
+}
+
 void SkillsComponent::addPotion(const Potions& potion_type)
 {
 	switch (potion_type)
@@ -195,6 +213,7 @@ void SkillsComponent::usePotion(const Potions& potion_type)
 //Functions
 inline void SkillsComponent::useSkill(const SkillType& skill_type)
 {
+	this->playSkillSound(skill_type);
 	this->statsComponent.loseMP(1);
 }
 
@@ -229,6 +248,9 @@ inline void SkillsComponent::updatePlayerBuff(const float& dt, const sf::Vector2
 		this->isBuffed = true;
 		this->usingBuff = true;
 		this->buffTimer.restart();
+		this->statsComponent.critRate += 5.f;
+
+		this->playSkillSound(SkillType::BUFF);
 	}
 	
 	if (this->isBuffed)
@@ -236,6 +258,7 @@ inline void SkillsComponent::updatePlayerBuff(const float& dt, const sf::Vector2
 		if (this->buffTimer.getElapsedTime().asSeconds() > this->buffDuration)
 		{
 			this->isBuffed = false;
+			this->statsComponent.critRate -= 5.f;
 			this->buffTimer.restart();
 		}
 	}

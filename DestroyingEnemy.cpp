@@ -124,6 +124,17 @@ inline void DestroyingEnemy::updateAnimations(const float& dt)
 		}
 	}
 
+	//Player crit
+	if (this->critImpact)
+	{
+		this->critHitSprite.second.setPosition(this->getPosition().x - 20, this->getPosition().y - 100);
+
+		if (this->critHitAnimation.play("CRIT", dt, true))
+		{
+			this->critImpact = false;
+		}
+	}
+
 	//Plyaer skill
 	if (this->skillImpact)
 	{
@@ -182,13 +193,21 @@ inline void DestroyingEnemy::updatePlayerImpact(const float& dt)
 	{
 		if (this->player->isDealingDmg())
 		{
-			this->isTakingDamage = true;
+			if (std::rand() % 100 <= this->player->getStatsComponent()->critRate)
+			{
+				this->critImpact = true;
+				this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical * 2);
+			}
+			else
+			{
+				this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical);
+			}
 			this->hitImpact = true;
-
-			this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical);
+			this->isTakingDamage = true;
 			this->healthBar.updateOffsetX();
 		}
 	}
+
 	//Skill damage impact
 	if (this->player->usingSkill())
 	{
@@ -235,6 +254,10 @@ void DestroyingEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 		target.draw(this->sprite, shader);
 	}
 
+	if (this->critImpact)
+	{
+		target.draw(this->critHitSprite.second);
+	}
 	if (this->hitImpact)
 	{
 		target.draw(this->takeHitSprite.second);

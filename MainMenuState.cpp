@@ -6,6 +6,14 @@ inline void MainMenuState::initVariables()
 {
 }
 
+inline void MainMenuState::initSounds()
+{
+	this->music.openFromFile("Sounds/main_menu/main_menu.ogg");
+	this->music.setVolume(5.f);
+	this->music.setLoop(true);
+	this->music.play();
+}
+
 inline void MainMenuState::initBackground()
 {
 	this->background.setSize(sf::Vector2f(static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)));
@@ -74,6 +82,7 @@ MainMenuState::MainMenuState(StateData* state_data)
 	: State(state_data)
 {
 	this->initVariables();
+	this->initSounds();
 	this->initBackground();
 	this->initFonts();	   
 	this->initKeybinds(); 
@@ -106,6 +115,7 @@ inline void MainMenuState::updateButtons()
 	if (this->buttons["GAME_STATE"]->isPressed())
 	{
 		this->states->push(new GameState(this->stateData));
+		this->music.stop();
 	}
 	
 	//Settings
@@ -123,6 +133,7 @@ inline void MainMenuState::updateButtons()
 	//Quit game
 	if (this->buttons["EXIT_STATE"]->isPressed())
 	{
+		this->music.stop();
 		this->endState();
 	}
 }

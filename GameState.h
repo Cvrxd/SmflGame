@@ -47,6 +47,9 @@ private:
 	std::vector<MageEnemy> mageEnemies;
 	std::vector<DestroyingEnemy> destroyingEnemies;
 
+	//Enemies sounds
+	std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>> enemiesSounds;
+
 	//Functions
 	void initRenderTextures();
 	void initView();
@@ -59,6 +62,7 @@ private:
 	void initEnemies();
 	void initPlayerGUI();
 	void initTileMap();
+	void initSounds();
 
 public:
 	GameState(StateData* state_data);

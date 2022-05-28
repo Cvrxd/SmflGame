@@ -91,15 +91,15 @@ inline void GameState::initPlayers()
 inline void GameState::initEnemies()
 {
 	this->bosses.reserve(3);
-	this->bosses.emplace_back(BossType::NOMAND, 1, 100, 900, this->textures["ENEMY_NOMAND"], &this->player);
+	//this->bosses.emplace_back(BossType::NOMAND, 1, 100, 900, this->textures["ENEMY_NOMAND"], &this->player);
 
-	this->meleEnemies.reserve(2);
-	//this->meleEnemies.emplace_back(MeleEnemyType::MIMIC, 11, 700, 700, this->textures["ENEMY_MIMIC"], &this->player);
-	this->meleEnemies.emplace_back(MeleEnemyType::MARTIAL_HERO3, 1, 700, 700, this->textures["ENEMY_MARTIAL_HERO3"], &this->player);
-	//this->meleEnemies.emplace_back(MeleEnemyType::BRINGER_OF_DEATH, 1, 700, 700, this->textures["ENEMY_BRINGER_OF_DEATH"], &this->player);
+	this->meleEnemies.reserve(3);
+	this->meleEnemies.emplace_back(MeleEnemyType::MIMIC, 5, 700, 700, this->textures["ENEMY_MIMIC"], &this->player);
+	this->meleEnemies.emplace_back(MeleEnemyType::MARTIAL_HERO3, 5, 700, 700, this->textures["ENEMY_MARTIAL_HERO3"], &this->player);
+	this->meleEnemies.emplace_back(MeleEnemyType::BRINGER_OF_DEATH, 5, 700, 700, this->textures["ENEMY_BRINGER_OF_DEATH"], &this->player);
 
 	this->mageEnemies.reserve(2);
-	//this->mageEnemies.emplace_back(MageEnemyType::FIRE_MAGE, 1, 400, 400, this->textures["ENEMY_FIRE_MAGE"], &this->player);
+	this->mageEnemies.emplace_back(MageEnemyType::FIRE_MAGE, 1, 400, 400, this->textures["ENEMY_FIRE_MAGE"], &this->player);
 
 	this->destroyingEnemies.reserve(2);
 	//this->destroyingEnemies.emplace_back(DestroyingEnemyType::FIRE_SKULL, 1, 0, 0, this->textures["ENEMY_FIRE_SKULL"], &this->player);
@@ -113,6 +113,15 @@ inline void GameState::initPlayerGUI()
 inline void GameState::initTileMap()
 {
 	this->tileMap.loadFromFile("map/game_map.txt");
+}
+
+inline void GameState::initSounds()
+{
+	//Enemies sounds
+	this->enemiesSounds["PLAYER_CRIT"].first.loadFromFile("Sounds/game_state/hit_sounds/crit.ogg");
+	this->enemiesSounds["PLAYER_CRIT"].second.setBuffer(this->enemiesSounds["PLAYER_CRIT"].first);
+	this->enemiesSounds["PLAYER_CRIT"].second.setVolume(40.f);
+
 }
 
 //Constructor
@@ -134,6 +143,7 @@ GameState::GameState(StateData* state_data)
 	this->initShaders();
 	this->initTileMap();
 	this->initPlayerGUI();
+	this->initSounds();
 }
 
 GameState::~GameState()

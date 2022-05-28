@@ -288,6 +288,17 @@ inline void MeleEnemy::updateAnimations(const float& dt)
 		}
 	}
 
+	//Player crit
+	if (this->critImpact)
+	{
+		this->critHitSprite.second.setPosition(this->getPosition().x - 20, this->getPosition().y - 100);
+
+		if (this->critHitAnimation.play("CRIT", dt, true))
+		{
+			this->critImpact = false;
+		}
+	}
+
 	//Plyaer skill
 	if (this->skillImpact)
 	{
@@ -340,11 +351,18 @@ inline void MeleEnemy::updatePlayerImpact(const float& dt)
 	{
 		if (this->player->isDealingDmg())
 		{
-			this->isTakingDamage = true;
+			if (std::rand() % 100 <= this->player->getStatsComponent()->critRate)
+			{
+				this->critImpact = true;
+				this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical * 2);
+			}
+			else
+			{
+				this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical);
+			}
+
 			this->hitImpact = true;
-
-			this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical);
-
+			this->isTakingDamage = true;
 			this->healthBar.updateOffsetX();
 		}
 	}
@@ -392,6 +410,12 @@ void MeleEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 	{
 		target.draw(this->takeHitSprite.second);
 	}
+
+	if (this->critImpact)
+	{
+		target.draw(this->critHitSprite.second);
+	}
+
 	if (this->skillImpact)
 	{
 		target.draw(this->skillsImpactSprites[*this->playerUsingSkill].first);
@@ -399,5 +423,5 @@ void MeleEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 
 	this->healthBar.render(target);
 	this->levelIcon.render(target);
-	this->hitboxComponent.render(target);
+	//this->hitboxComponent.render(target);
 }

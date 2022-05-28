@@ -33,6 +33,9 @@ private:
 	float buffDuration;
 	float buffCooldown;
 
+	//Sounds
+	std::unordered_map<SkillType, std::pair<sf::SoundBuffer, sf::Sound>> sounds;
+
 	//Potions
 	std::pair<Potions, int> healthPotions;
 	std::pair<Potions, int> manaPotions;
@@ -67,6 +70,7 @@ private:
 	SkillType& currentSkillType;
 
 	//Init functions
+	void initSounds();
 	void initAllSkills();
 	void initAllAnimations();
 public:
@@ -82,6 +86,8 @@ public:
 	int& getHpPotions();
 
 	//Functions
+	void playSkillSound(const SkillType& type);
+
 	void addPotion(const Potions& potion_type);
 	void usePotion(const Potions& potion_type);
 

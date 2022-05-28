@@ -16,6 +16,7 @@ protected:
 	bool isAttaking = false;
 	bool isTakingDamage = false;
 
+	bool critImpact = false;
 	bool hitImpact = false;
 	bool skillImpact = false;
 	bool isDead = false;
@@ -23,6 +24,9 @@ protected:
 	//Player Hit impact
 	std::pair<sf::Texture, sf::Sprite> takeHitSprite;
 	AnimationComponent takeHitAnimation;
+
+	std::pair<sf::Texture, sf::Sprite> critHitSprite;
+	AnimationComponent critHitAnimation;
 
 	//Player Skills impact
 	const SkillType* playerUsingSkill;

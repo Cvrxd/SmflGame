@@ -9,6 +9,11 @@ void Enemy::initSkillsImpactTextures()
 	this->takeHitSprite.second.setScale(3.f, 3.f);
 	this->takeHitAnimation = { &this->takeHitSprite.second, &this->takeHitSprite.first };
 
+	//Crit hit
+	this->critHitSprite.first.loadFromFile("Textures/animations/hit/crit.png");
+	this->critHitSprite.second.setScale(2.5f, 2.5f);
+	this->critHitAnimation = { &this->critHitSprite.second, &this->critHitSprite.first };
+
 	//Skills textures and sptites
 	this->skillsImpactSprites[SkillType::BLOOD_SPIKE].second.loadFromFile("Textures/animations/hit/skill_hit.png");;
 	this->skillsImpactSprites[SkillType::BLOOD_SPIKE].first.setScale(4.f, 4.f);
@@ -56,6 +61,9 @@ void Enemy::initImpactAnimations()
 	//Take hit animations
 	this->takeHitAnimation.addAnimation("TAKE_HIT1", 0, 0, 4, 0, 64, 64, 4.f);
 	this->takeHitAnimation.addAnimation("TAKE_HIT2", 0, 1, 4, 1, 64, 64, 4.f);
+
+	//Crit animations
+	this->critHitAnimation.addAnimation("CRIT", 0, 0, 13, 0, 128, 128, 4.f);
 
 	//Skills impact animations
 	this->skillsImpactAnimations[SkillType::BLOOD_SPIKE].addAnimation("SKILL_IMPACT", 0, 0, 14, 0, 64, 49, 5.f);

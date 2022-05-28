@@ -20,8 +20,13 @@ private:
 
 	std::unordered_map<std::string, GUI::Button*> buttons;
 
+	//Sounds
+	sf::SoundBuffer soundBuffer;
+	sf::Music music;
+
 	//Functions
 	void initVariables();
+	void initSounds();
 	void initBackground();
 	void initFonts();
 	void initButtons();

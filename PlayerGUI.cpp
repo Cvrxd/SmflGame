@@ -645,7 +645,7 @@ inline void SkillsMenu::initBackground(const float& x, const float& y)
 	this->background.setPosition(x / 2.f - this->background.getSize().x / 2.f, y / 2.f - this->background.getSize().y / 2.f);
 
 	//Stat icons
-	this->statIcons.resize(6);
+	this->statIcons.resize(7);
 	this->textures["STAT_ICONS"].loadFromFile("Textures/hud/inventory_hud/items32_simple_transparent.png");
 
 	int i = 0;
@@ -655,18 +655,20 @@ inline void SkillsMenu::initBackground(const float& x, const float& y)
 		el.setTexture(&this->textures["STAT_ICONS"]);
 		el.setPosition(this->background.getPosition().x + 50, this->background.getPosition().y + (++i) * 55);
 	}
-	
+
 	this->statIcons[0].setTextureRect(sf::IntRect(64, 128, 32, 32)); //Level icon
 	this->statIcons[1].setTextureRect(sf::IntRect(96, 32, 32, 32));	 //Hp icon
 	this->statIcons[2].setTextureRect(sf::IntRect(96, 128, 32, 32)); //Mp icon
 	this->statIcons[3].setTextureRect(sf::IntRect(160, 96, 32, 32)); //Armor icon
 	this->statIcons[4].setTextureRect(sf::IntRect(64, 32, 32, 32)); //Phys damage icon
 	this->statIcons[5].setTextureRect(sf::IntRect(224, 0, 32, 32)); //Magika damage icon
+	this->statIcons[6].setTextureRect(sf::IntRect(128, 32, 32, 32)); //Crit rate icon
+
 }
 
 inline void SkillsMenu::initTexts()
 {
-	this->texts.resize(10);
+	this->texts.resize(11);
 
 	for (auto& el : this->texts)
 	{
@@ -694,8 +696,11 @@ inline void SkillsMenu::initTexts()
 	this->texts[5].setString("Magical damage: " + std::to_string(this->player.getStatsComponent()->damageMagical));
 	this->texts[5].setPosition(sf::Vector2f(this->statIcons[5].getPosition().x + 50, this->statIcons[5].getPosition().y));
 
+	this->texts[9].setString("Crit rate: " + std::to_string(this->player.getStatsComponent()->critRate));
+	this->texts[9].setPosition(sf::Vector2f(this->statIcons[6].getPosition().x + 50, this->statIcons[6].getPosition().y));
+
 	this->texts[6].setString("Stat points: " + std::to_string(this->player.getStatsComponent()->statsPoints));
-	this->texts[6].setPosition(sf::Vector2f(this->statIcons[5].getPosition().x, this->statIcons[5].getPosition().y + 100));
+	this->texts[6].setPosition(sf::Vector2f(this->statIcons[5].getPosition().x, this->statIcons[5].getPosition().y + 150));
 
 	this->texts[7].setString("Skill points: " + std::to_string(this->player.getStatsComponent()->skillPoints));
 	this->texts[7].setPosition(sf::Vector2f(this->texts[6].getPosition().x, this->texts[6].getPosition().y + 55));
@@ -758,7 +763,7 @@ inline void SkillsMenu::initSkillIcons()
 	this->skillsIcons[7].first = SkillType::HOLY_STRIKE;
 	this->skillsIcons[7].second.setTexture(&this->textures["HOLY_STRIKE"]);
 
-	this->textures["BUFF"].loadFromFile("Textures/skills/skill_icons15.png");
+	this->textures["BUFF"].loadFromFile("Textures/skills/skill_icons41.png");
 	this->skillsIcons[8].first = SkillType::BUFF;
 	this->skillsIcons[8].second.setTexture(&this->textures["BUFF"]);
 }
@@ -859,7 +864,9 @@ inline void SkillsMenu::updateText()
 	this->texts[3].setString("Armor: " + std::to_string(this->player.getStatsComponent()->armor) + "/" + std::to_string(this->player.getStatsComponent()->armorMAX));
 	this->texts[4].setString("Physical damage : " + std::to_string(this->player.getStatsComponent()->damagePhysical));
 	this->texts[5].setString("Magical damage: " + std::to_string(this->player.getStatsComponent()->damageMagical));
-	
+	this->texts[9].setString("Crit rate: " + std::to_string(int(this->player.getStatsComponent()->critRate)) + '%');
+
+
 	//Skill and Stat points
 	this->texts[6].setString("Stat points: " + std::to_string(this->player.getStatsComponent()->statsPoints));
 	this->texts[7].setString("Skill points: " + std::to_string(this->player.getStatsComponent()->skillPoints));
