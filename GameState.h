@@ -18,6 +18,7 @@ class MeleEnemy;
 class MageEnemy;
 class DestroyingEnemy;
 
+
 class GameState : public State
 {
 private:
@@ -48,7 +49,7 @@ private:
 	std::vector<DestroyingEnemy> destroyingEnemies;
 
 	//Enemies sounds
-	std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>> enemiesSounds;
+	EnemiesSounds enemiesSounds;
 
 	//Functions
 	void initRenderTextures();

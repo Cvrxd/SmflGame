@@ -12,6 +12,9 @@ inline void MageEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 
 		this->sprite.setScale(2.f, 2.f);
 		
+		//Resistance
+		this->skillReistance = SkillType::DARK_POSION;
+
 		//Init spell cast range
 		this->castR = 500.f;
 		this->ineerR = 350.f;
@@ -49,6 +52,9 @@ inline void MageEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		this->offsetY = 70;
 
 		this->sprite.setScale(3.f, 3.f);
+
+		//Resistance
+		this->skillReistance = SkillType::FIRE_EXPLOSION;
 
 		//Init spell cast range
 		this->castR = 200.f;
@@ -112,9 +118,21 @@ inline void MageEnemy::addAnimations()
 	}
 }
 
+//Sound functions
+inline void MageEnemy::playImpactSounds(const std::string& sound)
+{
+	this->sounds.hit[sound].second.play();
+}
+
+inline void MageEnemy::playSkillImpactSounds(const SkillType& type)
+{
+	this->sounds.skillsImpact[type].second.play();
+}
+
 //Constructors
-MageEnemy::MageEnemy(const MageEnemyType& type, const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player)
-	:Enemy(level, x, y, texture_sheet, player),
+MageEnemy::MageEnemy(const MageEnemyType& type, const int& level, const float& x, const float& y, 
+	sf::Texture& texture_sheet, Player* player, EnemiesSounds& sounds)
+	:Enemy(level, x, y, texture_sheet, player, sounds),
 	type(type), healthBar(&this->statsComponent.hp), levelIcon(&level, &this->player->getStatsComponent()->level, this->player->getFont())
 {
 	this->initComponents(texture_sheet, this->sprite);
@@ -300,32 +318,65 @@ inline void MageEnemy::updatePlayerImpact(const float& dt)
 	{
 		if (this->player->isDealingDmg())
 		{
-			if (std::rand() % 100 <= this->player->getStatsComponent()->critRate)
+			if (!this->physicalResistance)
 			{
-				this->critImpact = true;
-				this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical * 2);
+				if (std::rand() % 100 <= this->player->getStatsComponent()->critRate)
+				{
+					this->critImpact = true;
+					this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical * 2);
+
+					//Sound
+					this->playImpactSounds("PLAYER_CRIT");
+				}
+				else
+				{
+					this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical);
+
+					//Sound
+					
+				}
+				this->hitImpact = true;
+				this->isTakingDamage = true;
+				this->healthBar.updateOffsetX();
 			}
 			else
 			{
-				this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical);
+				//pop up text
 			}
-			this->hitImpact = true;
-			this->isTakingDamage = true;
-			this->healthBar.updateOffsetX();
 		}
 	}
 
 	//Skill damage impact
 	if (this->player->usingSkill())
 	{
-		if (this->player->getSkillComponent()->getDamageArea().getGlobalBounds().intersects(this->getGlobalBounds()))
+		if (!this->magicalResistance)
 		{
-			this->isTakingDamage = true;
-			this->skillImpact = true;
+			if (*this->playerUsingSkill != this->skillReistance)
+			{
+				if (this->player->getSkillComponent()->getDamageArea().getGlobalBounds().intersects(this->getGlobalBounds()))
+				{
+					this->isTakingDamage = true;
+					this->skillImpact = true;
 
-			this->statsComponent.loseHP(this->player->getStatsComponent()->damageMagical +
-				this->player->getStatsComponent()->currentSkillDamage);
-			this->healthBar.updateOffsetX();
+					//Lose hp
+					this->statsComponent.loseHP(this->player->getStatsComponent()->damageMagical +
+						this->player->getStatsComponent()->currentSkillDamage);
+
+					//Update health bar
+					this->healthBar.updateOffsetX();
+
+					//Play sound
+					this->playSkillImpactSounds(*this->playerUsingSkill);
+				}
+			}
+			else
+			{
+				//Pop up text
+			}
+		}
+		else
+		{
+			//Pop up text
 		}
 	}
 }

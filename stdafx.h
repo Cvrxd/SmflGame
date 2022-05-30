@@ -14,6 +14,7 @@
 #include<cmath>
 #include<thread>
 #include<random>
+#include <cstdlib>
 
 //SFML
 #include<SFML/Audio.hpp>

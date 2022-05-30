@@ -48,7 +48,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -117,6 +117,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,6 +133,9 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <Optimization>MaxSpeed</Optimization>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -161,6 +165,7 @@
     <ClCompile Include="HitboxComponent.cpp" />
     <ClCompile Include="MageEnemy.cpp" />
     <ClCompile Include="MeleEnemy.cpp" />
+    <ClCompile Include="PopUpTextComponent.cpp" />
     <ClCompile Include="StatsComponent.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="PlayerGUI.cpp" />
@@ -194,6 +199,7 @@
     <ClInclude Include="HitboxComponent.h" />
     <ClInclude Include="MageEnemy.h" />
     <ClInclude Include="MeleEnemy.h" />
+    <ClInclude Include="PopUpTextComponent.h" />
     <ClInclude Include="StatsComponent.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="PlayerGUI.h" />

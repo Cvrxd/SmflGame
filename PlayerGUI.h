@@ -99,8 +99,11 @@ private:
 
 	sf::Font& font;
 
+	//Pointers to other icons
 	std::vector<std::pair<SkillType, sf::RectangleShape>>* originalSkillsIcons;
 	std::vector<std::pair<sf::RectangleShape, sf::RectangleShape>>* quickSlotBars;
+
+	//Pointer from skills component 
 	const std::vector<std::pair<SkillType, int>>* playerSkills;
 
 	//Core
@@ -111,22 +114,30 @@ private:
 	float keyTime = 0.f;
 	float keyTimeMax = 20.f;
 
+	//Crystal animations and sprites
 	std::unordered_map<SkillType, sf::Sprite> crystalsSprites;
 	std::unordered_map<SkillType, AnimationComponent> crystalsAnimations;
 
-
+	//Menu GUI
 	std::unordered_map<SkillType, int> skillLevels;
 	std::unordered_map<SkillType, GUI::Button*> buttons;
 	std::unordered_map<SkillType, sf::RectangleShape> skillsIcons;
 	std::unordered_map<SkillType, sf::Text> texts;
 
-	//Functions
+	//Sounds
+	std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>> sounds;
+	
+	//Init functions
 	void initVariables(std::vector<std::pair<SkillType, sf::RectangleShape>>& originalSkillsIcons, 
 		std::vector<std::pair<sf::RectangleShape, sf::RectangleShape>>& quickSlotBars);
 
 	void initSkill(const SkillType& type);
+	void initSounds();
+
+	//Other functions
 	void updateKeyTime(const float& dt);
 	void updateSkillColor(const SkillType& type, const sf::Color& color);
+	void playSound(const std::string& sound);
 
 public:
 	SkillsLevelingComponent(SkillsComponent& skillsComponent, PlayerGUI& playerGUI, sf::Font& font);
@@ -179,14 +190,20 @@ private:
 	std::unordered_map<std::string, GUI::Button*> buttons;
 	std::unordered_map<SkillType, GUI::Button*> unclockButtons;
 
+	//Sounds
+	std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>> sounds;
+
 	//Init functions
 	void initButtons();
 	void initBackground(const float& x, const float& y);
 	void initTexts();
 	void initSkillIcons();
+	void initSounds();
 
 	//Other functions
 	void updateKeyTime(const float& dt);
+
+	void playSound(const std::string& sound);
 public:
 	//Constructor
 	SkillsMenu(Player& player, PlayerGUI& playerGUI, sf::Font& font, const float& x, const float& y);

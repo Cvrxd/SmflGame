@@ -8,10 +8,18 @@ inline void MainMenuState::initVariables()
 
 inline void MainMenuState::initSounds()
 {
-	this->music.openFromFile("Sounds/main_menu/main_menu.ogg");
-	this->music.setVolume(5.f);
-	this->music.setLoop(true);
-	this->music.play();
+	//Init background music
+	this->sounds.music.openFromFile("Sounds/main_menu/main_menu.ogg");
+	this->sounds.music.setVolume(5.f);
+	this->sounds.music.setLoop(true);
+	
+	//Play background music
+	this->sounds.music.play();
+
+	//Click sound
+	this->sounds.clickSound.first.loadFromFile("Sounds/main_menu/click.wav");
+	this->sounds.clickSound.second.setBuffer(this->sounds.clickSound.first);
+	this->sounds.clickSound.second.setVolume(10.f);
 }
 
 inline void MainMenuState::initBackground()
@@ -114,26 +122,34 @@ inline void MainMenuState::updateButtons()
 	//New game start
 	if (this->buttons["GAME_STATE"]->isPressed())
 	{
+		this->sounds.clickSound.second.play();
+
 		this->states->push(new GameState(this->stateData));
-		this->music.stop();
+		this->sounds.music.stop();
 	}
 	
 	//Settings
 	if (this->buttons["SETTINGS_STATE"]->isPressed())
 	{
+		this->sounds.clickSound.second.play();
+
 		this->states->push(new SettingsState(this->stateData));
 	}
 
 	//Editor
 	if (this->buttons["EDITOR_STATE"]->isPressed())
 	{
+		this->sounds.clickSound.second.play();
+
 		this->states->push(new EditorState(this->stateData));
 	}
 
 	//Quit game
 	if (this->buttons["EXIT_STATE"]->isPressed())
 	{
-		this->music.stop();
+		this->sounds.clickSound.second.play();
+
+		this->sounds.music.stop();
 		this->endState();
 	}
 }

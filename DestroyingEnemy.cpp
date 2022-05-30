@@ -9,6 +9,10 @@ inline void DestroyingEnemy::initComponents(sf::Texture& texture_sheet, sf::Spri
 	case DestroyingEnemyType::FIRE_SKULL:
 		this->sprite.setScale(3.f, 3.f);
 
+		//Init resistance
+		this->skillReistance = SkillType::FIRE_EXPLOSION;
+		this->physicalResistance = true;
+
 		//Init components
 		this->createHitboxComponent(this->sprite, 70.f, 120.f, 200.f, 200.f);
 		this->createMovementComponent(80.f, 600.f, 100.f);
@@ -65,9 +69,21 @@ inline void DestroyingEnemy::addAnimations()
 	}
 }
 
+//Sound functions
+inline void DestroyingEnemy::playImpactSounds(const std::string& sound)
+{
+	this->sounds.hit[sound].second.play();
+}
+
+inline void DestroyingEnemy::playSkillImpactSounds(const SkillType& type)
+{
+	this->sounds.skillsImpact[type].second.play();
+}
+
 //Constructors
-DestroyingEnemy::DestroyingEnemy(const DestroyingEnemyType& type, const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player)
-	:Enemy(level, x, y, texture_sheet, player),
+DestroyingEnemy::DestroyingEnemy(const DestroyingEnemyType& type, const int& level, const float& x, const float& y, 
+	sf::Texture& texture_sheet, Player* player, EnemiesSounds& sounds)
+	:Enemy(level, x, y, texture_sheet, player, sounds),
 	type(type), healthBar(&this->statsComponent.hp), levelIcon(&level, &this->player->getStatsComponent()->level, this->player->getFont())
 {
 	this->initStats();
@@ -193,32 +209,57 @@ inline void DestroyingEnemy::updatePlayerImpact(const float& dt)
 	{
 		if (this->player->isDealingDmg())
 		{
-			if (std::rand() % 100 <= this->player->getStatsComponent()->critRate)
+			if (!this->physicalResistance)
 			{
-				this->critImpact = true;
-				this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical * 2);
+				if (std::rand() % 100 <= this->player->getStatsComponent()->critRate)
+				{
+					this->critImpact = true;
+					this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical * 2);
+
+					//Sound
+					this->playImpactSounds("PLAYER_CRIT");
+				}
+				else
+				{
+					this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical);
+
+					//Sound
+				}
+				this->hitImpact = true;
+				this->isTakingDamage = true;
+				this->healthBar.updateOffsetX();
 			}
 			else
 			{
-				this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical);
+				//Pop up text//
 			}
-			this->hitImpact = true;
-			this->isTakingDamage = true;
-			this->healthBar.updateOffsetX();
 		}
 	}
 
 	//Skill damage impact
 	if (this->player->usingSkill())
 	{
-		if (this->player->getSkillComponent()->getDamageArea().getGlobalBounds().intersects(this->getGlobalBounds()))
+		if (*this->playerUsingSkill != this->skillReistance)
 		{
-			this->isTakingDamage = true;
-			this->skillImpact = true;
+			if (this->player->getSkillComponent()->getDamageArea().getGlobalBounds().intersects(this->getGlobalBounds()))
+			{
+				this->isTakingDamage = true;
+				this->skillImpact = true;
 
-			this->statsComponent.loseHP(this->player->getStatsComponent()->damageMagical +
-				this->player->getStatsComponent()->currentSkillDamage);
-			this->healthBar.updateOffsetX();
+				//Loosing hp 
+				this->statsComponent.loseHP(this->player->getStatsComponent()->damageMagical +
+					this->player->getStatsComponent()->currentSkillDamage);
+
+				//Health bar update
+				this->healthBar.updateOffsetX();
+
+				//Playing sound
+				this->playSkillImpactSounds(*this->playerUsingSkill);
+			}
+		}
+		else
+		{
+			//Pop up text//
 		}
 	}
 }

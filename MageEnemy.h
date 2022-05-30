@@ -29,8 +29,14 @@ class MageEnemy : public Enemy
 
 	//Other fuctions
 	void enemyDead(const float& dt) override;
+
+	//Sound functions
+	void playImpactSounds(const std::string& sound);
+	void playSkillImpactSounds(const SkillType& type);
+
 public:
-	MageEnemy(const MageEnemyType& type, const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player);
+	MageEnemy(const MageEnemyType& type, const int& level, const float& x, const float& y, 
+		sf::Texture& texture_sheet, Player* player, EnemiesSounds& sounds);
 
 	~MageEnemy();
 

@@ -8,7 +8,7 @@ class StatsComponent;
 enum class SkillType
 {
 	EMPTY = 0, THUNDER_STRIKE, DARK_BOLT,
-	POISON_CLAW, DARK_POSION, BLOOD_SPIKE, FIRE_EXPLOSION, LIGHTNING_STRIKE, HOLY_STRIKE, BUFF
+	POISON_CLAW, DARK_POSION, BLOOD_SPIKE, FIRE_EXPLOSION, LIGHTNING_STRIKE, HOLY_STRIKE, BUFF, POTION
 };
 
 enum Potions{HEALTH = 0, MANA};
@@ -19,7 +19,7 @@ private:
 	//Variables
 	sf::Clock skillTimer;
 	sf::Clock buffTimer;
-
+	
 	StatsComponent& statsComponent;
 
 	float time;

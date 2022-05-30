@@ -9,6 +9,9 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 	case MeleEnemyType::MIMIC:
 		this->sprite.setScale(3.f, 3.f);
 
+		//Resistance
+		this->skillReistance = SkillType::POISON_CLAW;
+
 		//Init components
 		this->createHitboxComponent(this->sprite, 70.f, 120.f, 130.f, 100.f);
 		this->createMovementComponent(80.f, 600.f, 100.f);
@@ -28,6 +31,9 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		break;
 	case MeleEnemyType::BRINGER_OF_DEATH:
 		this->sprite.setScale(3.f, 3.f);
+
+		//Resistance
+		this->magicalResistance = true;
 
 		//Init components
 		this->createHitboxComponent(this->sprite, 250.f, 120.f, 100.f, 200.f);
@@ -49,6 +55,9 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 	case MeleEnemyType::KNIGHT1:
 		this->sprite.setScale(2.5f, 2.5f);
 
+		//Resistance
+		this->skillReistance = SkillType::HOLY_STRIKE;
+
 		//Init components
 		this->createHitboxComponent(this->sprite, 200.f, 150.f, 120.f, 150.f);
 		this->createMovementComponent(200.f, 1000.f, 350.f);
@@ -68,6 +77,9 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		break;
 	case MeleEnemyType::HUNTRESS:
 		this->sprite.setScale(3.f, 3.f);
+
+		//Resistance
+		this->skillReistance = SkillType::POISON_CLAW;
 
 		//Init components
 		this->createHitboxComponent(this->sprite, 170.f, 150.f, 100.f, 150.f);
@@ -207,15 +219,26 @@ inline void MeleEnemy::addAnimations()
 	}
 }
 
+inline void MeleEnemy::playImpactSounds(const std::string& sound)
+{
+	this->sounds.hit[sound].second.play();
+}
+
+inline void MeleEnemy::playSkillImpactSounds(const SkillType& type)
+{
+	this->sounds.skillsImpact[type].second.play();
+}
+
 //Constructors
 MeleEnemy::MeleEnemy(const MeleEnemyType& type, const int& level, const float& x, const float& y, 
-	sf::Texture& texture_sheet, Player* player)
-	:Enemy(level, x, y, texture_sheet, player),
+	sf::Texture& texture_sheet, Player* player, EnemiesSounds& sounds)
+	:Enemy(level, x, y, texture_sheet, player, sounds),
 	type(type), healthBar(&this->statsComponent.hp), levelIcon(&level, &this->player->getStatsComponent()->level, this->player->getFont())
 {
 	this->initComponents(texture_sheet, this->sprite);
 	this->setPosition(x, y);
 }
+
 
 MeleEnemy::~MeleEnemy()
 {
@@ -351,33 +374,66 @@ inline void MeleEnemy::updatePlayerImpact(const float& dt)
 	{
 		if (this->player->isDealingDmg())
 		{
-			if (std::rand() % 100 <= this->player->getStatsComponent()->critRate)
+			if (!this->physicalResistance)
 			{
-				this->critImpact = true;
-				this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical * 2);
+				if (std::rand() % 100 <= this->player->getStatsComponent()->critRate)
+				{
+					this->critImpact = true;
+					this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical * 2);
+
+					//Sound
+					this->playImpactSounds("PLAYER_CRIT");
+				}
+				else
+				{
+					this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical);
+
+					//Sound
+				}
+
+				this->hitImpact = true;
+				this->isTakingDamage = true;
+
+				//Updating health bar
+				this->healthBar.updateOffsetX();
 			}
 			else
 			{
-				this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical);
+				//Pop up text
 			}
-
-			this->hitImpact = true;
-			this->isTakingDamage = true;
-			this->healthBar.updateOffsetX();
 		}
 	}
 	//Skill damage impact
 	if (this->player->usingSkill())
 	{
-		if (this->player->getSkillComponent()->getDamageArea().getGlobalBounds().intersects(this->getGlobalBounds()))
+		if (!this->magicalResistance)
 		{
-			this->isTakingDamage = true;
-			this->skillImpact = true;
+			if (this->skillReistance != *this->playerUsingSkill)
+			{
+				if (this->player->getSkillComponent()->getDamageArea().getGlobalBounds().intersects(this->getGlobalBounds()))
+				{
+					this->isTakingDamage = true;
+					this->skillImpact = true;
 
-			this->statsComponent.loseHP(this->player->getStatsComponent()->damageMagical + 
-				this->player->getStatsComponent()->currentSkillDamage);
+					//Lose hp
+					this->statsComponent.loseHP(this->player->getStatsComponent()->damageMagical +
+						this->player->getStatsComponent()->currentSkillDamage);
 
-			this->healthBar.updateOffsetX();
+					//Update health bar
+					this->healthBar.updateOffsetX();
+
+					//Sound
+					this->playSkillImpactSounds(*this->playerUsingSkill);
+				}
+			}
+			else 
+			{
+				//Pop up text
+			}
+		}
+		else
+		{
+			//Pop up text
 		}
 	}
 }

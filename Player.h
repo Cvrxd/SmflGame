@@ -8,7 +8,19 @@ class PlayerGUI;
 class Player : public Entity
 {
 private:
+	struct Sounds
+	{
+		//Walking sound
+		sf::SoundBuffer walkingBuffer;
+		sf::Sound walkingSound;
+
+		//Running sound
+		sf::SoundBuffer runningBuffer;
+		sf::Sound runningSound;
+	};
+
 	//Variables
+	//Booleans for animations
 	bool& isBuffed;
 
 	bool isAttacking = false;
@@ -17,21 +29,25 @@ private:
 	bool isTakingHit = false;
 	bool isUsingSkill = false;
 
+	//For hit animations
 	int currentHitAnimation;
-
 	int currentskillDamage = 1;
 
+	//Keys for moving
 	std::string moveKey;
 	std::string dashKey;
 	std::string* currentKey;
 
+	//Player GUi pointer
 	PlayerGUI* playerGUI = nullptr;
 
 	SkillType currentSkilltype = SkillType::EMPTY;
-
+	
+	//Ranges
 	sf::CircleShape hitRange;
 	sf::RectangleShape damageRange;
 	
+	//Font and timer
 	const sf::Font& font;
 	sf::Clock damageTimer;
 
@@ -44,12 +60,19 @@ private:
 	std::vector<std::pair<sf::Texture, sf::Sprite>> sprites;
 	std::vector<AnimationComponent> hitAnimations;
 
+	//Sounds
+	Sounds sounds;
 
 	//Initialisation functios
 	void initVariables();
 	void createAnimationComponent(sf::Texture& texture_sheet);
 	void addAnimations();
 	void initComponents(sf::Texture& texture_sheet);
+	void initSounds();
+	
+	//Sound functions
+	void playSound(const std::string& sound);
+
 public:
 	Player(const float& x, const float& y, sf::Texture& texture_sheet, const sf::Font& font, bool& isBuffed);
 	virtual ~Player();

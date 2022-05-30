@@ -12,6 +12,17 @@ class Button;
 class MainMenuState : public State
 {
 private:
+
+	struct MainMenuSounds
+	{
+		//Background music
+		sf::SoundBuffer soundBuffer;
+		sf::Music music;
+
+		//Click sound
+		std::pair<sf::SoundBuffer, sf::Sound> clickSound;
+	};
+
 	//variables 
 	sf::Font font;
 
@@ -21,8 +32,7 @@ private:
 	std::unordered_map<std::string, GUI::Button*> buttons;
 
 	//Sounds
-	sf::SoundBuffer soundBuffer;
-	sf::Music music;
+	MainMenuSounds sounds;
 
 	//Functions
 	void initVariables();

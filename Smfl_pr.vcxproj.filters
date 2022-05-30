@@ -129,6 +129,9 @@
     <ClCompile Include="EnemyGUI.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
+    <ClCompile Include="PopUpTextComponent.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -210,6 +213,9 @@
       <Filter>Entities\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="EnemyGUI.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="PopUpTextComponent.h">
       <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>

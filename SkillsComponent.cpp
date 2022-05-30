@@ -14,10 +14,29 @@ inline void SkillsComponent::initSounds()
 	this->sounds[SkillType::BUFF].second.setBuffer(this->sounds[SkillType::BUFF].first);
 	this->sounds[SkillType::BUFF].second.setVolume(20.f);
 
-	this->sounds[SkillType::DARK_BOLT].first.loadFromFile("Sounds/game_state/spell_sounds/dark_bolt.ogg");
-	this->sounds[SkillType::DARK_BOLT].second.setBuffer(this->sounds[SkillType::DARK_BOLT].first);
-	this->sounds[SkillType::DARK_BOLT].second.setVolume(20.f);
+	this->sounds[SkillType::THUNDER_STRIKE].first.loadFromFile("Sounds/game_state/spell_sounds/thunder_strike.wav");
+	this->sounds[SkillType::THUNDER_STRIKE].second.setBuffer(this->sounds[SkillType::THUNDER_STRIKE].first);
+	this->sounds[SkillType::THUNDER_STRIKE].second.setVolume(10.f);
 
+	this->sounds[SkillType::FIRE_EXPLOSION].first.loadFromFile("Sounds/game_state/spell_sounds/fire_explosion.wav");
+	this->sounds[SkillType::FIRE_EXPLOSION].second.setBuffer(this->sounds[SkillType::FIRE_EXPLOSION].first);
+	this->sounds[SkillType::FIRE_EXPLOSION].second.setVolume(10.f);
+
+	this->sounds[SkillType::BLOOD_SPIKE].first.loadFromFile("Sounds/game_state/spell_sounds/blood_strike.wav");
+	this->sounds[SkillType::BLOOD_SPIKE].second.setBuffer(this->sounds[SkillType::BLOOD_SPIKE].first);
+	this->sounds[SkillType::BLOOD_SPIKE].second.setVolume(10.f);
+
+	this->sounds[SkillType::DARK_POSION].first.loadFromFile("Sounds/game_state/spell_sounds/dark_poision.wav");
+	this->sounds[SkillType::DARK_POSION].second.setBuffer(this->sounds[SkillType::DARK_POSION].first);
+	this->sounds[SkillType::DARK_POSION].second.setVolume(10.f);
+
+	this->sounds[SkillType::DARK_BOLT].first.loadFromFile("Sounds/game_state/spell_sounds/dark_bolt.wav");
+	this->sounds[SkillType::DARK_BOLT].second.setBuffer(this->sounds[SkillType::DARK_BOLT].first);
+	this->sounds[SkillType::DARK_BOLT].second.setVolume(10.f);
+
+	this->sounds[SkillType::POTION].first.loadFromFile("Sounds/game_state/spell_sounds/potion.wav");
+	this->sounds[SkillType::POTION].second.setBuffer(this->sounds[SkillType::POTION].first);
+	this->sounds[SkillType::POTION].second.setVolume(10.f);
 }
 
 inline void SkillsComponent::initAllSkills()
@@ -115,7 +134,7 @@ inline void SkillsComponent::initAllAnimations()
 	this->skillsAnimations[SkillType::BLOOD_SPIKE].addAnimation("USE", 0, 0, 17, 0, 48, 32, 8.f);
 	this->skillTextures[SkillType::BLOOD_SPIKE].first.setScale(5.5f, 5.5f);
 
-	this->skillsAnimations[SkillType::FIRE_EXPLOSION].addAnimation("USE", 0, 0, 17, 0, 48, 48, 8.f);
+	this->skillsAnimations[SkillType::FIRE_EXPLOSION].addAnimation("USE", 0, 0, 17, 0, 48, 48, 10.f);
 	this->skillTextures[SkillType::FIRE_EXPLOSION].first.setScale(5.f, 5.f);
 
 	this->skillsAnimations[SkillType::LIGHTNING_STRIKE].addAnimation("USE", 0, 0, 9, 0, 64, 128, 8.f);
@@ -208,12 +227,13 @@ void SkillsComponent::usePotion(const Potions& potion_type)
 	default:
 		break;
 	}
+
+	this->playSkillSound(SkillType::POTION);
 }
 
 //Functions
 inline void SkillsComponent::useSkill(const SkillType& skill_type)
 {
-	this->playSkillSound(skill_type);
 	this->statsComponent.loseMP(1);
 }
 
@@ -250,6 +270,7 @@ inline void SkillsComponent::updatePlayerBuff(const float& dt, const sf::Vector2
 		this->buffTimer.restart();
 		this->statsComponent.critRate += 5.f;
 
+		//Sound
 		this->playSkillSound(SkillType::BUFF);
 	}
 	
@@ -287,30 +308,46 @@ void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
 		{
 			currentRender = 0;
+
 			_SKILLS_COMPONENT_SET_SKILL_POSITION;
 			this->playAnimation = true;
 			skillTimer.restart();
+
+			//Sound
+			this->playSkillSound(this->playerSkills[currentRender].first);
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
 		{
 			currentRender = 1;
+
 			_SKILLS_COMPONENT_SET_SKILL_POSITION;
 			this->playAnimation = true;
 			skillTimer.restart();
+
+			//Sound
+			this->playSkillSound(this->playerSkills[currentRender].first);
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
 		{
 			currentRender = 2;
+
 			_SKILLS_COMPONENT_SET_SKILL_POSITION;
 			this->playAnimation = true;
 			skillTimer.restart();
+
+			//Sound
+			this->playSkillSound(this->playerSkills[currentRender].first);
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
 		{
 			currentRender = 3;
+
 			_SKILLS_COMPONENT_SET_SKILL_POSITION;
 			this->playAnimation = true;
 			skillTimer.restart();
+
+			//Sound
+			this->playSkillSound(this->playerSkills[currentRender].first);
 		}
 	}
 

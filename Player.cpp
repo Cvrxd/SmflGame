@@ -79,6 +79,26 @@ inline void Player::addAnimations()
 	this->hitAnimations[2].addAnimation("TAKE_HIT2", 0, 1, 4, 1, 64, 64, 3.f);
 }
 
+inline void Player::initSounds()
+{
+	//Running sound
+	this->sounds.runningBuffer.loadFromFile("Sounds/game_state/player/running.wav");
+	this->sounds.runningSound.setBuffer(this->sounds.runningBuffer);
+	this->sounds.runningSound.setVolume(2.f);
+
+	//Walking sound
+	this->sounds.walkingBuffer.loadFromFile("Sounds/game_state/player/walking.wav");
+	this->sounds.walkingSound.setBuffer(this->sounds.walkingBuffer);
+	this->sounds.walkingSound.setVolume(2.f);
+	this->sounds.walkingSound.setLoop(true);
+}
+
+//Sound functions
+inline void Player::playSound(const std::string& sound)
+{
+	
+}
+
 //Constructor
 Player::Player(const float& x, const float& y, sf::Texture& texture_sheet, const sf::Font& font, bool& isBuffed)
 	: currentHitAnimation(0), font(font), isBuffed(isBuffed),
@@ -90,6 +110,8 @@ Player::Player(const float& x, const float& y, sf::Texture& texture_sheet, const
 	this->initVariables();
 	this->initComponents(texture_sheet);
 	this->setPosition(x, y);
+	this->initSounds();
+
 	this->sprite.setScale(2.8f, 2.8f);
 }
 
@@ -148,7 +170,7 @@ const sf::RectangleShape& Player::getDamageRange()
 	return this->damageRange;
 }
 
-//Stat functions
+//Stats functions
 void Player::gainEXP(const unsigned& exp)
 {
 	this->statsComponent.gainEXP(exp);
@@ -222,8 +244,6 @@ inline void Player::updateAttack(const float& dt, sf::Vector2f mouse_pos_view)
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
-		//Hit sprite position
-
 		this->isAttacking = true;
 		this->isHit = true;
 	}
@@ -265,6 +285,7 @@ inline void Player::updateAttack(const float& dt, sf::Vector2f mouse_pos_view)
 		if (this->statsComponent.armor != 0)
 		{
 			this->sprites[2].second.setPosition(this->getCenter().x - 120, this->getCenter().y - 100);
+
 			if (this->hitAnimations[2].play("TAKE_HIT1", dt, true))
 			{
 				if (this->hitAnimations[2].play("TAKE_HIT2", dt, true))
@@ -276,6 +297,7 @@ inline void Player::updateAttack(const float& dt, sf::Vector2f mouse_pos_view)
 		else
 		{
 			this->sprites[1].second.setPosition(this->getCenter().x - 100, this->getCenter().y - 70);
+
 			if (this->hitAnimations[1].play("TAKE_HIT", dt, true))
 			{
 				this->isTakingHit = false;
@@ -287,6 +309,7 @@ inline void Player::updateAttack(const float& dt, sf::Vector2f mouse_pos_view)
 
 inline void Player::updateAnimations(const float& dt, sf::Vector2f mouse_pos_view)
 {
+
 	if (this->isBuffed)
 	{
 		this->currentKey = &this->dashKey;

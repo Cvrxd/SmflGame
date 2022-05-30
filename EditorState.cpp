@@ -234,20 +234,28 @@ inline void EditorState::updatePauseMenuButtons()
 {
 	if (this->pauseMenu.isButtonPressed("QUIT"))
 	{
+		this->pauseMenu.playClickSound();
+
 		this->endState();
 	}
 	else if (this->pauseMenu.isButtonPressed("SAVE") && this->getKeyTime())
 	{
+		this->pauseMenu.playClickSound();
+
 		this->tileMap.saveToFile("map/game_map.txt");
 		this->paused = false;
 	}
 	else if (this->pauseMenu.isButtonPressed("LOAD") && this->getKeyTime())
 	{
+		this->pauseMenu.playClickSound();
+
 		this->tileMap.loadFromFile("map/game_map.txt");
 		this->paused = false;
 	}
 	else if (this->pauseMenu.isButtonPressed("CLEAR") && this->getKeyTime())
 	{
+		this->pauseMenu.playClickSound();
+
 		this->paused = false;
 	}
 }

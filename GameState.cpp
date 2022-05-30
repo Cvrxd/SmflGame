@@ -94,12 +94,12 @@ inline void GameState::initEnemies()
 	//this->bosses.emplace_back(BossType::NOMAND, 1, 100, 900, this->textures["ENEMY_NOMAND"], &this->player);
 
 	this->meleEnemies.reserve(3);
-	this->meleEnemies.emplace_back(MeleEnemyType::MIMIC, 5, 700, 700, this->textures["ENEMY_MIMIC"], &this->player);
-	this->meleEnemies.emplace_back(MeleEnemyType::MARTIAL_HERO3, 5, 700, 700, this->textures["ENEMY_MARTIAL_HERO3"], &this->player);
-	this->meleEnemies.emplace_back(MeleEnemyType::BRINGER_OF_DEATH, 5, 700, 700, this->textures["ENEMY_BRINGER_OF_DEATH"], &this->player);
+	this->meleEnemies.emplace_back(MeleEnemyType::MIMIC, 5, 700, 700, this->textures["ENEMY_MIMIC"], &this->player, this->enemiesSounds);
+	this->meleEnemies.emplace_back(MeleEnemyType::MARTIAL_HERO3, 5, 700, 700, this->textures["ENEMY_MARTIAL_HERO3"], &this->player, this->enemiesSounds);
+	this->meleEnemies.emplace_back(MeleEnemyType::BRINGER_OF_DEATH, 5, 700, 700, this->textures["ENEMY_BRINGER_OF_DEATH"], &this->player, this->enemiesSounds);
 
 	this->mageEnemies.reserve(2);
-	this->mageEnemies.emplace_back(MageEnemyType::FIRE_MAGE, 1, 400, 400, this->textures["ENEMY_FIRE_MAGE"], &this->player);
+	//this->mageEnemies.emplace_back(MageEnemyType::FIRE_MAGE, 1, 400, 400, this->textures["ENEMY_FIRE_MAGE"], &this->player);
 
 	this->destroyingEnemies.reserve(2);
 	//this->destroyingEnemies.emplace_back(DestroyingEnemyType::FIRE_SKULL, 1, 0, 0, this->textures["ENEMY_FIRE_SKULL"], &this->player);
@@ -118,9 +118,14 @@ inline void GameState::initTileMap()
 inline void GameState::initSounds()
 {
 	//Enemies sounds
-	this->enemiesSounds["PLAYER_CRIT"].first.loadFromFile("Sounds/game_state/hit_sounds/crit.ogg");
-	this->enemiesSounds["PLAYER_CRIT"].second.setBuffer(this->enemiesSounds["PLAYER_CRIT"].first);
-	this->enemiesSounds["PLAYER_CRIT"].second.setVolume(40.f);
+	this->enemiesSounds.hit["PLAYER_CRIT"].first.loadFromFile("Sounds/game_state/hit_sounds/crit.ogg");
+	this->enemiesSounds.hit["PLAYER_CRIT"].second.setBuffer(this->enemiesSounds.hit["PLAYER_CRIT"].first);
+	this->enemiesSounds.hit["PLAYER_CRIT"].second.setVolume(2.f);
+
+	this->enemiesSounds.skillsImpact[SkillType::DARK_BOLT].first.loadFromFile("Sounds/game_state/spell_sounds/dark_bolt.ogg");
+	this->enemiesSounds.skillsImpact[SkillType::DARK_BOLT].second.setBuffer(this->enemiesSounds.skillsImpact[SkillType::DARK_BOLT].first);
+	this->enemiesSounds.skillsImpact[SkillType::DARK_BOLT].second.setVolume(20.f);
+
 
 }
 
@@ -139,11 +144,11 @@ GameState::GameState(StateData* state_data)
 	this->initKeybinds();
 	this->initTextures();
 	this->initPauseMenu();
+	this->initSounds();
 	this->initEnemies();
 	this->initShaders();
 	this->initTileMap();
 	this->initPlayerGUI();
-	this->initSounds();
 }
 
 GameState::~GameState()
@@ -197,10 +202,14 @@ inline void GameState::updatePauseMenuButtons()
 	}
 	else if (this->pauseMenu.isButtonPressed("CONTINUE"))
 	{
+		this->pauseMenu.playClickSound();
+
 		this->unpausedState();
 	}
 	else if (this->pauseMenu.isButtonPressed("SKILLS"))
 	{
+		this->pauseMenu.playClickSound();
+
 		this->skillMenuActive = true;
 	}
 }
@@ -271,6 +280,8 @@ inline void GameState::updateInput(const float& dt)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("CLOSE"))) && this->getKeyTime())
 	{
+		this->pauseMenu.playClickSound();
+
 		if (!this->paused)
 		{
 			this->pauseState();

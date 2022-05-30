@@ -17,8 +17,14 @@ private:
 
 	//Other fuctions
 	void enemyDead(const float& dt) override;
+
+	//Sound fucntions
+	void playImpactSounds(const std::string& sound);
+	void playSkillImpactSounds(const SkillType& type);
+
 public:
-	BossEnemy(const BossType& type, const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player);
+	BossEnemy(const BossType& type, const int& level, const float& x, const float& y, 
+		sf::Texture& texture_sheet, Player* player, EnemiesSounds& sounds);
 	
 	~BossEnemy();
 

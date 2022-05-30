@@ -483,6 +483,18 @@ void SkillsLevelingComponent::initSkill(const SkillType& type)
 	this->crystalsAnimations[type].addAnimation("PLAY", 0, 0, 3, 0, 16, 16, 15.f);
 }
 
+inline void SkillsLevelingComponent::initSounds()
+{
+	this->sounds["UPGRADE_SKILL"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/spell_upgrade.wav");
+	this->sounds["UPGRADE_SKILL"].second.setBuffer(this->sounds["UPGRADE_SKILL"].first);
+	this->sounds["UPGRADE_SKILL"].second.setVolume(10.f);
+
+	this->sounds["CLICK"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/click.wav");
+	this->sounds["CLICK"].second.setBuffer(this->sounds["CLICK"].first);
+	this->sounds["CLICK"].second.setVolume(10.f);
+}
+
+//Other functions
 inline void SkillsLevelingComponent::updateKeyTime(const float& dt)
 {
 	this->keyTime += 100.f * dt;
@@ -518,11 +530,16 @@ inline void SkillsLevelingComponent::updateSkillColor(const SkillType& type, con
 	this->quickSlotBars->at(index).first.setOutlineColor(color);
 }
 
+inline void SkillsLevelingComponent::playSound(const std::string& sound)
+{
+	this->sounds[sound].second.play();
+}
+
 //Constructors
 SkillsLevelingComponent::SkillsLevelingComponent(SkillsComponent& skillsComponent, PlayerGUI& playerGUI, sf::Font& font)
 	:skillsComponent(skillsComponent), playerGUI(playerGUI), font(font)
 {
-	
+	this->initSounds();
 }
 
 SkillsLevelingComponent::~SkillsLevelingComponent()
@@ -539,10 +556,15 @@ inline void SkillsLevelingComponent::upgradeSkill(const SkillType& type)
 		&& this->skillLevels[type] != this->skillMaxLevel)
 	{
 		++this->skillLevels[type];
-		this->playerGUI.statsComponent.loseCrystals(this->skillLevels[type] * 10);
 		--this->playerGUI.statsComponent.skillPoints;
+
+		//Losing crystals
+		this->playerGUI.statsComponent.loseCrystals(this->skillLevels[type] * 10);
+
+		//Skills component update
 		this->skillsComponent.upgradeSkill(type);
 
+		//Changing color depending on skill level
 		switch (this->skillLevels[type])
 		{
 		case 2:
@@ -560,7 +582,12 @@ inline void SkillsLevelingComponent::upgradeSkill(const SkillType& type)
 		default:
 			break;
 		}
+		
+		//Updating text for next level
 		this->updateTexts();
+
+		//Sound
+		this->playSound("UPGRADE_SKILL");
 	}
 }
 
@@ -571,10 +598,16 @@ inline void SkillsLevelingComponent::updateButtons(sf::Vector2i& mousePosWindow,
 	{
 		el.second->update(mousePosWindow);
 
-		if (el.second->isPressed() && this->keyTime >= this->keyTimeMax)
+		if (el.second->isPressed())
 		{
-			this->upgradeSkill(el.first);
-			this->keyTime = 0.f;
+			this->playSound("CLICK");
+
+			if (this->keyTime >= this->keyTimeMax)
+			{
+				this->upgradeSkill(el.first);
+				this->keyTime = 0.f;
+			}
+			
 		}
 	}
 
@@ -768,6 +801,17 @@ inline void SkillsMenu::initSkillIcons()
 	this->skillsIcons[8].second.setTexture(&this->textures["BUFF"]);
 }
 
+inline void SkillsMenu::initSounds()
+{
+	this->sounds["UNLOCK_SKILL"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/spell_unlock.wav");
+	this->sounds["UNLOCK_SKILL"].second.setBuffer(this->sounds["UNLOCK_SKILL"].first);
+	this->sounds["UNLOCK_SKILL"].second.setVolume(10.f);
+
+	this->sounds["CLICK"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/click.wav");
+	this->sounds["CLICK"].second.setBuffer(this->sounds["CLICK"].first);
+	this->sounds["CLICK"].second.setVolume(10.f);
+}
+
 inline void SkillsMenu::initButtons()
 {
 	this->buttons["HP_UP"] = new GUI::Button(this->statIcons[0].getPosition().x + 200, this->statIcons[0].getPosition().y + 28,
@@ -820,6 +864,11 @@ inline void SkillsMenu::updateKeyTime(const float& dt)
 	}
 }
 
+inline void SkillsMenu::playSound(const std::string& sound)
+{
+	this->sounds[sound].second.play();
+}
+
 //Constructor
 SkillsMenu::SkillsMenu(Player& player, PlayerGUI& playerGUI, sf::Font& font, const float& x, const float& y)
 	:player(player), playerGUI(playerGUI), font(font), keyTime(0.f), keyTimeMax(10.f), skillsSize(9),
@@ -829,6 +878,7 @@ SkillsMenu::SkillsMenu(Player& player, PlayerGUI& playerGUI, sf::Font& font, con
 	this->initTexts();
 	this->initSkillIcons();
 	this->initButtons();
+	this->initSounds();
 
 	//Init other components variables
 	this->playerGUI.initSkillIcons(&this->skillsIcons);
@@ -851,6 +901,8 @@ SkillsMenu::~SkillsMenu()
 //Functions
 void SkillsMenu::unlockSkill(const SkillType& type)
 {
+	this->playSound("UNLOCK_SKILL");
+
 	this->playerGUI.addSkill(type);
 	this->skillsLevelingComponent.initSkill(type);
 }
@@ -897,7 +949,11 @@ inline void SkillsMenu::updateButtons(sf::Vector2i& mousePosWindow)
 			++this->player.getStatsComponent()->hp;
 			++this->player.getStatsComponent()->hpMAX;
 			--this->player.getStatsComponent()->statsPoints;
+
+			this->playSound("CLICK");
 		}
+
+
 	}
 	else if (this->buttons["MP_UP"]->isPressed() && this->getKeyTime())
 	{
@@ -906,6 +962,8 @@ inline void SkillsMenu::updateButtons(sf::Vector2i& mousePosWindow)
 			++this->player.getStatsComponent()->magicka;
 			++this->player.getStatsComponent()->magickaMAX;
 			--this->player.getStatsComponent()->statsPoints;
+
+			this->playSound("CLICK");
 		}
 	}
 	else if (this->buttons["ARMOR_UP"]->isPressed() && this->getKeyTime())
@@ -915,6 +973,8 @@ inline void SkillsMenu::updateButtons(sf::Vector2i& mousePosWindow)
 			++this->player.getStatsComponent()->armor;
 			++this->player.getStatsComponent()->armorMAX;
 			--this->player.getStatsComponent()->statsPoints;
+
+			this->playSound("CLICK");
 		}
 	}
 	
@@ -926,6 +986,8 @@ inline void SkillsMenu::updateButtons(sf::Vector2i& mousePosWindow)
 		{
 			if (it.operator*().second->isPressed() && this->getKeyTime())
 			{
+				this->playSound("CLICK");
+
 				if (this->player.getStatsComponent()->skillPoints > 0)
 				{
 					this->unlockSkill(it.operator*().first);
