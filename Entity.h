@@ -23,7 +23,7 @@ protected:
 
 	virtual void initVariables();
 public:
-	Entity();
+	Entity() noexcept;
 	virtual ~Entity();
 
 	//component functions

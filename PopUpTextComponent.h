@@ -12,7 +12,7 @@ private:
 	void updateText(const std::string& key);
 
 public:
-	PopUpTextComponent(sf::Font& font);
+	PopUpTextComponent(sf::Font& font) noexcept;
 	~PopUpTextComponent();
 
 	//Functions

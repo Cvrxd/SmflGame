@@ -74,7 +74,7 @@ protected:
 	//Other functions
 	virtual void enemyDead(const float& dt) = 0;
 public:
-	Enemy(const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player, EnemiesSounds& sounds);
+	Enemy(const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player, EnemiesSounds& sounds) noexcept;
 	virtual ~Enemy();
 
 	//Accessors

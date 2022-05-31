@@ -10,7 +10,7 @@ inline void PauseMenu::initSounds()
 }
 
 //Constructor
-PauseMenu::PauseMenu(sf::RenderWindow& window, sf::Font& font)
+PauseMenu::PauseMenu(sf::RenderWindow& window, sf::Font& font) noexcept
 	: font(font)
 {
 	//Background

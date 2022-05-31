@@ -87,7 +87,7 @@ void Enemy::initStats()
 }
 
 //Constructor
-Enemy::Enemy(const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player, EnemiesSounds& sounds)
+Enemy::Enemy(const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player, EnemiesSounds& sounds)noexcept
 	:statsComponent(level), animationComponent(&this->sprite, &texture_sheet), player(player), textureSheet(&texture_sheet), sounds(sounds)
 {
 	this->playerUsingSkill = &this->player->getUsingSkilltype();

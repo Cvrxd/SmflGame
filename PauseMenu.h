@@ -19,10 +19,11 @@ private:
 	//Sounds
 	std::pair<sf::SoundBuffer, sf::Sound> clickSound;
 
+	//Init functions
 	void initSounds();
 
 public:
-	PauseMenu(sf::RenderWindow& window, sf::Font& font);
+	PauseMenu(sf::RenderWindow& window, sf::Font& font) noexcept;
 	~PauseMenu();
 
 	//Accessors
@@ -30,7 +31,6 @@ public:
 
 	//Functions
 	void playClickSound();
-
 	const bool isButtonPressed(const std::string& key);
 	void addButton(const std::string& key, const float& y, const float& modifier_x, const std::string& text);
 	void update(const sf::Vector2i& mousePosition);

@@ -32,7 +32,7 @@ public:
 	int currentSkillDamage;
 
 	//Constructor
-	StatsComponent(const int& level);
+	StatsComponent(const int& level) noexcept;
 	~StatsComponent();
 
 	//Functions

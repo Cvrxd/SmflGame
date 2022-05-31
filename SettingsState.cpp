@@ -86,7 +86,8 @@ inline void SettingsState::initGUI()
 
 }
 
-SettingsState::SettingsState(StateData* state_data)
+//Constructor
+SettingsState::SettingsState(StateData* state_data) noexcept
 	: State(state_data)
 {
 	this->initVariables();
@@ -155,7 +156,6 @@ void SettingsState::update(const float& dt)
 	this->updateGUI(dt);
 }
 
-//render
 inline void SettingsState::renderGUI(sf::RenderTarget& target)
 {
 	//render buttons

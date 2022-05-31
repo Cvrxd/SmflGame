@@ -18,7 +18,7 @@ protected:
 	sf::Sprite shape;
 public:
 	Tile(const int& x, const int& y, const float& gridSizef, const sf::Texture& texture, const sf::IntRect& texture_rect,
-		const bool& collision = false, const short& type = TileTypes::DEFAULT);
+		const bool& collision = false, const short& type = TileTypes::DEFAULT) noexcept;
 
 	virtual ~Tile();
 	

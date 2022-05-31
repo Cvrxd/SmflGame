@@ -120,9 +120,6 @@
     <ClCompile Include="MeleEnemy.cpp">
       <Filter>Entities\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="DropComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="DestroyingEnemy.cpp">
       <Filter>Entities\Enemies</Filter>
     </ClCompile>
@@ -131,6 +128,9 @@
     </ClCompile>
     <ClCompile Include="PopUpTextComponent.cpp">
       <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="EntitySoundComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -206,9 +206,6 @@
     <ClInclude Include="BossEnemy.h">
       <Filter>Entities\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="DropComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="DestroyingEnemy.h">
       <Filter>Entities\Enemies</Filter>
     </ClInclude>
@@ -217,6 +214,9 @@
     </ClInclude>
     <ClInclude Include="PopUpTextComponent.h">
       <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="EntitySoundComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

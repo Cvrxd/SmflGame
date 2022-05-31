@@ -18,7 +18,7 @@ namespace EnemyGUI
 
 		void initTextures();
 	public:
-		EnemyHealthBar(const int* hp);
+		EnemyHealthBar(const int* hp) noexcept;
 		~EnemyHealthBar();
 
 		//Functions
@@ -43,7 +43,7 @@ namespace EnemyGUI
 
 		void initVariables(const sf::Font& font);
 	public:
-		EnemyLevelIcon(const int* lvl, const int* playerLvl, const sf::Font& font);
+		EnemyLevelIcon(const int* lvl, const int* playerLvl, const sf::Font& font) noexcept;
 		~EnemyLevelIcon();
 
 		//Functions

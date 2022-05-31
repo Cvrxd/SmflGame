@@ -18,7 +18,6 @@ class MeleEnemy;
 class MageEnemy;
 class DestroyingEnemy;
 
-
 class GameState : public State
 {
 private:
@@ -48,8 +47,9 @@ private:
 	std::vector<MageEnemy> mageEnemies;
 	std::vector<DestroyingEnemy> destroyingEnemies;
 
-	//Enemies sounds
+	//Sounds
 	EnemiesSounds enemiesSounds;
+	GuiSounds guiSounds;
 
 	//Functions
 	void initRenderTextures();

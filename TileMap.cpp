@@ -11,7 +11,7 @@ inline void TileMap::initTextureSheet()
 }
 
 //Constructor
-TileMap::TileMap(const float& gridSize, const int& width, const int& hight, const std::string& textureFile)
+TileMap::TileMap(const float& gridSize, const int& width, const int& hight, const std::string& textureFile) noexcept
 	: gridSizeF(gridSize), gridSizeI(static_cast<int>(gridSizeF)), textureFile(textureFile), 
 	fromX(0), toX(0), fromY(0), toY(0)
 {

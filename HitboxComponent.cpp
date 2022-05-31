@@ -2,7 +2,7 @@
 #include "HitboxComponent.h"
 
 //Constructor
-HitboxComponent::HitboxComponent(sf::Sprite& sprite, const float& offset_x, const float& offset_y, const float& width, const float& height)
+HitboxComponent::HitboxComponent(sf::Sprite& sprite, const float& offset_x, const float& offset_y, const float& width, const float& height) noexcept
 	: sprite(&sprite), offsetX(offset_x), offsetY(offset_y)
 {
 	//Next positon rect

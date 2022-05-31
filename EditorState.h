@@ -32,7 +32,7 @@ private:
 	bool collision;
 	short tileType;
 
-	//Functions
+	//Init functions
 	void initVariables();
 	void initView();
 	void initBackground();
@@ -44,7 +44,7 @@ private:
 	void initGUI();
 
 public:
-	EditorState(StateData* state_data);
+	EditorState(StateData* state_data) noexcept;
 	virtual ~EditorState() override;
 
 	//functions

@@ -2,7 +2,7 @@
 #include "StatsComponent.h"
 
 //Constructor
-StatsComponent::StatsComponent(const int& level)
+StatsComponent::StatsComponent(const int& level) noexcept
 	:level(level), exp(0), statsPoints(3), skillPoints(1), coins(0), crystals(0)
 {
 	//Exp

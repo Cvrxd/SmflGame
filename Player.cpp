@@ -81,26 +81,46 @@ inline void Player::addAnimations()
 
 inline void Player::initSounds()
 {
-	//Running sound
-	this->sounds.runningBuffer.loadFromFile("Sounds/game_state/player/running.wav");
-	this->sounds.runningSound.setBuffer(this->sounds.runningBuffer);
-	this->sounds.runningSound.setVolume(2.f);
-
-	//Walking sound
-	this->sounds.walkingBuffer.loadFromFile("Sounds/game_state/player/walking.wav");
-	this->sounds.walkingSound.setBuffer(this->sounds.walkingBuffer);
-	this->sounds.walkingSound.setVolume(2.f);
-	this->sounds.walkingSound.setLoop(true);
+	this->soundComponent.addWalkingSound("Sounds/game_state/player/walking.wav");
+	this->soundComponent.addRunningSound("Sounds/game_state/player/running.wav");
 }
 
 //Sound functions
-inline void Player::playSound(const std::string& sound)
+inline void Player::updateSound()
 {
-	
+	//Pause or unpause movement sound
+	if (this->movementComponent.getState(IDLE))
+	{
+		this->soundComponent.pauseMovementSound();
+	}
+	else
+	{
+		this->soundComponent.unpauseMovementSound();
+	}
+
+	//Change movement sound if player is buffed
+	if (this->isBuffed)
+	{
+		this->soundComponent.changeMovementSound(true);
+	}
+	else
+	{
+		this->soundComponent.changeMovementSound(false);
+	}
+
+	//Decrease movement sound if isAttacking
+	if (this->isAttacking)
+	{
+		this->soundComponent.changeMovementVolume(false);
+	}
+	else
+	{
+		this->soundComponent.changeMovementVolume(true);
+	}
 }
 
 //Constructor
-Player::Player(const float& x, const float& y, sf::Texture& texture_sheet, const sf::Font& font, bool& isBuffed)
+Player::Player(const float& x, const float& y, sf::Texture& texture_sheet, const sf::Font& font, bool& isBuffed) noexcept
 	: currentHitAnimation(0), font(font), isBuffed(isBuffed),
 	statsComponent(1),
 	animationComponent(&this->sprite, &texture_sheet),
@@ -238,6 +258,11 @@ void Player::usePotions(const Potions& potion_type)
 }
 
 //Functions
+void Player::pauseSounds()
+{
+	this->soundComponent.pauseMovementSound();
+}
+
 inline void Player::updateAttack(const float& dt, sf::Vector2f mouse_pos_view)
 {
 	this->dealDMG = false;
@@ -309,7 +334,6 @@ inline void Player::updateAttack(const float& dt, sf::Vector2f mouse_pos_view)
 
 inline void Player::updateAnimations(const float& dt, sf::Vector2f mouse_pos_view)
 {
-
 	if (this->isBuffed)
 	{
 		this->currentKey = &this->dashKey;
@@ -335,19 +359,25 @@ inline void Player::updateAnimations(const float& dt, sf::Vector2f mouse_pos_vie
 	else if (this->movementComponent.getState(MOVING_RIGHT))
 	{
 		SPTIRES_SETSCALE_RIGHT;
+
+		//Animation
 		this->animationComponent.play(*this->currentKey, dt, this->movementComponent.getVelocity().x, this->movementComponent.getMaxVelocity());
 	}
 	else if (this->movementComponent.getState(MOVING_LEFT))
 	{
 		SPTIRES_SETSCALE_LEFT;
+
+		//Animation
 		this->animationComponent.play(*this->currentKey, dt, this->movementComponent.getVelocity().x, this->movementComponent.getMaxVelocity());
 	}
 	else if (this->movementComponent.getState(MOVE_UP))
 	{
+		//Animation
 		this->animationComponent.play(*this->currentKey, dt, this->movementComponent.getVelocity().y, this->movementComponent.getMaxVelocity());
 	}
 	else if (this->movementComponent.getState(MOVE_DOWN))
 	{
+		//Animation
 		this->animationComponent.play(*this->currentKey, dt, this->movementComponent.getVelocity().y, this->movementComponent.getMaxVelocity());
 	}
 }
@@ -356,6 +386,7 @@ void Player::update(const float& dt, sf::Vector2f mouse_pos_view)
 {
 	this->hitRange.setPosition(this->getCenter().x - 80, this->getCenter().y - 80);
 
+	this->updateSound();
 	this->movementComponent.update(dt);
 	this->updateAnimations(dt, mouse_pos_view);
 	this->updateAttack(dt, mouse_pos_view);
@@ -395,3 +426,4 @@ void Player::render(sf::RenderTarget& target, sf::Shader* shader)
 	//this->hitboxComponent.render(target);
 	//target.draw(this->hitRange);
 }
+

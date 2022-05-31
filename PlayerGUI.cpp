@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "PlayerGUI.h"
 
+//==================================
+//PlayerGUI=========================
+//==================================
+
 //Initialisation
 inline void PlayerGUI::initVariables()
 {
@@ -237,13 +241,13 @@ void PlayerGUI::setPotionsCount(int& hp, int& mp)
 	this->mpPotions = &mp;
 }
 
-void PlayerGUI::initSkillIcons(std::vector<std::pair<SkillType, sf::RectangleShape>>* skillsIcons)
+void PlayerGUI::initSkillIcons(std::vector<std::pair<SkillType, sf::RectangleShape>>* skillsIcons) 
 {
 	this->skillsIcons = skillsIcons;
 }
 
 //Constructor
-PlayerGUI::PlayerGUI(Player& player, sf::Font& font)
+PlayerGUI::PlayerGUI(Player& player, sf::Font& font) noexcept
 	:player(player), font(font), statsComponent(*this->player.getStatsComponent())
 {
 	this->initVariables();
@@ -431,8 +435,9 @@ void PlayerGUI::skillsMenUpdate(const float& dt)
 	this->updateTextIcons();
 }
 
-
-//SkillsLevelingComponent=======================================
+//===============================================
+//SkillsLevelingComponent========================
+//===============================================
 
 //Init functions
 inline void SkillsLevelingComponent::initVariables(std::vector<std::pair<SkillType, sf::RectangleShape>>& originalSkillsIcons,
@@ -483,17 +488,6 @@ void SkillsLevelingComponent::initSkill(const SkillType& type)
 	this->crystalsAnimations[type].addAnimation("PLAY", 0, 0, 3, 0, 16, 16, 15.f);
 }
 
-inline void SkillsLevelingComponent::initSounds()
-{
-	this->sounds["UPGRADE_SKILL"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/spell_upgrade.wav");
-	this->sounds["UPGRADE_SKILL"].second.setBuffer(this->sounds["UPGRADE_SKILL"].first);
-	this->sounds["UPGRADE_SKILL"].second.setVolume(10.f);
-
-	this->sounds["CLICK"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/click.wav");
-	this->sounds["CLICK"].second.setBuffer(this->sounds["CLICK"].first);
-	this->sounds["CLICK"].second.setVolume(10.f);
-}
-
 //Other functions
 inline void SkillsLevelingComponent::updateKeyTime(const float& dt)
 {
@@ -532,14 +526,13 @@ inline void SkillsLevelingComponent::updateSkillColor(const SkillType& type, con
 
 inline void SkillsLevelingComponent::playSound(const std::string& sound)
 {
-	this->sounds[sound].second.play();
+	this->guiSounds.sounds[sound].second.play();
 }
 
 //Constructors
-SkillsLevelingComponent::SkillsLevelingComponent(SkillsComponent& skillsComponent, PlayerGUI& playerGUI, sf::Font& font)
-	:skillsComponent(skillsComponent), playerGUI(playerGUI), font(font)
+SkillsLevelingComponent::SkillsLevelingComponent(SkillsComponent& skillsComponent, PlayerGUI& playerGUI, sf::Font& font, GuiSounds& guiSounds) noexcept
+	:skillsComponent(skillsComponent), playerGUI(playerGUI), font(font), guiSounds(guiSounds)
 {
-	this->initSounds();
 }
 
 SkillsLevelingComponent::~SkillsLevelingComponent()
@@ -666,8 +659,9 @@ void SkillsLevelingComponent::render(sf::RenderTarget& target, sf::Vector2i& mou
 	}
 }
 
-
-//Skills Menu=======================================
+//==================================
+//Skills menu=======================
+//==================================
 
 //Init functions
 inline void SkillsMenu::initBackground(const float& x, const float& y)
@@ -801,17 +795,6 @@ inline void SkillsMenu::initSkillIcons()
 	this->skillsIcons[8].second.setTexture(&this->textures["BUFF"]);
 }
 
-inline void SkillsMenu::initSounds()
-{
-	this->sounds["UNLOCK_SKILL"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/spell_unlock.wav");
-	this->sounds["UNLOCK_SKILL"].second.setBuffer(this->sounds["UNLOCK_SKILL"].first);
-	this->sounds["UNLOCK_SKILL"].second.setVolume(10.f);
-
-	this->sounds["CLICK"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/click.wav");
-	this->sounds["CLICK"].second.setBuffer(this->sounds["CLICK"].first);
-	this->sounds["CLICK"].second.setVolume(10.f);
-}
-
 inline void SkillsMenu::initButtons()
 {
 	this->buttons["HP_UP"] = new GUI::Button(this->statIcons[0].getPosition().x + 200, this->statIcons[0].getPosition().y + 28,
@@ -866,19 +849,18 @@ inline void SkillsMenu::updateKeyTime(const float& dt)
 
 inline void SkillsMenu::playSound(const std::string& sound)
 {
-	this->sounds[sound].second.play();
+	this->guiSounds.sounds[sound].second.play();
 }
 
 //Constructor
-SkillsMenu::SkillsMenu(Player& player, PlayerGUI& playerGUI, sf::Font& font, const float& x, const float& y)
-	:player(player), playerGUI(playerGUI), font(font), keyTime(0.f), keyTimeMax(10.f), skillsSize(9),
-	skillsLevelingComponent(*this->player.getSkillComponent(), playerGUI, font)
+SkillsMenu::SkillsMenu(Player& player, PlayerGUI& playerGUI, sf::Font& font, GuiSounds& guiSounds, const float& x, const float& y) noexcept
+	:player(player), playerGUI(playerGUI), font(font), guiSounds(guiSounds), keyTime(0.f), keyTimeMax(10.f), skillsSize(9),
+	skillsLevelingComponent(*this->player.getSkillComponent(), playerGUI, font, guiSounds)
 {
 	this->initBackground(x, y);
 	this->initTexts();
 	this->initSkillIcons();
 	this->initButtons();
-	this->initSounds();
 
 	//Init other components variables
 	this->playerGUI.initSkillIcons(&this->skillsIcons);
@@ -1058,4 +1040,33 @@ void SkillsMenu::render(sf::RenderTarget& target, sf::Vector2i& mousePosWindow)
 	
 	//SKills leveling component
 	this->skillsLevelingComponent.render(target, mousePosWindow);
+}
+
+//==================================
+//Items menu========================
+//==================================
+
+//Init functions
+void ItemsMune::initVariables()
+{
+}
+
+//Constructors
+ItemsMune::ItemsMune(Player& player, PlayerGUI& playerGUI, sf::Font& font, const float& x, const float& y) noexcept
+	: player(player), playerGui(playerGUI), font(font)
+{
+
+}
+
+ItemsMune::~ItemsMune()
+{
+}
+
+//Functions
+void ItemsMune::update(sf::Vector2i& mousePosWindow, const float& dt)
+{
+}
+
+void ItemsMune::render(sf::RenderTarget& target, sf::Vector2i& mousePosWindow)
+{
 }

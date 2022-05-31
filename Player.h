@@ -1,24 +1,15 @@
 #pragma once
 #include "Entity.h"
 #include "PlayerGUI.h"
+#include "EntitySoundComponent.h"
 
 class Entity;
 class PlayerGUI;
+class EntitySoundComponent;
 
 class Player : public Entity
 {
 private:
-	struct Sounds
-	{
-		//Walking sound
-		sf::SoundBuffer walkingBuffer;
-		sf::Sound walkingSound;
-
-		//Running sound
-		sf::SoundBuffer runningBuffer;
-		sf::Sound runningSound;
-	};
-
 	//Variables
 	//Booleans for animations
 	bool& isBuffed;
@@ -55,13 +46,11 @@ private:
 	AnimationComponent animationComponent;
 	StatsComponent statsComponent;
 	SkillsComponent skillsComponent;
+	EntitySoundComponent soundComponent;
 
 	//Animations
 	std::vector<std::pair<sf::Texture, sf::Sprite>> sprites;
 	std::vector<AnimationComponent> hitAnimations;
-
-	//Sounds
-	Sounds sounds;
 
 	//Initialisation functios
 	void initVariables();
@@ -69,12 +58,11 @@ private:
 	void addAnimations();
 	void initComponents(sf::Texture& texture_sheet);
 	void initSounds();
-	
-	//Sound functions
-	void playSound(const std::string& sound);
 
+	//Sound functions
+	void updateSound();
 public:
-	Player(const float& x, const float& y, sf::Texture& texture_sheet, const sf::Font& font, bool& isBuffed);
+	Player(const float& x, const float& y, sf::Texture& texture_sheet, const sf::Font& font, bool& isBuffed) noexcept;
 	virtual ~Player();
 
 	//Accessors
@@ -109,6 +97,7 @@ public:
 	void usePotions(const Potions& potion_type);
 
 	//Functions
+	void pauseSounds();
 	void updateAttack(const float& dt, sf::Vector2f mouse_pos_view);
 	void updateAnimations(const float& dt, sf::Vector2f mouse_pos_view);
 	void update(const float& dt, sf::Vector2f mouse_pos_view) override;

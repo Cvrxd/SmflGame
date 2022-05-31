@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "Gui.h"
 
-////========================Button==========================////
+//============================//
+//Button======================//
+//============================//
 
 // Constructor
 GUI::Button::Button(const float& x, const float& y, const float& width, const float& height,
@@ -9,7 +11,7 @@ GUI::Button::Button(const float& x, const float& y, const float& width, const fl
 	const sf::Color& text_idle_color, const sf::Color& text_hover_color, const sf::Color& text_active_color,
 	const sf::Color& idleColor, const sf::Color& hoverColor, const sf::Color& activeColor,
 	const sf::Color& outlineIdleColor, const sf::Color& outlineHoverColor, const sf::Color& outlineActiveColor,
-	short unsigned id)
+	short unsigned id) noexcept
 
 	: textIdleColor(text_idle_color), textHoverColor(text_hover_color), texActiveColor(text_active_color), id(id),
 	outlineActiveColor(outlineActiveColor), outlineHoverColor(outlineHoverColor), outlineIdleColor(outlineIdleColor),
@@ -28,7 +30,7 @@ GUI::Button::Button(const float& x, const float& y, const float& width, const fl
 	this->text.setPosition(this->shape.getPosition().x + 20, this->shape.getPosition().y + 8);
 }
 
-GUI::Button::Button(const GUI::Button& other)
+GUI::Button::Button(const GUI::Button& other) noexcept
 {
 	this->activeColor = other.activeColor;
 	this->buttonState = other.buttonState;
@@ -46,7 +48,7 @@ GUI::Button::Button(const GUI::Button& other)
 	this->textIdleColor = other.textIdleColor;
 }
 
-GUI::Button::Button(GUI::Button&& other)
+GUI::Button::Button(GUI::Button&& other) noexcept
 {
 	this->activeColor = other.activeColor;
 	this->buttonState = other.buttonState;
@@ -64,7 +66,7 @@ GUI::Button::Button(GUI::Button&& other)
 	this->textIdleColor = other.textIdleColor;
 }
 
-GUI::Button& GUI::Button::operator= (const GUI::Button& other)
+GUI::Button& GUI::Button::operator= (const GUI::Button& other) noexcept
 {
 	if (this != &other)
 	{
@@ -86,7 +88,7 @@ GUI::Button& GUI::Button::operator= (const GUI::Button& other)
 	return *this;
 }
 
-GUI::Button& GUI::Button::operator=(GUI::Button&& other)
+GUI::Button& GUI::Button::operator=(GUI::Button&& other) noexcept
 {
 	this->activeColor = other.activeColor;
 	this->buttonState = other.buttonState;
@@ -150,9 +152,7 @@ void GUI::Button::setId(const short unsigned& id)
 	this->id = id;
 }
 
-//functions
-
-// update bolleans for hoverand pressed
+//Functions
 void GUI::Button::update(const sf::Vector2i& mousePosition)
 {
 	//Idle
@@ -204,11 +204,13 @@ void GUI::Button::render(sf::RenderTarget& target)
 	target.draw(this->text);
 }
 
+//============================//
+//DropDownList================//
+//============================//
 
-//========================DropDownBox==========================//
-
+//Constructor
 GUI::DropDownList::DropDownList(const float& x, const float& y, const float& width, const float& hight, 
-	sf::Font& font, std::string text_list[], const unsigned& number_of_elements,const unsigned& default_index)
+	sf::Font& font, std::string text_list[], const unsigned& number_of_elements,const unsigned& default_index) noexcept
 	:font(font), showDropBox(false), keyTimeMax(2.f), keyTime(0.f)
 {
 	this->activeBox = new GUI::Button(x, y + 20, width + 8, hight,
@@ -313,7 +315,9 @@ void GUI::DropDownList::render(sf::RenderTarget& target)
 	}
 }
 
-////========================TextureSelector==========================////
+//============================//
+//TextureSelector=============//
+//============================//
 
 //Initialisation
 inline void GUI::TextureSelector::initBounds(const float& x, const float& y, const float& width_bounds, const float& height_bounds)
@@ -355,7 +359,7 @@ inline void GUI::TextureSelector::initSelector_TextureRect(const float& x, const
 
 //Constructor
 GUI::TextureSelector::TextureSelector(const float& x, const float& y, const float& width_bounds, const float& hight_bounds, 
-	const unsigned& gridSize ,const sf::Texture& texture_sheet, sf::Font& font)
+	const unsigned& gridSize ,const sf::Texture& texture_sheet, sf::Font& font) noexcept
 	:active(false), hiden(false), gridSize(gridSize), keyTime(0.f), keyTimeMax(5.f)
 {
 	this->initBounds(x, y, width_bounds, hight_bounds);
@@ -368,23 +372,6 @@ GUI::TextureSelector::TextureSelector(const float& x, const float& y, const floa
 		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
 	);
 }
-
-//GUI::TextureSelector::TextureSelector(TextureSelector&& other)
-//{
-//	this->active = other.active;
-//	this->bounds = std::move(other.bounds);
-//	this->gridSize = other.gridSize;
-//	this->hideButton = other.hideButton;
-//	other.hideButton = nullptr;
-//
-//	this->hiden = other.hiden;
-//	this->keyTime = other.keyTime;
-//	this->keyTimeMax = other.keyTimeMax;
-//	this->mousePosGrid = std::move(other.mousePosGrid);
-//	this->selector = std::move(other.selector);
-//	this->sheet = std::move(other.sheet);
-//	this->textureRect = std::move(other.textureRect);
-//}
 
 GUI::TextureSelector::~TextureSelector()
 {

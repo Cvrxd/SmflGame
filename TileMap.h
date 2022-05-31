@@ -35,12 +35,12 @@ private:
 
 	bool updateCollision;
 
-	//Functions
+	//Init unctions
 	void initTextureSheet();
 
 public:
-	TileMap(const float& gridSize, const int& width, const int& hight, const std::string& textureFile);
-	TileMap(const std::string& file_name);
+	TileMap(const float& gridSize, const int& width, const int& hight, const std::string& textureFile) noexcept;
+	TileMap(const std::string& file_name) ;
 	virtual ~TileMap();
 
 	//Accessors

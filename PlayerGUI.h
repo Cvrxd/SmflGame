@@ -5,6 +5,26 @@
 class Player;
 class GUI::Button;
 
+struct GuiSounds
+{
+	std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>> sounds;
+
+	GuiSounds()
+	{
+		this->sounds["UPGRADE_SKILL"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/spell_upgrade.wav");
+		this->sounds["UPGRADE_SKILL"].second.setBuffer(this->sounds["UPGRADE_SKILL"].first);
+		this->sounds["UPGRADE_SKILL"].second.setVolume(10.f);
+
+		this->sounds["UNLOCK_SKILL"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/spell_unlock.wav");
+		this->sounds["UNLOCK_SKILL"].second.setBuffer(this->sounds["UNLOCK_SKILL"].first);
+		this->sounds["UNLOCK_SKILL"].second.setVolume(10.f);
+
+		this->sounds["CLICK"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/click.wav");
+		this->sounds["CLICK"].second.setBuffer(this->sounds["CLICK"].first);
+		this->sounds["CLICK"].second.setVolume(10.f);
+	}
+};
+
 class PlayerGUI
 {
 private:
@@ -61,7 +81,7 @@ private:
 	void initAniamtions();
 public:
 	//Constructor
-	PlayerGUI(Player& player, sf::Font& font);
+	PlayerGUI(Player& player, sf::Font& font) noexcept;
 	~PlayerGUI();
 
 	//Accessors
@@ -125,14 +145,13 @@ private:
 	std::unordered_map<SkillType, sf::Text> texts;
 
 	//Sounds
-	std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>> sounds;
+	GuiSounds& guiSounds;
 	
 	//Init functions
 	void initVariables(std::vector<std::pair<SkillType, sf::RectangleShape>>& originalSkillsIcons, 
 		std::vector<std::pair<sf::RectangleShape, sf::RectangleShape>>& quickSlotBars);
 
 	void initSkill(const SkillType& type);
-	void initSounds();
 
 	//Other functions
 	void updateKeyTime(const float& dt);
@@ -140,7 +159,7 @@ private:
 	void playSound(const std::string& sound);
 
 public:
-	SkillsLevelingComponent(SkillsComponent& skillsComponent, PlayerGUI& playerGUI, sf::Font& font);
+	SkillsLevelingComponent(SkillsComponent& skillsComponent, PlayerGUI& playerGUI, sf::Font& font, GuiSounds& guiSounds) noexcept;
 	~SkillsLevelingComponent();
 
 	//Functions
@@ -191,14 +210,13 @@ private:
 	std::unordered_map<SkillType, GUI::Button*> unclockButtons;
 
 	//Sounds
-	std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>> sounds;
+	GuiSounds& guiSounds;
 
 	//Init functions
 	void initButtons();
 	void initBackground(const float& x, const float& y);
 	void initTexts();
 	void initSkillIcons();
-	void initSounds();
 
 	//Other functions
 	void updateKeyTime(const float& dt);
@@ -206,7 +224,7 @@ private:
 	void playSound(const std::string& sound);
 public:
 	//Constructor
-	SkillsMenu(Player& player, PlayerGUI& playerGUI, sf::Font& font, const float& x, const float& y);
+	SkillsMenu(Player& player, PlayerGUI& playerGUI, sf::Font& font, GuiSounds& guiSounds,const float& x, const float& y) noexcept;
 	~SkillsMenu();
 
 	//Other functions
@@ -223,6 +241,27 @@ public:
 	void render(sf::RenderTarget& target, sf::Vector2i& mousePosWindow);
 
 	friend class SkillsLevelingMenu;
-
 	friend void PlayerGUI::initBuffSkill();
+};
+
+class ItemsMune
+{
+private:
+	//Variables
+	PlayerGUI& playerGui;
+	Player& player;
+
+	sf::Font& font;
+
+	//Init functions
+	void initVariables();
+
+public:
+	ItemsMune(Player& player, PlayerGUI& playerGUI, sf::Font& font, const float& x, const float& y) noexcept;
+	~ItemsMune();
+
+	//Finctions
+
+	void update(sf::Vector2i& mousePosWindow, const float& dt);
+	void render(sf::RenderTarget& target, sf::Vector2i& mousePosWindow);
 };

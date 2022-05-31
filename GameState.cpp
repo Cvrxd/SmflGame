@@ -135,7 +135,7 @@ GameState::GameState(StateData* state_data)
 	pauseMenu(*this->window, this->stateData->font), //Pause menu 
 	player(500,500, this->textures["PLAYER_SHEET"], this->font, this->isBuffed), //Player
 	playerGUI(this->player, this->font), // Player GUI
-	skillsMenu(this->player, this->playerGUI,this->font, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
+	skillsMenu(this->player, this->playerGUI,this->font, this->guiSounds,static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
 	tileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg") //Tile map
 {
 	this->initRenderTextures();
@@ -284,6 +284,7 @@ inline void GameState::updateInput(const float& dt)
 
 		if (!this->paused)
 		{
+			this->player.pauseSounds();
 			this->pauseState();
 		}
 		else

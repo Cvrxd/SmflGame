@@ -49,7 +49,7 @@ protected:
 	virtual void initKeybinds() = 0;
 
 public:
-	State(StateData* state_data);
+	State(StateData* state_data) noexcept;
 	virtual ~State();
 
 	//Functions
@@ -60,10 +60,10 @@ public:
 	const bool& getQuit() const;
 	const bool getKeyTime();
  
-	// end state
+	//End state
 	virtual void endState();
 
-	// update functions
+	//Update functions
 	virtual void updateKeyTime(const float& dt);
 	virtual void updateInput(const float& dt) = 0;
 	virtual void updateMousePosition(sf::View* view = NULL);

@@ -86,7 +86,8 @@ inline void MainMenuState::initButtons()
 	
 }
 
-MainMenuState::MainMenuState(StateData* state_data)
+//Constructor
+MainMenuState::MainMenuState(StateData* state_data) noexcept
 	: State(state_data)
 {
 	this->initVariables();

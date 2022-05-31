@@ -1,19 +1,14 @@
 #include "stdafx.h"
 #include "Tile.h"
 
+//constructor
 Tile::Tile(const int& x, const int& y, const float& gridSizef, const sf::Texture& texture, const sf::IntRect& texture_rect, 
-	const bool& collision, const short& type)
+	const bool& collision, const short& type) noexcept
 	: collision(collision), type(type), x(x), y(y)
 {
-	/*this->shape.setSize(sf::Vector2f(gridSizef, gridSizef));
-	this->shape.setFillColor(sf::Color::White);*/
 	this->shape.setPosition(static_cast<float>(x) * gridSizef, static_cast<float>(y) * gridSizef);
 	this->shape.setTexture(texture);
 	this->shape.setTextureRect(texture_rect);
-	//this->shape.setScale(2.f, 2.f);
-
-	//this->shape.setOutlineThickness(1.f);
-	//this->shape.setOutlineColor(sf::Color::Black);
 }
 
 Tile::~Tile()

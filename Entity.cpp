@@ -6,7 +6,8 @@ void Entity::initVariables()
 {
 }
 
-Entity::Entity()
+//Constructor
+Entity::Entity() noexcept
 {
 	this->initVariables();
 }
@@ -40,17 +41,13 @@ const sf::Vector2f& Entity::getPosition() const
 
 const sf::Vector2f Entity::getCenter() const
 {
-	return this->hitboxComponent.getPositionHitbox() +
-		sf::Vector2f(
-			this->hitboxComponent.getGlobalBounds().width / 2.f,
-			this->hitboxComponent.getGlobalBounds().height / 2.f);
-
+	return this->hitboxComponent.getPositionHitbox() + 
+		sf::Vector2f(this->hitboxComponent.getGlobalBounds().width / 2.f, this->hitboxComponent.getGlobalBounds().height / 2.f);
 }
 
 const sf::Vector2i Entity::getGridPosition(const int& gridSizeI) const
 {
-	return sf::Vector2i(
-		static_cast<int>(this->hitboxComponent.getPositionHitbox().x) / gridSizeI,
+	return sf::Vector2i(static_cast<int>(this->hitboxComponent.getPositionHitbox().x) / gridSizeI,
 		static_cast<int>(this->hitboxComponent.getPositionHitbox().y) / gridSizeI);
 }
 

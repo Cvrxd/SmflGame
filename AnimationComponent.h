@@ -29,7 +29,7 @@ private:
 		Animation(sf::Sprite* sprite, sf::Texture* textureSheet, 
 			const int& start_frame_x, const int& start_frame_y, 
 			const int& frame_x, const int& frame_y,
-			const int& width, const int& height, const float& animationTimer)
+			const int& width, const int& height, const float& animationTimer) noexcept
 			:sprite(sprite), textureSheet(textureSheet), width(width), height(height), animationTimer(animationTimer)
 		{
 			this->timer = 0.f;
@@ -143,12 +143,12 @@ private:
 
 public:
 	AnimationComponent() {};
-	AnimationComponent(sf::Sprite* sprite, sf::Texture* textureSheet);
-	AnimationComponent(const AnimationComponent& other);
+	AnimationComponent(sf::Sprite* sprite, sf::Texture* textureSheet) noexcept;
+	AnimationComponent(const AnimationComponent& other) noexcept;
 
 
-	AnimationComponent& operator=(AnimationComponent&& other);
-	AnimationComponent& operator=(const AnimationComponent& other);
+	AnimationComponent& operator=(AnimationComponent&& other) noexcept;
+	AnimationComponent& operator=(const AnimationComponent& other) noexcept;
 
 	virtual ~AnimationComponent();
 

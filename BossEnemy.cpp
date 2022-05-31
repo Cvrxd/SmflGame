@@ -125,7 +125,7 @@ inline void BossEnemy::playSkillImpactSounds(const SkillType& type)
 
 //Constructors
 BossEnemy::BossEnemy(const BossType& type, const int& level, const float& x, const float& y, 
-	sf::Texture& texture_sheet, Player* player, EnemiesSounds& sounds)
+	sf::Texture& texture_sheet, Player* player, EnemiesSounds& sounds) noexcept
 	:Enemy(level, x, y, texture_sheet, player, sounds),
 	type(type), healthBar(&this->statsComponent.hp), levelIcon(&level, &this->player->getStatsComponent()->level, this->player->getFont())
 {

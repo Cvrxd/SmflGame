@@ -8,7 +8,7 @@ void PopUpTextComponent::updateText(const std::string& key)
 }
 
 //Constructor
-PopUpTextComponent::PopUpTextComponent(sf::Font& font)
+PopUpTextComponent::PopUpTextComponent(sf::Font& font) noexcept
 	:font(font)
 {
 	

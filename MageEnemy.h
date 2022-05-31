@@ -36,7 +36,7 @@ class MageEnemy : public Enemy
 
 public:
 	MageEnemy(const MageEnemyType& type, const int& level, const float& x, const float& y, 
-		sf::Texture& texture_sheet, Player* player, EnemiesSounds& sounds);
+		sf::Texture& texture_sheet, Player* player, EnemiesSounds& sounds) noexcept;
 
 	~MageEnemy();
 

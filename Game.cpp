@@ -74,7 +74,7 @@ inline void Game::initStates()
 }
 
 //Constructor
-Game::Game()
+Game::Game() noexcept
 {
 	this->initVariables();
 	this->initGraphicsSettings();

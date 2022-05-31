@@ -34,7 +34,7 @@ private:
 	//Sounds
 	MainMenuSounds sounds;
 
-	//Functions
+	//Init functions
 	void initVariables();
 	void initSounds();
 	void initBackground();
@@ -42,7 +42,7 @@ private:
 	void initButtons();
 	void initKeybinds() override;
 public:
-	MainMenuState(StateData* state_data);
+	MainMenuState(StateData* state_data) noexcept;
 	virtual ~MainMenuState() override;
 
 	//Functions

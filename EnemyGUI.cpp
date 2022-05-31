@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "EnemyGUI.h"
 
+//===========================
+//EnemyHealthBar=============
+//===========================
+
 //Initialisation
 inline void EnemyGUI::EnemyHealthBar::initTextures()
 {
@@ -14,7 +18,7 @@ inline void EnemyGUI::EnemyHealthBar::initTextures()
 }
 
 //Constructor
-EnemyGUI::EnemyHealthBar::EnemyHealthBar(const int* hp)
+EnemyGUI::EnemyHealthBar::EnemyHealthBar(const int* hp) noexcept
 	: hp(hp), hpMAX(*hp)
 {
 	this->initTextures();
@@ -68,8 +72,12 @@ inline void EnemyGUI::EnemyLevelIcon::initVariables(const sf::Font& font)
 
 }
 
+//===========================
+//EnemyLevelIcon=============
+//===========================
+
 //Constructor
-EnemyGUI::EnemyLevelIcon::EnemyLevelIcon(const int* lvl, const int* playerLvl, const sf::Font& font)
+EnemyGUI::EnemyLevelIcon::EnemyLevelIcon(const int* lvl, const int* playerLvl, const sf::Font& font) noexcept
 	: lvl(lvl), playerLvl(playerLvl)
 {
 	this->initVariables(font);

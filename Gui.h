@@ -34,12 +34,12 @@ namespace GUI
 			const sf::Color& text_idle_color, const sf::Color& text_hover_color, const sf::Color& text_active_color,
 			const sf::Color& idleColor, const sf::Color& hoverColor, const sf::Color& activeColor, 
 			const sf::Color& outlineIdleColor = sf::Color::Transparent, const sf::Color& outlineHoverColor = sf::Color::Transparent, const sf::Color& outlineActiveColor = sf::Color::Transparent,
-			short unsigned id = 0);
+			short unsigned id = 0) noexcept;
 
-		Button(const GUI::Button& other);
-		Button(GUI::Button&& other);
-		Button& operator=(const GUI::Button& other);
-		Button& operator=(GUI::Button&& other);
+		Button(const GUI::Button& other) noexcept;
+		Button(GUI::Button&& other) noexcept;
+		Button& operator=(const GUI::Button& other) noexcept;
+		Button& operator=(GUI::Button&& other) noexcept;
 
 		~Button();
 
@@ -74,7 +74,7 @@ namespace GUI
 		 
 	public:
 		DropDownList(const float& x, const float& y, const float& width, const float& hight, 
-			sf::Font& font, std::string text_list[], const unsigned& number_of_elements, const unsigned& default_index = 0);
+			sf::Font& font, std::string text_list[], const unsigned& number_of_elements, const unsigned& default_index = 0) noexcept;
 		~DropDownList();
 
 		//Accessors
@@ -112,9 +112,7 @@ namespace GUI
 
 	public:
 		TextureSelector(const float& x, const float& y, const float& width_bounds, const float& hight_bounds, 
-			const unsigned& gridSize, const sf::Texture& texture_sheet, sf::Font& font);
-
-		//TextureSelector(TextureSelector&& other);
+			const unsigned& gridSize, const sf::Texture& texture_sheet, sf::Font& font) noexcept;
 
 		~TextureSelector();
 

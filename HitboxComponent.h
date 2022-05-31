@@ -15,7 +15,7 @@ private:
 
 public:
 	HitboxComponent() {};
-	HitboxComponent(sf::Sprite& sprite, const float& offset_x, const float& offset_y, const float& width, const float& height);
+	HitboxComponent(sf::Sprite& sprite, const float& offset_x, const float& offset_y, const float& width, const float& height) noexcept;
 
 
 	~HitboxComponent();

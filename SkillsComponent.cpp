@@ -148,7 +148,7 @@ inline void SkillsComponent::initAllAnimations()
 }
 
 //Constructor
-SkillsComponent::SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill, SkillType& currentSkillType, int& currentSkillDamage, bool& isBuffed)
+SkillsComponent::SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill, SkillType& currentSkillType, int& currentSkillDamage, bool& isBuffed) noexcept
 	: statsComponent(statsComponent) ,currentRender(-1), playAnimation(false), usingPotion(false), isBuffed(isBuffed), usingBuff(false),
 	keyTime(0.f), keyTimeMax(15.f), potionKeyTime(0.f), potionKeyTimeMax(5.f), buffDuration(5.f), buffCooldown(15.f),
 	skillsSize(8), usingSkill(isUsingSkill), currentSkillType(currentSkillType), currentSkillDamage(currentSkillDamage)

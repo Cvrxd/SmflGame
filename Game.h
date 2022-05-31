@@ -7,7 +7,6 @@ class Game
 {
 private:
 	// Vriables
-	// core
 	sf::Clock dtClock;
 
 	float dt;
@@ -21,7 +20,7 @@ private:
 	std::stack<State*> states;
 	std::unordered_map<std::string, int> supportedKeys;
 
-	// functions
+	//Init functions
 	void initVariables();
 	void initGraphicsSettings();
 	void initWnodow();
@@ -29,13 +28,12 @@ private:
 	void initStateData();
 	void initStates();
 public:
-	Game();
+	Game() noexcept;
 	~Game();
 
 	//Functions
 	void endAplication();
 
-	
 	//update
 	void updateSFMLEvents();
 	void update();

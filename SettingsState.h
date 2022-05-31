@@ -20,7 +20,7 @@ private:
 	std::unordered_map<std::string, GUI::Button*> buttons;
 	std::unordered_map<std::string, GUI::DropDownList*> dropDownLists;
 
-	//Functions
+	//Init functions
 	void initVariables();
 	void initText();
 	void initBackground();
@@ -29,7 +29,7 @@ private:
 	void initKeybinds() override;
 
 public:
-	SettingsState(StateData* state_data);
+	SettingsState(StateData* state_data) noexcept;
 	virtual ~SettingsState();
 
 	//Accessors

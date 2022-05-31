@@ -74,7 +74,7 @@ private:
 	void initAllSkills();
 	void initAllAnimations();
 public:
-	SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill, SkillType& usingSkillType, int& currentSkillDamage, bool& isBuffed);
+	SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill, SkillType& usingSkillType, int& currentSkillDamage, bool& isBuffed) noexcept;
 	~SkillsComponent();
 
 	//Accessors

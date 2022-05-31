@@ -1,14 +1,14 @@
 #include "stdafx.h"
 #include "AnimationComponent.h"
 
-
-AnimationComponent::AnimationComponent(sf::Sprite* sprite, sf::Texture* textureSheet)
+//Constructors
+AnimationComponent::AnimationComponent(sf::Sprite* sprite, sf::Texture* textureSheet) noexcept
 	:sprite(sprite), textureSheet(textureSheet), lastAnimation(NULL), priorityAnimation(NULL)
 {
 
 }
 
-AnimationComponent::AnimationComponent(const AnimationComponent& other)
+AnimationComponent::AnimationComponent(const AnimationComponent& other) noexcept
 	:sprite(other.sprite), textureSheet(other.textureSheet)
 {
 	this->animations = other.animations;
@@ -16,7 +16,7 @@ AnimationComponent::AnimationComponent(const AnimationComponent& other)
 	this->lastAnimation = other.lastAnimation;
 }
 
-AnimationComponent& AnimationComponent::operator=(AnimationComponent&& other)
+AnimationComponent& AnimationComponent::operator=(AnimationComponent&& other) noexcept
 {
 	this->textureSheet = std::move(other.textureSheet);
 	this->sprite = std::move(other.sprite);
@@ -27,7 +27,7 @@ AnimationComponent& AnimationComponent::operator=(AnimationComponent&& other)
 	return *this;
 }
 
-AnimationComponent& AnimationComponent::operator=(const AnimationComponent& other)
+AnimationComponent& AnimationComponent::operator=(const AnimationComponent& other) noexcept
 {
 	this->textureSheet = other.textureSheet;
 	this->sprite = other.sprite;

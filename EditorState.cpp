@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "EditorState.h"
 
-///////// Initialisation //////////
-
+//Init functions
 inline void EditorState::initVariables()
 {
 	this->textureRect = sf::IntRect(0, 0, static_cast<int>(this->stateData->gridSize), static_cast<int>(this->stateData->gridSize));
@@ -92,7 +91,7 @@ inline void EditorState::initPauseMenu()
 }
 
 //Constructor
-EditorState::EditorState(StateData* state_data)
+EditorState::EditorState(StateData* state_data) noexcept
 	: State(state_data),
 	tileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg"),
 	pauseMenu(*this->stateData->window, this->stateData->font)
@@ -118,8 +117,6 @@ EditorState::~EditorState()
 }
 
 // Functions 
-
-// update
 inline void EditorState::updateView(const float& dt)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_VIEW_UP"))))
@@ -282,7 +279,7 @@ void EditorState::update(const float& dt)
 	this->updateButtons();
 }
 
-//render
+//Render
 inline void EditorState::renderButtons(sf::RenderTarget& target)
 {
 	for (auto& el : this->buttons)
