@@ -22,9 +22,13 @@ class GameState : public State
 {
 private:
 	//variables 
-	bool skillMenuActive;
+	bool skillMenuActive = false;
+	bool itemsMenuActive = false;
+
+	//Player buff
 	bool isBuffed = false;
 
+	//Core
 	sf::Vector2i viewGridPosition;
 
 	sf::View view;
@@ -36,6 +40,8 @@ private:
 
 	PlayerGUI playerGUI;
 	SkillsMenu skillsMenu;
+	ItemsMune itemsMenu;
+
 	PauseMenu pauseMenu;
 
 	TileMap tileMap;
@@ -49,7 +55,7 @@ private:
 
 	//Sounds
 	EnemiesSounds enemiesSounds;
-	GuiSounds guiSounds;
+	GuiSoundsBox guiSounds;
 
 	//Functions
 	void initRenderTextures();

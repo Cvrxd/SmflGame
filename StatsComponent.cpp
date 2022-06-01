@@ -37,10 +37,6 @@ void StatsComponent::addItem(const Items& item)
 	case Items::STAFF:
 		++this->damageMagical;
 		break;
-	case Items::DAGGER:
-		++this->damagePhysical;
-	case Items::MAGIK_SWORD:
-		++this->damageMagical;
 	case Items::RING:
 		++this->magickaMAX;
 		break;

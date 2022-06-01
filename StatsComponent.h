@@ -1,6 +1,6 @@
 #pragma once
 
-enum class Items {SWORD = 0, DAGGER, MAGIK_SWORD, STAFF, RING, NECKLASE, HELMET, ARMOR, GLOVES, BOOTS, EMPTY_ITEM};
+enum class Items {SWORD = 0, STAFF, RING, NECKLASE, HELMET, ARMOR, GLOVES, BOOTS, EMPTY_ITEM};
 
 class StatsComponent
 {
@@ -37,6 +37,7 @@ public:
 
 	//Functions
 	void addItem(const Items& item);
+	void upgradeItem(const Items& item, const int& level);
 
 	void gainEXP(const unsigned& exp);
 	void gainHP(const int& hp);

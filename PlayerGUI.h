@@ -5,11 +5,11 @@
 class Player;
 class GUI::Button;
 
-struct GuiSounds
+struct GuiSoundsBox
 {
 	std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>> sounds;
 
-	GuiSounds()
+	GuiSoundsBox()
 	{
 		this->sounds["UPGRADE_SKILL"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/spell_upgrade.wav");
 		this->sounds["UPGRADE_SKILL"].second.setBuffer(this->sounds["UPGRADE_SKILL"].first);
@@ -69,15 +69,11 @@ private:
 
 	std::vector<std::pair<SkillType, sf::RectangleShape>>* skillsIcons;
 
-	//Inventory icons
-	std::unordered_map<std::string, std::pair<sf::RectangleShape, sf::RectangleShape>> itemsIcons;
-
 	//Functions
 	void initVariables();
 	void initStatBars();
 	void initQuickSlotBars();
 	void initTextsIcons();
-	void initItems();
 	void initAniamtions();
 public:
 	//Constructor
@@ -145,7 +141,7 @@ private:
 	std::unordered_map<SkillType, sf::Text> texts;
 
 	//Sounds
-	GuiSounds& guiSounds;
+	GuiSoundsBox& guiSounds;
 	
 	//Init functions
 	void initVariables(std::vector<std::pair<SkillType, sf::RectangleShape>>& originalSkillsIcons, 
@@ -159,7 +155,7 @@ private:
 	void playSound(const std::string& sound);
 
 public:
-	SkillsLevelingComponent(SkillsComponent& skillsComponent, PlayerGUI& playerGUI, sf::Font& font, GuiSounds& guiSounds) noexcept;
+	SkillsLevelingComponent(SkillsComponent& skillsComponent, PlayerGUI& playerGUI, sf::Font& font, GuiSoundsBox& guiSounds) noexcept;
 	~SkillsLevelingComponent();
 
 	//Functions
@@ -210,7 +206,7 @@ private:
 	std::unordered_map<SkillType, GUI::Button*> unclockButtons;
 
 	//Sounds
-	GuiSounds& guiSounds;
+	GuiSoundsBox& guiSounds;
 
 	//Init functions
 	void initButtons();
@@ -221,10 +217,11 @@ private:
 	//Other functions
 	void updateKeyTime(const float& dt);
 
+	//Sound
 	void playSound(const std::string& sound);
 public:
 	//Constructor
-	SkillsMenu(Player& player, PlayerGUI& playerGUI, sf::Font& font, GuiSounds& guiSounds,const float& x, const float& y) noexcept;
+	SkillsMenu(Player& player, PlayerGUI& playerGUI, sf::Font& font, GuiSoundsBox& guiSounds,const float& x, const float& y) noexcept;
 	~SkillsMenu();
 
 	//Other functions
@@ -250,17 +247,70 @@ private:
 	//Variables
 	PlayerGUI& playerGui;
 	Player& player;
+	StatsComponent* playerStats;
+
+	GuiSoundsBox& guiSounds;
 
 	sf::Font& font;
 
+	//Core
+	sf::RectangleShape background;
+
+	//Text
+	std::unordered_map<std::string, sf::Text> texts;
+	std::unordered_map<Items, sf::Text> upgradeTexts;
+
+	//Buttons
+	std::unordered_map<Items, GUI::Button*> unclockButtons;
+	std::unordered_map<Items, GUI::Button*> upgradeButtons;
+
+	//Coins animations and sprites
+	std::unordered_map<Items, sf::Sprite> coinsSprites;
+	std::unordered_map<Items, AnimationComponent> coinsAnimations;
+
+	//Items
+	std::unordered_map<Items, sf::RectangleShape> itemsIcons;
+	std::unordered_map<Items, int> itemsLvl;
+
+	//Textures
+	std::unordered_map<std::string, sf::Texture> textures;
+
+	//Key time
+	float keyTime;
+	float keyTimeMax;
+
 	//Init functions
 	void initVariables();
+	void initTextures();
+	void initBackground(const float& x, const float& y);
+	void initItemsIcons();
+	void initTexts();
+	void initButtons();
+	void initAnimations();
+
+	//Update functions
+	void updateKeyTime(const float& dt);
+	void updateText();
+	void updateAnimations(const float& dt);
+
+	void unlockItem(const Items& item);
+	void upgradeItem(const Items& item);
+
+	//Render functions
+	void renderIcons(sf::RenderTarget& target);
+
+	//Sound
+	void playSound(const std::string& sound);
 
 public:
-	ItemsMune(Player& player, PlayerGUI& playerGUI, sf::Font& font, const float& x, const float& y) noexcept;
+	ItemsMune(Player& player, PlayerGUI& playerGUI, sf::Font& font, GuiSoundsBox& sounds, const float& x, const float& y) noexcept;
 	~ItemsMune();
 
 	//Finctions
+	void renderText(sf::RenderTarget& target);
+
+	void updateButtons(sf::Vector2i& mousePosWindow);
+	void renderButtons(sf::RenderTarget& target, sf::Vector2i& mousePosWindow);
 
 	void update(sf::Vector2i& mousePosWindow, const float& dt);
 	void render(sf::RenderTarget& target, sf::Vector2i& mousePosWindow);

@@ -119,6 +119,19 @@ inline void Player::updateSound()
 	}
 }
 
+//Update functions
+inline void Player::updateRestoration()
+{
+	if (this->restorationTimer.getElapsedTime().asSeconds() >= 10.f)
+	{
+		this->restorationTimer.restart();
+
+		this->gainMP(1);
+		this->gainHP(1);
+		this->gainArmor(1);
+	}
+}
+
 //Constructor
 Player::Player(const float& x, const float& y, sf::Texture& texture_sheet, const sf::Font& font, bool& isBuffed) noexcept
 	: currentHitAnimation(0), font(font), isBuffed(isBuffed),
@@ -385,7 +398,8 @@ inline void Player::updateAnimations(const float& dt, sf::Vector2f mouse_pos_vie
 void Player::update(const float& dt, sf::Vector2f mouse_pos_view)
 {
 	this->hitRange.setPosition(this->getCenter().x - 80, this->getCenter().y - 80);
-
+	
+	this->updateRestoration();
 	this->updateSound();
 	this->movementComponent.update(dt);
 	this->updateAnimations(dt, mouse_pos_view);

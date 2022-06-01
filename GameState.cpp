@@ -71,9 +71,10 @@ inline void GameState::initTextures()
 
 inline void GameState::initPauseMenu()
 {
-	this->pauseMenu.addButton("CONTINUE", 400.f, -20.f,"Continue");
-	this->pauseMenu.addButton("SKILLS", 550.f, 20.f, "Skills");
-	this->pauseMenu.addButton("QUIT", 700.f, 40.f,"Quit");
+	this->pauseMenu.addButton("CONTINUE", 350.f, -20.f,"Continue");
+	this->pauseMenu.addButton("SKILLS", 500.f, 20.f, "Skills");
+	this->pauseMenu.addButton("ITEMS", 650.f, 20.f, "items");
+	this->pauseMenu.addButton("QUIT", 800.f, 40.f,"Quit");
 }
 
 inline void GameState::initShaders()
@@ -115,6 +116,7 @@ inline void GameState::initTileMap()
 	this->tileMap.loadFromFile("map/game_map.txt");
 }
 
+//To do
 inline void GameState::initSounds()
 {
 	//Enemies sounds
@@ -136,6 +138,7 @@ GameState::GameState(StateData* state_data)
 	player(500,500, this->textures["PLAYER_SHEET"], this->font, this->isBuffed), //Player
 	playerGUI(this->player, this->font), // Player GUI
 	skillsMenu(this->player, this->playerGUI,this->font, this->guiSounds,static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
+	itemsMenu(this->player, this->playerGUI, this->font, this->guiSounds, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // items menu
 	tileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg") //Tile map
 {
 	this->initRenderTextures();
@@ -211,6 +214,12 @@ inline void GameState::updatePauseMenuButtons()
 		this->pauseMenu.playClickSound();
 
 		this->skillMenuActive = true;
+	}
+	else if (this->pauseMenu.isButtonPressed("ITEMS"))
+	{
+		this->pauseMenu.playClickSound();
+
+		this->itemsMenuActive = true;
 	}
 }
 
@@ -291,6 +300,7 @@ inline void GameState::updateInput(const float& dt)
 		{
 			this->unpausedState();
 			this->skillMenuActive = false;
+			this->itemsMenuActive = false;
 		}
 	}
 }
@@ -323,6 +333,10 @@ void GameState::update(const float& dt)
 	{
 		this->playerGUI.skillsMenUpdate(dt);
 		this->skillsMenu.update(this->mousePosWindow, dt);
+	}
+	else if (this->paused && this->itemsMenuActive)
+	{
+		this->itemsMenu.update(this->mousePosWindow, dt);
 	}
 	else//Paused
 	{
@@ -388,16 +402,20 @@ void GameState::render(sf::RenderTarget* target)
 	this->playerGUI.render(this->renderTexture);
 
 
-	if (this->paused && !this->skillMenuActive) //Pause menu render
+	if (this->paused && !this->skillMenuActive && !this->itemsMenuActive) //Pause menu render
 	{
 		this->pauseMenu.render(this->renderTexture);
 	}
-	else if(this->paused && this->skillMenuActive)
+	else if(this->paused && this->skillMenuActive && !this->itemsMenuActive) //Skills menu render
 	{
 		this->skillsMenu.render(this->renderTexture, this->mousePosWindow);
 	}
+	else if (this->paused && !this->skillMenuActive && this->itemsMenuActive) //Items menu render
+	{
+		this->itemsMenu.render(this->renderTexture, this->mousePosWindow);
+	}
 
-	//Render
+	//Render renderTexure
 	this->renderTexture.display();
 	this->renderSprite.setTexture(this->renderTexture.getTexture());
 	target->draw(this->renderSprite);

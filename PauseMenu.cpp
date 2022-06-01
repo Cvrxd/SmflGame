@@ -15,7 +15,7 @@ PauseMenu::PauseMenu(sf::RenderWindow& window, sf::Font& font) noexcept
 {
 	//Background
 	this->background.setSize(static_cast<sf::Vector2f>(window.getSize()));
-	this->background.setFillColor(sf::Color(20, 20, 20, 100));
+	this->background.setFillColor(sf::Color(10, 10, 10, 100));
 
 	//Container for buttons
 	this->container.setSize(sf::Vector2f(background.getSize().x / 4.f, background.getSize().y - 100.f));

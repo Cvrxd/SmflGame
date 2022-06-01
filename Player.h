@@ -40,7 +40,9 @@ private:
 	
 	//Font and timer
 	const sf::Font& font;
+
 	sf::Clock damageTimer;
+	sf::Clock restorationTimer;
 
 	//Components
 	AnimationComponent animationComponent;
@@ -61,6 +63,10 @@ private:
 
 	//Sound functions
 	void updateSound();
+
+	//Update functions
+	void updateRestoration();
+
 public:
 	Player(const float& x, const float& y, sf::Texture& texture_sheet, const sf::Font& font, bool& isBuffed) noexcept;
 	virtual ~Player();

@@ -164,57 +164,6 @@ inline void PlayerGUI::initTextsIcons()
 	this->texts["SLOT6"].setString("E");
 }
 
-inline void PlayerGUI::initItems()
-{
-	itemsIcons["HELMET"].first.setSize(sf::Vector2f(32, 32));
-	itemsIcons["HELMET"].first.setFillColor(sf::Color(200, 200, 200, 100));
-	itemsIcons["HELMET"].first.setPosition(1700, 100);
-	itemsIcons["HELMET"].first.setOutlineColor(sf::Color::White);
-	itemsIcons["HELMET"].first.setOutlineThickness(1.f);
-
-	itemsIcons["ARMOR"].first.setSize(sf::Vector2f(32, 32));
-	itemsIcons["ARMOR"].first.setFillColor(sf::Color(200, 200, 200, 100));
-	itemsIcons["ARMOR"].first.setPosition(1700, 100 + 64);
-	itemsIcons["ARMOR"].first.setOutlineColor(sf::Color::White);
-	itemsIcons["ARMOR"].first.setOutlineThickness(1.f);
-
-	itemsIcons["GLOVES"].first.setSize(sf::Vector2f(32, 32));
-	itemsIcons["GLOVES"].first.setFillColor(sf::Color(200, 200, 200, 100));
-	itemsIcons["GLOVES"].first.setPosition(1700, 100 + 64 * 2);
-	itemsIcons["GLOVES"].first.setOutlineColor(sf::Color::White);
-	itemsIcons["GLOVES"].first.setOutlineThickness(1.f);
-
-	itemsIcons["BOOTS"].first.setSize(sf::Vector2f(32, 32));
-	itemsIcons["BOOTS"].first.setFillColor(sf::Color(200, 200, 200, 100));
-	itemsIcons["BOOTS"].first.setPosition(1700, 100 + 64 * 3);
-	itemsIcons["BOOTS"].first.setOutlineColor(sf::Color::White);
-	itemsIcons["BOOTS"].first.setOutlineThickness(1.f);
-
-	itemsIcons["SWORD"].first.setSize(sf::Vector2f(32, 32));
-	itemsIcons["SWORD"].first.setFillColor(sf::Color(200, 200, 200, 100));
-	itemsIcons["SWORD"].first.setPosition(1700 - 64, 100 + 64 * 2);
-	itemsIcons["SWORD"].first.setOutlineColor(sf::Color::White);
-	itemsIcons["SWORD"].first.setOutlineThickness(1.f);
-
-	itemsIcons["STAFF"].first.setSize(sf::Vector2f(32, 32));
-	itemsIcons["STAFF"].first.setFillColor(sf::Color(200, 200, 200, 100));
-	itemsIcons["STAFF"].first.setPosition(1700 + 64, 100 + 64 * 2);
-	itemsIcons["STAFF"].first.setOutlineColor(sf::Color::White);
-	itemsIcons["STAFF"].first.setOutlineThickness(1.f);
-
-	itemsIcons["RING"].first.setSize(sf::Vector2f(32, 32));
-	itemsIcons["RING"].first.setFillColor(sf::Color(200, 200, 200, 100));
-	itemsIcons["RING"].first.setPosition(1700 - 64, 100 + 64);
-	itemsIcons["RING"].first.setOutlineColor(sf::Color::White);
-	itemsIcons["RING"].first.setOutlineThickness(1.f);
-
-	itemsIcons["NECKLASE"].first.setSize(sf::Vector2f(32, 32));
-	itemsIcons["NECKLASE"].first.setFillColor(sf::Color(200, 200, 200, 100));
-	itemsIcons["NECKLASE"].first.setPosition(1700 + 64, 100 + 64);
-	itemsIcons["NECKLASE"].first.setOutlineColor(sf::Color::White);
-	itemsIcons["NECKLASE"].first.setOutlineThickness(1.f);
-}
-
 inline void PlayerGUI::initAniamtions()
 {
 	this->sprites["COIN"].setScale(2.f, 2.f);
@@ -254,7 +203,6 @@ PlayerGUI::PlayerGUI(Player& player, sf::Font& font) noexcept
 	this->initStatBars();
 	this->initQuickSlotBars();
 	this->initTextsIcons();
-	this->initItems();
 	this->initAniamtions();
 }
 
@@ -414,13 +362,6 @@ void PlayerGUI::render(sf::RenderTarget& target)
 		target.draw(el.second);
 	}
 
-	//Render items
-	for (auto& el : this->itemsIcons)
-	{
-		target.draw(el.second.first);
-		target.draw(el.second.second);
-	}
-
 	//Render text
 	for (auto& el : this->texts)
 	{
@@ -530,7 +471,7 @@ inline void SkillsLevelingComponent::playSound(const std::string& sound)
 }
 
 //Constructors
-SkillsLevelingComponent::SkillsLevelingComponent(SkillsComponent& skillsComponent, PlayerGUI& playerGUI, sf::Font& font, GuiSounds& guiSounds) noexcept
+SkillsLevelingComponent::SkillsLevelingComponent(SkillsComponent& skillsComponent, PlayerGUI& playerGUI, sf::Font& font, GuiSoundsBox& guiSounds) noexcept
 	:skillsComponent(skillsComponent), playerGUI(playerGUI), font(font), guiSounds(guiSounds)
 {
 }
@@ -853,7 +794,7 @@ inline void SkillsMenu::playSound(const std::string& sound)
 }
 
 //Constructor
-SkillsMenu::SkillsMenu(Player& player, PlayerGUI& playerGUI, sf::Font& font, GuiSounds& guiSounds, const float& x, const float& y) noexcept
+SkillsMenu::SkillsMenu(Player& player, PlayerGUI& playerGUI, sf::Font& font, GuiSoundsBox& guiSounds, const float& x, const float& y) noexcept
 	:player(player), playerGUI(playerGUI), font(font), guiSounds(guiSounds), keyTime(0.f), keyTimeMax(10.f), skillsSize(9),
 	skillsLevelingComponent(*this->player.getSkillComponent(), playerGUI, font, guiSounds)
 {
@@ -1047,26 +988,260 @@ void SkillsMenu::render(sf::RenderTarget& target, sf::Vector2i& mousePosWindow)
 //==================================
 
 //Init functions
-void ItemsMune::initVariables()
+inline void ItemsMune::initVariables()
 {
+	this->playerStats = this->player.getStatsComponent();
+}
+
+inline void ItemsMune::initTextures()
+{
+	this->textures["ITEMS"].loadFromFile("Textures/hud/inventory_hud/items32_simple_transparent.png");
+	this->textures["COIN"].loadFromFile("Textures/hud/game_hud/coin.png");
+}
+
+inline void ItemsMune::initBackground(const float& x, const float& y)
+{
+	//Background
+	this->background.setSize(sf::Vector2f(x / 1.5f, y / 1.7f + 50));
+	this->background.setFillColor(sf::Color(20, 20, 20, 200));
+	this->background.setPosition(x / 2.f - this->background.getSize().x / 2.f, y / 2.f - this->background.getSize().y / 2.f);
+}
+
+inline void ItemsMune::initItemsIcons()
+{
+	//Set textures && rect
+	itemsIcons[Items::HELMET].setTexture(&this->textures["ITEMS"]);
+	itemsIcons[Items::HELMET].setTextureRect(sf::IntRect(128, 64, 32, 32));
+
+	itemsIcons[Items::ARMOR].setTexture(&this->textures["ITEMS"]);
+	itemsIcons[Items::ARMOR].setTextureRect(sf::IntRect(128 + 32, 64, 32, 32));
+
+	itemsIcons[Items::GLOVES].setTexture(&this->textures["ITEMS"]);
+	itemsIcons[Items::GLOVES].setTextureRect(sf::IntRect(128 + 32 * 2, 64, 32, 32));
+
+	itemsIcons[Items::BOOTS].setSize(sf::Vector2f(32, 32));
+	itemsIcons[Items::BOOTS].setTexture(&this->textures["ITEMS"]);
+	itemsIcons[Items::BOOTS].setTextureRect(sf::IntRect(128 + 32 * 3, 64, 32, 32));
+
+	itemsIcons[Items::SWORD].setTexture(&this->textures["ITEMS"]);
+	itemsIcons[Items::SWORD].setTextureRect(sf::IntRect(64, 32, 32, 32));
+	
+	itemsIcons[Items::STAFF].setTexture(&this->textures["ITEMS"]);
+	itemsIcons[Items::STAFF].setTextureRect(sf::IntRect(224, 0, 32, 32));
+
+	itemsIcons[Items::RING].setTexture(&this->textures["ITEMS"]);
+	itemsIcons[Items::RING].setTextureRect(sf::IntRect(64, 32 * 3, 32, 32));
+
+	itemsIcons[Items::NECKLASE].setTexture(&this->textures["ITEMS"]);
+	itemsIcons[Items::NECKLASE].setTextureRect(sf::IntRect(64 + 32, 32 * 3, 32, 32));
+
+
+	float x = this->background.getPosition().x + 50.f;
+	float y = this->background.getPosition().y + 110.f;
+
+	for (auto& el : this->itemsIcons)
+	{
+		el.second.setSize(sf::Vector2f(32, 32));
+		el.second.setOutlineColor(sf::Color::White);
+		el.second.setOutlineThickness(1.f);
+		el.second.setPosition(x, y);
+		
+		y += 70;
+	}
+}
+
+inline void ItemsMune::initTexts()
+{
+	this->texts["ITEMS_STATS"].setCharacterSize(37);
+	this->texts["ITEMS_STATS"].setFillColor(sf::Color::White);
+	this->texts["ITEMS_STATS"].setFont(this->font);
+	this->texts["ITEMS_STATS"].setString("Items Stats");
+	this->texts["ITEMS_STATS"].setPosition(this->background.getPosition().x + 50.f, this->background.getPosition().y + 30.f);
+
+	this->texts["UPGRADE_ITEMS"].setCharacterSize(37);
+	this->texts["UPGRADE_ITEMS"].setFillColor(sf::Color::White);
+	this->texts["UPGRADE_ITEMS"].setFont(this->font);
+	this->texts["UPGRADE_ITEMS"].setString("Items");
+	this->texts["UPGRADE_ITEMS"].setPosition(this->background.getSize().x - 100.f, this->background.getPosition().y + 30.f);
+}	
+
+inline void ItemsMune::initButtons()
+{
+	for (auto& el : this->itemsIcons)
+	{
+		this->unclockButtons[el.first] = new GUI::Button(el.second.getPosition().x + 50, el.second.getPosition().y - 10,
+			110.f, 40.f,
+			&this->font, "Unlock", 30,
+			sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
+			sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
+		);
+	}
+}
+
+inline void ItemsMune::initAnimations()
+{
+	for (auto& el : this->unclockButtons)
+	{
+		this->coinsSprites[el.first].setScale(2.f, 2.f);
+		this->coinsSprites[el.first].setPosition(this->itemsIcons[el.first].getPosition().x + 170,
+			this->itemsIcons[el.first].getPosition().y + 2);
+
+		this->coinsAnimations[el.first] = { &this->coinsSprites[el.first], &this->textures["COIN"] };
+		this->coinsAnimations[el.first].addAnimation("PLAY", 0, 0, 4, 0, 16, 16, 15.f);
+	}
+}
+
+//Update functions
+inline void ItemsMune::updateKeyTime(const float& dt)
+{
+	if (this->keyTime < this->keyTimeMax)
+	{
+		this->keyTime += 100.f * dt;
+	}
+	else
+	{
+		this->keyTime = 0;
+	}
+}
+
+inline void ItemsMune::updateText()
+{
+	
+}
+
+inline void ItemsMune::updateAnimations(const float& dt)
+{
+	for (auto& el : this->coinsAnimations)
+	{
+		el.second.play("PLAY", dt, true);
+	}
+}
+
+inline void ItemsMune::unlockItem(const Items& item)
+{
+
+}
+
+//Render functions
+inline void ItemsMune::renderIcons(sf::RenderTarget& target)
+{
+	for (auto& el : this->itemsIcons)
+	{
+		target.draw(el.second);
+	}
+}
+
+//Sound
+inline void ItemsMune::playSound(const std::string& sound)
+{
+	this->guiSounds.sounds[sound].second.play();
 }
 
 //Constructors
-ItemsMune::ItemsMune(Player& player, PlayerGUI& playerGUI, sf::Font& font, const float& x, const float& y) noexcept
-	: player(player), playerGui(playerGUI), font(font)
+ItemsMune::ItemsMune(Player& player, PlayerGUI& playerGUI, sf::Font& font, GuiSoundsBox& sounds, const float& x, const float& y) noexcept
+	: player(player), playerGui(playerGUI), font(font), guiSounds(sounds), // references
+	keyTime(0), keyTimeMax(20.f) // key time
 {
-
+	this->initVariables();
+	this->initTextures();
+	this->initBackground(x, y);
+	this->initItemsIcons();
+	this->initTexts();
+	this->initButtons();
+	this->initAnimations();
 }
 
 ItemsMune::~ItemsMune()
 {
+	for (auto& el : this->unclockButtons)
+	{
+		delete el.second;
+	}
+	for (auto& el : this->upgradeButtons)
+	{
+		delete el.second;
+	}
+}
+
+inline void ItemsMune::renderText(sf::RenderTarget& target)
+{
+	for (auto& el : this->texts)
+	{
+		target.draw(el.second);
+	}
 }
 
 //Functions
+inline void ItemsMune::updateButtons(sf::Vector2i& mousePosWindow)
+{
+	//Updating buttons
+	for (auto& el : this->unclockButtons)
+	{
+		el.second->update(mousePosWindow);
+
+		//Is pressed
+		if (el.second->isPressed())
+		{
+			//Sound
+			this->playSound("CLICK");
+
+			//
+		}
+
+	}
+	for (auto& el : this->upgradeButtons)
+	{
+		el.second->update(mousePosWindow);
+
+		//Is pressed
+		if (el.second->isPressed())
+		{
+			//Sound
+			this->playSound("CLICK");
+
+			//
+		}
+	}
+}
+
+inline void ItemsMune::renderButtons(sf::RenderTarget& target, sf::Vector2i& mousePosWindow)
+{
+	//Render unlock buttons
+	for (auto& el : this->unclockButtons)
+	{
+		el.second->render(target);
+
+		if (el.second->getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosWindow)))
+		{
+			target.draw(this->upgradeTexts[el.first]);
+			target.draw(this->coinsSprites[el.first]);
+		}
+	}
+
+	//Render upgrade buttons
+	for (auto& el : this->upgradeButtons)
+	{
+		el.second->render(target);
+
+		if (el.second->getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosWindow)))
+		{
+			target.draw(this->upgradeTexts[el.first]);
+			target.draw(this->coinsSprites[el.first]);
+		}
+	}
+}
+
 void ItemsMune::update(sf::Vector2i& mousePosWindow, const float& dt)
 {
+	this->updateAnimations(dt);
+	this->updateButtons(mousePosWindow);
 }
 
 void ItemsMune::render(sf::RenderTarget& target, sf::Vector2i& mousePosWindow)
 {
+	target.draw(this->background);
+
+	this->renderButtons(target, mousePosWindow);
+	this->renderText(target);
+	this->renderIcons(target);
 }
