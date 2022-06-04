@@ -336,6 +336,7 @@ void GameState::update(const float& dt)
 	}
 	else if (this->paused && this->itemsMenuActive)
 	{
+		this->playerGUI.itemsMenuUpdate(dt);
 		this->itemsMenu.update(this->mousePosWindow, dt);
 	}
 	else//Paused

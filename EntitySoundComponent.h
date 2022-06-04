@@ -3,6 +3,9 @@ class EntitySoundComponent
 {
 private:
 	//Variables
+	float movementVolumeMin = 1.f;
+	float movementVolumeMax = 2.f;
+
 	std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>> sounds;
 
 	//Movement sound to play

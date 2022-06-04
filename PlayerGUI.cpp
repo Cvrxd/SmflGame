@@ -376,6 +376,14 @@ void PlayerGUI::skillsMenUpdate(const float& dt)
 	this->updateTextIcons();
 }
 
+void PlayerGUI::itemsMenuUpdate(const float& dt)
+{
+	this->updateAnimations(dt);
+	this->updateTextIcons();
+}
+
+
+
 //===============================================
 //SkillsLevelingComponent========================
 //===============================================
@@ -1052,17 +1060,28 @@ inline void ItemsMune::initItemsIcons()
 
 inline void ItemsMune::initTexts()
 {
-	this->texts["ITEMS_STATS"].setCharacterSize(37);
-	this->texts["ITEMS_STATS"].setFillColor(sf::Color::White);
-	this->texts["ITEMS_STATS"].setFont(this->font);
-	this->texts["ITEMS_STATS"].setString("Items Stats");
-	this->texts["ITEMS_STATS"].setPosition(this->background.getPosition().x + 50.f, this->background.getPosition().y + 30.f);
+	//Main text
+	this->mainText.first.setCharacterSize(37);
+	this->mainText.first.setFillColor(sf::Color::White);
+	this->mainText.first.setFont(this->font);
+	this->mainText.first.setString("Items Stats");
+	this->mainText.first.setPosition(this->background.getPosition().x + 100.f, this->background.getPosition().y + 30.f);
 
-	this->texts["UPGRADE_ITEMS"].setCharacterSize(37);
-	this->texts["UPGRADE_ITEMS"].setFillColor(sf::Color::White);
-	this->texts["UPGRADE_ITEMS"].setFont(this->font);
-	this->texts["UPGRADE_ITEMS"].setString("Items");
-	this->texts["UPGRADE_ITEMS"].setPosition(this->background.getSize().x - 100.f, this->background.getPosition().y + 30.f);
+	this->mainText.second.setCharacterSize(37);
+	this->mainText.second.setFillColor(sf::Color::White);
+	this->mainText.second.setFont(this->font);
+	this->mainText.second.setString("Items");
+	this->mainText.second.setPosition(this->background.getSize().x - 100.f, this->background.getPosition().y + 30.f);
+
+	//Items text
+	for (auto& el : this->itemsIcons)
+	{
+		this->upgradeTexts[el.first].setCharacterSize(30);
+		this->upgradeTexts[el.first].setFillColor(sf::Color::White);
+		this->upgradeTexts[el.first].setFont(this->font);
+		this->upgradeTexts[el.first].setString("50");
+		this->upgradeTexts[el.first].setPosition(el.second.getPosition().x + 175.f, el.second.getPosition().y - 2);
+	}
 }	
 
 inline void ItemsMune::initButtons()
@@ -1083,12 +1102,33 @@ inline void ItemsMune::initAnimations()
 	for (auto& el : this->unclockButtons)
 	{
 		this->coinsSprites[el.first].setScale(2.f, 2.f);
-		this->coinsSprites[el.first].setPosition(this->itemsIcons[el.first].getPosition().x + 170,
+		this->coinsSprites[el.first].setPosition(this->itemsIcons[el.first].getPosition().x + 210,
 			this->itemsIcons[el.first].getPosition().y + 2);
 
 		this->coinsAnimations[el.first] = { &this->coinsSprites[el.first], &this->textures["COIN"] };
 		this->coinsAnimations[el.first].addAnimation("PLAY", 0, 0, 4, 0, 16, 16, 15.f);
 	}
+}
+
+inline void ItemsMune::initOffsets()
+{
+	this->offsetX = this->mainText.second.getPosition().x - 100.f;
+	this->offsetY = this->itemsIcons.begin().operator*().second.getPosition().y;
+}
+
+inline void ItemsMune::updateItemGrade(const Items& item,const sf::Color& color)
+{
+	//Color update
+	this->itemsIcons[item].setOutlineThickness(3.f);
+	this->upgradeItemsIcons[item].setOutlineThickness(3.f);
+	this->itemsIcons[item].setOutlineColor(color);
+	this->upgradeItemsIcons[item].setOutlineColor(color);
+
+	//Stats text update
+	this->statsTexts[item].setString("lvl: " + std::to_string(this->itemsLvl[item]));
+
+	//Upgrade text update
+	this->upgradeTexts[item].setString(std::to_string(this->itemsLvl[item] * 10));
 }
 
 //Update functions
@@ -1119,13 +1159,79 @@ inline void ItemsMune::updateAnimations(const float& dt)
 
 inline void ItemsMune::unlockItem(const Items& item)
 {
+	//Item lvl
+	this->itemsLvl[item] = 1;
+	++this->unlockedItemsCount;
 
+	//Stat text
+	this->statsTexts[item].setCharacterSize(30);
+	this->statsTexts[item].setFillColor(sf::Color::White);
+	this->statsTexts[item].setFont(this->font);
+	this->statsTexts[item].setString("lvl: " + std::to_string(this->itemsLvl[item]));
+	this->statsTexts[item].setPosition(this->itemsIcons[item].getPosition().x + 70, this->itemsIcons[item].getPosition().y);
+
+	//Create another icon
+	this->upgradeItemsIcons[item].setOutlineThickness(1.f);
+	this->upgradeItemsIcons[item].setOutlineColor(sf::Color::White);
+	this->upgradeItemsIcons[item].setSize(this->itemsIcons[item].getSize());
+	this->upgradeItemsIcons[item].setTexture(this->itemsIcons[item].getTexture());
+	this->upgradeItemsIcons[item].setTextureRect(this->itemsIcons[item].getTextureRect());
+	this->upgradeItemsIcons[item].setPosition(this->offsetX, this->offsetY);
+
+	//Create upgrade button
+	this->upgradeButtons[item] = new GUI::Button(this->offsetX + 40.f, this->offsetY - 12.f,
+		110.f, 40.f,
+		&this->font, "Upgrade", 30,
+		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
+		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
+	);
+
+	//Move coins sprites
+	this->coinsSprites[item].setPosition(this->offsetX + 220.f, this->offsetY);
+
+	//Move upgrade text
+	this->upgradeTexts[item].setPosition(this->offsetX + 180.f, this->offsetY - 4.f);
+
+	//Update offset
+	this->offsetY += 70.f;
+}
+
+inline void ItemsMune::upgradeItem(const Items& item)
+{
+	++this->itemsLvl[item];
+	
+	switch (this->itemsLvl[item])
+	{
+	case 2:
+		this->updateItemGrade(item, sf::Color::Green);
+		this->playerStats->upgradeItem(item, this->itemsLvl[item]);
+		break;
+	case 3:
+		this->updateItemGrade(item, sf::Color::Yellow);
+		this->playerStats->upgradeItem(item, this->itemsLvl[item]);
+		break;
+	case 4:
+		this->updateItemGrade(item, sf::Color::Magenta);
+		this->playerStats->upgradeItem(item, this->itemsLvl[item]);
+		break;
+	case 5:
+		this->updateItemGrade(item, sf::Color::Red);
+		this->playerStats->upgradeItem(item, this->itemsLvl[item]);
+		break;
+	default:
+		break;
+	}
 }
 
 //Render functions
 inline void ItemsMune::renderIcons(sf::RenderTarget& target)
 {
 	for (auto& el : this->itemsIcons)
+	{
+		target.draw(el.second);
+	}
+
+	for (auto& el : this->upgradeItemsIcons)
 	{
 		target.draw(el.second);
 	}
@@ -1149,6 +1255,7 @@ ItemsMune::ItemsMune(Player& player, PlayerGUI& playerGUI, sf::Font& font, GuiSo
 	this->initTexts();
 	this->initButtons();
 	this->initAnimations();
+	this->initOffsets();
 }
 
 ItemsMune::~ItemsMune()
@@ -1165,7 +1272,10 @@ ItemsMune::~ItemsMune()
 
 inline void ItemsMune::renderText(sf::RenderTarget& target)
 {
-	for (auto& el : this->texts)
+	target.draw(this->mainText.first);
+	target.draw(this->mainText.second);
+
+	for (auto& el : this->statsTexts)
 	{
 		target.draw(el.second);
 	}
@@ -1174,32 +1284,52 @@ inline void ItemsMune::renderText(sf::RenderTarget& target)
 //Functions
 inline void ItemsMune::updateButtons(sf::Vector2i& mousePosWindow)
 {
-	//Updating buttons
-	for (auto& el : this->unclockButtons)
+	//Unlock items buttons
+	for (auto it = this->unclockButtons.begin(); it != this->unclockButtons.end(); ++it)
 	{
-		el.second->update(mousePosWindow);
+		it.operator*().second->update(mousePosWindow);
 
-		//Is pressed
-		if (el.second->isPressed())
+		if (it.operator*().second->isPressed() && this->keyTime >= this->keyTimeMax)
 		{
-			//Sound
 			this->playSound("CLICK");
 
-			//
-		}
+			if (this->playerStats->coins >= 50)
+			{
+				this->unlockItem(it.operator*().first);
+				this->playerStats->loseCoins(50);
 
+				if (it == --this->unclockButtons.end())
+				{
+					delete it.operator*().second;
+					this->unclockButtons.erase(it);
+					break;
+				}
+				else
+				{
+					delete it.operator*().second;
+					it = this->unclockButtons.erase(it);
+				}
+			}
+		}
 	}
+
+	//Upgrade buttons
 	for (auto& el : this->upgradeButtons)
 	{
 		el.second->update(mousePosWindow);
 
 		//Is pressed
-		if (el.second->isPressed())
+		if (el.second->isPressed() && this->keyTime >= this->keyTimeMax)
 		{
 			//Sound
 			this->playSound("CLICK");
 
-			//
+			//Upgrade item
+			if (this->playerStats->coins >= this->itemsLvl[el.first] * 10)
+			{
+				this->playerStats->loseCoins(this->itemsLvl[el.first] * 10);
+				this->upgradeItem(el.first);
+			}
 		}
 	}
 }
@@ -1233,6 +1363,7 @@ inline void ItemsMune::renderButtons(sf::RenderTarget& target, sf::Vector2i& mou
 
 void ItemsMune::update(sf::Vector2i& mousePosWindow, const float& dt)
 {
+	this->updateKeyTime(dt);
 	this->updateAnimations(dt);
 	this->updateButtons(mousePosWindow);
 }

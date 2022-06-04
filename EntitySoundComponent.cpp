@@ -16,7 +16,7 @@ void EntitySoundComponent::addWalkingSound(const std::string& path)
 {
 	this->sounds["WALKING"].first.loadFromFile(path);
 	this->sounds["WALKING"].second.setBuffer(this->sounds["WALKING"].first);
-	this->sounds["WALKING"].second.setVolume(0.5f);
+	this->sounds["WALKING"].second.setVolume(this->movementVolumeMin);
 	this->sounds["WALKING"].second.setLoop(true);
 
 	this->movementSound = &this->sounds["WALKING"].second;
@@ -29,7 +29,7 @@ void EntitySoundComponent::addRunningSound(const std::string& path)
 {
 	this->sounds["RUNNING"].first.loadFromFile(path);
 	this->sounds["RUNNING"].second.setBuffer(this->sounds["RUNNING"].first);
-	this->sounds["RUNNING"].second.setVolume(0.5f);
+	this->sounds["RUNNING"].second.setVolume(this->movementVolumeMin);
 	this->sounds["RUNNING"].second.setLoop(true);
 
 	this->sounds["RUNNING"].second.play();
@@ -60,16 +60,16 @@ void EntitySoundComponent::changeMovementVolume(const bool& increase)
 {
 	if (increase)
 	{
-		if (this->movementSound->getVolume() != 0.5f)
+		if (this->movementSound->getVolume() != this->movementVolumeMax)
 		{
-			this->movementSound->setVolume(0.5f);
+			this->movementSound->setVolume(this->movementVolumeMax);
 		}
 	}
 	else
 	{
-		if (this->movementSound->getVolume() != 0.2f)
+		if (this->movementSound->getVolume() != this->movementVolumeMin)
 		{
-			this->movementSound->setVolume(0.2f);
+			this->movementSound->setVolume(this->movementVolumeMax);
 		}
 	}
 }

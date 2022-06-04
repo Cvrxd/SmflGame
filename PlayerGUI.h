@@ -101,6 +101,7 @@ public:
 	void render(sf::RenderTarget& target);
 
 	void skillsMenUpdate(const float& dt);
+	void itemsMenuUpdate(const float& dt);
 	
 	friend class SkillsLevelingComponent;
 	friend class SkillsMenu;
@@ -256,9 +257,15 @@ private:
 	//Core
 	sf::RectangleShape background;
 
+	int maxLevel = 5;
+	int unlockedItemsCount = 0;
+	float offsetX;
+	float offsetY;
+
 	//Text
-	std::unordered_map<std::string, sf::Text> texts;
+	std::pair<sf::Text, sf::Text> mainText;
 	std::unordered_map<Items, sf::Text> upgradeTexts;
+	std::unordered_map<Items, sf::Text>	statsTexts;
 
 	//Buttons
 	std::unordered_map<Items, GUI::Button*> unclockButtons;
@@ -270,6 +277,7 @@ private:
 
 	//Items
 	std::unordered_map<Items, sf::RectangleShape> itemsIcons;
+	std::unordered_map<Items, sf::RectangleShape> upgradeItemsIcons;
 	std::unordered_map<Items, int> itemsLvl;
 
 	//Textures
@@ -287,8 +295,10 @@ private:
 	void initTexts();
 	void initButtons();
 	void initAnimations();
+	void initOffsets();
 
 	//Update functions
+	void updateItemGrade(const Items& item, const sf::Color& color);
 	void updateKeyTime(const float& dt);
 	void updateText();
 	void updateAnimations(const float& dt);

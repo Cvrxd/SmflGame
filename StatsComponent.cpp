@@ -60,6 +60,11 @@ void StatsComponent::addItem(const Items& item)
 	}
 }
 
+void StatsComponent::upgradeItem(const Items& item, const int& level)
+{
+	//
+}
+
 void StatsComponent::gainEXP(const unsigned& exp)
 {
 	this->exp += exp;
@@ -154,7 +159,8 @@ void StatsComponent::gainCoins(const int& coins)
 
 void StatsComponent::loseCoins(const int& coins)
 {
-	if (this->coins -= coins < 0)
+	this->coins -= coins;
+	if (coins <= 0)
 	{
 		this->coins = 0;
 	}
