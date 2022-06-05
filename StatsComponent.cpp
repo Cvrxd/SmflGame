@@ -62,7 +62,23 @@ void StatsComponent::addItem(const Items& item)
 
 void StatsComponent::upgradeItem(const Items& item, const int& level)
 {
-	//
+	if (item == Items::NECKLASE && item == Items::RING)
+	{
+		++this->magickaMAX;
+	}
+	else if (item == Items::SWORD)
+	{
+		++this->damagePhysical;
+		++this->critRate;
+	}
+	else if (item == Items::STAFF)
+	{
+		++this->damageMagical;
+	}
+	else
+	{
+		++this->armorMAX;
+	}
 }
 
 void StatsComponent::gainEXP(const unsigned& exp)

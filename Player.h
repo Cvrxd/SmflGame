@@ -1,7 +1,7 @@
 #pragma once
 #include "Entity.h"
 #include "PlayerGUI.h"
-#include "EntitySoundComponent.h"
+#include "SoundComponent.h"
 
 class Entity;
 class PlayerGUI;
@@ -48,7 +48,7 @@ private:
 	AnimationComponent animationComponent;
 	StatsComponent statsComponent;
 	SkillsComponent skillsComponent;
-	EntitySoundComponent soundComponent;
+	PlayerSoundBox soundBox;
 
 	//Animations
 	std::vector<std::pair<sf::Texture, sf::Sprite>> sprites;

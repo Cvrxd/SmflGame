@@ -12,31 +12,43 @@ inline void SkillsComponent::initSounds()
 {
 	this->sounds[SkillType::BUFF].first.loadFromFile("Sounds/game_state/spell_sounds/buff.wav");
 	this->sounds[SkillType::BUFF].second.setBuffer(this->sounds[SkillType::BUFF].first);
-	this->sounds[SkillType::BUFF].second.setVolume(20.f);
+	this->sounds[SkillType::BUFF].second.setVolume(10.f);
 
 	this->sounds[SkillType::THUNDER_STRIKE].first.loadFromFile("Sounds/game_state/spell_sounds/thunder_strike.wav");
 	this->sounds[SkillType::THUNDER_STRIKE].second.setBuffer(this->sounds[SkillType::THUNDER_STRIKE].first);
-	this->sounds[SkillType::THUNDER_STRIKE].second.setVolume(10.f);
+	this->sounds[SkillType::THUNDER_STRIKE].second.setVolume(5.f);
 
 	this->sounds[SkillType::FIRE_EXPLOSION].first.loadFromFile("Sounds/game_state/spell_sounds/fire_explosion.wav");
 	this->sounds[SkillType::FIRE_EXPLOSION].second.setBuffer(this->sounds[SkillType::FIRE_EXPLOSION].first);
-	this->sounds[SkillType::FIRE_EXPLOSION].second.setVolume(10.f);
+	this->sounds[SkillType::FIRE_EXPLOSION].second.setVolume(5.f);
+
+	this->sounds[SkillType::POISON_CLAW].first.loadFromFile("Sounds/game_state/spell_sounds/poison_claw.wav");
+	this->sounds[SkillType::POISON_CLAW].second.setBuffer(this->sounds[SkillType::POISON_CLAW].first);
+	this->sounds[SkillType::POISON_CLAW].second.setVolume(5.f);
 
 	this->sounds[SkillType::BLOOD_SPIKE].first.loadFromFile("Sounds/game_state/spell_sounds/blood_strike.wav");
 	this->sounds[SkillType::BLOOD_SPIKE].second.setBuffer(this->sounds[SkillType::BLOOD_SPIKE].first);
-	this->sounds[SkillType::BLOOD_SPIKE].second.setVolume(10.f);
+	this->sounds[SkillType::BLOOD_SPIKE].second.setVolume(2.f);
 
 	this->sounds[SkillType::DARK_POSION].first.loadFromFile("Sounds/game_state/spell_sounds/dark_poision.wav");
 	this->sounds[SkillType::DARK_POSION].second.setBuffer(this->sounds[SkillType::DARK_POSION].first);
-	this->sounds[SkillType::DARK_POSION].second.setVolume(10.f);
+	this->sounds[SkillType::DARK_POSION].second.setVolume(5.f);
 
 	this->sounds[SkillType::DARK_BOLT].first.loadFromFile("Sounds/game_state/spell_sounds/dark_bolt.wav");
 	this->sounds[SkillType::DARK_BOLT].second.setBuffer(this->sounds[SkillType::DARK_BOLT].first);
-	this->sounds[SkillType::DARK_BOLT].second.setVolume(10.f);
+	this->sounds[SkillType::DARK_BOLT].second.setVolume(5.f);
+
+	this->sounds[SkillType::HOLY_STRIKE].first.loadFromFile("Sounds/game_state/spell_sounds/holy_strike.wav");
+	this->sounds[SkillType::HOLY_STRIKE].second.setBuffer(this->sounds[SkillType::HOLY_STRIKE].first);
+	this->sounds[SkillType::HOLY_STRIKE].second.setVolume(2.f);
+
+	this->sounds[SkillType::LIGHTNING_STRIKE].first.loadFromFile("Sounds/game_state/spell_sounds/lightning_strike.wav");
+	this->sounds[SkillType::LIGHTNING_STRIKE].second.setBuffer(this->sounds[SkillType::LIGHTNING_STRIKE].first);
+	this->sounds[SkillType::LIGHTNING_STRIKE].second.setVolume(2.f);
 
 	this->sounds[SkillType::POTION].first.loadFromFile("Sounds/game_state/spell_sounds/potion.wav");
 	this->sounds[SkillType::POTION].second.setBuffer(this->sounds[SkillType::POTION].first);
-	this->sounds[SkillType::POTION].second.setVolume(10.f);
+	this->sounds[SkillType::POTION].second.setVolume(5.f);
 }
 
 inline void SkillsComponent::initAllSkills()

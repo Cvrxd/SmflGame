@@ -82,8 +82,8 @@ void Enemy::initStats()
 	this->statsComponent.hp = 3 * this->statsComponent.level;
 	this->statsComponent.armor = 0;
 
-	this->statsComponent.damagePhysical = 1 * this->statsComponent.level;
-	this->statsComponent.damageMagical = 1 * this->statsComponent.level;
+	this->statsComponent.damagePhysical = 1 * (this->statsComponent.level / 5);
+	this->statsComponent.damageMagical = 1 * (this->statsComponent.level / 5);
 }
 
 //Constructor

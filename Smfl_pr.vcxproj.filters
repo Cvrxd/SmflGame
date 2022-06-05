@@ -129,7 +129,7 @@
     <ClCompile Include="PopUpTextComponent.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="EntitySoundComponent.cpp">
+    <ClCompile Include="SoundComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -215,7 +215,7 @@
     <ClInclude Include="PopUpTextComponent.h">
       <Filter>GUI</Filter>
     </ClInclude>
-    <ClInclude Include="EntitySoundComponent.h">
+    <ClInclude Include="SoundComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>

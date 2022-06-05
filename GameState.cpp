@@ -120,14 +120,32 @@ inline void GameState::initTileMap()
 inline void GameState::initSounds()
 {
 	//Enemies sounds
+	// 
+	//Hit impact and crit impact
 	this->enemiesSounds.hit["PLAYER_CRIT"].first.loadFromFile("Sounds/game_state/hit_sounds/crit.ogg");
 	this->enemiesSounds.hit["PLAYER_CRIT"].second.setBuffer(this->enemiesSounds.hit["PLAYER_CRIT"].first);
-	this->enemiesSounds.hit["PLAYER_CRIT"].second.setVolume(2.f);
+	this->enemiesSounds.hit["PLAYER_CRIT"].second.setVolume(1.f);
 
+	this->enemiesSounds.hit["PLAYER_HIT"].first.loadFromFile("Sounds/game_state/hit_sounds/hit.wav");
+	this->enemiesSounds.hit["PLAYER_HIT"].second.setBuffer(this->enemiesSounds.hit["PLAYER_HIT"].first);
+	this->enemiesSounds.hit["PLAYER_HIT"].second.setVolume(2.5f);
+
+	//Skills impact
 	this->enemiesSounds.skillsImpact[SkillType::DARK_BOLT].first.loadFromFile("Sounds/game_state/spell_sounds/dark_bolt.ogg");
 	this->enemiesSounds.skillsImpact[SkillType::DARK_BOLT].second.setBuffer(this->enemiesSounds.skillsImpact[SkillType::DARK_BOLT].first);
-	this->enemiesSounds.skillsImpact[SkillType::DARK_BOLT].second.setVolume(20.f);
+	this->enemiesSounds.skillsImpact[SkillType::DARK_BOLT].second.setVolume(10.f);
 
+	this->enemiesSounds.skillsImpact[SkillType::HOLY_STRIKE].first.loadFromFile("Sounds/game_state/spell_sounds/holy_strile_impact.wav");
+	this->enemiesSounds.skillsImpact[SkillType::HOLY_STRIKE].second.setBuffer(this->enemiesSounds.skillsImpact[SkillType::HOLY_STRIKE].first);
+	this->enemiesSounds.skillsImpact[SkillType::HOLY_STRIKE].second.setVolume(2.f);
+
+	this->enemiesSounds.skillsImpact[SkillType::BLOOD_SPIKE].first.loadFromFile("Sounds/game_state/spell_sounds/blood_strike_impact.wav");
+	this->enemiesSounds.skillsImpact[SkillType::BLOOD_SPIKE].second.setBuffer(this->enemiesSounds.skillsImpact[SkillType::BLOOD_SPIKE].first);
+	this->enemiesSounds.skillsImpact[SkillType::BLOOD_SPIKE].second.setVolume(2.f);
+
+	this->enemiesSounds.skillsImpact[SkillType::DARK_POSION].first.loadFromFile("Sounds/game_state/spell_sounds/dark_poison_impact.wav");
+	this->enemiesSounds.skillsImpact[SkillType::DARK_POSION].second.setBuffer(this->enemiesSounds.skillsImpact[SkillType::DARK_POSION].first);
+	this->enemiesSounds.skillsImpact[SkillType::DARK_POSION].second.setVolume(2.f);
 
 }
 

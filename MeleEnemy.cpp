@@ -389,6 +389,7 @@ inline void MeleEnemy::updatePlayerImpact(const float& dt)
 					this->statsComponent.loseHP(this->player->getStatsComponent()->damagePhysical);
 
 					//Sound
+					this->playImpactSounds("PLAYER_HIT");
 				}
 
 				this->hitImpact = true;

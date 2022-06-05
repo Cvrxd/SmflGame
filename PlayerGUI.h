@@ -4,26 +4,7 @@
 
 class Player;
 class GUI::Button;
-
-struct GuiSoundsBox
-{
-	std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>> sounds;
-
-	GuiSoundsBox()
-	{
-		this->sounds["UPGRADE_SKILL"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/spell_upgrade.wav");
-		this->sounds["UPGRADE_SKILL"].second.setBuffer(this->sounds["UPGRADE_SKILL"].first);
-		this->sounds["UPGRADE_SKILL"].second.setVolume(10.f);
-
-		this->sounds["UNLOCK_SKILL"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/spell_unlock.wav");
-		this->sounds["UNLOCK_SKILL"].second.setBuffer(this->sounds["UNLOCK_SKILL"].first);
-		this->sounds["UNLOCK_SKILL"].second.setVolume(10.f);
-
-		this->sounds["CLICK"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/click.wav");
-		this->sounds["CLICK"].second.setBuffer(this->sounds["CLICK"].first);
-		this->sounds["CLICK"].second.setVolume(10.f);
-	}
-};
+struct GuiSoundsBox;
 
 class PlayerGUI
 {

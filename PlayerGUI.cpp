@@ -1125,10 +1125,26 @@ inline void ItemsMune::updateItemGrade(const Items& item,const sf::Color& color)
 	this->upgradeItemsIcons[item].setOutlineColor(color);
 
 	//Stats text update
-	this->statsTexts[item].setString("lvl: " + std::to_string(this->itemsLvl[item]));
+	if (item == Items::NECKLASE && item == Items::RING)
+	{
+		this->statsTexts[item].setString("lvl:" + std::to_string(this->itemsLvl[item]) + "  Mp: " + std::to_string(this->itemsLvl[item]));
+	}
+	else if (item == Items::SWORD)
+	{
+		this->statsTexts[item].setString("lvl:" + std::to_string(this->itemsLvl[item]) + "  Damage: " + std::to_string(this->itemsLvl[item])
+		+ " Crit rate: " + std::to_string(this->itemsLvl[item]) + '%');
+	}
+	else if (item == Items::STAFF)
+	{
+		this->statsTexts[item].setString("lvl:" + std::to_string(this->itemsLvl[item]) + "  Magical Damage: " + std::to_string(this->itemsLvl[item]));
+	}
+	else
+	{
+		this->statsTexts[item].setString("lvl:" + std::to_string(this->itemsLvl[item]) + "  Armor: " + std::to_string(this->itemsLvl[item]));
+	}
 
 	//Upgrade text update
-	this->upgradeTexts[item].setString(std::to_string(this->itemsLvl[item] * 10));
+	this->upgradeTexts[item].setString(std::to_string(this->itemsLvl[item] * 20));
 }
 
 //Update functions
@@ -1162,13 +1178,31 @@ inline void ItemsMune::unlockItem(const Items& item)
 	//Item lvl
 	this->itemsLvl[item] = 1;
 	++this->unlockedItemsCount;
+	this->playerStats->upgradeItem(item, this->itemsLvl[item]);
 
 	//Stat text
 	this->statsTexts[item].setCharacterSize(30);
 	this->statsTexts[item].setFillColor(sf::Color::White);
 	this->statsTexts[item].setFont(this->font);
-	this->statsTexts[item].setString("lvl: " + std::to_string(this->itemsLvl[item]));
 	this->statsTexts[item].setPosition(this->itemsIcons[item].getPosition().x + 70, this->itemsIcons[item].getPosition().y);
+
+	if (item == Items::NECKLASE && item == Items::RING)
+	{
+		this->statsTexts[item].setString("lvl:" + std::to_string(this->itemsLvl[item]) + "  Mp: " + std::to_string(this->itemsLvl[item]));
+	}
+	else if (item == Items::SWORD)
+	{
+		this->statsTexts[item].setString("lvl:" + std::to_string(this->itemsLvl[item]) + "  Damage: " + std::to_string(this->itemsLvl[item])
+			+ " Crit rate: " + std::to_string(this->itemsLvl[item]) + '%');
+	}
+	else if (item == Items::STAFF)
+	{
+		this->statsTexts[item].setString("lvl:" + std::to_string(this->itemsLvl[item]) + "  Magical Damage: " + std::to_string(this->itemsLvl[item]));
+	}
+	else
+	{
+		this->statsTexts[item].setString("lvl:" + std::to_string(this->itemsLvl[item]) + "  Armor: " + std::to_string(this->itemsLvl[item]));
+	}
 
 	//Create another icon
 	this->upgradeItemsIcons[item].setOutlineThickness(1.f);
@@ -1191,6 +1225,7 @@ inline void ItemsMune::unlockItem(const Items& item)
 
 	//Move upgrade text
 	this->upgradeTexts[item].setPosition(this->offsetX + 180.f, this->offsetY - 4.f);
+	this->upgradeTexts[item].setString(std::to_string(this->itemsLvl[item] * 20));
 
 	//Update offset
 	this->offsetY += 70.f;
@@ -1220,6 +1255,13 @@ inline void ItemsMune::upgradeItem(const Items& item)
 		break;
 	default:
 		break;
+	}
+
+	//If max level
+	if (this->itemsLvl[item] == this->maxLevel)
+	{
+		this->upgradeButtons[item]->setText("MAX level");
+		this->upgradeTexts[item].setString("");
 	}
 }
 
@@ -1325,9 +1367,9 @@ inline void ItemsMune::updateButtons(sf::Vector2i& mousePosWindow)
 			this->playSound("CLICK");
 
 			//Upgrade item
-			if (this->playerStats->coins >= this->itemsLvl[el.first] * 10)
+			if (this->playerStats->coins >= this->itemsLvl[el.first] * 20 && this->itemsLvl[el.first] != this->maxLevel)
 			{
-				this->playerStats->loseCoins(this->itemsLvl[el.first] * 10);
+				this->playerStats->loseCoins(this->itemsLvl[el.first] * 20);
 				this->upgradeItem(el.first);
 			}
 		}

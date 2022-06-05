@@ -81,8 +81,8 @@ inline void Player::addAnimations()
 
 inline void Player::initSounds()
 {
-	this->soundComponent.addWalkingSound("Sounds/game_state/player/walking.wav");
-	this->soundComponent.addRunningSound("Sounds/game_state/player/running.wav");
+	this->soundBox.addWalkingSound("Sounds/game_state/player/walking.wav");
+	this->soundBox.addRunningSound("Sounds/game_state/player/running.wav");
 }
 
 //Sound functions
@@ -91,31 +91,31 @@ inline void Player::updateSound()
 	//Pause or unpause movement sound
 	if (this->movementComponent.getState(IDLE))
 	{
-		this->soundComponent.pauseMovementSound();
+		this->soundBox.pauseMovementSound();
 	}
 	else
 	{
-		this->soundComponent.unpauseMovementSound();
+		this->soundBox.unpauseMovementSound();
 	}
 
 	//Change movement sound if player is buffed
 	if (this->isBuffed)
 	{
-		this->soundComponent.changeMovementSound(true);
+		this->soundBox.changeMovementSound(true);
 	}
 	else
 	{
-		this->soundComponent.changeMovementSound(false);
+		this->soundBox.changeMovementSound(false);
 	}
 
 	//Decrease movement sound if isAttacking
 	if (this->isAttacking)
 	{
-		this->soundComponent.changeMovementVolume(false);
+		this->soundBox.changeMovementVolume(false);
 	}
 	else
 	{
-		this->soundComponent.changeMovementVolume(true);
+		this->soundBox.changeMovementVolume(true);
 	}
 }
 
@@ -273,7 +273,7 @@ void Player::usePotions(const Potions& potion_type)
 //Functions
 void Player::pauseSounds()
 {
-	this->soundComponent.pauseMovementSound();
+	this->soundBox.pauseMovementSound();
 }
 
 inline void Player::updateAttack(const float& dt, sf::Vector2f mouse_pos_view)
