@@ -40,10 +40,6 @@ AnimationComponent& AnimationComponent::operator=(const AnimationComponent& othe
 
 AnimationComponent::~AnimationComponent()
 {
-	for (auto& el : this->animations)
-	{
-		delete el.second;
-	}
 }
 
 //Functions
@@ -57,7 +53,7 @@ void AnimationComponent::addAnimation(const std::string key,
 	const int& frame_x, const int& frame_y,
 	const int& width, const int& height, const float& animationTimer)
 {
-	this->animations[key] = new Animation(this->sprite, this->textureSheet, 
+	this->animations[key] = std::make_shared<Animation>(this->sprite, this->textureSheet, 
 		start_frame_x, start_frame_y, frame_x, start_frame_y, 
 		width, height, animationTimer);
 

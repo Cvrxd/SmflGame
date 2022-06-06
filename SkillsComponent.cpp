@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "SkillsComponent.h"
 
-#define _SKILLS_COMPONENT_USE_SKILL_CHECK this->keyTime >= this->keyTimeMax && this->statsComponent.magicka > 0
+#define _SKILLS_COMPONENT_USE_SKILL_CHECK this->keyTime >= this->keyTimeMax && this->statsComponent.mp > 0
 
 #define _SKILLS_COMPONENT_SET_SKILL_POSITION this->skillTextures[playerSkills[currentRender].first].first.setPosition(skill_position.x - 100, skill_position.y - 150);\
 										     this->skillsEndingSprite.first.setPosition(skill_position.x - 100, skill_position.y - 150);\
@@ -159,6 +159,28 @@ inline void SkillsComponent::initAllAnimations()
 	this->skillTextures[SkillType::BUFF].first.setScale(5.f, 5.f);
 }
 
+//Update functions
+inline void SkillsComponent::updateClock(const float& dt)
+{
+	//Update key time
+	this->keyTime += 10.f * dt;
+	this->potionKeyTime += 10.f * dt;
+
+	//Skills duration
+	this->time = skillTimer.getElapsedTime().asSeconds();
+}
+
+//Core functions
+inline void SkillsComponent::useSkill(const SkillType& skill_type)
+{
+	this->statsComponent.loseMP(1);
+}
+
+inline void SkillsComponent::playSkillSound(const SkillType& type)
+{
+	this->sounds[type].second.play();
+}
+
 //Constructor
 SkillsComponent::SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill, SkillType& currentSkillType, int& currentSkillDamage, bool& isBuffed) noexcept
 	: statsComponent(statsComponent) ,currentRender(-1), playAnimation(false), usingPotion(false), isBuffed(isBuffed), usingBuff(false),
@@ -174,6 +196,17 @@ SkillsComponent::~SkillsComponent()
 {
 }
 
+//Accessors
+const int& SkillsComponent::getBuffMaxLevel() const
+{
+	return this->buffMaxLevel;
+}
+
+const int& SkillsComponent::getBuffLevel() const
+{
+	return this->buffLevel;
+}
+
 const std::vector<std::pair<SkillType, int>>& SkillsComponent::getPlayerSkills()
 {
 	return this->playerSkills;
@@ -184,7 +217,6 @@ const sf::CircleShape& SkillsComponent::getDamageArea()
 	return this->damageArea;
 }
 
-//Accessors
 const bool SkillsComponent::getKeyTime() const
 {
 	return this->keyTime >= this->keyTimeMax;
@@ -203,11 +235,6 @@ int& SkillsComponent::getMpPotions()
 int& SkillsComponent::getHpPotions()
 {
 	return this->healthPotions.second;
-}
-
-inline void SkillsComponent::playSkillSound(const SkillType& type)
-{
-	this->sounds[type].second.play();
 }
 
 void SkillsComponent::addPotion(const Potions& potion_type)
@@ -243,12 +270,7 @@ void SkillsComponent::usePotion(const Potions& potion_type)
 	this->playSkillSound(SkillType::POTION);
 }
 
-//Functions
-inline void SkillsComponent::useSkill(const SkillType& skill_type)
-{
-	this->statsComponent.loseMP(1);
-}
-
+//Public Functions
 void SkillsComponent::addSkill(const SkillType& skill_type, const short& slot)
 {
 	this->playerSkills[slot].first = skill_type;
@@ -262,6 +284,12 @@ void SkillsComponent::upgradeSkill(const SkillType& skill_type)
 	{
 		this->buffDuration += 1.f;
 		this->buffCooldown -= 0.5f;
+		++this->buffLevel;
+
+		if (this->buffLevel == this->buffMaxLevel)
+		{
+			this->buffCritRate += 2.f;
+		}
 	}
 	else
 	{
@@ -272,15 +300,15 @@ void SkillsComponent::upgradeSkill(const SkillType& skill_type)
 	}
 }
 
-inline void SkillsComponent::updatePlayerBuff(const float& dt, const sf::Vector2f& player_position)
+void SkillsComponent::updatePlayerBuff(const float& dt, const sf::Vector2f& player_position)
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F) && this->buffTimer.getElapsedTime().asSeconds() > this->buffCooldown && this->statsComponent.magicka != 0)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F) && this->buffTimer.getElapsedTime().asSeconds() > this->buffCooldown && this->statsComponent.mp != 0)
 	{
 		this->statsComponent.loseMP(1);
 		this->isBuffed = true;
 		this->usingBuff = true;
 		this->buffTimer.restart();
-		this->statsComponent.critRate += 5.f;
+		this->statsComponent.critRate += this->buffCritRate;
 
 		//Sound
 		this->playSkillSound(SkillType::BUFF);
@@ -291,20 +319,10 @@ inline void SkillsComponent::updatePlayerBuff(const float& dt, const sf::Vector2
 		if (this->buffTimer.getElapsedTime().asSeconds() > this->buffDuration)
 		{
 			this->isBuffed = false;
-			this->statsComponent.critRate -= 5.f;
+			this->statsComponent.critRate -= this->buffCritRate;
 			this->buffTimer.restart();
 		}
 	}
-}
-
-inline void SkillsComponent::updateClock(const float& dt)
-{
-	//Update key time
-	this->keyTime += 10.f * dt;
-	this->potionKeyTime += 10.f * dt;
-
-	//Skills duration
-	this->time = skillTimer.getElapsedTime().asSeconds();
 }
 
 void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position, const sf::Vector2f& player_position)

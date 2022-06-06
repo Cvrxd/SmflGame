@@ -14,7 +14,7 @@ private:
 	sf::RectangleShape background;
 	sf::RectangleShape container;
 
-	std::unordered_map<std::string, GUI::Button*> buttons;
+	std::unordered_map<std::string, std::unique_ptr<GUI::Button>> buttons;
 
 	//Sounds
 	std::pair<sf::SoundBuffer, sf::Sound> clickSound;
@@ -27,7 +27,7 @@ public:
 	~PauseMenu();
 
 	//Accessors
-	std::unordered_map<std::string, GUI::Button*>& getButtons();
+	std::unordered_map<std::string, std::unique_ptr<GUI::Button>>& getButtons();
 
 	//Functions
 	void playClickSound();

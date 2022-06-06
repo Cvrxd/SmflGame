@@ -38,6 +38,10 @@ private:
 	//Init unctions
 	void initTextureSheet();
 
+	//Update functions
+	void updateLevelCollision(Entity* entity, const float& dt);
+	void updateTilesCollision(Entity* entity, const sf::Vector2i& gridPosition, const float& dt);
+
 public:
 	TileMap(const float& gridSize, const int& width, const int& hight, const std::string& textureFile) noexcept;
 	TileMap(const std::string& file_name) ;
@@ -57,9 +61,6 @@ public:
 	//Other Fucntions
 	void clear();
 
-	void updateLevelCollision(Entity* entity, const float& dt);
-	void updateTilesCollision(Entity* entity, const sf::Vector2i& gridPosition, const float& dt);
-	
 	void update(Entity* entity, const sf::Vector2i& gridPosition, const float& dt);
 
 	void renderGameState(sf::RenderTarget& target, const sf::Vector2f& player_position = sf::Vector2f(), sf::Shader* shader = NULL);

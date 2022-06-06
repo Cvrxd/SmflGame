@@ -57,7 +57,7 @@ inline void EditorState::initGUI()
 	this->selectorRect.setTexture(&this->tileMap.getTileTextureSheet());
 	this->selectorRect.setTextureRect(this->textureRect);
 
-	this->textureSelector = new GUI::TextureSelector(
+	this->textureSelector =  std::make_unique<GUI::TextureSelector>(
 		100.f, 20.f, 1280.f, 640.f, static_cast<unsigned int>(this->stateData->gridSize), 
 		this->tileMap.getTileTextureSheet(), this->font);
 }
@@ -90,33 +90,7 @@ inline void EditorState::initPauseMenu()
 	this->pauseMenu.addButton("QUIT", 710.f, 40.f, "Quit");
 }
 
-//Constructor
-EditorState::EditorState(StateData* state_data) noexcept
-	: State(state_data),
-	tileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg"),
-	pauseMenu(*this->stateData->window, this->stateData->font)
-{
-	this->initVariables();
-	this->initView();
-	this->initBackground();
-	this->initFonts();	  
-	this->initTexts();
-	this->initKeybinds(); 
-	this->initPauseMenu();
-	this->initButtons(); 
-	this->initGUI();
-}
-
-EditorState::~EditorState()
-{
-	for (auto it = this->buttons.begin(); it != buttons.end(); ++it)
-	{
-		delete it->second;
-	}
-	delete this->textureSelector;
-}
-
-// Functions 
+//Update functions
 inline void EditorState::updateView(const float& dt)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_VIEW_UP"))))
@@ -223,7 +197,7 @@ inline void EditorState::updateGUI(const float& dt)
 		std::to_string(this->mousePosGrid.x) + " " + std::to_string(this->mousePosGrid.y) +
 		"\nCollision: " + std::to_string(this->collision) +
 		"\nType: " + std::to_string(this->tileType));
-	
+
 	this->cursorText.setPosition(this->mousPosView.x + 100.f, this->mousPosView.y - 50.f);
 }
 
@@ -257,29 +231,7 @@ inline void EditorState::updatePauseMenuButtons()
 	}
 }
 
-void EditorState::update(const float& dt)
-{
-	this->updateMousePosition(&this->view);
-	this->updateKeyTime(dt);
-	this->updateInput(dt);
-
-	if (!this->paused)//Unpaused
-	{
-		this->updateView(dt);
-		this->updateGUI(dt);
-		this->updateButtons();
-		this->updateEditorInput(dt);
-	}
-	else //Paused
-	{
-		this->pauseMenu.update(this->mousePosWindow);
-		this->updatePauseMenuButtons();
-	}
-
-	this->updateButtons();
-}
-
-//Render
+//Render functions
 inline void EditorState::renderButtons(sf::RenderTarget& target)
 {
 	for (auto& el : this->buttons)
@@ -302,6 +254,50 @@ inline void EditorState::renderGUI(sf::RenderTarget& target)
 
 	target.setView(this->view);
 	target.draw(this->cursorText);
+}
+
+//Constructor
+EditorState::EditorState(StateData* state_data) noexcept
+	: State(state_data),
+	tileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg"),
+	pauseMenu(*this->stateData->window, this->stateData->font)
+{
+	this->initVariables();
+	this->initView();
+	this->initBackground();
+	this->initFonts();	  
+	this->initTexts();
+	this->initKeybinds(); 
+	this->initPauseMenu();
+	this->initButtons(); 
+	this->initGUI();
+}
+
+EditorState::~EditorState()
+{
+}
+
+//Public functions 
+void EditorState::update(const float& dt)
+{
+	this->updateMousePosition(&this->view);
+	this->updateKeyTime(dt);
+	this->updateInput(dt);
+
+	if (!this->paused)//Unpaused
+	{
+		this->updateView(dt);
+		this->updateGUI(dt);
+		this->updateButtons();
+		this->updateEditorInput(dt);
+	}
+	else //Paused
+	{
+		this->pauseMenu.update(this->mousePosWindow);
+		this->updatePauseMenuButtons();
+	}
+
+	this->updateButtons();
 }
 
 void EditorState::render(sf::RenderTarget* target)

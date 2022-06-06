@@ -17,8 +17,8 @@ private:
 
 	std::vector<sf::VideoMode> videoModes;
 
-	std::unordered_map<std::string, GUI::Button*> buttons;
-	std::unordered_map<std::string, GUI::DropDownList*> dropDownLists;
+	std::unordered_map<std::string, std::unique_ptr<GUI::Button>> buttons;
+	std::unordered_map<std::string, std::unique_ptr<GUI::DropDownList>> dropDownLists;
 
 	//Init functions
 	void initVariables();

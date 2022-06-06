@@ -73,34 +73,7 @@ inline void Game::initStates()
 	this->states.push(new MainMenuState(&this->stateData));
 }
 
-//Constructor
-Game::Game() noexcept
-{
-	this->initVariables();
-	this->initGraphicsSettings();
-	this->initWnodow();
-	this->initKeys();
-	this->initStateData();
-	this->initStates();
-}
-
-Game::~Game()
-{
-	delete this->window;
-
-	while (!this->states.empty())
-	{
-		delete this->states.top();
-		states.pop();
-	}
-}
-
-//Functions
-void Game::endAplication()
-{
-
-}
-
+//Update functions
 inline void Game::updateDt()
 {
 	// updates dt
@@ -114,7 +87,7 @@ inline void Game::updateSFMLEvents()
 		if (this->sfEvent.type == sf::Event::Closed)
 		{
 			this->window->close();
-		}  
+		}
 	}
 }
 
@@ -146,10 +119,11 @@ inline void Game::update()
 	}
 }
 
+//Render functions
 inline void Game::render()
 {
 	this->window->clear();
-	
+
 	//render states
 	if (!this->states.empty())
 	{
@@ -159,6 +133,35 @@ inline void Game::render()
 	this->window->display();
 }
 
+//Core functions
+inline void Game::endAplication()
+{
+
+}
+
+//Constructor
+Game::Game() noexcept
+{
+	this->initVariables();
+	this->initGraphicsSettings();
+	this->initWnodow();
+	this->initKeys();
+	this->initStateData();
+	this->initStates();
+}
+
+Game::~Game()
+{
+	delete this->window;
+
+	while (!this->states.empty())
+	{
+		delete this->states.top();
+		states.pop();
+	}
+}
+
+//Public Functions
 void Game::run()
 {
 	while (this->window->isOpen())

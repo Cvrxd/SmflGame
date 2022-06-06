@@ -60,25 +60,25 @@ inline void MainMenuState::initFonts()
 
 inline void MainMenuState::initButtons()
 {
-	this->buttons["GAME_STATE"] = new GUI::Button(100.f, 100.f, 300.f, 70.f,
+	this->buttons["GAME_STATE"] = std::make_unique<GUI::Button>(100.f, 100.f, 300.f, 70.f,
 		&this->font, "New Game", 70,
 		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
 		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
 	);
 
-	this->buttons["SETTINGS_STATE"] = new GUI::Button(100.f, 250.f, 300.f, 70.f,
+	this->buttons["SETTINGS_STATE"] = std::make_unique<GUI::Button>(100.f, 250.f, 300.f, 70.f,
 		&this->font, "Settings", 70,
 		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
 		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
 	);
 
-	this->buttons["EDITOR_STATE"] = new GUI::Button(100.f, 400.f, 250.f, 70.f,
+	this->buttons["EDITOR_STATE"] = std::make_unique<GUI::Button>(100.f, 400.f, 250.f, 70.f,
 		&this->font, "Editor", 70,
 		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
 		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
 	);
 
-	this->buttons["EXIT_STATE"] = new GUI::Button(100.f, 550.f, 180.f, 75.f,
+	this->buttons["EXIT_STATE"] = std::make_unique<GUI::Button>(100.f, 550.f, 180.f, 75.f,
 		&this->font, "Quit", 70,
 		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
 		sf::Color(100, 100, 100, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
@@ -100,13 +100,9 @@ MainMenuState::MainMenuState(StateData* state_data) noexcept
 
 MainMenuState::~MainMenuState()
 {
-	for (auto it = this->buttons.begin(); it != buttons.end(); ++it)
-	{
-		delete it->second;
-	}
 }
 
-// Functions 
+//Functions 
 inline void MainMenuState::updateInput(const float& dt)
 { 
 	

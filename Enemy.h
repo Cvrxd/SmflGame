@@ -9,12 +9,6 @@ class AnimationComponent;
 class StatsComponent;
 class EnemyHealthBar;
 
-struct EnemiesSounds
-{
-	std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>> hit;
-	std::unordered_map<SkillType, std::pair<sf::SoundBuffer, sf::Sound>> skillsImpact;
-};
-
 class Enemy : public Entity
 {
 protected:
@@ -34,7 +28,7 @@ protected:
 	bool isDead = false;
 
 	//Sounds
-	EnemiesSounds& sounds;
+	EnemySoundBox& soundBox;
 
 	//Player Hit impact
 	std::pair<sf::Texture, sf::Sprite> takeHitSprite;
@@ -71,19 +65,17 @@ protected:
 	virtual void createAnimationComponent(sf::Texture& texture_sheet) = 0;
 	virtual void addAnimations() = 0;
 
-	//Other functions
-	virtual void enemyDead(const float& dt) = 0;
-public:
-	Enemy(const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player, EnemiesSounds& sounds) noexcept;
-	virtual ~Enemy();
-
-	//Accessors
-	const bool& dead();
-
 	//Functions
 	virtual void updatePlayerImpact(const float& dt) = 0;
 	virtual void updateAttack(const float& dt) = 0;
 	virtual void updateMovement(const float& dt) = 0;
 	virtual void updateAnimations(const float& dt) = 0;
+
+public:
+	Enemy(const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player, EnemySoundBox& sounds) noexcept;
+	virtual ~Enemy();
+
+	//Accessors
+	const bool& dead();
 };
 

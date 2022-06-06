@@ -10,7 +10,7 @@ StatsComponent::StatsComponent(const int& level) noexcept
 
 	//Base init stats
 	this->hp = this->hpMAX = 5;
-	this->magicka = this->magickaMAX = 3;
+	this->mp = this->mpMAX = 3;
 	this->armor = this->armorMAX = 3;
 
 	//Atributes
@@ -38,10 +38,10 @@ void StatsComponent::addItem(const Items& item)
 		++this->damageMagical;
 		break;
 	case Items::RING:
-		++this->magickaMAX;
+		++this->mpMAX;
 		break;
 	case Items::NECKLASE:
-		++this->magickaMAX;
+		++this->mpMAX;
 		break;
 	case Items::HELMET:
 		++this->armorMAX;
@@ -64,7 +64,7 @@ void StatsComponent::upgradeItem(const Items& item, const int& level)
 {
 	if (item == Items::NECKLASE && item == Items::RING)
 	{
-		++this->magickaMAX;
+		++this->mpMAX;
 	}
 	else if (item == Items::SWORD)
 	{
@@ -136,21 +136,21 @@ void StatsComponent::loseArmor(const int& armor)
 
 void StatsComponent::gainMP(const int& mp)
 {
-	if (this->magicka + mp < this->magickaMAX)
+	if (this->mp + mp < this->mpMAX)
 	{
-		this->magicka += mp;
+		this->mp += mp;
 	}
 	else
 	{
-		this->magicka = this->magickaMAX;
+		this->mp = this->mpMAX;
 	}
 }
 
 void StatsComponent::loseMP(const int& mp)
 {
-	if (this->magicka > 0)
+	if (this->mp > 0)
 	{
-		--this->magicka;
+		--this->mp;
 	}
 }
 
@@ -187,8 +187,10 @@ void StatsComponent::updateLevel()
 	//New level gained
 	if(this->exp >= this->expNext)
 	{
+		++this->level;
+
 		//Each 10th level
-		if ((++this->level) % 10 == 0)
+		if (this->level % 10 == 0)
 		{
 			++this->damagePhysical;
 			++this->damageMagical;
@@ -197,7 +199,7 @@ void StatsComponent::updateLevel()
 		}
 
 		//Each 5th level
-		if ((++this->level) % 5 == 0)
+		if (this->level % 5 == 0)
 		{
 			++this->critRate;
 		}
@@ -218,7 +220,7 @@ void StatsComponent::updateStats(const bool& reset)
 	{
 		this->armor = this->armorMAX;
 		this->hp = this->hpMAX;
-		this->magicka = magickaMAX;
+		this->mp = this->mpMAX;
 	}
 }
 

@@ -66,11 +66,11 @@ namespace GUI
 		//Variables
 		bool showDropBox;
 		sf::Font& font;
-		GUI::Button* activeBox;
+		std::shared_ptr<GUI::Button> activeBox;
 
 		float keyTime;
 		float keyTimeMax;
-		std::vector<GUI::Button*> dropBox;
+		std::vector<std::shared_ptr<GUI::Button>> dropBox;
 		 
 	public:
 		DropDownList(const float& x, const float& y, const float& width, const float& hight, 
@@ -94,7 +94,8 @@ namespace GUI
 		bool active;
 		bool hiden;
 		unsigned gridSize;
-		GUI::Button* hideButton;
+
+		std::unique_ptr<GUI::Button> hideButton;
 
 		float keyTime;
 		float keyTimeMax;
@@ -103,6 +104,7 @@ namespace GUI
 		sf::RectangleShape selector;
 		sf::RectangleShape bounds;
 		sf::Sprite sheet;
+
 		sf::Vector2u mousePosGrid;
 	
 		//Functions

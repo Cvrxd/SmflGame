@@ -30,8 +30,13 @@ private:
 	float potionKeyTime;
 	float potionKeyTimeMax;
 
+	//Buff
 	float buffDuration;
 	float buffCooldown;
+
+	int buffLevel = 1;
+	int buffMaxLevel = 5;
+	float buffCritRate = 5.f;
 
 	//Sounds
 	std::unordered_map<SkillType, std::pair<sf::SoundBuffer, sf::Sound>> sounds;
@@ -73,11 +78,22 @@ private:
 	void initSounds();
 	void initAllSkills();
 	void initAllAnimations();
+
+	//Update functions
+	void updateClock(const float& dt);
+
+	//Core functions
+	void useSkill(const SkillType& skill_type);
+	void playSkillSound(const SkillType& type);
+
 public:
 	SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill, SkillType& usingSkillType, int& currentSkillDamage, bool& isBuffed) noexcept;
 	~SkillsComponent();
 
 	//Accessors
+	const int& getBuffMaxLevel() const;
+	const int& getBuffLevel() const;
+
 	const std::vector<std::pair<SkillType, int>>& getPlayerSkills();
 	const sf::CircleShape& getDamageArea();
 	const bool getKeyTime() const;
@@ -86,16 +102,12 @@ public:
 	int& getHpPotions();
 
 	//Functions
-	void playSkillSound(const SkillType& type);
-
 	void addPotion(const Potions& potion_type);
 	void usePotion(const Potions& potion_type);
 
-	void useSkill(const SkillType& skill_type);
 	void addSkill(const SkillType& skill_type, const short& slot);
 	void upgradeSkill(const SkillType& skill_type);
 
-	void updateClock(const float& dt);
 	void updatePlayerBuff(const float& dt, const sf::Vector2f& player_position);
 	void update(const float& dt, const sf::Vector2f& skill_position, const sf::Vector2f& player_position);
 	void render(sf::RenderTarget& target);

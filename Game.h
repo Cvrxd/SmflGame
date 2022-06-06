@@ -6,11 +6,11 @@ class MainMenuState;
 class Game
 {
 private:
-	// Vriables
-	sf::Clock dtClock;
-
+	//Vriables
 	float dt;
 	float gridSize;
+
+	sf::Clock dtClock;
 
 	GraphicsSettings gfxSettings;
 	StateData stateData;
@@ -27,21 +27,22 @@ private:
 	void initKeys();
 	void initStateData();
 	void initStates();
+
+	//Update functions
+	void updateDt();
+	void updateSFMLEvents();
+	void update();
+
+	//Render functions
+	void render();
+
+	//Core functions
+	void endAplication();
+
 public:
 	Game() noexcept;
 	~Game();
 
 	//Functions
-	void endAplication();
-
-	//update
-	void updateSFMLEvents();
-	void update();
-
-	//render
-	void render();
-	void updateDt();
-
-	//core
 	void run();
 };

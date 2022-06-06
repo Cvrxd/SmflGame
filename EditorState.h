@@ -23,12 +23,13 @@ private:
 	sf::RectangleShape sidebar;
 	sf::RectangleShape selectorRect;
 	sf::IntRect textureRect;
-	GUI::TextureSelector* textureSelector;
 
 	PauseMenu pauseMenu;
-	std::unordered_map<std::string, GUI::Button*> buttons;
+	std::unique_ptr<GUI::TextureSelector> textureSelector;
+	std::unordered_map<std::string, std::unique_ptr<GUI::Button>> buttons;
 
 	TileMap tileMap;
+
 	bool collision;
 	short tileType;
 
@@ -43,21 +44,24 @@ private:
 	void initKeybinds() override;
 	void initGUI();
 
-public:
-	EditorState(StateData* state_data) noexcept;
-	virtual ~EditorState() override;
-
-	//functions
+	//Update functions
 	void updateView(const float& dt);
 	void updateInput(const float& dt) override;
 	void updateEditorInput(const float& dt);
 	void updateButtons();
 	void updateGUI(const float& dt);
 	void updatePauseMenuButtons();
-	void update(const float& dt) override;
 
+	//Render functions
 	void renderGUI(sf::RenderTarget& target);
 	void renderButtons(sf::RenderTarget& target);
+
+public:
+	EditorState(StateData* state_data) noexcept;
+	virtual ~EditorState() override;
+
+	//Functions
+	void update(const float& dt) override;
 	void render(sf::RenderTarget* target = NULL) override;
 };
 

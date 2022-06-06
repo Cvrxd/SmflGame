@@ -121,32 +121,18 @@ inline void MageEnemy::addAnimations()
 //Sound functions
 inline void MageEnemy::playImpactSounds(const std::string& sound)
 {
-	this->sounds.hit[sound].second.play();
+	this->soundBox.playSound(sound);
 }
 
 inline void MageEnemy::playSkillImpactSounds(const SkillType& type)
 {
-	this->sounds.skillsImpact[type].second.play();
+	this->soundBox.playSound(type);
 }
 
-//Constructors
-MageEnemy::MageEnemy(const MageEnemyType& type, const int& level, const float& x, const float& y, 
-	sf::Texture& texture_sheet, Player* player, EnemiesSounds& sounds) noexcept
-	:Enemy(level, x, y, texture_sheet, player, sounds),
-	type(type), healthBar(&this->statsComponent.hp), levelIcon(&level, &this->player->getStatsComponent()->level, this->player->getFont())
-{
-	this->initComponents(texture_sheet, this->sprite);
-	this->setPosition(x, y);
-}
-
-MageEnemy::~MageEnemy()
-{
-}
-
-//Functions
+//Update functions
 inline void MageEnemy::updateAttack(const float& dt)
 {
-	if (this->player->getHitRange().getGlobalBounds().intersects(this->castRange.getGlobalBounds()) && 
+	if (this->player->getHitRange().getGlobalBounds().intersects(this->castRange.getGlobalBounds()) &&
 		!this->player->getHitRange().getGlobalBounds().intersects(this->innerRange.getGlobalBounds()) && !this->isDead)
 	{
 		this->isAttaking = true;
@@ -177,7 +163,7 @@ inline void MageEnemy::updateMovement(const float& dt)
 	if (this->player->getHitRange().getGlobalBounds().intersects(this->innerRange.getGlobalBounds()))
 	{
 		if (this->player->getPosition().x > this->getPosition().x)
-		{	
+		{
 			this->move(-1.f, 0.f, dt);
 		}
 		else if (this->player->getPosition().x < this->getPosition().x)
@@ -215,7 +201,7 @@ inline void MageEnemy::updateMovement(const float& dt)
 	}
 
 	//Set attack origin
-	if (this->player->getHitRange().getGlobalBounds().intersects(this->castRange.getGlobalBounds()) && 
+	if (this->player->getHitRange().getGlobalBounds().intersects(this->castRange.getGlobalBounds()) &&
 		!this->player->getHitRange().getGlobalBounds().intersects(this->innerRange.getGlobalBounds()))
 	{
 		if (this->player->getPosition().x > this->getPosition().x)
@@ -270,7 +256,7 @@ inline void MageEnemy::updateAnimations(const float& dt)
 	if (this->skillImpact)
 	{
 		this->skillsImpactSprites[*this->playerUsingSkill].first.setPosition(
-			this->getPosition().x - this->offsets[*this->playerUsingSkill], 
+			this->getPosition().x - this->offsets[*this->playerUsingSkill],
 			this->getPosition().y - this->offsets[*this->playerUsingSkill]);
 
 		if (this->skillsImpactAnimations[*this->playerUsingSkill].play("SKILL_IMPACT", dt, true))
@@ -381,11 +367,22 @@ inline void MageEnemy::updatePlayerImpact(const float& dt)
 	}
 }
 
-void MageEnemy::enemyDead(const float& dt)
-{
 
+//Constructors
+MageEnemy::MageEnemy(const MageEnemyType& type, const int& level, const float& x, const float& y, 
+	sf::Texture& texture_sheet, Player* player, EnemySoundBox& sounds) noexcept
+	:Enemy(level, x, y, texture_sheet, player, sounds),
+	type(type), healthBar(&this->statsComponent.hp), levelIcon(&level, &this->player->getStatsComponent()->level, this->player->getFont())
+{
+	this->initComponents(texture_sheet, this->sprite);
+	this->setPosition(x, y);
 }
 
+MageEnemy::~MageEnemy()
+{
+}
+
+//Public functions
 void MageEnemy::update(const float& dt, sf::Vector2f mouse_pos_view)
 {
 	this->movementComponent.update(dt);

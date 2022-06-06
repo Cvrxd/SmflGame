@@ -213,7 +213,7 @@ GUI::DropDownList::DropDownList(const float& x, const float& y, const float& wid
 	sf::Font& font, std::string text_list[], const unsigned& number_of_elements,const unsigned& default_index) noexcept
 	:font(font), showDropBox(false), keyTimeMax(2.f), keyTime(0.f)
 {
-	this->activeBox = new GUI::Button(x, y + 20, width + 8, hight,
+	this->activeBox = std::make_shared<GUI::Button>(x, y + 20, width + 8, hight,
 		&this->font, text_list[default_index], 28,
 		sf::Color(255, 255, 255, 160), sf::Color(252, 252, 252, 200), sf::Color(20, 20, 20, 50),
 		sf::Color(100, 100, 100, 200), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200),
@@ -224,7 +224,7 @@ GUI::DropDownList::DropDownList(const float& x, const float& y, const float& wid
 
 	for (unsigned short i = 0; i < number_of_elements; ++i)
 	{
-		this->dropBox.push_back(new GUI::Button(x, y + ((i+1) * hight) + 20, width + 8, hight,
+		this->dropBox.push_back(std::make_shared<GUI::Button>(x, y + ((i+1) * hight) + 20, width + 8, hight,
 			&this->font, text_list[i], 28,
 			sf::Color(255, 255, 255, 150), sf::Color(252, 252, 252, 252), sf::Color(20, 20, 20, 50),
 			sf::Color(70, 70, 70, 200), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200),
@@ -236,12 +236,6 @@ GUI::DropDownList::DropDownList(const float& x, const float& y, const float& wid
 
 GUI::DropDownList::~DropDownList()
 {
-	for (size_t i = 0; i < this->dropBox.size(); ++i)
-	{
-		delete this->dropBox[i];
-	}
-
-	delete this->activeBox;
 }
 
 //Accessors
@@ -366,7 +360,7 @@ GUI::TextureSelector::TextureSelector(const float& x, const float& y, const floa
 	this->initSpriteSheet(x, y, texture_sheet);
 	this->initSelector_TextureRect(x, y);
 
-	this->hideButton = new GUI::Button(x - 40, y - 10, 50.f, 50.f,
+	this->hideButton = std::make_unique<GUI::Button>(x - 40, y - 10, 50.f, 50.f,
 		&font, "TS", 30,
 		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
 		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
@@ -375,7 +369,6 @@ GUI::TextureSelector::TextureSelector(const float& x, const float& y, const floa
 
 GUI::TextureSelector::~TextureSelector()
 {
-	delete this->hideButton;
 }
 
 const sf::IntRect& GUI::TextureSelector::getTextureRect() const

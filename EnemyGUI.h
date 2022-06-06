@@ -16,6 +16,7 @@ namespace EnemyGUI
 		sf::Texture healthTexture;
 		sf::Texture backgroundTexture;
 
+		//Init functions
 		void initTextures();
 	public:
 		EnemyHealthBar(const int* hp) noexcept;

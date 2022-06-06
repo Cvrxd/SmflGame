@@ -13,6 +13,7 @@ class MainMenuState : public State
 {
 private:
 
+	//To do
 	struct MainMenuSounds
 	{
 		//Background music
@@ -29,7 +30,7 @@ private:
 	sf::Texture backgroundTexture;
 	sf::RectangleShape background;
 
-	std::unordered_map<std::string, GUI::Button*> buttons;
+	std::unordered_map<std::string, std::unique_ptr<GUI::Button>> buttons;
 
 	//Sounds
 	MainMenuSounds sounds;
@@ -41,6 +42,7 @@ private:
 	void initFonts();
 	void initButtons();
 	void initKeybinds() override;
+
 public:
 	MainMenuState(StateData* state_data) noexcept;
 	virtual ~MainMenuState() override;

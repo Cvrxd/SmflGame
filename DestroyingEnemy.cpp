@@ -72,30 +72,15 @@ inline void DestroyingEnemy::addAnimations()
 //Sound functions
 inline void DestroyingEnemy::playImpactSounds(const std::string& sound)
 {
-	this->sounds.hit[sound].second.play();
+	this->soundBox.playSound(sound);
 }
 
 inline void DestroyingEnemy::playSkillImpactSounds(const SkillType& type)
 {
-	this->sounds.skillsImpact[type].second.play();
+	this->soundBox.playSound(type);
 }
 
-//Constructors
-DestroyingEnemy::DestroyingEnemy(const DestroyingEnemyType& type, const int& level, const float& x, const float& y, 
-	sf::Texture& texture_sheet, Player* player, EnemiesSounds& sounds) noexcept
-	:Enemy(level, x, y, texture_sheet, player, sounds),
-	type(type), healthBar(&this->statsComponent.hp), levelIcon(&level, &this->player->getStatsComponent()->level, this->player->getFont())
-{
-	this->initStats();
-	this->initComponents(texture_sheet, this->sprite);
-	this->setPosition(x, y);
-}
-
-DestroyingEnemy::~DestroyingEnemy()
-{
-}
-
-//Functions
+//Update functions
 inline void DestroyingEnemy::updateAttack(const float& dt)
 {
 	if (this->player->getHitRange().getGlobalBounds().intersects(this->getGlobalBounds()) && !this->isDead)
@@ -167,7 +152,7 @@ inline void DestroyingEnemy::updateAnimations(const float& dt)
 	if (this->statsComponent.hp == 0)
 	{
 		this->stopVelocity();
-		
+
 		this->destroyingSprite.first.setPosition(this->getPosition().x - 50, this->getPosition().y - 50);
 
 		if (this->destroyingAnimation.play("DESTROY", dt, true))
@@ -265,11 +250,22 @@ inline void DestroyingEnemy::updatePlayerImpact(const float& dt)
 	}
 }
 
-void DestroyingEnemy::enemyDead(const float& dt)
+//Constructors
+DestroyingEnemy::DestroyingEnemy(const DestroyingEnemyType& type, const int& level, const float& x, const float& y, 
+	sf::Texture& texture_sheet, Player* player, EnemySoundBox& sounds) noexcept
+	:Enemy(level, x, y, texture_sheet, player, sounds),
+	type(type), healthBar(&this->statsComponent.hp), levelIcon(&level, &this->player->getStatsComponent()->level, this->player->getFont())
 {
-
+	this->initStats();
+	this->initComponents(texture_sheet, this->sprite);
+	this->setPosition(x, y);
 }
 
+DestroyingEnemy::~DestroyingEnemy()
+{
+}
+
+//Public functions
 void DestroyingEnemy::update(const float& dt, sf::Vector2f mouse_pos_view)
 {
 	this->movementComponent.update(dt);

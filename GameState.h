@@ -54,7 +54,7 @@ private:
 	std::vector<DestroyingEnemy> destroyingEnemies;
 
 	//Sounds
-	EnemiesSounds enemiesSounds;
+	EnemySoundBox enemiesSounds;
 	GuiSoundsBox guiSounds;
 
 	//Functions

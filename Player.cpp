@@ -132,150 +132,6 @@ inline void Player::updateRestoration()
 	}
 }
 
-//Constructor
-Player::Player(const float& x, const float& y, sf::Texture& texture_sheet, const sf::Font& font, bool& isBuffed) noexcept
-	: currentHitAnimation(0), font(font), isBuffed(isBuffed),
-	statsComponent(1),
-	animationComponent(&this->sprite, &texture_sheet),
-	skillsComponent(this->statsComponent, this->isUsingSkill, this->currentSkilltype, this->currentskillDamage, this->isBuffed),
-	moveKey("MOVE"), dashKey("DASH"), currentKey(&moveKey)
-{
-	this->initVariables();
-	this->initComponents(texture_sheet);
-	this->setPosition(x, y);
-	this->initSounds();
-
-	this->sprite.setScale(2.8f, 2.8f);
-}
-
-Player::~Player()
-{
-}
-
-//Accessors
-const SkillType& Player::getUsingSkilltype()
-{
-	return this->currentSkilltype;
-}
-
-const int& Player::getUsingSkilldamage()
-{
-	return this->currentskillDamage;
-}
-
-const sf::Font& Player::getFont()
-{
-	return this->font;
-}
-
-void Player::setPlayerGUI(PlayerGUI& playerGUI)
-{
-	this->playerGUI = &playerGUI;
-}
-
-const bool& Player::usingSkill()
-{
-	return this->isUsingSkill;
-}
-
-const bool& Player::isDealingDmg()
-{
-	return this->dealDMG;
-}
-
-StatsComponent* Player::getStatsComponent()
-{
-	return &this->statsComponent;
-}
-
-SkillsComponent* Player::getSkillComponent()
-{
-	return &this->skillsComponent;
-}
-
-const sf::CircleShape& Player::getHitRange()
-{
-	return this->hitRange;
-}
-
-const sf::RectangleShape& Player::getDamageRange()
-{
-	return this->damageRange;
-}
-
-//Stats functions
-void Player::gainEXP(const unsigned& exp)
-{
-	this->statsComponent.gainEXP(exp);
-}
-
-void Player::gainHP(const int& hp)
-{
-	this->statsComponent.gainHP(hp);
-}
-
-void Player::loseHP(const int& hp)
-{
-	this->statsComponent.loseHP(hp);
-	this->isTakingHit = true;
-}
-
-void Player::gainMP(const int& mp)
-{
-	this->statsComponent.gainMP(mp);
-}
-
-void Player::loseMP(const int& mp)
-{
-	this->statsComponent.loseMP(mp);
-}
-
-void Player::gainArmor(const int& armor)
-{
-	this->statsComponent.gainArmor(armor);
-}
-
-void Player::gainCrystals(const int& crystals)
-{
-	this->statsComponent.gainCrystals(crystals);
-}
-
-void Player::loseCrystals(const int& crystals)
-{
-	this->statsComponent.loseCrystals(crystals);
-}
-
-void Player::gainCoins(const int& coins)
-{
-	this->statsComponent.gainCoins(coins);
-}
-
-void Player::loseCoins(const int& coins)
-{
-	this->statsComponent.loseCoins(coins);
-}
-
-void Player::addItem(const Items& item)
-{
-	this->statsComponent.addItem(item);
-}
-
-void Player::addPotions(const Potions& potion_type)
-{
-	this->skillsComponent.addPotion(potion_type);
-}
-
-void Player::usePotions(const Potions& potion_type)
-{
-	this->skillsComponent.usePotion(potion_type);
-}
-
-//Functions
-void Player::pauseSounds()
-{
-	this->soundBox.pauseMovementSound();
-}
-
 inline void Player::updateAttack(const float& dt, sf::Vector2f mouse_pos_view)
 {
 	this->dealDMG = false;
@@ -354,7 +210,7 @@ inline void Player::updateAnimations(const float& dt, sf::Vector2f mouse_pos_vie
 	else
 	{
 		this->currentKey = &this->moveKey;
-	}	
+	}
 
 	if (this->movementComponent.getState(IDLE))
 	{
@@ -393,6 +249,162 @@ inline void Player::updateAnimations(const float& dt, sf::Vector2f mouse_pos_vie
 		//Animation
 		this->animationComponent.play(*this->currentKey, dt, this->movementComponent.getVelocity().y, this->movementComponent.getMaxVelocity());
 	}
+}
+
+//Constructor
+Player::Player(const float& x, const float& y, sf::Texture& texture_sheet, const sf::Font& font, bool& isBuffed) noexcept
+	: currentHitAnimation(0), font(font), isBuffed(isBuffed),
+	statsComponent(1),
+	animationComponent(&this->sprite, &texture_sheet),
+	skillsComponent(this->statsComponent, this->isUsingSkill, this->currentSkilltype, this->currentskillDamage, this->isBuffed),
+	moveKey("MOVE"), dashKey("DASH"), currentKey(&moveKey)
+{
+	this->initVariables();
+	this->initComponents(texture_sheet);
+	this->setPosition(x, y);
+	this->initSounds();
+
+	this->sprite.setScale(2.8f, 2.8f);
+}
+
+Player::~Player()
+{
+}
+
+//Accessors
+const SkillType& Player::getUsingSkilltype()
+{
+	return this->currentSkilltype;
+}
+
+const int& Player::getUsingSkilldamage()
+{
+	return this->currentskillDamage;
+}
+
+const sf::Font& Player::getFont()
+{
+	return this->font;
+}
+
+void Player::setPlayerGUI(PlayerGUI& playerGUI)
+{
+	this->playerGUI = &playerGUI;
+}
+
+const bool& Player::usingSkill()
+{
+	return this->isUsingSkill;
+}
+
+const bool& Player::isDealingDmg()
+{
+	return this->dealDMG;
+}
+
+StatsComponent* Player::getStatsComponent()
+{
+	return &this->statsComponent;
+}
+
+SkillsComponent* Player::getSkillComponent()
+{
+	return &this->skillsComponent;
+}
+
+const sf::CircleShape& Player::getHitRange()
+{
+	return this->hitRange;
+}
+
+const sf::RectangleShape& Player::getDamageRange()
+{
+	return this->damageRange;
+}
+
+//Stats functions
+void Player::gainEXP(const unsigned& exp)
+{
+	this->statsComponent.gainEXP(exp);
+
+	//Upgrade buff every 5th player level
+	if (this->statsComponent.level % 5 == 0)
+	{
+		if (this->skillsComponent.getBuffLevel() != this->skillsComponent.getBuffMaxLevel())
+		{
+			this->skillsComponent.upgradeSkill(SkillType::BUFF);
+
+			this->playerGUI->upgradePlayerBuff(this->skillsComponent.getBuffLevel());
+		}
+	}
+	
+}
+
+void Player::gainHP(const int& hp)
+{
+	this->statsComponent.gainHP(hp);
+}
+
+void Player::loseHP(const int& hp)
+{
+	this->statsComponent.loseHP(hp);
+	this->isTakingHit = true;
+}
+
+void Player::gainMP(const int& mp)
+{
+	this->statsComponent.gainMP(mp);
+}
+
+void Player::loseMP(const int& mp)
+{
+	this->statsComponent.loseMP(mp);
+}
+
+void Player::gainArmor(const int& armor)
+{
+	this->statsComponent.gainArmor(armor);
+}
+
+void Player::gainCrystals(const int& crystals)
+{
+	this->statsComponent.gainCrystals(crystals);
+}
+
+void Player::loseCrystals(const int& crystals)
+{
+	this->statsComponent.loseCrystals(crystals);
+}
+
+void Player::gainCoins(const int& coins)
+{
+	this->statsComponent.gainCoins(coins);
+}
+
+void Player::loseCoins(const int& coins)
+{
+	this->statsComponent.loseCoins(coins);
+}
+
+void Player::addItem(const Items& item)
+{
+	this->statsComponent.addItem(item);
+}
+
+void Player::addPotions(const Potions& potion_type)
+{
+	this->skillsComponent.addPotion(potion_type);
+}
+
+void Player::usePotions(const Potions& potion_type)
+{
+	this->skillsComponent.usePotion(potion_type);
+}
+
+//Functions
+void Player::pauseSounds()
+{
+	this->soundBox.pauseMovementSound();
 }
 
 void Player::update(const float& dt, sf::Vector2f mouse_pos_view)

@@ -52,14 +52,14 @@ inline void GameState::initTextures()
 	this->textures["ENEMY_MIMIC"].loadFromFile("Textures/enemies/mele/mimic.png");
 	this->textures["ENEMY_FIRE_DEMON"].loadFromFile("Textures/enemies/boses/fire_demon.png");
 	this->textures["ENEMY_BRINGER_OF_DEATH"].loadFromFile("Textures/enemies/mele/bringer_of_death.png");
-	this->textures["ENEMY_NOMAND"].loadFromFile("Textures/enemies/boses/nomand.png");
+	this->textures["ENEMY_NOMAND"].loadFromFile("Textures/enemies/mele/nomand.png");
 
 	//Humans
 	this->textures["ENEMY_KNIGHT1"].loadFromFile("Textures/enemies/mele/knight1.png");
 	this->textures["ENEMY_HUNTRESS"].loadFromFile("Textures/enemies/mele/huntress.png");
+	this->textures["ENEMY_SAMURAI"].loadFromFile("Textures/enemies/boses/samurai.png");
 	this->textures["ENEMY_MARTIAL_HERO1"].loadFromFile("Textures/enemies/mele/martial_hero1.png");
 	this->textures["ENEMY_MARTIAL_HERO2"].loadFromFile("Textures/enemies/mele/martial_hero2.png");
-	this->textures["ENEMY_MARTIAL_HERO3"].loadFromFile("Textures/enemies/mele/martial_hero3.png");
 
 	//Mages
 	this->textures["ENEMY_DARK_MAGE"].loadFromFile("Textures/enemies/mages/dark_mage.png");
@@ -92,18 +92,18 @@ inline void GameState::initPlayers()
 inline void GameState::initEnemies()
 {
 	this->bosses.reserve(3);
-	//this->bosses.emplace_back(BossType::NOMAND, 1, 100, 900, this->textures["ENEMY_NOMAND"], &this->player);
+	this->bosses.emplace_back(BossType::SAMURAI, 1, 100, 900, this->textures["ENEMY_SAMURAI"], &this->player, this->enemiesSounds);
 
 	this->meleEnemies.reserve(3);
-	this->meleEnemies.emplace_back(MeleEnemyType::MIMIC, 5, 700, 700, this->textures["ENEMY_MIMIC"], &this->player, this->enemiesSounds);
-	this->meleEnemies.emplace_back(MeleEnemyType::MARTIAL_HERO3, 5, 700, 700, this->textures["ENEMY_MARTIAL_HERO3"], &this->player, this->enemiesSounds);
-	this->meleEnemies.emplace_back(MeleEnemyType::BRINGER_OF_DEATH, 5, 700, 700, this->textures["ENEMY_BRINGER_OF_DEATH"], &this->player, this->enemiesSounds);
+	//this->meleEnemies.emplace_back(MeleEnemyType::MIMIC, 5, 700, 700, this->textures["ENEMY_MIMIC"], &this->player, this->enemiesSounds);
+	//this->meleEnemies.emplace_back(MeleEnemyType::NOMAND, 5, 700, 700, this->textures["ENEMY_NOMAND"], &this->player, this->enemiesSounds);
+	//this->meleEnemies.emplace_back(MeleEnemyType::BRINGER_OF_DEATH, 5, 700, 700, this->textures["ENEMY_BRINGER_OF_DEATH"], &this->player, this->enemiesSounds);
 
 	this->mageEnemies.reserve(2);
-	//this->mageEnemies.emplace_back(MageEnemyType::FIRE_MAGE, 1, 400, 400, this->textures["ENEMY_FIRE_MAGE"], &this->player);
+	//this->mageEnemies.emplace_back(MageEnemyType::FIRE_MAGE, 1, 400, 400, this->textures["ENEMY_FIRE_MAGE"], &this->player, this->enemiesSounds);
 
 	this->destroyingEnemies.reserve(2);
-	//this->destroyingEnemies.emplace_back(DestroyingEnemyType::FIRE_SKULL, 1, 0, 0, this->textures["ENEMY_FIRE_SKULL"], &this->player);
+	//this->destroyingEnemies.emplace_back(DestroyingEnemyType::FIRE_SKULL, 1, 0, 0, this->textures["ENEMY_FIRE_SKULL"], &this->player, this->enemiesSounds);
 }
 
 inline void GameState::initPlayerGUI()
@@ -116,37 +116,8 @@ inline void GameState::initTileMap()
 	this->tileMap.loadFromFile("map/game_map.txt");
 }
 
-//To do
 inline void GameState::initSounds()
 {
-	//Enemies sounds
-	// 
-	//Hit impact and crit impact
-	this->enemiesSounds.hit["PLAYER_CRIT"].first.loadFromFile("Sounds/game_state/hit_sounds/crit.ogg");
-	this->enemiesSounds.hit["PLAYER_CRIT"].second.setBuffer(this->enemiesSounds.hit["PLAYER_CRIT"].first);
-	this->enemiesSounds.hit["PLAYER_CRIT"].second.setVolume(1.f);
-
-	this->enemiesSounds.hit["PLAYER_HIT"].first.loadFromFile("Sounds/game_state/hit_sounds/hit.wav");
-	this->enemiesSounds.hit["PLAYER_HIT"].second.setBuffer(this->enemiesSounds.hit["PLAYER_HIT"].first);
-	this->enemiesSounds.hit["PLAYER_HIT"].second.setVolume(2.5f);
-
-	//Skills impact
-	this->enemiesSounds.skillsImpact[SkillType::DARK_BOLT].first.loadFromFile("Sounds/game_state/spell_sounds/dark_bolt.ogg");
-	this->enemiesSounds.skillsImpact[SkillType::DARK_BOLT].second.setBuffer(this->enemiesSounds.skillsImpact[SkillType::DARK_BOLT].first);
-	this->enemiesSounds.skillsImpact[SkillType::DARK_BOLT].second.setVolume(10.f);
-
-	this->enemiesSounds.skillsImpact[SkillType::HOLY_STRIKE].first.loadFromFile("Sounds/game_state/spell_sounds/holy_strile_impact.wav");
-	this->enemiesSounds.skillsImpact[SkillType::HOLY_STRIKE].second.setBuffer(this->enemiesSounds.skillsImpact[SkillType::HOLY_STRIKE].first);
-	this->enemiesSounds.skillsImpact[SkillType::HOLY_STRIKE].second.setVolume(2.f);
-
-	this->enemiesSounds.skillsImpact[SkillType::BLOOD_SPIKE].first.loadFromFile("Sounds/game_state/spell_sounds/blood_strike_impact.wav");
-	this->enemiesSounds.skillsImpact[SkillType::BLOOD_SPIKE].second.setBuffer(this->enemiesSounds.skillsImpact[SkillType::BLOOD_SPIKE].first);
-	this->enemiesSounds.skillsImpact[SkillType::BLOOD_SPIKE].second.setVolume(2.f);
-
-	this->enemiesSounds.skillsImpact[SkillType::DARK_POSION].first.loadFromFile("Sounds/game_state/spell_sounds/dark_poison_impact.wav");
-	this->enemiesSounds.skillsImpact[SkillType::DARK_POSION].second.setBuffer(this->enemiesSounds.skillsImpact[SkillType::DARK_POSION].first);
-	this->enemiesSounds.skillsImpact[SkillType::DARK_POSION].second.setVolume(2.f);
-
 }
 
 //Constructor
@@ -297,9 +268,9 @@ inline void GameState::updatePlayerInput(const float& dt)
 	//For Testing
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
 	{
-		this->player.getStatsComponent()->gainEXP(1);
-		this->player.getStatsComponent()->gainCoins(1);
-		this->player.getStatsComponent()->gainCrystals(1);
+		this->player.gainEXP(1);
+		this->player.gainCoins(1);
+		this->player.gainCrystals(1);
 	}
 }
 

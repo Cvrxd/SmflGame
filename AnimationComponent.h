@@ -136,10 +136,10 @@ private:
 	sf::Sprite* sprite;
 	sf::Texture* textureSheet;
 
-	Animation* lastAnimation;
-	Animation* priorityAnimation;
+	std::shared_ptr<Animation> lastAnimation;
+	std::shared_ptr<Animation> priorityAnimation;
 
-	std::unordered_map<std::string, Animation*> animations;
+	std::unordered_map<std::string, std::shared_ptr<Animation>> animations;
 
 public:
 	AnimationComponent() {};

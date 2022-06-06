@@ -21,8 +21,8 @@ public:
 	//Stats
 	int hp;
 	int hpMAX;
-	int magicka;
-	int magickaMAX;
+	int mp;
+	int mpMAX;
 	int armor;
 	int armorMAX;
 

@@ -54,26 +54,29 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		};
 
 		break;
-	case BossType::NOMAND:
-		this->sprite.setScale(4.f, 4.f);
+
+	case BossType::SAMURAI:
+		this->sprite.setScale(2.7f, 2.7f);
+
+		//Resistance
+		this->skillReistance = SkillType::BLOOD_SPIKE;
 
 		//Init components
-		this->createHitboxComponent(this->sprite, 80.f, 100.f, 150.f, 180.f);
-		this->createMovementComponent(200.f, 1200.f, 250.f);
+		this->createHitboxComponent(this->sprite, 200.f, 150.f, 100.f, 150.f);
+		this->createMovementComponent(200.f, 1200.f, 230.f);
 		this->createAnimationComponent(texture_sheet);
 
 		//Sets origins
 		this->setOriginLeft = [&sprite]()
 		{
-			sprite.setOrigin(70.f, 0.f);
-			sprite.setScale(-4.f, 4.f);
+			sprite.setOrigin(200.f, 0.f);
+			sprite.setScale(-2.7f, 2.7f);
 		};
 		this->setOriginRight = [&sprite]()
 		{
 			sprite.setOrigin(0.f, 0.f);
-			sprite.setScale(4.f, 4.f);
+			sprite.setScale(2.7f, 2.7f);
 		};
-
 		break;
 	default:
 		break;
@@ -101,11 +104,12 @@ inline void BossEnemy::addAnimations()
 		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 4, 3, 288, 160, 10.f);
 		this->animationComponent.addAnimation("DEATH", 0, 4, 21, 4, 288, 160, 10.f);
 		break;
-	case BossType::NOMAND:
-		this->animationComponent.addAnimation("MOVE", 0, 1, 7, 1, 64, 64, 20.f);
-		this->animationComponent.addAnimation("ATTACK", 0, 2, 10, 2, 64, 64, 10.f);
-		this->animationComponent.addAnimation("TAKE_HIT", 0, 5, 1, 5, 64, 64, 10.f);
-		this->animationComponent.addAnimation("DEATH", 0, 5, 7, 5, 64, 64, 15.f);
+
+	case BossType::SAMURAI:
+		this->animationComponent.addAnimation("MOVE", 0, 2, 7, 2, 200, 200, 10.f);
+		this->animationComponent.addAnimation("ATTACK", 0, 0, 5, 0, 200, 200, 13.f);
+		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 3, 3, 200, 200, 14.f);
+		this->animationComponent.addAnimation("DEATH", 0, 1, 5, 1, 200, 200, 15.f);
 		break;
 	default:
 		break;
@@ -115,30 +119,15 @@ inline void BossEnemy::addAnimations()
 //Sound fucntions
 inline void BossEnemy::playImpactSounds(const std::string& sound)
 {
-	this->sounds.hit[sound].second.play();
+	this->soundBox.playSound(sound);
 }
 
 inline void BossEnemy::playSkillImpactSounds(const SkillType& type)
 {
-	this->sounds.skillsImpact[type].second.play();
+	this->soundBox.playSound(type);
 }
 
-//Constructors
-BossEnemy::BossEnemy(const BossType& type, const int& level, const float& x, const float& y, 
-	sf::Texture& texture_sheet, Player* player, EnemiesSounds& sounds) noexcept
-	:Enemy(level, x, y, texture_sheet, player, sounds),
-	type(type), healthBar(&this->statsComponent.hp), levelIcon(&level, &this->player->getStatsComponent()->level, this->player->getFont())
-{
-	this->initStats();
-	this->initComponents(texture_sheet, this->sprite);
-	this->setPosition(x, y);
-}
-
-BossEnemy::~BossEnemy()
-{
-}
-
-//Functions
+//Update functions
 inline void BossEnemy::updateAttack(const float& dt)
 {
 	if (this->player->getHitRange().getGlobalBounds().intersects(this->getGlobalBounds()) && !this->isDead)
@@ -340,11 +329,22 @@ inline void BossEnemy::updatePlayerImpact(const float& dt)
 	}
 }
 
-void BossEnemy::enemyDead(const float& dt)
+//Constructors
+BossEnemy::BossEnemy(const BossType& type, const int& level, const float& x, const float& y, 
+	sf::Texture& texture_sheet, Player* player, EnemySoundBox& sounds) noexcept
+	:Enemy(level, x, y, texture_sheet, player, sounds),
+	type(type), healthBar(&this->statsComponent.hp), levelIcon(&level, &this->player->getStatsComponent()->level, this->player->getFont())
 {
-
+	this->initStats();
+	this->initComponents(texture_sheet, this->sprite);
+	this->setPosition(x, y);
 }
 
+BossEnemy::~BossEnemy()
+{
+}
+
+//Public Functions
 void BossEnemy::update(const float& dt, sf::Vector2f mouse_pos_view)
 {
 	this->movementComponent.update(dt);

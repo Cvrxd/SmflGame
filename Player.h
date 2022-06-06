@@ -48,6 +48,8 @@ private:
 	AnimationComponent animationComponent;
 	StatsComponent statsComponent;
 	SkillsComponent skillsComponent;
+
+	//Sounds
 	PlayerSoundBox soundBox;
 
 	//Animations
@@ -66,6 +68,8 @@ private:
 
 	//Update functions
 	void updateRestoration();
+	void updateAttack(const float& dt, sf::Vector2f mouse_pos_view);
+	void updateAnimations(const float& dt, sf::Vector2f mouse_pos_view);
 
 public:
 	Player(const float& x, const float& y, sf::Texture& texture_sheet, const sf::Font& font, bool& isBuffed) noexcept;
@@ -104,8 +108,6 @@ public:
 
 	//Functions
 	void pauseSounds();
-	void updateAttack(const float& dt, sf::Vector2f mouse_pos_view);
-	void updateAnimations(const float& dt, sf::Vector2f mouse_pos_view);
 	void update(const float& dt, sf::Vector2f mouse_pos_view) override;
 	void render(sf::RenderTarget& target, sf::Shader* shader = NULL) override;
 };

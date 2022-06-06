@@ -98,28 +98,7 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 			sprite.setScale(3.f, 3.f);
 		};
 		break;
-
 	case MeleEnemyType::MARTIAL_HERO1:
-		this->sprite.setScale(2.7f, 2.7f);
-
-		//Init components
-		this->createHitboxComponent(this->sprite, 200.f, 150.f, 100.f, 150.f);
-		this->createMovementComponent(200.f, 1200.f, 230.f);
-		this->createAnimationComponent(texture_sheet);
-
-		//Sets origins
-		this->setOriginLeft = [&sprite]()
-		{
-			sprite.setOrigin(200.f, 0.f);
-			sprite.setScale(-2.7f, 2.7f);
-		};
-		this->setOriginRight = [&sprite]()
-		{
-			sprite.setOrigin(0.f, 0.f);
-			sprite.setScale(2.7f, 2.7f);
-		};
-		break;
-	case MeleEnemyType::MARTIAL_HERO2:
 		this->sprite.setScale(2.6f, 2.6f);
 
 		//Init components
@@ -139,7 +118,7 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 			sprite.setScale(2.6f, 2.6f);
 		};
 		break;
-	case MeleEnemyType::MARTIAL_HERO3:
+	case MeleEnemyType::MARTIAL_HERO2:
 		this->sprite.setScale(3.f, 3.f);
 
 		//Init components
@@ -159,6 +138,28 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 			sprite.setScale(3.f, 3.f);
 		};
 	break;
+
+	case MeleEnemyType::NOMAND:
+		this->sprite.setScale(4.f, 4.f);
+
+		//Init components
+		this->createHitboxComponent(this->sprite, 80.f, 100.f, 150.f, 180.f);
+		this->createMovementComponent(200.f, 1200.f, 250.f);
+		this->createAnimationComponent(texture_sheet);
+
+		//Sets origins
+		this->setOriginLeft = [&sprite]()
+		{
+			sprite.setOrigin(70.f, 0.f);
+			sprite.setScale(-4.f, 4.f);
+		};
+		this->setOriginRight = [&sprite]()
+		{
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setScale(4.f, 4.f);
+		};
+
+		break;
 	default:
 		break;
 	}
@@ -209,42 +210,29 @@ inline void MeleEnemy::addAnimations()
 		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 2, 3, 200, 200, 14.f);
 		this->animationComponent.addAnimation("DEATH", 0, 1, 6, 1, 200, 200, 15.f);
 		break;
-	case MeleEnemyType::MARTIAL_HERO3:
-		this->animationComponent.addAnimation("MOVE", 0, 2, 7, 2, 126, 126, 10.f);
-		this->animationComponent.addAnimation("ATTACK", 0, 0, 6, 0, 126, 126, 16.f);
-		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 2, 3, 126, 126, 14.f);
-		this->animationComponent.addAnimation("DEATH", 0, 1, 10, 1, 126, 126, 15.f);
+	case MeleEnemyType::NOMAND:
+		this->animationComponent.addAnimation("MOVE", 0, 1, 7, 1, 64, 64, 20.f);
+		this->animationComponent.addAnimation("ATTACK", 0, 2, 10, 2, 64, 64, 10.f);
+		this->animationComponent.addAnimation("TAKE_HIT", 0, 5, 1, 5, 64, 64, 10.f);
+		this->animationComponent.addAnimation("DEATH", 0, 5, 7, 5, 64, 64, 15.f);
+		break;
 	default:
 		break;
 	}
 }
 
+//Sound functions
 inline void MeleEnemy::playImpactSounds(const std::string& sound)
 {
-	this->sounds.hit[sound].second.play();
+	this->soundBox.playSound(sound);
 }
 
 inline void MeleEnemy::playSkillImpactSounds(const SkillType& type)
 {
-	this->sounds.skillsImpact[type].second.play();
+	this->soundBox.playSound(type);
 }
 
-//Constructors
-MeleEnemy::MeleEnemy(const MeleEnemyType& type, const int& level, const float& x, const float& y, 
-	sf::Texture& texture_sheet, Player* player, EnemiesSounds& sounds)noexcept
-	:Enemy(level, x, y, texture_sheet, player, sounds),
-	type(type), healthBar(&this->statsComponent.hp), levelIcon(&level, &this->player->getStatsComponent()->level, this->player->getFont())
-{
-	this->initComponents(texture_sheet, this->sprite);
-	this->setPosition(x, y);
-}
-
-
-MeleEnemy::~MeleEnemy()
-{
-}
-
-//Functions
+//Update functions
 inline void MeleEnemy::updateAttack(const float& dt)
 {
 	if (this->player->getHitRange().getGlobalBounds().intersects(this->getGlobalBounds()) && !this->isDead)
@@ -342,7 +330,7 @@ inline void MeleEnemy::updateAnimations(const float& dt)
 		{
 			this->player->gainCoins(3 * this->statsComponent.level);
 			this->player->gainEXP(this->statsComponent.level * 2);
-			
+
 			this->isDead = true;
 		}
 	}
@@ -427,7 +415,7 @@ inline void MeleEnemy::updatePlayerImpact(const float& dt)
 					this->playSkillImpactSounds(*this->playerUsingSkill);
 				}
 			}
-			else 
+			else
 			{
 				//Pop up text
 			}
@@ -439,11 +427,23 @@ inline void MeleEnemy::updatePlayerImpact(const float& dt)
 	}
 }
 
-void MeleEnemy::enemyDead(const float& dt)
-{
 
+//Constructors
+MeleEnemy::MeleEnemy(const MeleEnemyType& type, const int& level, const float& x, const float& y, 
+	sf::Texture& texture_sheet, Player* player, EnemySoundBox& sounds)noexcept
+	:Enemy(level, x, y, texture_sheet, player, sounds),
+	type(type), healthBar(&this->statsComponent.hp), levelIcon(&level, &this->player->getStatsComponent()->level, this->player->getFont())
+{
+	this->initComponents(texture_sheet, this->sprite);
+	this->setPosition(x, y);
 }
 
+
+MeleEnemy::~MeleEnemy()
+{
+}
+
+//Public functions
 void MeleEnemy::update(const float& dt, sf::Vector2f mouse_pos_view)
 {
 	this->movementComponent.update(dt);

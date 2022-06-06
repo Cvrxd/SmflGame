@@ -57,13 +57,13 @@ inline void SettingsState::initFonts()
 
 inline void SettingsState::initGUI()
 {
-	this->buttons["EXIT_STATE"] = new GUI::Button(815.f, 850.f, 180.f, 75.f,
+	this->buttons["EXIT_STATE"] = std::make_unique<GUI::Button>(815.f, 850.f, 180.f, 75.f,
 		&this->font, "Quit", 50,
 		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
 		sf::Color(100, 100, 100, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
 	);
 
-	this->buttons["APPLY"] = new GUI::Button(800.f, 700.f, 180.f, 75.f,
+	this->buttons["APPLY"] = std::make_unique<GUI::Button>(800.f, 700.f, 180.f, 75.f,
 		&this->font, "Apply", 50,
 		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
 		sf::Color(100, 100, 100, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
@@ -80,7 +80,7 @@ inline void SettingsState::initGUI()
 	}
 
 	std::string text_list[] = { "1920 x 1080", "800 x 600", "640 x 480" };
-	this->dropDownLists["RESOLUTION"] =  new GUI::DropDownList(280, 225, 200, 50, font, modes_str.data(), 
+	this->dropDownLists["RESOLUTION"] = std::make_unique<GUI::DropDownList>(280, 225, 200, 50, font, modes_str.data(),
 		static_cast<unsigned int>(modes_str.size()), 0);
 	//
 
@@ -100,15 +100,6 @@ SettingsState::SettingsState(StateData* state_data) noexcept
 
 SettingsState::~SettingsState()
 {
-	for (auto it = this->buttons.begin(); it != buttons.end(); ++it)
-	{
-		delete it->second;
-	} 
-	
-	for (auto it = this->dropDownLists.begin(); it != dropDownLists.end(); ++it)
-	{
-		delete it->second;
-	}
 }
 
 //Accessors

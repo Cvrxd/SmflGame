@@ -28,12 +28,12 @@ EnemyGUI::EnemyHealthBar::~EnemyHealthBar()
 {
 }
 
+//Functions
 void EnemyGUI::EnemyHealthBar::updateOffsetX()
 {
 	this->offsetX += 10.f / float(this->hpMAX / 3.f) + 0.1f;
 }
 
-//Functions
 void EnemyGUI::EnemyHealthBar::update(const float& dt, const sf::Vector2f& position)
 {
 	this->backgroundRect.setPosition(position.x - 30, position.y - 20);
@@ -51,7 +51,10 @@ void EnemyGUI::EnemyHealthBar::render(sf::RenderTarget& target)
 	target.draw(this->backgroundRect);
 }
 
-//Enemy LVL icon
+//======================
+//Enemy LVL icon========
+//======================
+
 //Initialisation
 inline void EnemyGUI::EnemyLevelIcon::initVariables(const sf::Font& font)
 {
@@ -71,10 +74,6 @@ inline void EnemyGUI::EnemyLevelIcon::initVariables(const sf::Font& font)
 	this->updateText();
 
 }
-
-//===========================
-//EnemyLevelIcon=============
-//===========================
 
 //Constructor
 EnemyGUI::EnemyLevelIcon::EnemyLevelIcon(const int* lvl, const int* playerLvl, const sf::Font& font) noexcept
