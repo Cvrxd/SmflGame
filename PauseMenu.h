@@ -6,18 +6,22 @@ class Button;
 class PauseMenu
 {
 private:
+	using MapButtons	= std::unordered_map<std::string, std::unique_ptr<GUI::Button>>;
+	using Sound			= std::pair<sf::SoundBuffer, sf::Sound>;
+
 	//Variables
-	sf::Font font;
-	sf::Text menuText;
+	sf::Font	font;
+	sf::Text	menuText;
 	sf::Texture backgroundTexture;
 
 	sf::RectangleShape background;
 	sf::RectangleShape container;
 
-	std::unordered_map<std::string, std::unique_ptr<GUI::Button>> buttons;
+	//Buttons
+	MapButtons buttons;
 
 	//Sounds
-	std::pair<sf::SoundBuffer, sf::Sound> clickSound;
+	Sound clickSound;
 
 	//Init functions
 	void initSounds();
@@ -27,11 +31,12 @@ public:
 	~PauseMenu();
 
 	//Accessors
-	std::unordered_map<std::string, std::unique_ptr<GUI::Button>>& getButtons();
+	MapButtons& getButtons();
 
 	//Functions
-	void playClickSound();
 	const bool isButtonPressed(const std::string& key);
+
+	void playClickSound();
 	void addButton(const std::string& key, const float& y, const float& modifier_x, const std::string& text);
 	void update(const sf::Vector2i& mousePosition);
 	void render(sf::RenderTarget& target);

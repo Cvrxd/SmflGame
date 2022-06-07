@@ -6,19 +6,21 @@ class MainMenuState;
 class Game
 {
 private:
+	using KeyBindsMap	= std::unordered_map<std::string, int>;
+	using StatesStack	= std::stack<State*>;
+
 	//Vriables
-	float dt;
-	float gridSize;
+	float				dt;
+	float				gridSize;
 
-	sf::Clock dtClock;
+	GraphicsSettings	gfxSettings;
+	StateData			stateData;
+	StatesStack			states;
+	KeyBindsMap			supportedKeys;
 
-	GraphicsSettings gfxSettings;
-	StateData stateData;
-	sf::Event sfEvent;
-
-	sf::RenderWindow* window = nullptr;
-	std::stack<State*> states;
-	std::unordered_map<std::string, int> supportedKeys;
+	sf::Clock			dtClock;
+	sf::Event			sfEvent;
+	sf::RenderWindow*	window = nullptr;
 
 	//Init functions
 	void initVariables();

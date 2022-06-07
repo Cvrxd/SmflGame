@@ -30,6 +30,31 @@ inline void DestroyingEnemy::initComponents(sf::Texture& texture_sheet, sf::Spri
 			sprite.setScale(-3.f, 3.f);
 		};
 		break;
+
+	case DestroyingEnemyType::FIRE_WORM:
+		this->sprite.setScale(3.f, 3.f);
+
+		//Init resistance
+		this->skillReistance = SkillType::FIRE_EXPLOSION;
+		this->physicalResistance = true;
+
+		//Init components
+		this->createHitboxComponent(this->sprite, 70.f, 120.f, 150.f, 120.f);
+		this->createMovementComponent(120.f, 800.f, 160.f);
+		this->createAnimationComponent(texture_sheet);
+
+		//Sets origins
+		this->setOriginLeft = [&sprite]()
+		{
+			sprite.setOrigin(100.f, 0.f);
+			sprite.setScale(-3.f, 3.f);
+		};
+		this->setOriginRight = [&sprite]()
+		{
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setScale(3.f, 3.f);
+		};
+		break;
 	default:
 		break;
 	}
@@ -41,6 +66,11 @@ inline void DestroyingEnemy::createAnimationComponent(sf::Texture& texture_sheet
 	switch (this->type)
 	{
 	case DestroyingEnemyType::FIRE_SKULL:
+		this->destroyingSprite.first.setScale(4.f, 4.f);
+		this->destroyingSprite.second.loadFromFile("Textures/animations/hit/destroying1.png");
+		this->destroyingAnimation = { &this->destroyingSprite.first, &this->destroyingSprite.second };
+		break;
+	case DestroyingEnemyType::FIRE_WORM:
 		this->destroyingSprite.first.setScale(4.f, 4.f);
 		this->destroyingSprite.second.loadFromFile("Textures/animations/hit/destroying1.png");
 		this->destroyingAnimation = { &this->destroyingSprite.first, &this->destroyingSprite.second };
@@ -61,7 +91,13 @@ inline void DestroyingEnemy::addAnimations()
 		this->animationComponent.addAnimation("ATTACK", 0, 0, 7, 0, 96, 112, 20.f);
 		this->animationComponent.addAnimation("TAKE_HIT", 0, 0, 7, 0, 96, 112, 20.f);
 		this->animationComponent.addAnimation("DEATH", 0, 0, 7, 0, 96, 112, 20.f);
-
+		this->destroyingAnimation.addAnimation("DESTROY", 0, 0, 6, 0, 81, 66, 10.f);
+		break;
+	case DestroyingEnemyType::FIRE_WORM:
+		this->animationComponent.addAnimation("MOVE", 0, 3, 8, 3, 90, 90, 11.f);
+		this->animationComponent.addAnimation("ATTACK", 0, 0, 15, 0, 90, 90, 15.f);
+		this->animationComponent.addAnimation("TAKE_HIT", 0, 2, 2, 2, 90, 90, 20.f);
+		this->animationComponent.addAnimation("DEATH", 0, 1, 7, 1, 90, 90, 20.f);
 		this->destroyingAnimation.addAnimation("DESTROY", 0, 0, 6, 0, 81, 66, 10.f);
 		break;
 	default:

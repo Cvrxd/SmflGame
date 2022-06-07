@@ -6,15 +6,15 @@ namespace EnemyGUI
 	{
 	private:
 		//Variables
-		int hpMAX;
-		float offsetX = 0;
-		const int* hp;
+		int			hpMAX;
+		const int*	hp;
+		float		offsetX = 0;
 
-		sf::RectangleShape healthRect;
-		sf::RectangleShape backgroundRect;
+		sf::RectangleShape	healthRect;
+		sf::RectangleShape	backgroundRect;
 
-		sf::Texture healthTexture;
-		sf::Texture backgroundTexture;
+		sf::Texture			healthTexture;
+		sf::Texture			backgroundTexture;
 
 		//Init functions
 		void initTextures();
@@ -37,8 +37,8 @@ namespace EnemyGUI
 
 		float offsetX = 45.f;
 
-		sf::RectangleShape backgroundRect;
-		sf::Texture backgroundTexture;
+		sf::RectangleShape	backgroundRect;
+		sf::Texture			backgroundTexture;
 
 		sf::Text lvlText;
 

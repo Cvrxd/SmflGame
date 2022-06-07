@@ -12,19 +12,19 @@ inline void SkillsComponent::initSounds()
 {
 	this->sounds[SkillType::BUFF].first.loadFromFile("Sounds/game_state/spell_sounds/buff.wav");
 	this->sounds[SkillType::BUFF].second.setBuffer(this->sounds[SkillType::BUFF].first);
-	this->sounds[SkillType::BUFF].second.setVolume(10.f);
+	this->sounds[SkillType::BUFF].second.setVolume(5.f);
 
 	this->sounds[SkillType::THUNDER_STRIKE].first.loadFromFile("Sounds/game_state/spell_sounds/thunder_strike.wav");
 	this->sounds[SkillType::THUNDER_STRIKE].second.setBuffer(this->sounds[SkillType::THUNDER_STRIKE].first);
-	this->sounds[SkillType::THUNDER_STRIKE].second.setVolume(5.f);
+	this->sounds[SkillType::THUNDER_STRIKE].second.setVolume(4.f);
 
 	this->sounds[SkillType::FIRE_EXPLOSION].first.loadFromFile("Sounds/game_state/spell_sounds/fire_explosion.wav");
 	this->sounds[SkillType::FIRE_EXPLOSION].second.setBuffer(this->sounds[SkillType::FIRE_EXPLOSION].first);
-	this->sounds[SkillType::FIRE_EXPLOSION].second.setVolume(5.f);
+	this->sounds[SkillType::FIRE_EXPLOSION].second.setVolume(3.f);
 
 	this->sounds[SkillType::POISON_CLAW].first.loadFromFile("Sounds/game_state/spell_sounds/poison_claw.wav");
 	this->sounds[SkillType::POISON_CLAW].second.setBuffer(this->sounds[SkillType::POISON_CLAW].first);
-	this->sounds[SkillType::POISON_CLAW].second.setVolume(5.f);
+	this->sounds[SkillType::POISON_CLAW].second.setVolume(3.f);
 
 	this->sounds[SkillType::BLOOD_SPIKE].first.loadFromFile("Sounds/game_state/spell_sounds/blood_strike.wav");
 	this->sounds[SkillType::BLOOD_SPIKE].second.setBuffer(this->sounds[SkillType::BLOOD_SPIKE].first);
@@ -32,11 +32,11 @@ inline void SkillsComponent::initSounds()
 
 	this->sounds[SkillType::DARK_POSION].first.loadFromFile("Sounds/game_state/spell_sounds/dark_poision.wav");
 	this->sounds[SkillType::DARK_POSION].second.setBuffer(this->sounds[SkillType::DARK_POSION].first);
-	this->sounds[SkillType::DARK_POSION].second.setVolume(5.f);
+	this->sounds[SkillType::DARK_POSION].second.setVolume(3.f);
 
 	this->sounds[SkillType::DARK_BOLT].first.loadFromFile("Sounds/game_state/spell_sounds/dark_bolt.wav");
 	this->sounds[SkillType::DARK_BOLT].second.setBuffer(this->sounds[SkillType::DARK_BOLT].first);
-	this->sounds[SkillType::DARK_BOLT].second.setVolume(5.f);
+	this->sounds[SkillType::DARK_BOLT].second.setVolume(3.f);
 
 	this->sounds[SkillType::HOLY_STRIKE].first.loadFromFile("Sounds/game_state/spell_sounds/holy_strike.wav");
 	this->sounds[SkillType::HOLY_STRIKE].second.setBuffer(this->sounds[SkillType::HOLY_STRIKE].first);
@@ -48,7 +48,7 @@ inline void SkillsComponent::initSounds()
 
 	this->sounds[SkillType::POTION].first.loadFromFile("Sounds/game_state/spell_sounds/potion.wav");
 	this->sounds[SkillType::POTION].second.setBuffer(this->sounds[SkillType::POTION].first);
-	this->sounds[SkillType::POTION].second.setVolume(5.f);
+	this->sounds[SkillType::POTION].second.setVolume(3.f);
 }
 
 inline void SkillsComponent::initAllSkills()
@@ -131,13 +131,13 @@ inline void SkillsComponent::initAllAnimations()
 	this->skillsEndingAnimation.addAnimation("USE2", 0, 1, 3, 1, 64, 64, 11.f);
 
 	//Skills animation
-	this->skillsAnimations[SkillType::THUNDER_STRIKE].addAnimation("USE", 0, 0, 11, 0, 64, 64, 8.f);
+	this->skillsAnimations[SkillType::THUNDER_STRIKE].addAnimation("USE", 0, 0, 11, 0, 64, 64, 10.f);
 	this->skillTextures[SkillType::THUNDER_STRIKE].first.setScale(5.f, 5.f);
 
-	this->skillsAnimations[SkillType::DARK_BOLT].addAnimation("USE", 0, 0, 10, 0, 64, 88, 8.f);
+	this->skillsAnimations[SkillType::DARK_BOLT].addAnimation("USE", 0, 0, 10, 0, 64, 88, 10.f);
 	this->skillTextures[SkillType::DARK_BOLT].first.setScale(4.f, 4.f);
 
-	this->skillsAnimations[SkillType::POISON_CLAW].addAnimation("USE", 0, 0, 30, 0, 96, 96, 4.f);
+	this->skillsAnimations[SkillType::POISON_CLAW].addAnimation("USE", 0, 0, 30, 0, 96, 96, 6.f);
 	this->skillTextures[SkillType::POISON_CLAW].first.setScale(4.f, 4.f);
 
 	this->skillsAnimations[SkillType::DARK_POSION].addAnimation("USE", 0, 0, 13, 0, 48, 64, 8.f);
@@ -147,7 +147,7 @@ inline void SkillsComponent::initAllAnimations()
 	this->skillTextures[SkillType::BLOOD_SPIKE].first.setScale(5.5f, 5.5f);
 
 	this->skillsAnimations[SkillType::FIRE_EXPLOSION].addAnimation("USE", 0, 0, 17, 0, 48, 48, 10.f);
-	this->skillTextures[SkillType::FIRE_EXPLOSION].first.setScale(5.f, 5.f);
+	this->skillTextures[SkillType::FIRE_EXPLOSION].first.setScale(6.f, 6.f);
 
 	this->skillsAnimations[SkillType::LIGHTNING_STRIKE].addAnimation("USE", 0, 0, 9, 0, 64, 128, 8.f);
 	this->skillTextures[SkillType::LIGHTNING_STRIKE].first.setScale(3.5f, 3.5f);

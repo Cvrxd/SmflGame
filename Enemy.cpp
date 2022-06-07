@@ -88,7 +88,8 @@ void Enemy::initStats()
 
 //Constructor
 Enemy::Enemy(const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player, EnemySoundBox& sounds)noexcept
-	:statsComponent(level), animationComponent(&this->sprite, &texture_sheet), player(player), textureSheet(&texture_sheet), soundBox(sounds)
+	:statsComponent(level), animationComponent(&this->sprite, &texture_sheet), player(player), textureSheet(&texture_sheet), soundBox(sounds),
+	attackCount(0), attackCountMAX(INT_MAX), attackColdown(0)
 {
 	this->playerUsingSkill = &this->player->getUsingSkilltype();
 	this->playerUsingSkillDmg = &this->player->getUsingSkilldamage();

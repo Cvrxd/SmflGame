@@ -13,25 +13,28 @@ class TextureSelector;
 class EditorState : public State
 {
 private:
+	using MapButtons			= std::unordered_map<std::string, std::unique_ptr<GUI::Button>>;
+	using TextureSelectorUptr	= std::unique_ptr<GUI::TextureSelector>;
+
 	//Variables 
-	float cameraSpeed;
+	float	cameraSpeed;
+
+	bool	collision;
+	short	tileType;
+
 	sf::View view;
 
 	sf::Font font;
 	sf::Text cursorText;
 
-	sf::RectangleShape sidebar;
-	sf::RectangleShape selectorRect;
-	sf::IntRect textureRect;
-
-	PauseMenu pauseMenu;
-	std::unique_ptr<GUI::TextureSelector> textureSelector;
-	std::unordered_map<std::string, std::unique_ptr<GUI::Button>> buttons;
-
-	TileMap tileMap;
-
-	bool collision;
-	short tileType;
+	sf::RectangleShape	sidebar;
+	sf::RectangleShape	selectorRect;
+	sf::IntRect			textureRect;
+	
+	TextureSelectorUptr textureSelector;
+	PauseMenu			pauseMenu;
+	MapButtons			buttons;
+	TileMap				tileMap;
 
 	//Init functions
 	void initVariables();
@@ -41,12 +44,12 @@ private:
 	void initTexts();
 	void initButtons();
 	void initPauseMenu();
-	void initKeybinds() override;
+	void initKeybinds()								override;
 	void initGUI();
 
 	//Update functions
 	void updateView(const float& dt);
-	void updateInput(const float& dt) override;
+	void updateInput(const float& dt)				override;
 	void updateEditorInput(const float& dt);
 	void updateButtons();
 	void updateGUI(const float& dt);
@@ -57,11 +60,11 @@ private:
 	void renderButtons(sf::RenderTarget& target);
 
 public:
-	EditorState(StateData* state_data) noexcept;
+	EditorState(StateData* state_data)				noexcept;
 	virtual ~EditorState() override;
 
 	//Functions
-	void update(const float& dt) override;
-	void render(sf::RenderTarget* target = NULL) override;
+	void update(const float& dt)					override;
+	void render(sf::RenderTarget* target = nullptr) override;
 };
 

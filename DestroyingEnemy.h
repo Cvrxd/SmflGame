@@ -3,21 +3,23 @@
 
 class Enemy;
 
-enum class DestroyingEnemyType { FIRE_SKULL = 0};
+enum class DestroyingEnemyType { FIRE_SKULL = 0, FIRE_WORM};
 
 class DestroyingEnemy : public Enemy
 {
-	DestroyingEnemyType type;
+	using PairSpriteTexture = std::pair <sf::Sprite, sf::Texture>;
+
+	//Variables
+	DestroyingEnemyType		type;
+	PairSpriteTexture		destroyingSprite;
+	AnimationComponent		destroyingAnimation;
 
 	EnemyGUI::EnemyHealthBar healthBar;
 	EnemyGUI::EnemyLevelIcon levelIcon;
 
-	std::pair<sf::Sprite, sf::Texture> destroyingSprite;
-	AnimationComponent destroyingAnimation;
-
 	//Init functions
 	void initComponents(sf::Texture& texture_sheet, sf::Sprite& sprite) override;
-	void createAnimationComponent(sf::Texture& texture_sheet) override;
+	void createAnimationComponent(sf::Texture& texture_sheet)			override;
 	void addAnimations() override;
 
 	//Sound funtions
@@ -25,10 +27,10 @@ class DestroyingEnemy : public Enemy
 	void playSkillImpactSounds(const SkillType& type);
 
 	//Update functions
-	void updateAttack(const float& dt) override;
-	void updateMovement(const float& dt) override;
-	void updateAnimations(const float& dt) override;
-	void updatePlayerImpact(const float& dt) override;
+	void updateAttack(const float& dt)									override;
+	void updateMovement(const float& dt)								override;
+	void updateAnimations(const float& dt)								override;
+	void updatePlayerImpact(const float& dt)							override;
 
 public:
 	DestroyingEnemy(const DestroyingEnemyType& type, const int& level, const float& x, const float& y, 
@@ -37,7 +39,7 @@ public:
 	~DestroyingEnemy();
 
 	//Functions
-	void update(const float& dt, sf::Vector2f mouse_pos_view) override;
-	void render(sf::RenderTarget& target, sf::Shader* shader = NULL) override;
+	void update(const float& dt, sf::Vector2f mouse_pos_view)			override;
+	void render(sf::RenderTarget& target, sf::Shader* shader = NULL)	override;
 };
 

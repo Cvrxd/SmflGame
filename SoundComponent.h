@@ -54,8 +54,8 @@ class SkillsComponent;
 	{
 	private:
 		//Variables
-		std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>> hit;
-		std::unordered_map<SkillType, std::pair<sf::SoundBuffer, sf::Sound>> skillsImpact;
+		std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>>	hit;
+		std::unordered_map<SkillType, std::pair<sf::SoundBuffer, sf::Sound>>	skillsImpact;
 
 		//Init functions
 		void initSound();

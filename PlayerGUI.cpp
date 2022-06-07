@@ -92,25 +92,25 @@ inline void PlayerGUI::initTextsIcons()
 	this->textures["CRYSTAL"].loadFromFile("Textures/hud/game_hud/crystals.png");
 
 	//Game icons
-	this->iconsSprites["QUICK_SLOT_ARROW_LEFT"].setTexture(&this->textures["QUICK_SLOT_HUD"]);
-	this->iconsSprites["QUICK_SLOT_ARROW_LEFT"].setTextureRect(sf::IntRect(0, 0, 50, 84));
-	this->iconsSprites["QUICK_SLOT_ARROW_LEFT"].setSize(sf::Vector2f(60, 100));
-	this->iconsSprites["QUICK_SLOT_ARROW_LEFT"].setPosition(520, 895);
+	this->iconsShapes["QUICK_SLOT_ARROW_LEFT"].setTexture(&this->textures["QUICK_SLOT_HUD"]);
+	this->iconsShapes["QUICK_SLOT_ARROW_LEFT"].setTextureRect(sf::IntRect(0, 0, 50, 84));
+	this->iconsShapes["QUICK_SLOT_ARROW_LEFT"].setSize(sf::Vector2f(60, 100));
+	this->iconsShapes["QUICK_SLOT_ARROW_LEFT"].setPosition(520, 895);
 
-	this->iconsSprites["QUICK_SLOT_ARROW_RIGHT"].setTexture(&this->textures["QUICK_SLOT_HUD"]);
-	this->iconsSprites["QUICK_SLOT_ARROW_RIGHT"].setTextureRect(sf::IntRect(165, 0, 48, 84));
-	this->iconsSprites["QUICK_SLOT_ARROW_RIGHT"].setSize(sf::Vector2f(60, 100));
-	this->iconsSprites["QUICK_SLOT_ARROW_RIGHT"].setPosition(1380, 895);
+	this->iconsShapes["QUICK_SLOT_ARROW_RIGHT"].setTexture(&this->textures["QUICK_SLOT_HUD"]);
+	this->iconsShapes["QUICK_SLOT_ARROW_RIGHT"].setTextureRect(sf::IntRect(165, 0, 48, 84));
+	this->iconsShapes["QUICK_SLOT_ARROW_RIGHT"].setSize(sf::Vector2f(60, 100));
+	this->iconsShapes["QUICK_SLOT_ARROW_RIGHT"].setPosition(1380, 895);
 
-	this->iconsSprites["LEVEL"].setTexture(&this->textures["ICON_SHEET"]);
-	this->iconsSprites["LEVEL"].setTextureRect(sf::IntRect(158,54,32,29));
-	this->iconsSprites["LEVEL"].setSize(sf::Vector2f(100, 100));
-	this->iconsSprites["LEVEL"].setPosition(10,20);
+	this->iconsShapes["LEVEL"].setTexture(&this->textures["ICON_SHEET"]);
+	this->iconsShapes["LEVEL"].setTextureRect(sf::IntRect(158,54,32,29));
+	this->iconsShapes["LEVEL"].setSize(sf::Vector2f(100, 100));
+	this->iconsShapes["LEVEL"].setPosition(10,20);
 
-	this->iconsSprites["EXP"].setTexture(&this->textures["ICON_SHEET"]);
-	this->iconsSprites["EXP"].setTextureRect(sf::IntRect(149, 87, 40, 11));
-	this->iconsSprites["EXP"].setSize(sf::Vector2f(120, 50));
-	this->iconsSprites["EXP"].setPosition(1, 120);
+	this->iconsShapes["EXP"].setTexture(&this->textures["ICON_SHEET"]);
+	this->iconsShapes["EXP"].setTextureRect(sf::IntRect(149, 87, 40, 11));
+	this->iconsShapes["EXP"].setSize(sf::Vector2f(120, 50));
+	this->iconsShapes["EXP"].setPosition(1, 120);
 
 	//Exp, LVL, coins text
 	this->texts["LEVEL"].setFont(this->font);
@@ -311,7 +311,7 @@ void PlayerGUI::setPotionsCount(int& hp, int& mp)
 	this->mpPotions = &mp;
 }
 
-void PlayerGUI::initSkillIcons(std::vector<std::pair<SkillType, sf::RectangleShape>>* skillsIcons)
+void PlayerGUI::initSkillIcons(vectorSkillTypeShape* skillsIcons)
 {
 	this->skillsIcons = skillsIcons;
 }
@@ -388,7 +388,7 @@ void PlayerGUI::render(sf::RenderTarget& target)
 	}
 
 	//Render icons
-	for (auto& el : this->iconsSprites)
+	for (auto& el : this->iconsShapes)
 	{
 		target.draw(el.second);
 	}
@@ -418,8 +418,7 @@ void PlayerGUI::itemsMenuUpdate(const float& dt)
 //===============================================
 
 //Init functions
-inline void SkillsLevelingComponent::initVariables(std::vector<std::pair<SkillType, sf::RectangleShape>>& originalSkillsIcons,
-	std::vector<std::pair<sf::RectangleShape, sf::RectangleShape>>& quickSlotBars)
+inline void SkillsLevelingComponent::initVariables(VectorSkillIcons& originalSkillsIcons, VectorQuickSlotBars& quickSlotBars)
 {
 	this->originalSkillsIcons = &originalSkillsIcons;
 	this->quickSlotBars = &quickSlotBars;
@@ -444,7 +443,7 @@ void SkillsLevelingComponent::initSkill(const SkillType& type)
 		this->originalSkillsIcons->at(4).second.getPosition().y + this->offsetY + 70.f * ++this->unlockSkillsCount);
 
 	//Button
-	this->buttons[type] = new GUI::Button(this->skillsIcons[type].getPosition().x + 50, this->skillsIcons[type].getPosition().y - 5,
+	this->buttons[type] = std::make_unique<GUI::Button>(this->skillsIcons[type].getPosition().x + 50, this->skillsIcons[type].getPosition().y - 5,
 		150.f, 45.f,
 		&this->font, "Upgrade", 35,
 		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
@@ -562,10 +561,7 @@ SkillsLevelingComponent::SkillsLevelingComponent(SkillsComponent& skillsComponen
 
 SkillsLevelingComponent::~SkillsLevelingComponent()
 {
-	for (auto& el : this->buttons)
-	{
-		delete el.second;
-	}
+
 }
 
 inline void SkillsLevelingComponent::upgradeSkill(const SkillType& type)
@@ -776,21 +772,21 @@ inline void SkillsMenu::initSkillIcons()
 
 inline void SkillsMenu::initButtons()
 {
-	this->buttons["HP_UP"] = new GUI::Button(this->statIcons[0].getPosition().x + 200, this->statIcons[0].getPosition().y + 28,
+	this->buttons["HP_UP"] = std::make_unique<GUI::Button>(this->statIcons[0].getPosition().x + 200, this->statIcons[0].getPosition().y + 28,
 		70.f, 50.f,
 		&this->font, "+", 50,
 		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
 		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
 	);
 
-	this->buttons["MP_UP"] = new GUI::Button(this->statIcons[1].getPosition().x + 200, this->statIcons[1].getPosition().y + 28,
+	this->buttons["MP_UP"] = std::make_unique<GUI::Button>(this->statIcons[1].getPosition().x + 200, this->statIcons[1].getPosition().y + 28,
 		70.f, 50.f,
 		&this->font, "+", 50,
 		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
 		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
 	);
 
-	this->buttons["ARMOR_UP"] = new GUI::Button(this->statIcons[2].getPosition().x + 200, this->statIcons[2].getPosition().y + 28,
+	this->buttons["ARMOR_UP"] = std::make_unique<GUI::Button>(this->statIcons[2].getPosition().x + 200, this->statIcons[2].getPosition().y + 28,
 		70.f, 50.f,
 		&this->font, "+", 50,
 		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
@@ -799,7 +795,7 @@ inline void SkillsMenu::initButtons()
 
 	for (auto& el : this->skillsIcons)
 	{
-		this->unclockButtons[el.first] = new GUI::Button(el.second.getPosition().x, el.second.getPosition().y,
+		this->unclockButtons[el.first] = std::make_unique<GUI::Button>(el.second.getPosition().x, el.second.getPosition().y,
 			48.f, 48.f,
 			&this->font, " ", 50,
 			sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
@@ -909,13 +905,11 @@ inline void SkillsMenu::updateButtons(sf::Vector2i& mousePosWindow)
 
 					if (it == --this->unclockButtons.end())
 					{
-						delete it.operator*().second;
 						this->unclockButtons.erase(it);
 						break;
 					}
 					else
 					{
-						delete it.operator*().second;
 						it = this->unclockButtons.erase(it);
 					}
 
@@ -966,14 +960,6 @@ SkillsMenu::SkillsMenu(Player& player, PlayerGUI& playerGUI, sf::Font& font, Gui
 
 SkillsMenu::~SkillsMenu()
 {
-	for (auto it = this->buttons.begin(); it != buttons.end(); ++it)
-	{
-		delete it->second;
-	}
-	for (auto it = this->unclockButtons.begin(); it != unclockButtons.end(); ++it)
-	{
-		delete it->second;
-	}
 }
 
 //Accessors
@@ -1121,7 +1107,7 @@ inline void ItemsMune::initButtons()
 {
 	for (auto& el : this->itemsIcons)
 	{
-		this->unclockButtons[el.first] = new GUI::Button(el.second.getPosition().x + 50, el.second.getPosition().y - 10,
+		this->unclockButtons[el.first] = std::make_unique<GUI::Button>(el.second.getPosition().x + 50, el.second.getPosition().y - 10,
 			110.f, 40.f,
 			&this->font, "Unlock", 30,
 			sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
@@ -1241,7 +1227,7 @@ inline void ItemsMune::unlockItem(const Items& item)
 	this->upgradeItemsIcons[item].setPosition(this->offsetX, this->offsetY);
 
 	//Create upgrade button
-	this->upgradeButtons[item] = new GUI::Button(this->offsetX + 40.f, this->offsetY - 12.f,
+	this->upgradeButtons[item] = std::make_unique<GUI::Button>(this->offsetX + 40.f, this->offsetY - 12.f,
 		110.f, 40.f,
 		&this->font, "Upgrade", 30,
 		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
@@ -1311,13 +1297,11 @@ inline void ItemsMune::updateButtons(sf::Vector2i& mousePosWindow)
 
 				if (it == --this->unclockButtons.end())
 				{
-					delete it.operator*().second;
 					this->unclockButtons.erase(it);
 					break;
 				}
 				else
 				{
-					delete it.operator*().second;
 					it = this->unclockButtons.erase(it);
 				}
 			}
@@ -1420,14 +1404,6 @@ ItemsMune::ItemsMune(Player& player, PlayerGUI& playerGUI, sf::Font& font, GuiSo
 
 ItemsMune::~ItemsMune()
 {
-	for (auto& el : this->unclockButtons)
-	{
-		delete el.second;
-	}
-	for (auto& el : this->upgradeButtons)
-	{
-		delete el.second;
-	}
 }
 
 //Public functions

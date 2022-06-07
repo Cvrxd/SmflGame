@@ -12,28 +12,28 @@ class Button;
 class MainMenuState : public State
 {
 private:
+	using MapButtons	= std::unordered_map<std::string, std::unique_ptr<GUI::Button>>;
 
-	//To do
 	struct MainMenuSounds
 	{
+		using Sound = std::pair<sf::SoundBuffer, sf::Sound>;
+
 		//Background music
 		sf::SoundBuffer soundBuffer;
-		sf::Music music;
+		sf::Music		music;
 
 		//Click sound
-		std::pair<sf::SoundBuffer, sf::Sound> clickSound;
+		Sound			clickSound;
 	};
 
 	//variables 
 	sf::Font font;
+	sf::Texture			backgroundTexture;
+	sf::RectangleShape	background;
 
-	sf::Texture backgroundTexture;
-	sf::RectangleShape background;
-
-	std::unordered_map<std::string, std::unique_ptr<GUI::Button>> buttons;
-
+	MapButtons			buttons;
 	//Sounds
-	MainMenuSounds sounds;
+	MainMenuSounds		sounds;
 
 	//Init functions
 	void initVariables();
@@ -41,17 +41,21 @@ private:
 	void initBackground();
 	void initFonts();
 	void initButtons();
-	void initKeybinds() override;
+	void initKeybinds()								override;
+
+	//Update functions
+	void updateInput(const float& dt)				override;
+	void updateButtons();
+
+	//render functions
+	void renderButtons(sf::RenderTarget& target);
 
 public:
-	MainMenuState(StateData* state_data) noexcept;
-	virtual ~MainMenuState() override;
+	MainMenuState(StateData* state_data)			noexcept;
+	virtual ~MainMenuState()						override;
 
 	//Functions
-	void updateInput(const float& dt) override;
-	void updateButtons();
-	void update(const float& dt) override;
-	void renderButtons(sf::RenderTarget& target);
-	void render(sf::RenderTarget* target = NULL) override;
+	void update(const float& dt)					override;
+	void render(sf::RenderTarget* target = nullptr)	override;
 };
 

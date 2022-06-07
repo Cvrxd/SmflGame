@@ -29,35 +29,32 @@ private:
 	bool isBuffed = false;
 
 	//Core
-	sf::Vector2i viewGridPosition;
+	sf::RenderTexture	renderTexture;
+	sf::Sprite			renderSprite;
+	sf::Vector2i		viewGridPosition;
 
-	sf::View view;
-	sf::Font font;
-	sf::Shader core_shader;
+	sf::View	view;
+	sf::Font	font;
+	sf::Shader	core_shader;
 
-	sf::RenderTexture renderTexture;
-	sf::Sprite renderSprite;
-
-	PlayerGUI playerGUI;
-	SkillsMenu skillsMenu;
-	ItemsMune itemsMenu;
-
-	PauseMenu pauseMenu;
-
-	TileMap tileMap;
-	Player player;
+	PlayerGUI	playerGUI;
+	SkillsMenu	skillsMenu;
+	ItemsMune	itemsMenu;
+	PauseMenu	pauseMenu;
+	TileMap		tileMap;
+	Player		player;
 
 	//Entities
-	std::vector<BossEnemy> bosses;
-	std::vector<MeleEnemy> meleEnemies;
-	std::vector<MageEnemy> mageEnemies;
-	std::vector<DestroyingEnemy> destroyingEnemies;
+	std::vector<BossEnemy>			bosses;
+	std::vector<MeleEnemy>			meleEnemies;
+	std::vector<MageEnemy>			mageEnemies;
+	std::vector<DestroyingEnemy>	destroyingEnemies;
 
 	//Sounds
-	EnemySoundBox enemiesSounds;
-	GuiSoundsBox guiSounds;
+	EnemySoundBox	enemiesSounds;
+	GuiSoundsBox	guiSounds;
 
-	//Functions
+	//Init functions
 	void initRenderTextures();
 	void initView();
 	void initFonts();
@@ -71,18 +68,22 @@ private:
 	void initTileMap();
 	void initSounds();
 
-public:
-	GameState(StateData* state_data);
-	virtual ~GameState() override;
-
-	//functions
+	//Update functions
 	void updateView(const float& dt);
 	void updatePauseMenuButtons();
 	void updateEnemies(const float& dt);
 	void updatePlayerInput(const float& dt);
 	void updateInput(const float& dt) override;
 	void updateTileMap(const float& dt);
-	void update(const float& dt) override;
+
+	//Render functions
 	void renderEnemies(sf::RenderTarget* target);
+
+public:
+	GameState(StateData* state_data);
+	virtual ~GameState() override;
+
+	//Functions
+	void update(const float& dt) override;
 	void render(sf::RenderTarget* target = nullptr) override;
 };

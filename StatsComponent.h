@@ -26,10 +26,11 @@ public:
 	int armor;
 	int armorMAX;
 
-	float critRate;
 	int damagePhysical;
 	int damageMagical;
 	int currentSkillDamage;
+
+	float critRate;
 
 	//Constructor
 	StatsComponent(const int& level) noexcept;

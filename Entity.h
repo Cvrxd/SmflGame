@@ -15,11 +15,10 @@ class SkillsComponent;
 class Entity
 {
 protected:
-	//core
-	sf::Sprite sprite;
-	
-	HitboxComponent hitboxComponent;
-	MovementComponent movementComponent;
+	//Variables
+	sf::Sprite			sprite;
+	HitboxComponent		hitboxComponent;
+	MovementComponent	movementComponent;
 
 	virtual void initVariables();
 public:
@@ -33,11 +32,11 @@ public:
 	void createMovementComponent(const float& maxVelocity, const float& acceleration, const float& deceleration);
 
 	//Accessors 
-	virtual const sf::Vector2f& getPosition() const;
-	virtual const sf::Vector2f getCenter() const;
-	virtual const sf::Vector2i getGridPosition(const int& gridSizeI) const;
-	virtual const sf::FloatRect getGlobalBounds() const;
-	virtual const sf::FloatRect& getNextPosition(const float& dt);
+	virtual const sf::Vector2f&		getPosition()							const;
+	virtual const sf::Vector2f		getCenter()								const;
+	virtual const sf::Vector2i		getGridPosition(const int& gridSizeI)	const;
+	virtual const sf::FloatRect		getGlobalBounds()						const;
+	virtual const sf::FloatRect&	getNextPosition(const float& dt);
 
 	// Functions
 	virtual void stopVelocity();

@@ -9,6 +9,10 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 	case BossType::NIGHTBORN:
 		this->sprite.setScale(4.f, 4.f);
 
+		//Attack time
+		this->attackCountMAX = 2;
+		this->attackColdown = 2.f;
+
 		//Resistance
 		this->skillReistance = SkillType::DARK_BOLT;
 
@@ -32,6 +36,10 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		break;
 	case BossType::FIRE_DEMON:
 		this->sprite.setScale(4.f, 4.f);
+
+		//Attack time
+		this->attackCountMAX = 1;
+		this->attackColdown = 1.f;
 
 		//Resistance
 		this->magicalResistance = true;
@@ -57,6 +65,10 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 
 	case BossType::SAMURAI:
 		this->sprite.setScale(2.7f, 2.7f);
+		
+		//Attack time
+		this->attackCountMAX = 3;
+		this->attackColdown = 2.f;
 
 		//Resistance
 		this->skillReistance = SkillType::BLOOD_SPIKE;
@@ -130,9 +142,19 @@ inline void BossEnemy::playSkillImpactSounds(const SkillType& type)
 //Update functions
 inline void BossEnemy::updateAttack(const float& dt)
 {
+	//Attacking coldown update
 	if (this->player->getHitRange().getGlobalBounds().intersects(this->getGlobalBounds()) && !this->isDead)
 	{
-		this->isAttaking = true;
+		if (this->attackCount == this->attackCountMAX)
+		{
+			this->attackTimer.restart();
+			this->attackCount = 0;
+		}
+		else if(this->attackColdown <= this->attackTimer.getElapsedTime().asSeconds() && !this->isAttaking)
+		{
+			this->isAttaking = true;
+			++this->attackCount;
+		}
 	}
 
 	if (this->isAttaking)
@@ -158,6 +180,11 @@ inline void BossEnemy::updateMovement(const float& dt)
 	{
 		this->move(-1.f, 0.f, dt);
 	}
+	else
+	{
+		this->stopVelocityX();
+	}
+
 	if (this->player->getPosition().y < this->getPosition().y)
 	{
 		this->move(0.f, -1.f, dt);
@@ -165,6 +192,10 @@ inline void BossEnemy::updateMovement(const float& dt)
 	else if (this->player->getPosition().y > this->getPosition().y)
 	{
 		this->move(0, 1.f, dt);
+	}
+	else
+	{
+		this->stopVelocityY();
 	}
 }
 

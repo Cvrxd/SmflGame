@@ -12,6 +12,10 @@ inline void MageEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 
 		this->sprite.setScale(2.f, 2.f);
 		
+		//Attack time
+		this->attackCountMAX = 1;
+		this->attackColdown = 2.f;
+
 		//Resistance
 		this->skillReistance = SkillType::DARK_POSION;
 
@@ -53,6 +57,10 @@ inline void MageEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 
 		this->sprite.setScale(3.f, 3.f);
 
+		//Attack time
+		this->attackCountMAX = 2;
+		this->attackColdown = 3.f;
+
 		//Resistance
 		this->skillReistance = SkillType::FIRE_EXPLOSION;
 
@@ -87,6 +95,51 @@ inline void MageEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 			sprite.setScale(3.f, 3.f);
 		};
 		break;
+
+	case MageEnemyType::WIZZARD:
+		this->offsetX = 0;
+		this->offsetY = 0;
+
+		this->sprite.setScale(1.5f, 1.5f);
+
+		//Attack time
+		this->attackCountMAX = 2;
+		this->attackColdown = 3.f;
+
+		//Resistance
+		this->skillReistance = SkillType::LIGHTNING_STRIKE;
+
+		//Init spell cast range
+		this->castR = 700.f;
+		this->ineerR = 350.f;
+
+		this->castRange.setRadius(this->castR);
+		this->castRange.setFillColor(sf::Color::Transparent);
+		this->castRange.setOutlineColor(sf::Color::Red);
+		this->castRange.setOutlineThickness(1.f);
+
+		this->innerRange.setRadius(this->ineerR);
+		this->innerRange.setFillColor(sf::Color::Transparent);
+		this->innerRange.setOutlineColor(sf::Color::Green);
+		this->innerRange.setOutlineThickness(1.f);
+
+		//Init components
+		this->createHitboxComponent(this->sprite, 100.f, 100.f, 150.f, 150.f);
+		this->createMovementComponent(100.f, 700.f, 120.f);
+		this->createAnimationComponent(texture_sheet);
+
+		//Sets origins
+		this->setOriginLeft = [&sprite]()
+		{
+			sprite.setOrigin(230.f, 0.f);
+			sprite.setScale(-1.5f, 1.5f);
+		};
+		this->setOriginRight = [&sprite]()
+		{
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setScale(1.5f, 1.5f);
+		};
+		break;
 	default:
 		break;
 	}
@@ -102,16 +155,25 @@ inline void MageEnemy::addAnimations()
 	switch (this->type)
 	{
 	case MageEnemyType::DARK_MAGE:
+		this->animationComponent.addAnimation("IDLE", 0, 1, 7, 1, 250, 250, 20.f);
 		this->animationComponent.addAnimation("MOVE", 0, 1, 7, 1, 250, 250, 20.f);
 		this->animationComponent.addAnimation("CAST", 0, 3, 15, 3, 250, 250, 10.f);
 		this->animationComponent.addAnimation("TAKE_HIT", 0, 2, 2, 2, 250, 250, 20.f);
 		this->animationComponent.addAnimation("DEATH", 0, 0, 6, 0, 250, 250, 15.f);
 		break;
 	case MageEnemyType::FIRE_MAGE:
+		this->animationComponent.addAnimation("IDLE", 0, 2, 7, 2, 150, 150, 20.f);
 		this->animationComponent.addAnimation("MOVE", 0, 2, 7, 2, 150, 150, 20.f);
 		this->animationComponent.addAnimation("CAST", 0, 0, 7, 0, 150, 150, 15.f);
 		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 3, 3, 150, 150, 20.f);
 		this->animationComponent.addAnimation("DEATH", 0, 1, 6, 1, 150, 150, 15.f);
+		break;
+	case MageEnemyType::WIZZARD:
+		this->animationComponent.addAnimation("IDLE", 0, 3, 5, 3, 231, 190, 20.f);
+		this->animationComponent.addAnimation("MOVE", 0, 4, 7, 4, 231, 190, 11.f);
+		this->animationComponent.addAnimation("CAST", 0, 0, 7, 0, 231, 190, 15.f);
+		this->animationComponent.addAnimation("TAKE_HIT", 0, 2, 3, 2, 231, 190, 20.f);
+		this->animationComponent.addAnimation("DEATH", 0, 1, 6, 1, 231, 190, 11.f);
 		break;
 	default:
 		break;
@@ -135,7 +197,16 @@ inline void MageEnemy::updateAttack(const float& dt)
 	if (this->player->getHitRange().getGlobalBounds().intersects(this->castRange.getGlobalBounds()) &&
 		!this->player->getHitRange().getGlobalBounds().intersects(this->innerRange.getGlobalBounds()) && !this->isDead)
 	{
-		this->isAttaking = true;
+		if (this->attackCount == this->attackCountMAX)
+		{
+			this->attackTimer.restart();
+			this->attackCount = 0;
+		}
+		else if (this->attackColdown <= this->attackTimer.getElapsedTime().asSeconds() && !this->isAttaking)
+		{
+			this->isAttaking = true;
+			++this->attackCount;
+		}
 	}
 
 	if (this->isAttaking)
@@ -277,7 +348,11 @@ inline void MageEnemy::updateAnimations(const float& dt)
 		}
 	}
 
-	if (this->movementComponent.getState(MOVING_RIGHT))
+	if (this->movementComponent.getState(IDLE))
+	{
+		this->animationComponent.play("IDLE", dt);
+	}
+	else if (this->movementComponent.getState(MOVING_RIGHT))
 	{
 		this->setOriginRight();
 		this->animationComponent.play("MOVE", dt, this->movementComponent.getVelocity().x, this->movementComponent.getMaxVelocity());
@@ -419,5 +494,6 @@ void MageEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 
 	this->healthBar.render(target);
 	this->levelIcon.render(target);
+
 	//this->hitboxComponent.render(target);
 }

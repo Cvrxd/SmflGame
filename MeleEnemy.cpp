@@ -9,6 +9,10 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 	case MeleEnemyType::MIMIC:
 		this->sprite.setScale(3.f, 3.f);
 
+		//Attack coldown
+		this->attackCountMAX = 3;
+		this->attackColdown = 3.f;
+
 		//Resistance
 		this->skillReistance = SkillType::POISON_CLAW;
 
@@ -31,6 +35,10 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		break;
 	case MeleEnemyType::BRINGER_OF_DEATH:
 		this->sprite.setScale(3.f, 3.f);
+
+		//Attack coldown
+		this->attackCountMAX = 1;
+		this->attackColdown = 2.f;
 
 		//Resistance
 		this->magicalResistance = true;
@@ -55,6 +63,10 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 	case MeleEnemyType::KNIGHT1:
 		this->sprite.setScale(2.5f, 2.5f);
 
+		//Attack coldown
+		this->attackCountMAX = 1;
+		this->attackColdown = 2.f;
+
 		//Resistance
 		this->skillReistance = SkillType::HOLY_STRIKE;
 
@@ -77,6 +89,10 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		break;
 	case MeleEnemyType::HUNTRESS:
 		this->sprite.setScale(3.f, 3.f);
+
+		//Attack coldown
+		this->attackCountMAX = 3;
+		this->attackColdown = 2.f;
 
 		//Resistance
 		this->skillReistance = SkillType::POISON_CLAW;
@@ -101,6 +117,10 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 	case MeleEnemyType::MARTIAL_HERO1:
 		this->sprite.setScale(2.6f, 2.6f);
 
+		//Attack coldown
+		this->attackCountMAX = 2;
+		this->attackColdown = 2.f;
+
 		//Init components
 		this->createHitboxComponent(this->sprite, 200.f, 180.f, 100.f, 150.f);
 		this->createMovementComponent(170.f, 1000.f, 200.f);
@@ -120,6 +140,10 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		break;
 	case MeleEnemyType::MARTIAL_HERO2:
 		this->sprite.setScale(3.f, 3.f);
+
+		//Attack coldown
+		this->attackCountMAX = 1;
+		this->attackColdown = 2.f;
 
 		//Init components
 		this->createHitboxComponent(this->sprite, 180.f, 100.f, 150.f, 160.f);
@@ -141,6 +165,10 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 
 	case MeleEnemyType::NOMAND:
 		this->sprite.setScale(4.f, 4.f);
+
+		//Attack coldown
+		this->attackCountMAX = 1;
+		this->attackColdown = 2.f;
 
 		//Init components
 		this->createHitboxComponent(this->sprite, 80.f, 100.f, 150.f, 180.f);
@@ -237,7 +265,16 @@ inline void MeleEnemy::updateAttack(const float& dt)
 {
 	if (this->player->getHitRange().getGlobalBounds().intersects(this->getGlobalBounds()) && !this->isDead)
 	{
-		this->isAttaking = true;
+		if (this->attackCount == this->attackCountMAX)
+		{
+			this->attackTimer.restart();
+			this->attackCount = 0;
+		}
+		else if (this->attackColdown <= this->attackTimer.getElapsedTime().asSeconds() && !this->isAttaking)
+		{
+			this->isAttaking = true;
+			++this->attackCount;
+		}
 	}
 
 	if (this->isAttaking)

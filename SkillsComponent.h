@@ -16,63 +16,71 @@ enum Potions{HEALTH = 0, MANA};
 class SkillsComponent
 {
 private:
+	using VectorSkillsIndex		= std::vector<std::pair<SkillType, int>>;
+	using PairSpriteTexture		= std::pair<sf::Sprite, sf::Texture>;
+	using PotionsCount			= std::pair<Potions, int>;
+	using MapSkillsTextures		= std::unordered_map<SkillType, std::pair<sf::Sprite, sf::Texture>>;
+	using MapSkillsAnimations	= std::unordered_map<SkillType, AnimationComponent>;
+
 	//Variables
 	sf::Clock skillTimer;
 	sf::Clock buffTimer;
 	
 	StatsComponent& statsComponent;
 
-	float time;
+	float	time;
 
-	float keyTime;
-	float keyTimeMax;
+	float	keyTime;
+	float	keyTimeMax;
 
-	float potionKeyTime;
-	float potionKeyTimeMax;
+	float	potionKeyTime;
+	float	potionKeyTimeMax;
 
 	//Buff
-	float buffDuration;
-	float buffCooldown;
+	float	buffDuration;
+	float	buffCooldown;
 
-	int buffLevel = 1;
-	int buffMaxLevel = 5;
-	float buffCritRate = 5.f;
+	int		buffLevel = 1;
+	int		buffMaxLevel = 5;
+	float	buffCritRate = 5.f;
 
 	//Sounds
 	std::unordered_map<SkillType, std::pair<sf::SoundBuffer, sf::Sound>> sounds;
 
 	//Potions
-	std::pair<Potions, int> healthPotions;
-	std::pair<Potions, int> manaPotions;
+	PotionsCount		healthPotions;
+	PotionsCount		manaPotions;
 
-	std::pair<sf::Sprite, sf::Texture> potionSprite;
-	AnimationComponent potionAnimation;
+	PairSpriteTexture	potionSprite;
+	AnimationComponent	potionAnimation;
 
 	//Skills
-	const int skillsSize;
-	sf::CircleShape damageArea;
+	const int			skillsSize;
+	sf::CircleShape		damageArea;
 
-	std::vector<std::pair<SkillType, int>> allSkills;
-	std::vector<std::pair<SkillType, int>> playerSkills;
+	VectorSkillsIndex	allSkills;
+	VectorSkillsIndex	playerSkills;
 
-	std::pair<sf::Sprite, sf::Texture> skillsEndingSprite;
-	AnimationComponent skillsEndingAnimation;
+	PairSpriteTexture	skillsEndingSprite;
+	AnimationComponent	skillsEndingAnimation;
 
 	//Regular animation
-	std::unordered_map<SkillType, std::pair<sf::Sprite, sf::Texture>> skillTextures;
-	std::unordered_map<SkillType, AnimationComponent> skillsAnimations;
+	MapSkillsTextures	skillTextures;
+	MapSkillsAnimations skillsAnimations;
 
-	bool playAnimation;
-	bool usingPotion;
-	bool usingBuff;
+	//Booleans
+	bool	playAnimation;
+	bool	usingPotion;
+	bool	usingBuff;
 
-	bool& usingSkill;
-	bool& isBuffed;
+	bool&	usingSkill;
+	bool&	isBuffed;
 
-	int currentRender;
+	int		currentRender;
 
-	int& currentSkillDamage;
-	SkillType& currentSkillType;
+	int&	currentSkillDamage;
+
+	SkillType&	currentSkillType;
 
 	//Init functions
 	void initSounds();
@@ -91,15 +99,15 @@ public:
 	~SkillsComponent();
 
 	//Accessors
-	const int& getBuffMaxLevel() const;
-	const int& getBuffLevel() const;
-
 	const std::vector<std::pair<SkillType, int>>& getPlayerSkills();
-	const sf::CircleShape& getDamageArea();
-	const bool getKeyTime() const;
-	const bool getBuffKeyTime() const;
-	int& getMpPotions();
-	int& getHpPotions();
+
+	const int&				getBuffMaxLevel()	const;
+	const int&				getBuffLevel()		const;
+	const sf::CircleShape&	getDamageArea();
+	const bool				getKeyTime()		const;
+	const bool				getBuffKeyTime()	const;
+	int&					getMpPotions();
+	int&					getHpPotions();
 
 	//Functions
 	void addPotion(const Potions& potion_type);

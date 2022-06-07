@@ -4,7 +4,6 @@
 class AnimationComponent
 {
 private:
-	// core variables
 	//////////////////
 	class Animation
 	{
@@ -12,12 +11,12 @@ private:
 		//Variables core
 		sf::Texture* textureSheet;
 		sf::Sprite* sprite;
-		
-		bool done;
-		int width;
-		int height;
-		float animationTimer;
-		float timer;
+
+		bool	done;
+		int		width;
+		int		height;
+		float	animationTimer;
+		float	timer;
 
 		sf::IntRect startRect;
 		sf::IntRect currentRect;
@@ -26,8 +25,8 @@ private:
 		//Constructor
 		Animation() {};
 
-		Animation(sf::Sprite* sprite, sf::Texture* textureSheet, 
-			const int& start_frame_x, const int& start_frame_y, 
+		Animation(sf::Sprite* sprite, sf::Texture* textureSheet,
+			const int& start_frame_x, const int& start_frame_y,
 			const int& frame_x, const int& frame_y,
 			const int& width, const int& height, const float& animationTimer) noexcept
 			:sprite(sprite), textureSheet(textureSheet), width(width), height(height), animationTimer(animationTimer)
@@ -88,7 +87,7 @@ private:
 				}
 			}
 			this->sprite->setTextureRect(this->currentRect);
-			
+
 			return this->done;
 		}
 
@@ -133,22 +132,25 @@ private:
 	};
 	//////////////////
 
-	sf::Sprite* sprite;
-	sf::Texture* textureSheet;
+	using MapAnimations = std::unordered_map<std::string, std::shared_ptr<Animation>>;
+	using AnimationSptr = std::shared_ptr<Animation>;
 
-	std::shared_ptr<Animation> lastAnimation;
-	std::shared_ptr<Animation> priorityAnimation;
+	//Variables
+	sf::Sprite*		sprite;
+	sf::Texture*	textureSheet;
 
-	std::unordered_map<std::string, std::shared_ptr<Animation>> animations;
+	AnimationSptr	lastAnimation;
+	AnimationSptr	priorityAnimation;
+
+	MapAnimations	animations;
 
 public:
 	AnimationComponent() {};
-	AnimationComponent(sf::Sprite* sprite, sf::Texture* textureSheet) noexcept;
-	AnimationComponent(const AnimationComponent& other) noexcept;
+	AnimationComponent(sf::Sprite* sprite, sf::Texture* textureSheet)	noexcept;
+	AnimationComponent(const AnimationComponent& other)					noexcept;
 
-
-	AnimationComponent& operator=(AnimationComponent&& other) noexcept;
-	AnimationComponent& operator=(const AnimationComponent& other) noexcept;
+	AnimationComponent& operator=(AnimationComponent&& other)			noexcept;
+	AnimationComponent& operator=(const AnimationComponent& other)		noexcept;
 
 	virtual ~AnimationComponent();
 

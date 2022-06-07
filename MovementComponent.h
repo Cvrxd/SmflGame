@@ -8,14 +8,12 @@ private:
 	//Variables
 	sf::Sprite* sprite;
 
-	float maxVelocityOriginal;
-	float maxVelocity;
-	float acceleration;
-	float deceleration;
+	float	maxVelocityOriginal;
+	float	maxVelocity;
+	float	acceleration;
+	float	deceleration;
 
 	sf::Vector2f velocity;
-
-	//Initialisation functions
 
 public:
 	MovementComponent() {};
@@ -23,9 +21,10 @@ public:
 	virtual ~MovementComponent();
 
 	//Accessors
-	const float& getMaxVelocity() const;
-	const sf::Vector2f& getVelocity() const;
-	const bool getState(const short unsigned state) const;
+	const bool	getState(const short unsigned state) const;
+
+	const float&		getMaxVelocity()			const;
+	const sf::Vector2f& getVelocity()				const;
 
 	//Functions
 	void stopVelocity();

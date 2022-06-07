@@ -86,26 +86,10 @@ inline void MainMenuState::initButtons()
 	
 }
 
-//Constructor
-MainMenuState::MainMenuState(StateData* state_data) noexcept
-	: State(state_data)
-{
-	this->initVariables();
-	this->initSounds();
-	this->initBackground();
-	this->initFonts();	   
-	this->initKeybinds(); 
-	this->initButtons();  
-}
-
-MainMenuState::~MainMenuState()
-{
-}
-
-//Functions 
+//Update functions
 inline void MainMenuState::updateInput(const float& dt)
-{ 
-	
+{
+
 }
 
 inline void MainMenuState::updateButtons()
@@ -124,7 +108,7 @@ inline void MainMenuState::updateButtons()
 		this->states->push(new GameState(this->stateData));
 		this->sounds.music.stop();
 	}
-	
+
 	//Settings
 	if (this->buttons["SETTINGS_STATE"]->isPressed())
 	{
@@ -151,19 +135,37 @@ inline void MainMenuState::updateButtons()
 	}
 }
 
-void MainMenuState::update(const float& dt)
-{
-	this->updateInput(dt);
-	this->updateMousePosition();
-	this->updateButtons();
-}
-
+//Render functions
 inline void MainMenuState::renderButtons(sf::RenderTarget& target)
 {
 	for (auto& el : this->buttons)
 	{
 		el.second->render(target);
 	}
+}
+
+//Constructor
+MainMenuState::MainMenuState(StateData* state_data) noexcept
+	: State(state_data)
+{
+	this->initVariables();
+	this->initSounds();
+	this->initBackground();
+	this->initFonts();	   
+	this->initKeybinds(); 
+	this->initButtons();  
+}
+
+MainMenuState::~MainMenuState()
+{
+}
+
+//Oublic functions 
+void MainMenuState::update(const float& dt)
+{
+	this->updateInput(dt);
+	this->updateMousePosition();
+	this->updateButtons();
 }
 
 void MainMenuState::render(sf::RenderTarget* target)

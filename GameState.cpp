@@ -64,9 +64,11 @@ inline void GameState::initTextures()
 	//Mages
 	this->textures["ENEMY_DARK_MAGE"].loadFromFile("Textures/enemies/mages/dark_mage.png");
 	this->textures["ENEMY_FIRE_MAGE"].loadFromFile("Textures/enemies/mages/fire_mage.png");
+	this->textures["ENEMY_WIZZARD"].loadFromFile("Textures/enemies/mages/wizzard.png");
 
 	//Destroying enemies
 	this->textures["ENEMY_FIRE_SKULL"].loadFromFile("Textures/enemies/destroying/fire-skull.png");
+	this->textures["ENEMY_FIRE_WORM"].loadFromFile("Textures/enemies/destroying/fire_worm.png");
 }
 
 inline void GameState::initPauseMenu()
@@ -92,7 +94,7 @@ inline void GameState::initPlayers()
 inline void GameState::initEnemies()
 {
 	this->bosses.reserve(3);
-	this->bosses.emplace_back(BossType::SAMURAI, 1, 100, 900, this->textures["ENEMY_SAMURAI"], &this->player, this->enemiesSounds);
+	//this->bosses.emplace_back(BossType::SAMURAI, 5, 100, 900, this->textures["ENEMY_SAMURAI"], &this->player, this->enemiesSounds);
 
 	this->meleEnemies.reserve(3);
 	//this->meleEnemies.emplace_back(MeleEnemyType::MIMIC, 5, 700, 700, this->textures["ENEMY_MIMIC"], &this->player, this->enemiesSounds);
@@ -100,10 +102,10 @@ inline void GameState::initEnemies()
 	//this->meleEnemies.emplace_back(MeleEnemyType::BRINGER_OF_DEATH, 5, 700, 700, this->textures["ENEMY_BRINGER_OF_DEATH"], &this->player, this->enemiesSounds);
 
 	this->mageEnemies.reserve(2);
-	//this->mageEnemies.emplace_back(MageEnemyType::FIRE_MAGE, 1, 400, 400, this->textures["ENEMY_FIRE_MAGE"], &this->player, this->enemiesSounds);
+	this->mageEnemies.emplace_back(MageEnemyType::WIZZARD, 1, 400, 400, this->textures["ENEMY_WIZZARD"], &this->player, this->enemiesSounds);
 
 	this->destroyingEnemies.reserve(2);
-	//this->destroyingEnemies.emplace_back(DestroyingEnemyType::FIRE_SKULL, 1, 0, 0, this->textures["ENEMY_FIRE_SKULL"], &this->player, this->enemiesSounds);
+	//this->destroyingEnemies.emplace_back(DestroyingEnemyType::FIRE_WORM, 1, 0, 0, this->textures["ENEMY_FIRE_WORM"], &this->player, this->enemiesSounds);
 }
 
 inline void GameState::initPlayerGUI()
@@ -120,34 +122,61 @@ inline void GameState::initSounds()
 {
 }
 
-//Constructor
-GameState::GameState(StateData* state_data)
-	: State(state_data), skillMenuActive(false),
-	pauseMenu(*this->window, this->stateData->font), //Pause menu 
-	player(500,500, this->textures["PLAYER_SHEET"], this->font, this->isBuffed), //Player
-	playerGUI(this->player, this->font), // Player GUI
-	skillsMenu(this->player, this->playerGUI,this->font, this->guiSounds,static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
-	itemsMenu(this->player, this->playerGUI, this->font, this->guiSounds, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // items menu
-	tileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg") //Tile map
+//Update functions
+inline void GameState::updatePlayerInput(const float& dt)
 {
-	this->initRenderTextures();
-	this->initView();
-	this->initFonts();
-	this->initKeybinds();
-	this->initTextures();
-	this->initPauseMenu();
-	this->initSounds();
-	this->initEnemies();
-	this->initShaders();
-	this->initTileMap();
-	this->initPlayerGUI();
+	//check for keyboard key player
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_LEFT"))))
+	{
+		this->player.move(-1.f, 0.f, dt, this->isBuffed);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_RIGHT"))))
+	{
+		this->player.move(1.f, 0.f, dt, this->isBuffed);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_UP"))))
+	{
+		this->player.move(0.f, -1.f, dt, this->isBuffed);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_DOWN"))))
+	{
+		this->player.move(0.f, 1.f, dt, this->isBuffed);
+	}
+
+	//For Testing
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
+	{
+		this->player.gainEXP(1);
+		this->player.gainCoins(1);
+		this->player.gainCrystals(1);
+	}
 }
 
-GameState::~GameState()
+inline void GameState::updateInput(const float& dt)
 {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("CLOSE"))) && this->getKeyTime())
+	{
+		this->pauseMenu.playClickSound();
+
+		if (!this->paused)
+		{
+			this->player.pauseSounds();
+			this->pauseState();
+		}
+		else
+		{
+			this->unpausedState();
+			this->skillMenuActive = false;
+			this->itemsMenuActive = false;
+		}
+	}
 }
 
-// Funtions
+inline void GameState::updateTileMap(const float& dt)
+{
+	this->tileMap.update(&this->player, this->viewGridPosition, dt);
+}
+
 inline void GameState::updateView(const float& dt)
 {
 	this->view.setCenter(
@@ -185,7 +214,6 @@ inline void GameState::updateView(const float& dt)
 
 }
 
-//Pause menu update
 inline void GameState::updatePauseMenuButtons()
 {
 	if (this->pauseMenu.isButtonPressed("QUIT"))
@@ -244,97 +272,7 @@ inline void GameState::updateEnemies(const float& dt)
 	}
 }
 
-//Update functions
-inline void GameState::updatePlayerInput(const float& dt)
-{
-	//check for keyboard key player
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_LEFT"))))
-	{
-		this->player.move(-1.f, 0.f, dt, this->isBuffed);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_RIGHT"))))
-	{
-		this->player.move(1.f, 0.f, dt, this->isBuffed);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_UP"))))
-	{
-		this->player.move(0.f, -1.f, dt, this->isBuffed);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_DOWN"))))
-	{
-		this->player.move(0.f, 1.f, dt, this->isBuffed);
-	}
-
-	//For Testing
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
-	{
-		this->player.gainEXP(1);
-		this->player.gainCoins(1);
-		this->player.gainCrystals(1);
-	}
-}
-
-inline void GameState::updateInput(const float& dt)
-{
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("CLOSE"))) && this->getKeyTime())
-	{
-		this->pauseMenu.playClickSound();
-
-		if (!this->paused)
-		{
-			this->player.pauseSounds();
-			this->pauseState();
-		}
-		else
-		{
-			this->unpausedState();
-			this->skillMenuActive = false;
-			this->itemsMenuActive = false;
-		}
-	}
-}
-
-inline void GameState::updateTileMap(const float& dt)
-{
-	this->tileMap.update(&this->player, this->viewGridPosition, dt);
-}
-
-void GameState::update(const float& dt)
-{
-	this->updateMousePosition(&this->view);
-	this->updateKeyTime(dt);
-	this->updateInput(dt);
-	
-	if (!this->paused) //Unpaused
-	{
-		this->updateView(dt);
-
-		this->updateEnemies(dt);
-
-		this->updatePlayerInput(dt);
-		this->updateTileMap(dt);
-		this->player.update(dt, this->mousPosView);
-
-		//GUI UPDATE
-		this->playerGUI.update(dt);
-	} 
-	else if (this->paused && this->skillMenuActive)
-	{
-		this->playerGUI.skillsMenUpdate(dt);
-		this->skillsMenu.update(this->mousePosWindow, dt);
-	}
-	else if (this->paused && this->itemsMenuActive)
-	{
-		this->playerGUI.itemsMenuUpdate(dt);
-		this->itemsMenu.update(this->mousePosWindow, dt);
-	}
-	else//Paused
-	{
-		this->pauseMenu.update(this->mousePosWindow);
-		this->updatePauseMenuButtons();
-	}
-}
-
+//Render functions
 inline void GameState::renderEnemies(sf::RenderTarget* target)
 {
 	for (auto& el : this->bosses)
@@ -364,6 +302,68 @@ inline void GameState::renderEnemies(sf::RenderTarget* target)
 		{
 			el.render(this->renderTexture, &this->core_shader);
 		}
+	}
+}
+
+//Constructor
+GameState::GameState(StateData* state_data)
+	: State(state_data), skillMenuActive(false),
+	pauseMenu(*this->window, this->stateData->font), //Pause menu 
+	player(500,500, this->textures["PLAYER_SHEET"], this->font, this->isBuffed), //Player
+	playerGUI(this->player, this->font), // Player GUI
+	skillsMenu(this->player, this->playerGUI,this->font, this->guiSounds,static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
+	itemsMenu(this->player, this->playerGUI, this->font, this->guiSounds, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // items menu
+	tileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg") //Tile map
+{
+	this->initRenderTextures();
+	this->initView();
+	this->initFonts();
+	this->initKeybinds();
+	this->initTextures();
+	this->initPauseMenu();
+	this->initSounds();
+	this->initEnemies();
+	this->initShaders();
+	this->initTileMap();
+	this->initPlayerGUI();
+}
+
+GameState::~GameState()
+{
+}
+
+//Public functions
+void GameState::update(const float& dt)
+{
+	this->updateMousePosition(&this->view);
+	this->updateKeyTime(dt);
+	this->updateInput(dt);
+	
+	if (!this->paused) //Unpaused
+	{
+		this->updateView(dt);
+		this->updateEnemies(dt);
+		this->updatePlayerInput(dt);
+		this->updateTileMap(dt);
+		this->player.update(dt, this->mousPosView);
+
+		//GUI UPDATE
+		this->playerGUI.update(dt);
+	} 
+	else if (this->paused && this->skillMenuActive)
+	{
+		this->playerGUI.skillsMenUpdate(dt);
+		this->skillsMenu.update(this->mousePosWindow, dt);
+	}
+	else if (this->paused && this->itemsMenuActive)
+	{
+		this->playerGUI.itemsMenuUpdate(dt);
+		this->itemsMenu.update(this->mousePosWindow, dt);
+	}
+	else//Paused
+	{
+		this->pauseMenu.update(this->mousePosWindow);
+		this->updatePauseMenuButtons();
 	}
 }
 

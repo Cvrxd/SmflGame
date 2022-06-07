@@ -8,30 +8,33 @@ class Tile;
 class TileMap
 {
 private:
+	using VectorTiles		= std::vector<std::vector<Tile>>;
+	using VectorTilesAbove	= std::vector<Tile*>;
+
 	//Variables
-	int gridSizeI;
-	float gridSizeF;
+	int		gridSizeI;
+	float	gridSizeF;
 
-	sf::Vector2i maxSizeLevelGrid;
-	sf::Vector2f maxSizeLevelF;
+	sf::Vector2i		maxSizeLevelGrid;
+	sf::Vector2f		maxSizeLevelF;
 
-	std::string textureFile;
-	sf::Texture tileTextureSheet;
+	std::string			textureFile;
+	sf::Texture			tileTextureSheet;
 	
-	sf::RectangleShape collisionBox;
+	sf::RectangleShape	collisionBox;
 
-	std::vector<std::vector<Tile>> map;
-	std::vector<Tile*> mapAbove;
+	VectorTiles			map;
+	VectorTilesAbove	mapAbove;
 
 	//Collision variables
-	sf::FloatRect playerBounds;
-	sf::FloatRect wallBounds;
-	sf::FloatRect nextPositionBounds;
+	sf::FloatRect		playerBounds;
+	sf::FloatRect		wallBounds;
+	sf::FloatRect		nextPositionBounds;
 
 	int fromX;
 	int toX;
 	int fromY;
-	int toY;
+	int	toY;
 
 	bool updateCollision;
 
@@ -48,8 +51,8 @@ public:
 	virtual ~TileMap();
 
 	//Accessors
-	const sf::Texture& getTileTextureSheet() const;
-	const sf::Vector2f& getMaxSizeF() const;
+	const sf::Texture&	getTileTextureSheet()	const;
+	const sf::Vector2f& getMaxSizeF()			const;
 
 	//Core Functions
 	void addTile(const int& x, const int& y, const sf::IntRect& texture_rect, const bool& collision, const short& type);
@@ -58,14 +61,14 @@ public:
 	void saveToFile(const std::string& file);
 	void loadFromFile(const std::string& file);
 
-	//Other Fucntions
+	//Fucntions
 	void clear();
 
 	void update(Entity* entity, const sf::Vector2i& gridPosition, const float& dt);
 
-	void renderGameState(sf::RenderTarget& target, const sf::Vector2f& player_position = sf::Vector2f(), sf::Shader* shader = NULL);
+	void renderGameState(sf::RenderTarget& target, const sf::Vector2f& player_position = sf::Vector2f(), sf::Shader* shader = nullptr);
 	void renderEditorState(sf::RenderTarget& target);
-	void renderAbove(sf::RenderTarget& target, const sf::Vector2f& player_position = sf::Vector2f(), sf::Shader* shader = NULL);
+	void renderAbove(sf::RenderTarget& target, const sf::Vector2f& player_position = sf::Vector2f(), sf::Shader* shader = nullptr);
 
 };
 

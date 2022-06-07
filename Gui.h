@@ -25,8 +25,9 @@ namespace GUI
 		sf::Color outlineActiveColor;
 
 		sf::RectangleShape shape;
-		sf::Font* font;
-		sf::Text text;
+
+		sf::Font*	font;
+		sf::Text	text;
 
 	public:
 		Button(const float& x, const float& y, const float& width, const float& height,
@@ -34,21 +35,21 @@ namespace GUI
 			const sf::Color& text_idle_color, const sf::Color& text_hover_color, const sf::Color& text_active_color,
 			const sf::Color& idleColor, const sf::Color& hoverColor, const sf::Color& activeColor, 
 			const sf::Color& outlineIdleColor = sf::Color::Transparent, const sf::Color& outlineHoverColor = sf::Color::Transparent, const sf::Color& outlineActiveColor = sf::Color::Transparent,
-			short unsigned id = 0) noexcept;
+			short unsigned id = 0)					noexcept;
 
-		Button(const GUI::Button& other) noexcept;
-		Button(GUI::Button&& other) noexcept;
+		Button(const GUI::Button& other)			noexcept;
+		Button(GUI::Button&& other)					noexcept;
 		Button& operator=(const GUI::Button& other) noexcept;
-		Button& operator=(GUI::Button&& other) noexcept;
+		Button& operator=(GUI::Button&& other)		noexcept;
 
 		~Button();
 
 		//Accessors
-		const short unsigned& getId() const;
-		const bool isPressed() const;
-		std::string getText();
-		sf::FloatRect getGlobalBounds();
-		sf::Text& getSfText();
+		const short unsigned&	getId()				const;
+		const bool				isPressed()			const;
+		std::string				getText();
+		sf::FloatRect			getGlobalBounds();
+		sf::Text&				getSfText();
 
 		//Seters
 		void setText(std::string text);
@@ -63,14 +64,18 @@ namespace GUI
 	class DropDownList
 	{
 	private:
-		//Variables
-		bool showDropBox;
-		sf::Font& font;
-		std::shared_ptr<GUI::Button> activeBox;
+		using VectorButtons = std::vector<std::shared_ptr<GUI::Button>>;
+		using ButtonPtr		= std::shared_ptr<GUI::Button>;
 
-		float keyTime;
-		float keyTimeMax;
-		std::vector<std::shared_ptr<GUI::Button>> dropBox;
+		//Variables
+		bool			showDropBox;
+		sf::Font&		font;
+
+		float			keyTime;
+		float			keyTimeMax;
+
+		ButtonPtr		activeBox;
+		VectorButtons	dropBox;
 		 
 	public:
 		DropDownList(const float& x, const float& y, const float& width, const float& hight, 
@@ -90,22 +95,24 @@ namespace GUI
 	class TextureSelector
 	{
 	private:
+		using ButtonPtr = std::shared_ptr<GUI::Button>;
+
 		//Variables
-		bool active;
-		bool hiden;
-		unsigned gridSize;
+		bool		active;
+		bool		hiden;
+		unsigned	gridSize;
 
-		std::unique_ptr<GUI::Button> hideButton;
+		float		keyTime;
+		float		keyTimeMax;
 
-		float keyTime;
-		float keyTimeMax;
+		ButtonPtr	hideButton;
 
-		sf::IntRect textureRect;
-		sf::RectangleShape selector;
-		sf::RectangleShape bounds;
-		sf::Sprite sheet;
+		sf::IntRect			textureRect;
+		sf::RectangleShape	selector;
+		sf::RectangleShape	bounds;
+		sf::Sprite			sheet;
 
-		sf::Vector2u mousePosGrid;
+		sf::Vector2u		mousePosGrid;
 	
 		//Functions
 		void initBounds(const float& x, const float& y, const float& width_bounds, const float& height_bounds);
@@ -119,9 +126,9 @@ namespace GUI
 		~TextureSelector();
 
 		//Accessors
-		const sf::IntRect& getTextureRect() const;
-		const bool& getActive() const;
-		const bool getKeyTime();
+		const sf::IntRect&	getTextureRect()	const;
+		const bool&			getActive()			const;
+		const bool			getKeyTime();
 
 		//Fuctions
 		void updateKeyTime(const float& dt);
