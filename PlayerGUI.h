@@ -9,13 +9,13 @@ struct GuiSoundsBox;
 class PlayerGUI
 {
 private:
-	using MapSprites			= std::unordered_map<std::string, sf::Sprite>;
-	using MapAnimations			= std::unordered_map<std::string, AnimationComponent>;
-	using MapTextures			= std::unordered_map<std::string, sf::Texture>;
-	using VectorPairShapes		= std::vector<std::pair<sf::RectangleShape, sf::RectangleShape>>;
-	using VectorText			= std::unordered_map<std::string, sf::Text>;
-	using MapShapes				= std::unordered_map<std::string, sf::RectangleShape>;
-	using vectorSkillTypeShape	= std::vector<std::pair<SkillType, sf::RectangleShape>>;
+	using MapSprites            = std::unordered_map<std::string, sf::Sprite>;
+	using MapAnimations         = std::unordered_map<std::string, AnimationComponent>;
+	using MapTextures           = std::unordered_map<std::string, sf::Texture>;
+	using VectorPairShapes      = std::vector<std::pair<sf::RectangleShape, sf::RectangleShape>>;
+	using VectorText            = std::unordered_map<std::string, sf::Text>;
+	using MapShapes             = std::unordered_map<std::string, sf::RectangleShape>;
+	using vectorSkillTypeShape  = std::vector<std::pair<SkillType, sf::RectangleShape>>;
 
 	//Variables
 	int*  hpPotions;
@@ -261,7 +261,7 @@ private:
 	using MapTexts		= std::unordered_map<Items, sf::Text>;
 	using MapButtons	= std::unordered_map<Items, std::unique_ptr<GUI::Button>>;
 	using MapSprites	= std::unordered_map<Items, sf::Sprite>;
-	using MapAnimations = std::unordered_map<Items, AnimationComponent>;
+	using MapAnimations	= std::unordered_map<Items, AnimationComponent>;
 	using MapShapes		= std::unordered_map<Items, sf::RectangleShape>;
 	using MapItemsLvl	= std::unordered_map<Items, int>;
 	using Maptextures	= std::unordered_map<std::string, sf::Texture>;
