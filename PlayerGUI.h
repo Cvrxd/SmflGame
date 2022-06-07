@@ -24,7 +24,7 @@ private:
 	int*  coins;
 	int*  crystals;
 
-	int   index			= 0;
+	int   index	        = 0;
 	float hpOffset		= 0.f;
 	float mpOffset		= 0.f;
 	float armorOffset	= 0.f;
@@ -38,20 +38,20 @@ private:
 	SkillsComponent* skillComponent;
 
 	//Animations
-	MapSprites		sprites;
-	MapAnimations	animationComponent;
+	MapSprites      sprites;
+	MapAnimations   animationComponent;
 
 	//All textures
-	MapTextures		textures;
+	MapTextures     textures;
 
 	//Bars 
 	VectorPairShapes bars;
 	VectorPairShapes quickSlotBars;
 
 	//Text and icons
-	sf::Texture		iconsSheet;
-	VectorText		texts;
-	MapShapes		iconsShapes;
+	sf::Texture     iconsSheet;
+	VectorText      texts;
+	MapShapes       iconsShapes;
 
 	//Skill icons pointer
 	vectorSkillTypeShape* skillsIcons;
@@ -101,15 +101,15 @@ public:
 class SkillsLevelingComponent
 {
 private:
-	using VectorSkillIcons		= std::vector<std::pair<SkillType, sf::RectangleShape>>;
-	using VectorQuickSlotBars	= std::vector<std::pair<sf::RectangleShape, sf::RectangleShape>>;
-	using MapSprites			= std::unordered_map<SkillType, sf::Sprite>;
-	using MapAnimations			= std::unordered_map<SkillType, AnimationComponent>;
-	using MapSkillLevels		= std::unordered_map<SkillType, int>;
-	using VectorLevelSkills		= const std::vector<std::pair<SkillType, int>>;
-	using MapButtons			= std::unordered_map<SkillType, std::unique_ptr<GUI::Button>>;
-	using MapSkillShapes		= std::unordered_map<SkillType, sf::RectangleShape>;
-	using MapText				= std::unordered_map<SkillType, sf::Text>;
+	using VectorSkillIcons      = std::vector<std::pair<SkillType, sf::RectangleShape>>;
+	using VectorQuickSlotBars   = std::vector<std::pair<sf::RectangleShape, sf::RectangleShape>>;
+	using MapSprites            = std::unordered_map<SkillType, sf::Sprite>;
+	using MapAnimations         = std::unordered_map<SkillType, AnimationComponent>;
+	using MapSkillLevels        = std::unordered_map<SkillType, int>;
+	using VectorLevelSkills     = const std::vector<std::pair<SkillType, int>>;
+	using MapButtons            = std::unordered_map<SkillType, std::unique_ptr<GUI::Button>>;
+	using MapSkillShapes        = std::unordered_map<SkillType, sf::RectangleShape>;
+	using MapText               = std::unordered_map<SkillType, sf::Text>;
 
 	//Variables
 	//References
@@ -118,32 +118,32 @@ private:
 	sf::Font&        font;
 
 	//Pointers to other icons
-	VectorSkillIcons*		originalSkillsIcons;
-	VectorQuickSlotBars*	quickSlotBars;
+	VectorSkillIcons*     originalSkillsIcons;
+	VectorQuickSlotBars*  quickSlotBars;
 
 	//Pointer from skills component 
-	VectorLevelSkills*		playerSkills;
+	VectorLevelSkills*    playerSkills;
 
 	//Core
-	int				unlockSkillsCount = 0;
-	short unsigned	skillMaxLevel = 5;
+	int             unlockSkillsCount = 0;
+	short unsigned  skillMaxLevel = 5;
 
-	float			offsetY	 = 30.f;
-	float			keyTime	 = 0.f;
-	float			keyTimeMax = 20.f;
+	float           offsetY	 = 30.f;
+	float           keyTime	 = 0.f;
+	float           keyTimeMax = 20.f;
 
 	//Crystal animations and sprites
-	MapSprites		crystalsSprites;
-	MapAnimations	crystalsAnimations;
+	MapSprites      crystalsSprites;
+	MapAnimations   crystalsAnimations;
 
 	//Menu GUI
-	MapSkillLevels	skillLevels;
-	MapButtons		buttons;
+	MapSkillLevels  skillLevels;
+	MapButtons      buttons;
 	MapSkillShapes  skillsIcons;
-	MapText			texts;
+	MapText         texts;
 
 	//Sounds
-	GuiSoundsBox&	guiSounds;
+	GuiSoundsBox&   guiSounds;
 	
 	//Init functions
 	void initVariables(VectorSkillIcons& originalSkillsIcons, VectorQuickSlotBars& quickSlotBars);
@@ -177,47 +177,47 @@ public:
 class SkillsMenu
 {
 private:
-	using VectorShapes				= std::vector<sf::RectangleShape>;
-	using MapTextures				= std::unordered_map<std::string, sf::Texture>;
-	using VectorText				= std::vector<sf::Text>;
-	using VectorSkillIconsShapes	= std::vector<std::pair<SkillType, sf::RectangleShape>>;
-	using MapButtons				= std::unordered_map<std::string, std::unique_ptr<GUI::Button>>;
-	using MapUnlockButtons			= std::unordered_map<SkillType, std::unique_ptr<GUI::Button>>;
+	using VectorShapes              = std::vector<sf::RectangleShape>;
+	using MapTextures               = std::unordered_map<std::string, sf::Texture>;
+	using VectorText                = std::vector<sf::Text>;
+	using VectorSkillIconsShapes    = std::vector<std::pair<SkillType, sf::RectangleShape>>;
+	using MapButtons                = std::unordered_map<std::string, std::unique_ptr<GUI::Button>>;
+	using MapUnlockButtons          = std::unordered_map<SkillType, std::unique_ptr<GUI::Button>>;
 
 	//Variables
 	//References
-	Player&		player;
-	PlayerGUI&	playerGUI;
-	sf::Font&	font;
+	Player&     player;
+	PlayerGUI&  playerGUI;
+	sf::Font&   font;
 
 	//Sounds
 	GuiSoundsBox& guiSounds;
 
 	//Core
-	const int	skillsSize;
-	int			unlockSkillsCount = 0;
+	const int   skillsSize;
+	int         unlockSkillsCount = 0;
 
-	float		keyTime;
-	float		keyTimeMax;
+	float       keyTime;
+	float       keyTimeMax;
 
-	sf::RectangleShape		background;
+	sf::RectangleShape      background;
 	SkillsLevelingComponent skillsLevelingComponent;
 
 	//Texts
-	VectorText				texts;
+	VectorText             texts;
 
 	//All textures
-	MapTextures				textures;
+	MapTextures            textures;
 
 	//Stat icons
-	VectorShapes			statIcons;
+	VectorShapes           statIcons;
 
 	//Skill icons
-	VectorSkillIconsShapes	skillsIcons;
+	VectorSkillIconsShapes skillsIcons;
 
 	//Buttons
-	MapButtons				buttons;
-	MapUnlockButtons		unclockButtons;
+	MapButtons              buttons;
+	MapUnlockButtons        unclockButtons;
 
 	//Init functions
 	void initButtons();
@@ -257,57 +257,57 @@ public:
 class ItemsMune
 {
 private:
-	using MainTexts		= std::pair<sf::Text, sf::Text>;
-	using MapTexts		= std::unordered_map<Items, sf::Text>;
-	using MapButtons	= std::unordered_map<Items, std::unique_ptr<GUI::Button>>;
-	using MapSprites	= std::unordered_map<Items, sf::Sprite>;
+	using MainTexts     = std::pair<sf::Text, sf::Text>;
+	using MapTexts      = std::unordered_map<Items, sf::Text>;
+	using MapButtons    = std::unordered_map<Items, std::unique_ptr<GUI::Button>>;
+	using MapSprites    = std::unordered_map<Items, sf::Sprite>;
 	using MapAnimations	= std::unordered_map<Items, AnimationComponent>;
-	using MapShapes		= std::unordered_map<Items, sf::RectangleShape>;
-	using MapItemsLvl	= std::unordered_map<Items, int>;
-	using Maptextures	= std::unordered_map<std::string, sf::Texture>;
+	using MapShapes     = std::unordered_map<Items, sf::RectangleShape>;
+	using MapItemsLvl   = std::unordered_map<Items, int>;
+	using Maptextures   = std::unordered_map<std::string, sf::Texture>;
 
 	//Variables
 	//References
-	PlayerGUI&		playerGui;
-	Player&			player;
+	PlayerGUI&      playerGui;
+	Player&         player;
 	StatsComponent* playerStats;
-	sf::Font&		font;
+	sf::Font&       font;
 
 	//Sounds
-	GuiSoundsBox&	guiSounds;
+	GuiSoundsBox&   guiSounds;
 
 	//Core
 	sf::RectangleShape background;
 
-	int		maxLevel			= 5;
-	int		unlockedItemsCount	= 0;
-	float	offsetX;
-	float	offsetY;
+	int     maxLevel			= 5;
+	int     unlockedItemsCount	= 0;
+	float   offsetX;
+	float   offsetY;
 
 	//Key time
-	float	keyTime;
-	float	keyTimeMax;
+	float   keyTime;
+	float   keyTimeMax;
 
 	//Text
-	MainTexts		mainText;
-	MapTexts		upgradeTexts;
-	MapTexts		statsTexts;
+	MainTexts       mainText;
+	MapTexts        upgradeTexts;
+	MapTexts        statsTexts;
 
 	//Buttons
-	MapButtons		unclockButtons;
-	MapButtons		upgradeButtons;
+	MapButtons      unclockButtons;
+	MapButtons      upgradeButtons;
 
 	//Coins animations and sprites
-	MapSprites		coinsSprites;
-	MapAnimations	coinsAnimations;
+	MapSprites      coinsSprites;
+	MapAnimations   coinsAnimations;
 
 	//Items
-	MapShapes		itemsIcons;
-	MapShapes		upgradeItemsIcons;
-	MapItemsLvl		itemsLvl;
+	MapShapes       itemsIcons;
+	MapShapes       upgradeItemsIcons;
+	MapItemsLvl     itemsLvl;
 
 	//Textures
-	Maptextures		textures;
+	Maptextures     textures;
 
 	//Init functions
 	void initVariables();
