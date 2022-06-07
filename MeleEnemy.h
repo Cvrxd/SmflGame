@@ -12,19 +12,19 @@ class MeleEnemy : public Enemy
 	EnemyGUI::EnemyLevelIcon levelIcon;
 
 	//Init functions
-	void initComponents(sf::Texture& texture_sheet, sf::Sprite& sprite) override;
-	void createAnimationComponent(sf::Texture& texture_sheet)			override;
-	void addAnimations()												override;
+	void initComponents            (sf::Texture& texture_sheet, sf::Sprite& sprite) override;
+	void createAnimationComponent  (sf::Texture& texture_sheet)                     override;
+	void addAnimations             ()                                               override;
 
 	//Sound fuctions
-	void playImpactSounds(const std::string& sound);
-	void playSkillImpactSounds(const SkillType& type);
+	void playImpactSounds          (const std::string& sound);
+	void playSkillImpactSounds     (const SkillType& type);
 
 	//Update functions
-	void updateAttack(const float& dt)									override;
-	void updateMovement(const float& dt)								override;
-	void updateAnimations(const float& dt)								override;
-	void updatePlayerImpact(const float& dt)							override;
+	void updateAttack              (const float& dt)       override;
+	void updateMovement            (const float& dt)       override;
+	void updateAnimations          (const float& dt)       override;
+	void updatePlayerImpact        (const float& dt)       override;
 
 public:
 	MeleEnemy(const MeleEnemyType& type, const int& level, const float& x, const float& y, 
@@ -33,7 +33,7 @@ public:
 	~MeleEnemy();
 
 	//Functions
-	void update(const float& dt, sf::Vector2f mouse_pos_view)			override;
-	void render(sf::RenderTarget& target, sf::Shader* shader = NULL)	override;
+	void update    (const float& dt, sf::Vector2f mouse_pos_view)           override;
+	void render    (sf::RenderTarget& target, sf::Shader* shader = NULL)    override;
 };
 

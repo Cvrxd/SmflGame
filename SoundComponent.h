@@ -5,7 +5,9 @@ class SkillsComponent;
 
 	struct GuiSoundsBox
 	{
-		std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>> sounds;
+		using SoundsMap = std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>>;
+
+		SoundsMap sounds;
 
 		GuiSoundsBox()
 		{
@@ -26,11 +28,13 @@ class SkillsComponent;
 	class PlayerSoundBox
 	{
 	private:
+		using SoundsMap = std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>>;
+
 		//Variables
 		float movementVolumeMin = 0.1f;
 		float movementVolumeMax = 0.5f;
 
-		std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>> sounds;
+		SoundsMap sounds;
 
 		//Movement sound to play
 		sf::Sound* movementSound;
@@ -43,7 +47,7 @@ class SkillsComponent;
 		void addWalkingSound(const std::string& path);
 		void addRunningSound(const std::string& path);
 
-		void changeMovementSound(const bool& running);
+		void changeMovementSound (const bool& running);
 		void changeMovementVolume(const bool& increase);
 
 		void pauseMovementSound();
@@ -53,9 +57,12 @@ class SkillsComponent;
 	class EnemySoundBox
 	{
 	private:
+		using HitSoundMap            = std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>>;
+		using SkillsImpactSoundsMap  = std::unordered_map<SkillType, std::pair<sf::SoundBuffer, sf::Sound>>;
+
 		//Variables
-		std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>>	hit;
-		std::unordered_map<SkillType, std::pair<sf::SoundBuffer, sf::Sound>>	skillsImpact;
+		HitSoundMap            hit;
+		SkillsImpactSoundsMap  skillsImpact;
 
 		//Init functions
 		void initSound();

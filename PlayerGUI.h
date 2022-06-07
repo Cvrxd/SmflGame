@@ -24,10 +24,10 @@ private:
 	int*  coins;
 	int*  crystals;
 
-	int   index	        = 0;
-	float hpOffset		= 0.f;
-	float mpOffset		= 0.f;
-	float armorOffset	= 0.f;
+	int   index         = 0;
+	float hpOffset      = 0.f;
+	float mpOffset      = 0.f;
+	float armorOffset   = 0.f;
 
 	sf::Clock skillTimer;
 	sf::Font& font;
@@ -57,42 +57,42 @@ private:
 	vectorSkillTypeShape* skillsIcons;
 
 	//Init functions
-	void initVariables();
-	void initStatBars();
-	void initQuickSlotBars();
-	void initTextsIcons();
-	void initAniamtions();
+	void initVariables     ();
+	void initStatBars      ();
+	void initQuickSlotBars ();
+	void initTextsIcons    ();
+	void initAniamtions    ();
 
 	//Update functions
-	void updateAnimations(const float& dt);
-	void updateBars();
-	void updateTextIcons();
+	void updateAnimations  (const float& dt);
+	void updateBars        ();
+	void updateTextIcons   ();
 
 	//Render functions
-	void renderQuickSlotBars(sf::RenderTarget& target);
+	void renderQuickSlotBars (sf::RenderTarget& target);
 
 public:
 	//Constructor
-	PlayerGUI(Player& player, sf::Font& font) noexcept;
+	PlayerGUI (Player& player, sf::Font& font) noexcept;
 	~PlayerGUI();
 
 	//Accessors
-	sf::Texture& getCrystalsTexture();
-	sf::Texture& getCoinsTexture();
+	sf::Texture& getCrystalsTexture ();
+	sf::Texture& getCoinsTexture    ();
 
 	//Functions
-	void initBuffSkill();
-	void setPotionsCount(int& hp, int& mp);
-	void initSkillIcons(vectorSkillTypeShape* skillsIcons);
+	void initBuffSkill      ();
+	void setPotionsCount    (int& hp, int& mp);
+	void initSkillIcons     (vectorSkillTypeShape* skillsIcons);
 
-	void addSkill(const SkillType& type);
-	void upgradePlayerBuff(const int& level);
+	void addSkill           (const SkillType& type);
+	void upgradePlayerBuff  (const int& level);
 
-	void update(const float& dt);
-	void render(sf::RenderTarget& target);
+	void update             (const float& dt);
+	void render             (sf::RenderTarget& target);
 
-	void skillsMenUpdate(const float& dt);
-	void itemsMenuUpdate(const float& dt);
+	void skillsMenUpdate    (const float& dt);
+	void itemsMenuUpdate    (const float& dt);
 	
 	friend class SkillsLevelingComponent;
 	friend class SkillsMenu;
@@ -126,11 +126,11 @@ private:
 
 	//Core
 	int             unlockSkillsCount = 0;
-	short unsigned  skillMaxLevel = 5;
+	short unsigned  skillMaxLevel     = 5;
 
-	float           offsetY	 = 30.f;
-	float           keyTime	 = 0.f;
-	float           keyTimeMax = 20.f;
+	float           offsetY           = 30.f;
+	float           keyTime	          = 0.f;
+	float           keyTimeMax        = 20.f;
 
 	//Crystal animations and sprites
 	MapSprites      crystalsSprites;
@@ -146,29 +146,29 @@ private:
 	GuiSoundsBox&   guiSounds;
 	
 	//Init functions
-	void initVariables(VectorSkillIcons& originalSkillsIcons, VectorQuickSlotBars& quickSlotBars);
+	void initVariables  (VectorSkillIcons& originalSkillsIcons, VectorQuickSlotBars& quickSlotBars);
 
-	void initSkill(const SkillType& type);
+	void initSkill      (const SkillType& type);
 
 	//Update functions
-	void updateButtons(sf::Vector2i& mousePosWindow, const float& dt);
-	void updateTexts();
-	void updateAnimations(const float& dt);
-	void updateKeyTime(const float& dt);
-	void updateSkillColor(const SkillType& type, const sf::Color& color);
+	void updateTexts       ();
+	void updateButtons     (sf::Vector2i& mousePosWindow, const float& dt);
+	void updateAnimations  (const float& dt);
+	void updateKeyTime     (const float& dt);
+	void updateSkillColor  (const SkillType& type, const sf::Color& color);
 
 	//Sound functions
-	void playSound(const std::string& sound);
+	void playSound (const std::string& sound);
 
 public:
-	SkillsLevelingComponent(SkillsComponent& skillsComponent, PlayerGUI& playerGUI, sf::Font& font, GuiSoundsBox& guiSounds) noexcept;
+	SkillsLevelingComponent (SkillsComponent& skillsComponent, PlayerGUI& playerGUI, sf::Font& font, GuiSoundsBox& guiSounds) noexcept;
 	~SkillsLevelingComponent();
 
 	//Functions
-	void upgradeSkill(const SkillType& type);
+	void upgradeSkill  (const SkillType& type);
 
-	void update(sf::Vector2i& mousePosWindow, const float& dt);
-	void render(sf::RenderTarget& target, sf::Vector2i& mousePosWindow);
+	void update        (sf::Vector2i& mousePosWindow, const float& dt);
+	void render        (sf::RenderTarget& target, sf::Vector2i& mousePosWindow);
 
 	friend class SkillsMenu;
 	friend class PlayerGUI;
@@ -202,56 +202,54 @@ private:
 
 	sf::RectangleShape      background;
 	SkillsLevelingComponent skillsLevelingComponent;
+	VectorSkillIconsShapes  skillsIcons;
 
 	//Texts
-	VectorText             texts;
+	VectorText        texts;
 
 	//All textures
-	MapTextures            textures;
+	MapTextures		  textures;
 
 	//Stat icons
-	VectorShapes           statIcons;
-
-	//Skill icons
-	VectorSkillIconsShapes skillsIcons;
+	VectorShapes	  statIcons;
 
 	//Buttons
-	MapButtons              buttons;
-	MapUnlockButtons        unclockButtons;
+	MapButtons        buttons;
+	MapUnlockButtons  unclockButtons;
 
 	//Init functions
-	void initButtons();
-	void initBackground(const float& x, const float& y);
-	void initTexts();
-	void initSkillIcons();
+	void initBackground  (const float& x, const float& y);
+	void initButtons     ();
+	void initTexts       ();
+	void initSkillIcons  ();
 
 	//Update functions
-	void updateKeyTime(const float& dt);
-	void updateText();
-	void updateButtons(sf::Vector2i& mousePosWindow);
+	void updateKeyTime   (const float& dt);
+	void updateText      ();
+	void updateButtons   (sf::Vector2i& mousePosWindow);
 
 	//Render functions
-	void renderButtons(sf::RenderTarget& target);
+	void renderButtons   (sf::RenderTarget& target);
 
 	//Sound functions
-	void playSound(const std::string& sound);
+	void playSound       (const std::string& sound);
 
 public:
 	//Constructor
-	SkillsMenu(Player& player, PlayerGUI& playerGUI, sf::Font& font, GuiSoundsBox& guiSounds,const float& x, const float& y) noexcept;
-	~SkillsMenu();
+	SkillsMenu (Player& player, PlayerGUI& playerGUI, sf::Font& font, GuiSoundsBox& guiSounds,const float& x, const float& y) noexcept;
+	~SkillsMenu ();
 
 	//Accessors
-	const bool getKeyTime() const;
+	const bool getKeyTime () const;
 
 	//Functions
-	void unlockSkill(const SkillType& type);
+	void unlockSkill  (const SkillType& type);
 
-	void update(sf::Vector2i& mousePosWindow, const float& dt);
-	void render(sf::RenderTarget& target, sf::Vector2i& mousePosWindow);
+	void update       (sf::Vector2i& mousePosWindow, const float& dt);
+	void render       (sf::RenderTarget& target, sf::Vector2i& mousePosWindow);
 
 	friend class SkillsLevelingMenu;
-	friend void PlayerGUI::initBuffSkill();
+	friend void PlayerGUI::initBuffSkill ();
 };
 
 class ItemsMune
@@ -261,7 +259,7 @@ private:
 	using MapTexts      = std::unordered_map<Items, sf::Text>;
 	using MapButtons    = std::unordered_map<Items, std::unique_ptr<GUI::Button>>;
 	using MapSprites    = std::unordered_map<Items, sf::Sprite>;
-	using MapAnimations	= std::unordered_map<Items, AnimationComponent>;
+	using MapAnimations = std::unordered_map<Items, AnimationComponent>;
 	using MapShapes     = std::unordered_map<Items, sf::RectangleShape>;
 	using MapItemsLvl   = std::unordered_map<Items, int>;
 	using Maptextures   = std::unordered_map<std::string, sf::Texture>;
@@ -279,8 +277,8 @@ private:
 	//Core
 	sf::RectangleShape background;
 
-	int     maxLevel			= 5;
-	int     unlockedItemsCount	= 0;
+	int     maxLevel            = 5;
+	int     unlockedItemsCount  = 0;
 	float   offsetX;
 	float   offsetY;
 
@@ -310,37 +308,37 @@ private:
 	Maptextures     textures;
 
 	//Init functions
-	void initVariables();
-	void initTextures();
-	void initBackground(const float& x, const float& y);
-	void initItemsIcons();
-	void initTexts();
-	void initButtons();
-	void initAnimations();
-	void initOffsets();
+	void initBackground  (const float& x, const float& y);
+	void initVariables   ();
+	void initTextures    ();
+	void initItemsIcons  ();
+	void initTexts       ();
+	void initButtons     ();
+	void initAnimations  ();
+	void initOffsets     ();
 
 	//Update functions
-	void updateItemGrade(const Items& item, const sf::Color& color);
-	void updateKeyTime(const float& dt);
-	void updateAnimations(const float& dt);
-	void updateButtons(sf::Vector2i& mousePosWindow);
+	void updateItemGrade   (const Items& item, const sf::Color& color);
+	void updateKeyTime     (const float& dt);
+	void updateAnimations  (const float& dt);
+	void updateButtons     (sf::Vector2i& mousePosWindow);
 
-	void unlockItem(const Items& item);
-	void upgradeItem(const Items& item);
+	void unlockItem        (const Items& item);
+	void upgradeItem       (const Items& item);
 
 	//Render functions
-	void renderIcons(sf::RenderTarget& target);
-	void renderText(sf::RenderTarget& target);
-	void renderButtons(sf::RenderTarget& target, sf::Vector2i& mousePosWindow);
+	void renderIcons       (sf::RenderTarget& target);
+	void renderText        (sf::RenderTarget& target);
+	void renderButtons     (sf::RenderTarget& target, sf::Vector2i& mousePosWindow);
 
 	//Sound
-	void playSound(const std::string& sound);
+	void playSound (const std::string& sound);
 
 public:
-	ItemsMune(Player& player, PlayerGUI& playerGUI, sf::Font& font, GuiSoundsBox& sounds, const float& x, const float& y) noexcept;
-	~ItemsMune();
+	ItemsMune (Player& player, PlayerGUI& playerGUI, sf::Font& font, GuiSoundsBox& sounds, const float& x, const float& y) noexcept;
+	~ItemsMune ();
 
 	//Fonctions
-	void update(sf::Vector2i& mousePosWindow, const float& dt);
-	void render(sf::RenderTarget& target, sf::Vector2i& mousePosWindow);
+	void update  (sf::Vector2i& mousePosWindow, const float& dt);
+	void render  (sf::RenderTarget& target, sf::Vector2i& mousePosWindow);
 };

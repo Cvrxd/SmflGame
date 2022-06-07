@@ -9,14 +9,14 @@ private:
 	{
 	public:
 		//Variables core
-		sf::Texture* textureSheet;
-		sf::Sprite* sprite;
+		sf::Texture*  textureSheet;
+		sf::Sprite*   sprite;
 
-		bool	done;
-		int		width;
-		int		height;
-		float	animationTimer;
-		float	timer;
+		bool    done;
+		int     width;
+		int     height;
+		float   animationTimer;
+		float   timer;
 
 		sf::IntRect startRect;
 		sf::IntRect currentRect;
@@ -136,21 +136,21 @@ private:
 	using AnimationSptr = std::shared_ptr<Animation>;
 
 	//Variables
-	sf::Sprite*		sprite;
-	sf::Texture*	textureSheet;
+	sf::Sprite*     sprite;
+	sf::Texture*    textureSheet;
 
-	AnimationSptr	lastAnimation;
-	AnimationSptr	priorityAnimation;
+	AnimationSptr   lastAnimation;
+	AnimationSptr   priorityAnimation;
 
-	MapAnimations	animations;
+	MapAnimations   animations;
 
 public:
 	AnimationComponent() {};
-	AnimationComponent(sf::Sprite* sprite, sf::Texture* textureSheet)	noexcept;
-	AnimationComponent(const AnimationComponent& other)					noexcept;
+	AnimationComponent(sf::Sprite* sprite, sf::Texture* textureSheet)   noexcept;
+	AnimationComponent(const AnimationComponent& other)                 noexcept;
 
-	AnimationComponent& operator=(AnimationComponent&& other)			noexcept;
-	AnimationComponent& operator=(const AnimationComponent& other)		noexcept;
+	AnimationComponent& operator=(AnimationComponent&& other)           noexcept;
+	AnimationComponent& operator=(const AnimationComponent& other)      noexcept;
 
 	virtual ~AnimationComponent();
 

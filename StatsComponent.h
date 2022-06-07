@@ -33,28 +33,28 @@ public:
 	float critRate;
 
 	//Constructor
-	StatsComponent(const int& level) noexcept;
-	~StatsComponent();
+	StatsComponent    (const int& level) noexcept;
+	~StatsComponent   ();
 
 	//Functions
-	void addItem(const Items& item);
-	void upgradeItem(const Items& item, const int& level);
+	void addItem      (const Items& item);
+	void upgradeItem  (const Items& item, const int& level);
 
-	void gainEXP(const unsigned& exp);
-	void gainHP(const int& hp);
-	void loseHP(const int& hp);
-	void gainArmor(const int& armor);
-	void loseArmor(const int& armor);
-	void gainMP(const int& mp);
-	void loseMP(const int& mp);
+	void gainEXP      (const unsigned& exp);
+	void gainHP       (const int& hp);
+	void loseHP       (const int& hp);
+	void gainArmor    (const int& armor);
+	void loseArmor    (const int& armor);
+	void gainMP       (const int& mp);
+	void loseMP       (const int& mp);
 
-	void gainCrystals(const int& crystals);
-	void loseCrystals(const int& crystals);
-	void gainCoins(const int& coins);
-	void loseCoins(const int& coins);
+	void gainCrystals   (const int& crystals);
+	void loseCrystals   (const int& crystals);
+	void gainCoins      (const int& coins);
+	void loseCoins      (const int& coins);
 
-	void updateLevel();
-	void updateStats(const bool& reset = false);
-	void update();
+	void updateStats    (const bool& reset = false);
+	void updateLevel    ();
+	void update         ();
 };
 

@@ -6,26 +6,26 @@ namespace EnemyGUI
 	{
 	private:
 		//Variables
-		int			hpMAX;
-		const int*	hp;
-		float		offsetX = 0;
+		int         hpMAX;
+		const int*  hp;
+		float       offsetX = 0;
 
-		sf::RectangleShape	healthRect;
-		sf::RectangleShape	backgroundRect;
+		sf::RectangleShape  healthRect;
+		sf::RectangleShape  backgroundRect;
 
-		sf::Texture			healthTexture;
-		sf::Texture			backgroundTexture;
+		sf::Texture         healthTexture;
+		sf::Texture         backgroundTexture;
 
 		//Init functions
-		void initTextures();
+		void initTextures   ();
 	public:
-		EnemyHealthBar(const int* hp) noexcept;
-		~EnemyHealthBar();
+		EnemyHealthBar      (const int* hp) noexcept;
+		~EnemyHealthBar     ();
 
 		//Functions
-		void updateOffsetX();
-		void update(const float& dt, const sf::Vector2f& position);
-		void render(sf::RenderTarget& target);
+		void updateOffsetX  ();
+		void update         (const float& dt, const sf::Vector2f& position);
+		void render         (sf::RenderTarget& target);
 	};
 
 	class EnemyLevelIcon
@@ -37,21 +37,21 @@ namespace EnemyGUI
 
 		float offsetX = 45.f;
 
-		sf::RectangleShape	backgroundRect;
-		sf::Texture			backgroundTexture;
+		sf::RectangleShape  backgroundRect;
+		sf::Texture         backgroundTexture;
 
 		sf::Text lvlText;
 
-		void initVariables(const sf::Font& font);
+		void initVariables  (const sf::Font& font);
 	public:
 		EnemyLevelIcon(const int* lvl, const int* playerLvl, const sf::Font& font) noexcept;
 		~EnemyLevelIcon();
 
 		//Functions
-		void updateText();
-		void updateOffsetX();
-		void update(const float& dt, const sf::Vector2f& position);
-		void render(sf::RenderTarget& target);
+		void updateText     ();
+		void updateOffsetX  ();
+		void update         (const float& dt, const sf::Vector2f& position);
+		void render         (sf::RenderTarget& target);
 	};
 	
 }

@@ -2,17 +2,17 @@
 
 struct GraphicsSettings
 {
+	using Videomodes = std::vector<sf::VideoMode>;
+
 	//Variables
-	std::string title;
-	bool fullscreen;
-	bool vertucalSync;
-	unsigned framerateLimit;
+	std::string         title;
+	unsigned            framerateLimit;
+	bool                fullscreen;
+	bool                vertucalSync;
 
-	sf::VideoMode resolution;
+	sf::VideoMode       resolution;
 	sf::ContextSettings contextSettings;
-	std::vector<sf::VideoMode> videModes;
-
-	GraphicsSettings();
+	Videomodes          videModes;
 
 	//Functions
 	void saveToFile(const std::string& file);
