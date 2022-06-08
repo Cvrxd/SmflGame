@@ -15,6 +15,6 @@ struct GraphicsSettings
 	Videomodes          videModes;
 
 	//Functions
-	void saveToFile(const std::string& file);
-	void loadFromFile(const std::string& file);
+	void saveToFile    (const std::string& file);
+	void loadFromFile  (const std::string& file);
 };

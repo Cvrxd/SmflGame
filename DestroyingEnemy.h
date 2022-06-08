@@ -33,13 +33,13 @@ class DestroyingEnemy : public Enemy
 	void updatePlayerImpact    (const float& dt)           override;
 
 public:
-	DestroyingEnemy(const DestroyingEnemyType& type, const int& level, const float& x, const float& y, 
+	DestroyingEnemy (const DestroyingEnemyType& type, const int& level, const float& x, const float& y, 
 		sf::Texture& texture_sheet, Player* player, EnemySoundBox& sounds) noexcept;
 
 	~DestroyingEnemy();
 
 	//Functions
-	void update(const float& dt, sf::Vector2f mouse_pos_view)          override;
-	void render(sf::RenderTarget& target, sf::Shader* shader = NULL)   override;
+	void update  (const float& dt, sf::Vector2f mouse_pos_view)          override;
+	void render  (sf::RenderTarget& target, sf::Shader* shader = NULL)   override;
 };
 

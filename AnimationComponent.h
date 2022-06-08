@@ -23,9 +23,9 @@ private:
 		sf::IntRect endRect;
 
 		//Constructor
-		Animation() {};
+		Animation () {};
 
-		Animation(sf::Sprite* sprite, sf::Texture* textureSheet,
+		Animation (sf::Sprite* sprite, sf::Texture* textureSheet,
 			const int& start_frame_x, const int& start_frame_y,
 			const int& frame_x, const int& frame_y,
 			const int& width, const int& height, const float& animationTimer) noexcept
@@ -64,7 +64,7 @@ private:
 		}
 
 		//Play animation without modifier
-		inline const bool& play(const float& dt)
+		inline const bool& play  (const float& dt)
 		{
 			this->done = false;
 
@@ -92,7 +92,7 @@ private:
 		}
 
 		//Play animation with modifiers
-		inline const bool& play(const float& dt, float percentage)
+		inline const bool& play  (const float& dt, float percentage)
 		{
 			if (percentage < 0.5f)
 			{
@@ -145,24 +145,24 @@ private:
 	MapAnimations   animations;
 
 public:
-	AnimationComponent() {};
-	AnimationComponent(sf::Sprite* sprite, sf::Texture* textureSheet)   noexcept;
-	AnimationComponent(const AnimationComponent& other)                 noexcept;
+	AnimationComponent  () {};
+	AnimationComponent  (sf::Sprite* sprite, sf::Texture* textureSheet)   noexcept;
+	AnimationComponent  (const AnimationComponent& other)                 noexcept;
 
-	AnimationComponent& operator=(AnimationComponent&& other)           noexcept;
-	AnimationComponent& operator=(const AnimationComponent& other)      noexcept;
+	AnimationComponent& operator=  (AnimationComponent&& other)           noexcept;
+	AnimationComponent& operator=  (const AnimationComponent& other)      noexcept;
 
 	virtual ~AnimationComponent();
 
 	//Functions
-	const bool& isDone(const std::string& key);
+	const bool& isDone  (const std::string& key);
 
-	void addAnimation(const std::string key,
+	void addAnimation   (const std::string key,
 		const int& start_frame_x, const int& start_frame_y,
 		const int& frame_x, const int& frame_y,
 		const int& width, const int& height, const float& animationTimer); 
 
-	const bool& play(const std::string& key, const float& dt, const bool priority = false);
-	const bool& play(const std::string& key, const float& dt, const float& modifier, const float& modifier_max, const bool priority = false);
+	const bool& play  (const std::string& key, const float& dt, const bool priority = false);
+	const bool& play  (const std::string& key, const float& dt, const float& modifier, const float& modifier_max, const bool priority = false);
 };
 

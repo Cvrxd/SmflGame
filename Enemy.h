@@ -85,7 +85,7 @@ protected:
 	virtual void updateAnimations    (const float& dt)    = 0;
 
 public:
-	Enemy(const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player, EnemySoundBox& sounds) noexcept;
+	Enemy (const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player, EnemySoundBox& sounds) noexcept;
 	virtual ~Enemy();
 
 	//Accessors

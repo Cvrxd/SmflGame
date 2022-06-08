@@ -27,13 +27,13 @@ private:
 	void updatePlayerImpact     (const float& dt)                            override;
 
 public:
-	BossEnemy(const BossType& type, const int& level, const float& x, const float& y, 
+	BossEnemy (const BossType& type, const int& level, const float& x, const float& y, 
 		sf::Texture& texture_sheet, Player* player, EnemySoundBox& sounds) noexcept;
 	
 	~BossEnemy();
 
 	//Functions
-	void update(const float& dt, sf::Vector2f mouse_pos_view)           override;
-	void render(sf::RenderTarget& target, sf::Shader* shader = NULL)    override;
+	void update  (const float& dt, sf::Vector2f mouse_pos_view)           override;
+	void render  (sf::RenderTarget& target, sf::Shader* shader = NULL)    override;
 };
 

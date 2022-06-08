@@ -38,7 +38,7 @@ class MageEnemy : public Enemy
 	void updatePlayerImpact          (const float& dt)                              override;
 
 public:
-	MageEnemy(const MageEnemyType& type, const int& level, const float& x, const float& y, 
+	MageEnemy (const MageEnemyType& type, const int& level, const float& x, const float& y, 
 		sf::Texture& texture_sheet, Player* player, EnemySoundBox& sounds) noexcept;
 
 	~MageEnemy();

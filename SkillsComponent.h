@@ -19,7 +19,7 @@ private:
 	using VectorSkillsIndex     = std::vector<std::pair<SkillType, int>>;
 	using PairSpriteTexture     = std::pair<sf::Sprite, sf::Texture>;
 	using PotionsCount          = std::pair<Potions, int>;
-	using MapSkillsTextures	    = std::unordered_map<SkillType, std::pair<sf::Sprite, sf::Texture>>;
+	using MapSkillsTextures     = std::unordered_map<SkillType, std::pair<sf::Sprite, sf::Texture>>;
 	using MapSkillsAnimations   = std::unordered_map<SkillType, AnimationComponent>;
 
 	//Variables
@@ -82,41 +82,41 @@ private:
 	SkillType& currentSkillType;
 
 	//Init functions
-	void initSounds();
-	void initAllSkills();
-	void initAllAnimations();
+	void initSounds         ();
+	void initAllSkills      ();
+	void initAllAnimations  ();
 
 	//Update functions
-	void updateClock(const float& dt);
+	void updateClock     (const float& dt);
 
 	//Core functions
-	void useSkill(const SkillType& skill_type);
-	void playSkillSound(const SkillType& type);
+	void useSkill        (const SkillType& skill_type);
+	void playSkillSound  (const SkillType& type);
 
 public:
-	SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill, SkillType& usingSkillType, int& currentSkillDamage, bool& isBuffed) noexcept;
-	~SkillsComponent();
+	SkillsComponent  (StatsComponent& statsComponent, bool& isUsingSkill, SkillType& usingSkillType, int& currentSkillDamage, bool& isBuffed) noexcept;
+	~SkillsComponent ();
 
 	//Accessors
 	const std::vector<std::pair<SkillType, int>>& getPlayerSkills();
 
-	const int&              getBuffMaxLevel()   const;
-	const int&              getBuffLevel()      const;
-	const sf::CircleShape&  getDamageArea();
-	const bool              getKeyTime()        const;
-	const bool              getBuffKeyTime()    const;
-	int&                    getMpPotions();
-	int&                    getHpPotions();
+	const int&              getBuffMaxLevel  ()    const;
+	const int&              getBuffLevel     ()    const;
+	const sf::CircleShape&  getDamageArea    ();
+	const bool              getKeyTime()           const;
+	const bool              getBuffKeyTime   ()    const;
+	int&                    getMpPotions     ();
+	int&                    getHpPotions     ();
 
 	//Functions
-	void addPotion(const Potions& potion_type);
-	void usePotion(const Potions& potion_type);
+	void addPotion         (const Potions& potion_type);
+	void usePotion         (const Potions& potion_type);
 
-	void addSkill(const SkillType& skill_type, const short& slot);
-	void upgradeSkill(const SkillType& skill_type);
+	void addSkill          (const SkillType& skill_type, const short& slot);
+	void upgradeSkill      (const SkillType& skill_type);
 
-	void updatePlayerBuff(const float& dt, const sf::Vector2f& player_position);
-	void update(const float& dt, const sf::Vector2f& skill_position, const sf::Vector2f& player_position);
-	void render(sf::RenderTarget& target);
+	void updatePlayerBuff  (const float& dt, const sf::Vector2f& player_position);
+	void update            (const float& dt, const sf::Vector2f& skill_position, const sf::Vector2f& player_position);
+	void render            (sf::RenderTarget& target);
 };
 

@@ -40,18 +40,18 @@ class SkillsComponent;
 		sf::Sound* movementSound;
 
 	public:
-		PlayerSoundBox() noexcept;
-		~PlayerSoundBox();
+		PlayerSoundBox   () noexcept;
+		~PlayerSoundBox  ();
 
 		//Functions
-		void addWalkingSound(const std::string& path);
-		void addRunningSound(const std::string& path);
+		void addWalkingSound       (const std::string& path);
+		void addRunningSound       (const std::string& path);
 
-		void changeMovementSound (const bool& running);
-		void changeMovementVolume(const bool& increase);
+		void changeMovementSound   (const bool& running);
+		void changeMovementVolume  (const bool& increase);
 
-		void pauseMovementSound();
-		void unpauseMovementSound();
+		void pauseMovementSound    ();
+		void unpauseMovementSound  ();
 	};
 
 	class EnemySoundBox
@@ -65,12 +65,12 @@ class SkillsComponent;
 		SkillsImpactSoundsMap  skillsImpact;
 
 		//Init functions
-		void initSound();
+		void initSound  ();
 	public:
-		EnemySoundBox() noexcept;
-		~EnemySoundBox();
+		EnemySoundBox   () noexcept;
+		~EnemySoundBox  ();
 
 		//Functions
-		void playSound(const SkillType& sound);
-		void playSound(const std::string& sound);
+		void playSound  (const SkillType& sound);
+		void playSound  (const std::string& sound);
 	};

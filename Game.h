@@ -6,34 +6,34 @@ class MainMenuState;
 class Game
 {
 private:
-	using KeyBindsMap	= std::unordered_map<std::string, int>;
-	using StatesStack	= std::stack<State*>;
+	using KeyBindsMap   = std::unordered_map<std::string, int>;
+	using StatesStack   = std::stack<State*>;
 
 	//Vriables
-	float				dt;
-	float				gridSize;
+	float               dt;
+	float               gridSize;
 
-	GraphicsSettings	gfxSettings;
-	StateData			stateData;
-	StatesStack			states;
-	KeyBindsMap			supportedKeys;
+	GraphicsSettings    gfxSettings;
+	StateData           stateData;
+	StatesStack         states;
+	KeyBindsMap         supportedKeys;
 
-	sf::Clock			dtClock;
-	sf::Event			sfEvent;
-	sf::RenderWindow*	window = nullptr;
+	sf::Clock           dtClock;
+	sf::Event           sfEvent;
+	sf::RenderWindow*   window = nullptr;
 
 	//Init functions
-	void initVariables();
-	void initGraphicsSettings();
-	void initWnodow();
-	void initKeys();
-	void initStateData();
-	void initStates();
+	void initVariables         ();
+	void initGraphicsSettings  ();
+	void initWnodow            ();
+	void initKeys              ();
+	void initStateData         ();
+	void initStates            ();
 
 	//Update functions
-	void updateDt();
-	void updateSFMLEvents();
-	void update();
+	void updateDt          ();
+	void updateSFMLEvents  ();
+	void update            ();
 
 	//Render functions
 	void render();
