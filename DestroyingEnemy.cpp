@@ -239,6 +239,9 @@ inline void DestroyingEnemy::updatePlayerImpact(const float& dt)
 
 					//Sound
 					this->playImpactSounds("PLAYER_CRIT");
+
+					//Pop up text
+					this->updatePopUpText("CRIT");
 				}
 				else
 				{
@@ -253,7 +256,8 @@ inline void DestroyingEnemy::updatePlayerImpact(const float& dt)
 			}
 			else
 			{
-				//Pop up text//
+				//Pop up text
+				this->updatePopUpText("IMMUNE");
 			}
 		}
 	}
@@ -281,7 +285,8 @@ inline void DestroyingEnemy::updatePlayerImpact(const float& dt)
 		}
 		else
 		{
-			//Pop up text//
+			//Pop up text
+			this->updatePopUpText("IMMUNE");
 		}
 	}
 }
@@ -340,6 +345,9 @@ void DestroyingEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 	{
 		target.draw(this->skillsImpactSprites[*this->playerUsingSkill].first);
 	}
+
+	//Render pop up text
+	this->renderPopUpText(target);
 
 	this->healthBar.render(target);
 	this->levelIcon.render(target);

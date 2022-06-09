@@ -18,26 +18,30 @@ protected:
 	using MapOffsets         = std::unordered_map<SkillType, int>;
 
 	//Variables
+	std::string popUpTextKey;
+
 	//Resistance
 	SkillType skillReistance = SkillType::EMPTY;
 
 	bool physicalResistance	= false;
-	bool magicalResistance = false;
+	bool magicalResistance  = false;
 
 	//Boleans for animations
-	bool isAttaking	      = false;
-	bool isTakingDamage	  = false;
+	bool isAttaking       = false;
+	bool isTakingDamage   = false;
+	bool showPopUpText    = false;
 
 	bool critImpact       = false;
 	bool hitImpact        = false;
 	bool skillImpact      = false;
-	bool isDead	          = false;
+	bool isDead           = false;
 
 	//Timers
 	sf::Clock attackTimer;
+	sf::Clock popUpTextTimer;
 
 	float   attackColdown;
-	int	    attackCount;
+	int     attackCount;
 	int     attackCountMAX;
 
 	//Sounds
@@ -49,6 +53,9 @@ protected:
 
 	PairTextureSprite   critHitSprite;
 	AnimationComponent  critHitAnimation;
+
+	//Pop up text component
+	PopUpTextComponent  popUpTextComponent;
 
 	//Player Skills impact
 	const SkillType*    playerUsingSkill;
@@ -70,19 +77,26 @@ protected:
 	Player*                 player;
 	sf::Texture*            textureSheet;
 
-	//init functions
+	//Init functions
 	virtual void initImpactAnimations      ();
 	virtual void initSkillsImpactTextures  ();
 	virtual void initStats                 ();
 	virtual void initComponents            (sf::Texture& texture_sheet, sf::Sprite& sprite)  = 0;
 	virtual void createAnimationComponent  (sf::Texture& texture_sheet)                      = 0;
 	virtual void addAnimations             ()                                                = 0;
+	virtual void initPopUpTextComponent    ();
 
 	//Functions
+	// 
+	//Update
 	virtual void updatePlayerImpact  (const float& dt)    = 0;
 	virtual void updateAttack        (const float& dt)    = 0;
 	virtual void updateMovement      (const float& dt)    = 0;
 	virtual void updateAnimations    (const float& dt)    = 0;
+	virtual void updatePopUpText     (const std::string& key);
+
+	//Render
+	virtual void renderPopUpText     (sf::RenderTarget& target);
 
 public:
 	Enemy (const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player, EnemySoundBox& sounds) noexcept;

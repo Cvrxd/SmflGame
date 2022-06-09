@@ -159,6 +159,22 @@ inline void SkillsComponent::initAllAnimations()
 	this->skillTextures[SkillType::BUFF].first.setScale(5.f, 5.f);
 }
 
+inline void SkillsComponent::initPopUpText()
+{
+	this->popUpKeysMap[SkillType::BUFF] = "BUFF";
+
+	this->mpPopUpKey.first  = MANA;
+	this->mpPopUpKey.second = "MP: +3";
+
+	this->hpPopUpKey.first  = HEALTH;
+	this->hpPopUpKey.second = "HP: +3";
+
+	this->popUpTextComponent.addText(this->popUpKeysMap[SkillType::BUFF], sf::Color::Red, 35);
+
+	this->popUpTextComponent.addText(this->hpPopUpKey.second, sf::Color::Green, 35);
+	this->popUpTextComponent.addText(this->mpPopUpKey.second, sf::Color(102, 178, 255), 35);
+}
+
 //Update functions
 inline void SkillsComponent::updateClock(const float& dt)
 {
@@ -168,6 +184,32 @@ inline void SkillsComponent::updateClock(const float& dt)
 
 	//Skills duration
 	this->time = skillTimer.getElapsedTime().asSeconds();
+}
+
+inline void SkillsComponent::updatePopUpText(const std::string& key)
+{
+	this->popUpTextKey = key;
+	this->popUpTextComponent.prepareText(this->popUpTextKey);
+	this->popUpTextTimer.restart();
+	this->showPopUpText = true;
+}
+
+//Render functions
+inline void SkillsComponent::renderPopUpText(sf::RenderTarget& target, const sf::Vector2f& player_position)
+{
+	//Render pop up text
+	if (this->showPopUpText)
+	{
+		if (this->popUpTextTimer.getElapsedTime().asSeconds() > this->popUpTextComponent.getpTextExpireTime())
+		{
+			this->showPopUpText = false;
+			this->popUpTextComponent.resetText(this->popUpTextKey);
+		}
+		else
+		{
+			this->popUpTextComponent.popUpText(target, this->popUpTextKey, player_position);
+		}
+	}
 }
 
 //Core functions
@@ -182,14 +224,19 @@ inline void SkillsComponent::playSkillSound(const SkillType& type)
 }
 
 //Constructor
-SkillsComponent::SkillsComponent(StatsComponent& statsComponent, bool& isUsingSkill, SkillType& currentSkillType, int& currentSkillDamage, bool& isBuffed) noexcept
-	: statsComponent(statsComponent) ,currentRender(-1), playAnimation(false), usingPotion(false), isBuffed(isBuffed), usingBuff(false),
+SkillsComponent::SkillsComponent(StatsComponent& statsComponent, const sf::Font& font, bool& isUsingSkill, SkillType& currentSkillType, int& currentSkillDamage, bool& isBuffed) noexcept
+	: 
+	statsComponent     (statsComponent),
+	popUpTextComponent (font),
+
+	currentRender(-1), playAnimation(false), usingPotion(false), usingBuff(false), isBuffed(isBuffed),
 	keyTime(0.f), keyTimeMax(15.f), potionKeyTime(0.f), potionKeyTimeMax(5.f), buffDuration(5.f), buffCooldown(15.f),
 	skillsSize(8), usingSkill(isUsingSkill), currentSkillType(currentSkillType), currentSkillDamage(currentSkillDamage)
 {
-	this->initSounds();
-	this->initAllSkills();
-	this->initAllAnimations();
+	this->initSounds         ();
+	this->initAllSkills      ();
+	this->initAllAnimations  ();
+	this->initPopUpText      ();
 }
 
 SkillsComponent::~SkillsComponent()
@@ -312,6 +359,9 @@ void SkillsComponent::updatePlayerBuff(const float& dt, const sf::Vector2f& play
 
 		//Sound
 		this->playSkillSound(SkillType::BUFF);
+
+		//Pop up text
+		this->updatePopUpText(this->popUpKeysMap[SkillType::BUFF]);
 	}
 	
 	if (this->isBuffed)
@@ -388,11 +438,17 @@ void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position
 		{
 			this->usingPotion = true;
 			this->usePotion(MANA);
+
+			//Pop up text
+			this->updatePopUpText(this->mpPopUpKey.second);
 		}
 		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::E) && this->healthPotions.second != 0)
 		{
 			this->usingPotion = true;
 			this->usePotion(HEALTH);
+
+			//Pop up text
+			this->updatePopUpText(this->hpPopUpKey.second);
 		}
 	}
 	
@@ -449,7 +505,7 @@ void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position
 	}
 }
 
-void SkillsComponent::render(sf::RenderTarget& target)
+void SkillsComponent::render(sf::RenderTarget& target, const sf::Vector2f& player_position)
 {
 	if (this->currentRender != -1)
 	{
@@ -463,4 +519,6 @@ void SkillsComponent::render(sf::RenderTarget& target)
 	{
 		target.draw(this->skillTextures[SkillType::BUFF].first);
 	}
+
+	this->renderPopUpText(target, player_position);
 }

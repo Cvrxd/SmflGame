@@ -1,14 +1,8 @@
 #include "stdafx.h"
 #include "PopUpTextComponent.h"
 
-//Private funtions
-void PopUpTextComponent::updateText(const std::string& key)
-{
-	//
-}
-
 //Constructor
-PopUpTextComponent::PopUpTextComponent(sf::Font& font) noexcept
+PopUpTextComponent::PopUpTextComponent(const sf::Font& font) noexcept
 	:font(font)
 {
 	
@@ -16,6 +10,12 @@ PopUpTextComponent::PopUpTextComponent(sf::Font& font) noexcept
 
 PopUpTextComponent::~PopUpTextComponent()
 {
+}
+
+//Accessors
+const float& PopUpTextComponent::getpTextExpireTime() const
+{
+	return this->textExpireTime;
 }
 
 //Functions
@@ -27,11 +27,24 @@ void PopUpTextComponent::addText(const std::string& text, const sf::Color& color
 	this->texts[text].setFillColor(color);
 }
 
-bool PopUpTextComponent::showText(sf::RenderTarget& target, const std::string& key, const sf::Vector2f position)
+void PopUpTextComponent::popUpText(sf::RenderTarget& target, const std::string& key, const sf::Vector2f position)
 {
-	this->updateText(key);
+	this->texts[key].setPosition(position.x - this->offsetX, position.y - this->offsetY - ++this->modifierY);
 
-	//
-	
-	return true;
+	target.draw(this->texts[key]);
+}
+
+void PopUpTextComponent::prepareText(const std::string& key)
+{
+	this->offsetX = static_cast<float> (std::rand() % 50);
+	this->offsetY = static_cast<float> (std::rand() % 50);
+
+	this->orirginalTextColor = this->texts[key].getFillColor();
+}
+
+void PopUpTextComponent::resetText(const std::string& key)
+{
+	this->texts[key].setFillColor(this->orirginalTextColor);
+
+	this->modifierY = this->offsetY;
 }

@@ -86,9 +86,27 @@ void Enemy::initStats()
 	this->statsComponent.damageMagical = this->statsComponent.level / 5 + 1;
 }
 
+void Enemy::initPopUpTextComponent()
+{
+	this->popUpTextComponent.addText("IMMUNE", sf::Color::White, 40);
+	this->popUpTextComponent.addText("CRIT", sf::Color::Red, 40);
+}
+
+//Functions 
+void Enemy::updatePopUpText(const std::string& key)
+{
+	this->popUpTextKey = key;
+	this->popUpTextComponent.prepareText(this->popUpTextKey);
+	this->popUpTextTimer.restart();
+	this->showPopUpText = true;
+}
+
 //Constructor
 Enemy::Enemy(const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player, EnemySoundBox& sounds)noexcept
-	:statsComponent(level), animationComponent(&this->sprite, &texture_sheet), player(player), textureSheet(&texture_sheet), soundBox(sounds),
+	:statsComponent(level),
+	animationComponent(&this->sprite, &texture_sheet), 
+	player(player), textureSheet(&texture_sheet), soundBox(sounds),
+	popUpTextComponent(player->getFont()),
 	attackCount(0), attackCountMAX(INT_MAX), attackColdown(0)
 {
 	this->playerUsingSkill = &this->player->getUsingSkilltype();
@@ -97,6 +115,24 @@ Enemy::Enemy(const int& level, const float& x, const float& y, sf::Texture& text
 	this->initStats();
 	this->initSkillsImpactTextures();
 	this->initImpactAnimations();
+	this->initPopUpTextComponent();
+}
+
+void Enemy::renderPopUpText(sf::RenderTarget& target)
+{
+	//Render pop up text
+	if (this->showPopUpText)
+	{
+		if (this->popUpTextTimer.getElapsedTime().asSeconds() > this->popUpTextComponent.getpTextExpireTime())
+		{
+			this->showPopUpText = false;
+			this->popUpTextComponent.resetText(this->popUpTextKey);
+		}
+		else
+		{
+			this->popUpTextComponent.popUpText(target, this->popUpTextKey, this->getPosition());
+		}
+	}
 }
 
 Enemy::~Enemy()

@@ -6,21 +6,32 @@ private:
 	using TextMap = std::unordered_map < std::string, sf::Text>;
 
 	//Variables
-	sf::Font& font;
+	const sf::Font& font;
+	sf::Color orirginalTextColor;
+
+	float textExpireTime  = 1.5f;
+
+	float offsetX         = 0;
+	float offsetY         = 0;
+
+	float offsetYbase     = 0;
+	float modifierY	      = 5;
 
 	TextMap texts;
 
-	//Update text
-	void updateText (const std::string& key);
-
 public:
-	PopUpTextComponent  (sf::Font& font) noexcept;
+	PopUpTextComponent  (const sf::Font& font) noexcept;
 	~PopUpTextComponent ();
 
-	//Functions
-	void addText (const std::string& text, const sf::Color& color, const unsigned int& characterSize);
-	 
-	bool showText (sf::RenderTarget& target, const std::string& key, const sf::Vector2f position);
+	//Accessors
+	const float& getpTextExpireTime () const;
 
+	//Functions
+	void addText      (const std::string& text, const sf::Color& color, const unsigned int& characterSize);
+	
+	void popUpText    (sf::RenderTarget& target, const std::string& key, const sf::Vector2f position);
+
+	void prepareText  (const std::string& key);
+	void resetText    (const std::string& key);
 };
 

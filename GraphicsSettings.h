@@ -14,6 +14,8 @@ struct GraphicsSettings
 	sf::ContextSettings contextSettings;
 	Videomodes          videModes;
 
+	GraphicsSettings();
+
 	//Functions
 	void saveToFile    (const std::string& file);
 	void loadFromFile  (const std::string& file);

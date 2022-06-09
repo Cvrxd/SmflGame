@@ -126,10 +126,10 @@
     <ClCompile Include="EnemyGUI.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="PopUpTextComponent.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
     <ClCompile Include="SoundComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PopUpTextComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -212,10 +212,10 @@
     <ClInclude Include="EnemyGUI.h">
       <Filter>GUI</Filter>
     </ClInclude>
-    <ClInclude Include="PopUpTextComponent.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
     <ClInclude Include="SoundComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PopUpTextComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>

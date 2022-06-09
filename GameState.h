@@ -17,6 +17,7 @@ class BossEnemy;
 class MeleEnemy;
 class MageEnemy;
 class DestroyingEnemy;
+class PopUpTextComponent;
 
 class GameState : public State
 {
@@ -43,6 +44,9 @@ private:
 	PauseMenu   pauseMenu;
 	TileMap     tileMap;
 	Player      player;
+
+	//Pop up text
+	PopUpTextComponent popUpTextComponent;
 
 	//Entities
 	std::vector<BossEnemy>          bosses;

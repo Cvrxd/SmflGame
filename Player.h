@@ -17,6 +17,7 @@ private:
 	//Booleans for animations
 	bool& isBuffed;
 
+	bool showPopUpText  = false;
 	bool isAttacking    = false;
 	bool isHit          = false;
 	bool dealDMG        = false;
@@ -26,6 +27,9 @@ private:
 	//For hit animations
 	int currentHitAnimation;
 	int currentskillDamage = 1;
+
+	//Pop up text key
+	std::string     popUpTextKey;
 
 	//Keys for moving
 	std::string     moveKey;
@@ -46,11 +50,13 @@ private:
 
 	sf::Clock           damageTimer;
 	sf::Clock           restorationTimer;
+	sf::Clock           popUpTextTimer;
 
 	//Components
 	AnimationComponent  animationComponent;
 	StatsComponent      statsComponent;
 	SkillsComponent     skillsComponent;
+	PopUpTextComponent  popUpTextComponent;
 
 	//Sounds
 	PlayerSoundBox      soundBox;
@@ -64,15 +70,20 @@ private:
 	void createAnimationComponent  (sf::Texture& texture_sheet);
 	void addAnimations             ();
 	void initComponents            (sf::Texture& texture_sheet);
+	void initPopUpTextComponent    ();
 	void initSounds                ();
 
 	//Sound functions
-	void updateSound        ();
+	void updateSound ();
 
 	//Update functions
 	void updateRestoration  ();
 	void updateAttack       (const float& dt, sf::Vector2f mouse_pos_view);
 	void updateAnimations   (const float& dt, sf::Vector2f mouse_pos_view);
+	void updatePopUpText    (const std::string& key);
+
+	//Render fucntions
+	void renderPopUpText    (sf::RenderTarget& target);
 
 public:
 	Player(const float& x, const float& y, sf::Texture& texture_sheet, const sf::Font& font, bool& isBuffed) noexcept;

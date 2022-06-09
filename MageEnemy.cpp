@@ -388,6 +388,9 @@ inline void MageEnemy::updatePlayerImpact(const float& dt)
 
 					//Sound
 					this->playImpactSounds("PLAYER_CRIT");
+
+					//Pop up text
+					this->updatePopUpText("CRIT");
 				}
 				else
 				{
@@ -396,13 +399,15 @@ inline void MageEnemy::updatePlayerImpact(const float& dt)
 					//Sound
 					this->playImpactSounds("PLAYER_HIT");
 				}
-				this->hitImpact = true;
+				this->hitImpact      = true;
 				this->isTakingDamage = true;
+
 				this->healthBar.updateOffsetX();
 			}
 			else
 			{
-				//pop up text
+				//Pop up text
+				this->updatePopUpText("IMMUNE");
 			}
 		}
 	}
@@ -417,7 +422,7 @@ inline void MageEnemy::updatePlayerImpact(const float& dt)
 				if (this->player->getSkillComponent()->getDamageArea().getGlobalBounds().intersects(this->getGlobalBounds()))
 				{
 					this->isTakingDamage = true;
-					this->skillImpact = true;
+					this->skillImpact    = true;
 
 					//Lose hp
 					this->statsComponent.loseHP(this->player->getStatsComponent()->damageMagical +
@@ -433,11 +438,13 @@ inline void MageEnemy::updatePlayerImpact(const float& dt)
 			else
 			{
 				//Pop up text
+				this->updatePopUpText("IMMUNE");
 			}
 		}
 		else
 		{
 			//Pop up text
+			this->updatePopUpText("IMMUNE");
 		}
 	}
 }
@@ -491,6 +498,9 @@ void MageEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 	{
 		target.draw(this->skillsImpactSprites[*this->playerUsingSkill].first);
 	}
+
+	//Render pop up text
+	this->renderPopUpText(target);
 
 	this->healthBar.render(target);
 	this->levelIcon.render(target);

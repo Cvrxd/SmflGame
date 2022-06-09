@@ -4,6 +4,7 @@
 #include"AnimationComponent.h"
 #include"StatsComponent.h"
 #include"SkillsComponent.h"
+#include"PopUpTextComponent.h"
 
 class SkillsComponent;
 class HitboxComponent;
@@ -11,12 +12,14 @@ class MovementComponent;
 class AnimationComponent;
 class StatsComponent;
 class SkillsComponent;
+class PopUpTextComponent;
 
 class Entity
 {
 protected:
 	//Variables
 	sf::Sprite          sprite;
+
 	HitboxComponent     hitboxComponent;
 	MovementComponent   movementComponent;
 
@@ -32,7 +35,7 @@ public:
 	void createMovementComponent (const float& maxVelocity, const float& acceleration, const float& deceleration);
 
 	//Accessors 
-	virtual const sf::Vector2f&	 getPosition      ()                        const;
+	virtual const sf::Vector2f&  getPosition      ()                        const;
 	virtual const sf::Vector2f   getCenter        ()                        const;
 	virtual const sf::Vector2i   getGridPosition  (const int& gridSizeI)    const;
 	virtual const sf::FloatRect  getGlobalBounds  ()                        const;

@@ -408,6 +408,9 @@ inline void MeleEnemy::updatePlayerImpact(const float& dt)
 
 					//Sound
 					this->playImpactSounds("PLAYER_CRIT");
+
+					//Pop up text
+					this->updatePopUpText("CRIT");
 				}
 				else
 				{
@@ -426,6 +429,7 @@ inline void MeleEnemy::updatePlayerImpact(const float& dt)
 			else
 			{
 				//Pop up text
+				this->updatePopUpText("IMMUNE");
 			}
 		}
 	}
@@ -455,11 +459,13 @@ inline void MeleEnemy::updatePlayerImpact(const float& dt)
 			else
 			{
 				//Pop up text
+				this->updatePopUpText("IMMUNE");
 			}
 		}
 		else
 		{
 			//Pop up text
+			this->updatePopUpText("IMMUNE");
 		}
 	}
 }
@@ -504,16 +510,17 @@ void MeleEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 	{
 		target.draw(this->takeHitSprite.second);
 	}
-
 	if (this->critImpact)
 	{
 		target.draw(this->critHitSprite.second);
 	}
-
 	if (this->skillImpact)
 	{
 		target.draw(this->skillsImpactSprites[*this->playerUsingSkill].first);
 	}
+
+	//Render pop up text
+	this->renderPopUpText(target);
 
 	this->healthBar.render(target);
 	this->levelIcon.render(target);

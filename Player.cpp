@@ -53,11 +53,17 @@ inline void Player::createAnimationComponent(sf::Texture& texture_sheet)
 	this->addAnimations();
 }
 
+inline void Player::initPopUpTextComponent()
+{
+	this->popUpTextComponent.addText("NEW LEVEL", sf::Color::Yellow, 30);
+}
+
 inline void Player::initComponents(sf::Texture& texture_sheet)
 {
-	this->createHitboxComponent(this->sprite, 45.f, 48.f, 55.f, 55.f);
-	this->createMovementComponent(270.f, 1200.f, 400.f);
-	this->createAnimationComponent(texture_sheet);
+	this->createHitboxComponent     (this->sprite, 45.f, 48.f, 55.f, 55.f);
+	this->createMovementComponent   (270.f, 1200.f, 400.f);
+	this->createAnimationComponent  (texture_sheet);
+	this->initPopUpTextComponent    ();
 }
 
 inline void Player::addAnimations()
@@ -122,6 +128,7 @@ inline void Player::updateSound()
 //Update functions
 inline void Player::updateRestoration()
 {
+	//Regeneration
 	if (this->restorationTimer.getElapsedTime().asSeconds() >= 10.f)
 	{
 		this->restorationTimer.restart();
@@ -136,11 +143,14 @@ inline void Player::updateAttack(const float& dt, sf::Vector2f mouse_pos_view)
 {
 	this->dealDMG = false;
 
+	//Updating attacking button
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
 		this->isAttacking = true;
-		this->isHit = true;
+		this->isHit       = true;
 	}
+
+	//Updating attacking timer
 	if (this->isAttacking)
 	{
 		if (this->damageTimer.getElapsedTime().asSeconds() > 1.f)
@@ -153,6 +163,7 @@ inline void Player::updateAttack(const float& dt, sf::Vector2f mouse_pos_view)
 			this->dealDMG = false;
 		}
 
+		//Rotating scale if needed
 		if (mouse_pos_view.x < this->hitboxComponent.getPositionHitbox().x)
 		{
 			SPTIRES_SETSCALE_LEFT;
@@ -161,12 +172,15 @@ inline void Player::updateAttack(const float& dt, sf::Vector2f mouse_pos_view)
 		{
 			SPTIRES_SETSCALE_RIGHT;
 		}
+
+		//Finishing attacking animation
 		if (this->animationComponent.play("ATTACK_FIRST", dt, true))
 		{
 			this->isAttacking = false;
 		}
 	}
 
+	//Get git animation
 	if (this->isHit)
 	{
 		if (this->hitAnimations[currentHitAnimation].play("HIT", dt, true))
@@ -174,6 +188,8 @@ inline void Player::updateAttack(const float& dt, sf::Vector2f mouse_pos_view)
 			this->isHit = false;
 		}
 	}
+
+	//Updating impact animation depending on armor/health
 	if (this->isTakingHit)
 	{
 		if (this->statsComponent.armor != 0)
@@ -203,6 +219,7 @@ inline void Player::updateAttack(const float& dt, sf::Vector2f mouse_pos_view)
 
 inline void Player::updateAnimations(const float& dt, sf::Vector2f mouse_pos_view)
 {
+	//Changing movement animation if player is buffed
 	if (this->isBuffed)
 	{
 		this->currentKey = &this->dashKey;
@@ -212,6 +229,7 @@ inline void Player::updateAnimations(const float& dt, sf::Vector2f mouse_pos_vie
 		this->currentKey = &this->moveKey;
 	}
 
+	//Updating movement animations
 	if (this->movementComponent.getState(IDLE))
 	{
 		if (mouse_pos_view.x < this->hitboxComponent.getPositionHitbox().x)
@@ -251,13 +269,43 @@ inline void Player::updateAnimations(const float& dt, sf::Vector2f mouse_pos_vie
 	}
 }
 
+inline void Player::updatePopUpText(const std::string& key)
+{
+	this->popUpTextKey = key;
+	this->popUpTextComponent.prepareText(this->popUpTextKey);
+	this->popUpTextTimer.restart();
+	this->showPopUpText = true;
+}
+
+//Redner functions
+inline void Player::renderPopUpText(sf::RenderTarget& target)
+{
+	//Render pop up text
+	if (this->showPopUpText)
+	{
+		if (this->popUpTextTimer.getElapsedTime().asSeconds() > this->popUpTextComponent.getpTextExpireTime())
+		{
+			this->showPopUpText = false;
+			this->popUpTextComponent.resetText(this->popUpTextKey);
+		}
+		else
+		{
+			this->popUpTextComponent.popUpText(target, this->popUpTextKey, this->getPosition());
+		}
+	}
+}
+
 //Constructor
 Player::Player(const float& x, const float& y, sf::Texture& texture_sheet, const sf::Font& font, bool& isBuffed) noexcept
-	: currentHitAnimation(0), font(font), isBuffed(isBuffed),
-	statsComponent(1),
-	animationComponent(&this->sprite, &texture_sheet),
-	skillsComponent(this->statsComponent, this->isUsingSkill, this->currentSkilltype, this->currentskillDamage, this->isBuffed),
-	moveKey("MOVE"), dashKey("DASH"), currentKey(&moveKey)
+	: 
+	currentHitAnimation (0), font(font), isBuffed(isBuffed),
+
+	statsComponent      (1),
+	popUpTextComponent  (font),
+	animationComponent  (&this->sprite, &texture_sheet),
+	skillsComponent     (this->statsComponent, font, this->isUsingSkill, this->currentSkilltype, this->currentskillDamage, this->isBuffed),
+
+	moveKey ("MOVE"), dashKey ("DASH"), currentKey (&moveKey)
 {
 	this->initVariables();
 	this->initComponents(texture_sheet);
@@ -325,7 +373,15 @@ const sf::RectangleShape& Player::getDamageRange()
 //Stats functions
 void Player::gainEXP(const unsigned& exp)
 {
+	int currentLVL = this->statsComponent.level;
+
 	this->statsComponent.gainEXP(exp);
+
+	if (currentLVL != this->statsComponent.level)
+	{
+		//Pop up text
+		this->updatePopUpText("NEW LEVEL");
+	}
 
 	//Upgrade buff every 5th player level
 	if (this->statsComponent.level % 5 == 0)
@@ -409,30 +465,36 @@ void Player::pauseSounds()
 
 void Player::update(const float& dt, sf::Vector2f mouse_pos_view)
 {
+	//Uodating hit range
 	this->hitRange.setPosition(this->getCenter().x - 80, this->getCenter().y - 80);
 	
-	this->updateRestoration();
-	this->updateSound();
-	this->movementComponent.update(dt);
-	this->updateAnimations(dt, mouse_pos_view);
-	this->updateAttack(dt, mouse_pos_view);
-	this->skillsComponent.update(dt, mouse_pos_view, this->getCenter());
-	this->hitboxComponent.update();
+	//Updating all components
+	this->updateRestoration        ();
+	this->updateSound              ();
+	this->movementComponent.update (dt);
+	this->updateAnimations         (dt, mouse_pos_view);
+	this->updateAttack             (dt, mouse_pos_view);
+	this->skillsComponent.update   (dt, mouse_pos_view, this->getCenter());
+	this->hitboxComponent.update   ();
 }
 
 void Player::render(sf::RenderTarget& target, sf::Shader* shader)
 {
 	if (shader)
 	{
+		//Shader render
 		shader->setUniform("hasTexture", true);
 		shader->setUniform("lightPos", this->getCenter());
 
 		target.draw(this->sprite, shader);
+
+		//Rendering hit animation
 		if (this->isHit)
 		{
 			target.draw(this->sprites[currentHitAnimation].second);
 		}
 
+		//Render impact animation depending on armor or health damage
 		if (this->isTakingHit && this->statsComponent.armor != 0)
 		{
 			target.draw(this->sprites[2].second);
@@ -442,13 +504,20 @@ void Player::render(sf::RenderTarget& target, sf::Shader* shader)
 			target.draw(this->sprites[1].second);
 		}
 
-		this->skillsComponent.render(target);
+		//Skills component render
+		this->skillsComponent.render(target, this->getPosition());
 	}
 	else
 	{
+		//Rendering whithout shader
 		target.draw(this->sprite);
 	}
+
+	//Pop up text
+	this->renderPopUpText(target);
 	
+	//For debuging 
+	// 
 	//this->hitboxComponent.render(target);
 	//target.draw(this->hitRange);
 }

@@ -21,7 +21,7 @@ private:
 
 	VidoModesVector     videoModes;
 	ButtonsMap          buttons;
-	VidoModesVector     dropDownLists;
+	DropDownListsMap    dropDownLists;
 
 	//Init functions
 	void initVariables   ();

@@ -94,7 +94,8 @@ inline void GameState::initPlayers()
 inline void GameState::initEnemies()
 {
 	this->bosses.reserve(3);
-	//this->bosses.emplace_back(BossType::SAMURAI, 5, 100, 900, this->textures["ENEMY_SAMURAI"], &this->player, this->enemiesSounds);
+	//this->bosses.emplace_back(BossType::NIGHTBORN, 5, 100, 900, this->textures["ENEMY_NIGHT_BORN"], &this->player, this->enemiesSounds);
+	this->bosses.emplace_back(BossType::SAMURAI, 5, 100, 900, this->textures["ENEMY_SAMURAI"], &this->player, this->enemiesSounds);
 
 	this->meleEnemies.reserve(3);
 	//this->meleEnemies.emplace_back(MeleEnemyType::MIMIC, 5, 700, 700, this->textures["ENEMY_MIMIC"], &this->player, this->enemiesSounds);
@@ -102,7 +103,7 @@ inline void GameState::initEnemies()
 	//this->meleEnemies.emplace_back(MeleEnemyType::BRINGER_OF_DEATH, 5, 700, 700, this->textures["ENEMY_BRINGER_OF_DEATH"], &this->player, this->enemiesSounds);
 
 	this->mageEnemies.reserve(2);
-	this->mageEnemies.emplace_back(MageEnemyType::WIZZARD, 1, 400, 400, this->textures["ENEMY_WIZZARD"], &this->player, this->enemiesSounds);
+	//this->mageEnemies.emplace_back(MageEnemyType::WIZZARD, 1, 400, 400, this->textures["ENEMY_WIZZARD"], &this->player, this->enemiesSounds);
 
 	this->destroyingEnemies.reserve(2);
 	//this->destroyingEnemies.emplace_back(DestroyingEnemyType::FIRE_WORM, 1, 0, 0, this->textures["ENEMY_FIRE_WORM"], &this->player, this->enemiesSounds);
@@ -308,12 +309,14 @@ inline void GameState::renderEnemies(sf::RenderTarget* target)
 //Constructor
 GameState::GameState(StateData* state_data)
 	: State(state_data), skillMenuActive(false),
-	pauseMenu(*this->window, this->stateData->font), //Pause menu 
-	player(500,500, this->textures["PLAYER_SHEET"], this->font, this->isBuffed), //Player
-	playerGUI(this->player, this->font), // Player GUI
-	skillsMenu(this->player, this->playerGUI,this->font, this->guiSounds,static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
-	itemsMenu(this->player, this->playerGUI, this->font, this->guiSounds, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // items menu
-	tileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg") //Tile map
+	popUpTextComponent (state_data->font),
+
+	pauseMenu   (*this->window, this->stateData->font), //Pause menu 
+	player      (500,500, this->textures["PLAYER_SHEET"], this->font, this->isBuffed), //Player
+	playerGUI   (this->player, this->font), // Player GUI
+	skillsMenu  (this->player, this->playerGUI,this->font, this->guiSounds,static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
+	itemsMenu   (this->player, this->playerGUI, this->font, this->guiSounds, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // items menu
+	tileMap     (this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg") //Tile map
 {
 	this->initRenderTextures();
 	this->initView();

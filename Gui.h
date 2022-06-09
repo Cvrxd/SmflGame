@@ -115,12 +115,12 @@ namespace GUI
 		sf::Vector2u        mousePosGrid;
 	
 		//Functions
-		void initBounds(const float& x, const float& y, const float& width_bounds, const float& height_bounds);
-		void initSpriteSheet(const float& x, const float& y, const sf::Texture& texture_sheet);
-		void initSelector_TextureRect(const float& x, const float& y);
+		void initBounds                (const float& x, const float& y, const float& width_bounds, const float& height_bounds);
+		void initSpriteSheet           (const float& x, const float& y, const sf::Texture& texture_sheet);
+		void initSelector_TextureRect  (const float& x, const float& y);
 
 	public:
-		TextureSelector(const float& x, const float& y, const float& width_bounds, const float& hight_bounds, 
+		TextureSelector (const float& x, const float& y, const float& width_bounds, const float& hight_bounds, 
 			const unsigned& gridSize, const sf::Texture& texture_sheet, sf::Font& font) noexcept;
 
 		~TextureSelector();
