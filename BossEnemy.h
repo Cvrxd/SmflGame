@@ -5,27 +5,40 @@ enum class BossType { NIGHTBORN = 0, FIRE_DEMON, SAMURAI };
 class BossEnemy : public Enemy
 {
 private:
-	using Texture_and_Sprite = std::pair<sf::Texture, sf::Sprite>;
+	using Texture_and_Sprite  = std::pair<sf::Texture, sf::Sprite>;
+	using HealthBar           = EnemyGUI::EnemyHealthBar;
+	using LevelIcon           = EnemyGUI::EnemyLevelIcon;
+
 	//Variables
 	BossType   type;
 
 	sf::Clock  skillTimer;
 	float      skillColdown;
 
-	EnemyGUI::EnemyHealthBar healthBar;
-	EnemyGUI::EnemyLevelIcon levelIcon;
+	//GUI
+	HealthBar  healthBar;
+	LevelIcon  levelIcon;
 
 	//Boss skill variables
 	float              skillRangeRadius;
-	float              offsetX;
-	float              offsetY;
+
+	float              skillImpactoffsetX;
+	float              skillImpactoffsetY;
+
+	float              skilloffsetX;
+	float              skilloffsetY;
+
 	bool               isUsingSkill;
 	bool               bossSkillImpact;
+	bool               bossSkill;
 
 	sf::CircleShape    skillRange;
 
-	AnimationComponent skillAniamtion;
-	Texture_and_Sprite skillSprtite;
+	AnimationComponent skillImpactAniamtion;
+	Texture_and_Sprite skillImpactSprtite;
+
+	AnimationComponent skillAnimation;
+	Texture_and_Sprite skillSprite;
 
 	//Init functions
 	void initComponents            (sf::Texture& texture_sheet, sf::Sprite& sprite)  override;

@@ -47,6 +47,8 @@ namespace GUI
 		//Accessors
 		const short unsigned&	getId()         const;
 		const bool				isPressed()     const;
+		const sf::Vector2f      getPosition()   const;
+
 		std::string				getText();
 		sf::FloatRect			getGlobalBounds();
 		sf::Text&				getSfText();
@@ -83,7 +85,8 @@ namespace GUI
 		~DropDownList();
 
 		//Accessors
-		const unsigned short& getActiveBoxId() const;
+		const unsigned short&  getActiveBoxId() const;
+		const sf::Vector2f     getPosition() const;
 
 		//Functions
 		const bool  getKeyTime     ();

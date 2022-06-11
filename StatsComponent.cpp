@@ -9,14 +9,15 @@ StatsComponent::StatsComponent(const int& level) noexcept
 	this->expNext = static_cast<unsigned>(this->level * 20 - (this->level * 5));
 
 	//Base init stats
-	this->hp = this->hpMAX = 5;
-	this->mp = this->mpMAX = 3;
+	this->hp = this->hpMAX       = 5;
+	this->mp = this->mpMAX       = 3;
 	this->armor = this->armorMAX = 3;
 
 	//Atributes
 	this->damagePhysical = 1;
-	this->damageMagical = 1;
-	this->critRate = 10.f;
+	this->damageMagical  = 1;
+	this->critRate       = 10.f;
+	this->missChance     = 10.f;
 
 	//Update stats
 	this->updateStats(true);
@@ -202,6 +203,7 @@ void StatsComponent::updateLevel()
 		if (this->level % 5 == 0)
 		{
 			++this->critRate;
+			++this->missChance;
 		}
 
 		this->exp = 0;

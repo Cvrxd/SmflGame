@@ -9,7 +9,7 @@ private:
 	const sf::Font& font;
 	sf::Color orirginalTextColor;
 
-	float textExpireTime  = 1.5f;
+	float textExpireTime  = 1.2f;
 
 	float offsetX         = 0;
 	float offsetY         = 0;
@@ -17,7 +17,7 @@ private:
 	float offsetYbase     = 0;
 	float modifierY	      = 5;
 
-	TextMap texts;
+	TextMap    textsMap;
 
 public:
 	PopUpTextComponent  (const sf::Font& font) noexcept;

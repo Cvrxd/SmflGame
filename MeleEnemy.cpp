@@ -283,7 +283,15 @@ inline void MeleEnemy::updateAttack(const float& dt)
 		{
 			if (this->player->getHitRange().getGlobalBounds().intersects(this->getGlobalBounds()))
 			{
-				this->player->loseHP(this->statsComponent.damagePhysical);
+				if (std::rand() % 100 <= this->player->getStatsComponent()->missChance)
+				{
+					//Pop up text
+					this->updatePopUpText("MISS");
+				}
+				else
+				{
+					this->player->loseHP(this->statsComponent.damagePhysical);
+				}
 			}
 			this->isAttaking = false;
 		}
@@ -469,7 +477,6 @@ inline void MeleEnemy::updatePlayerImpact(const float& dt)
 		}
 	}
 }
-
 
 //Constructors
 MeleEnemy::MeleEnemy(const MeleEnemyType& type, const int& level, const float& x, const float& y, 

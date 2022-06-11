@@ -647,7 +647,7 @@ inline void SkillsMenu::initBackground(const float& x, const float& y)
 	this->background.setPosition(x / 2.f - this->background.getSize().x / 2.f, y / 2.f - this->background.getSize().y / 2.f);
 
 	//Stat icons
-	this->statIcons.resize(7);
+	this->statIcons.resize(8);
 	this->textures["STAT_ICONS"].loadFromFile("Textures/hud/inventory_hud/items32_simple_transparent.png");
 
 	int i = 0;
@@ -665,12 +665,12 @@ inline void SkillsMenu::initBackground(const float& x, const float& y)
 	this->statIcons[4].setTextureRect(sf::IntRect(64, 32, 32, 32)); //Phys damage icon
 	this->statIcons[5].setTextureRect(sf::IntRect(224, 0, 32, 32)); //Magika damage icon
 	this->statIcons[6].setTextureRect(sf::IntRect(128, 32, 32, 32)); //Crit rate icon
-
+	this->statIcons[7].setTextureRect(sf::IntRect(160, 32, 32, 32)); //Miss cnahce icon 
 }
 
 inline void SkillsMenu::initTexts()
 {
-	this->texts.resize(11);
+	this->texts.resize(12);
 
 	for (auto& el : this->texts)
 	{
@@ -701,8 +701,11 @@ inline void SkillsMenu::initTexts()
 	this->texts[9].setString("Crit rate: " + std::to_string(this->player.getStatsComponent()->critRate));
 	this->texts[9].setPosition(sf::Vector2f(this->statIcons[6].getPosition().x + 50, this->statIcons[6].getPosition().y));
 
+	this->texts[10].setString("Miss chance: " + std::to_string(this->player.getStatsComponent()->missChance));
+	this->texts[10].setPosition(sf::Vector2f(this->statIcons[6].getPosition().x + 50, this->statIcons[6].getPosition().y + 50));
+
 	this->texts[6].setString("Stat points: " + std::to_string(this->player.getStatsComponent()->statsPoints));
-	this->texts[6].setPosition(sf::Vector2f(this->statIcons[5].getPosition().x, this->statIcons[5].getPosition().y + 150));
+	this->texts[6].setPosition(sf::Vector2f(this->statIcons[5].getPosition().x, this->statIcons[5].getPosition().y + 180));
 
 	this->texts[7].setString("Skill points: " + std::to_string(this->player.getStatsComponent()->skillPoints));
 	this->texts[7].setPosition(sf::Vector2f(this->texts[6].getPosition().x, this->texts[6].getPosition().y + 55));
@@ -827,6 +830,7 @@ inline void SkillsMenu::updateText()
 	this->texts[4].setString("Physical damage : " + std::to_string(this->player.getStatsComponent()->damagePhysical));
 	this->texts[5].setString("Magical damage: " + std::to_string(this->player.getStatsComponent()->damageMagical));
 	this->texts[9].setString("Crit rate: " + std::to_string(int(this->player.getStatsComponent()->critRate)) + '%');
+	this->texts[10].setString("Miss chance: " + std::to_string(int(this->player.getStatsComponent()->missChance)) + '%');
 
 
 	//Skill and Stat points

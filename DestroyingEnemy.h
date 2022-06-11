@@ -7,15 +7,18 @@ enum class DestroyingEnemyType { FIRE_SKULL = 0, FIRE_WORM};
 
 class DestroyingEnemy : public Enemy
 {
-	using PairSpriteTexture = std::pair <sf::Sprite, sf::Texture>;
+	using PairSpriteTexture  = std::pair <sf::Sprite, sf::Texture>;
+	using HealthBar          = EnemyGUI::EnemyHealthBar;
+	using LevelIcon          = EnemyGUI::EnemyLevelIcon;
 
 	//Variables
-	DestroyingEnemyType     type;
-	PairSpriteTexture       destroyingSprite;
-	AnimationComponent      destroyingAnimation;
+	DestroyingEnemyType  type;
+	PairSpriteTexture    destroyingSprite;
+	AnimationComponent   destroyingAnimation;
 
-	EnemyGUI::EnemyHealthBar healthBar;
-	EnemyGUI::EnemyLevelIcon levelIcon;
+	//GUI
+	HealthBar            healthBar;
+	LevelIcon            levelIcon;
 
 	//Init functions
 	void initComponents              (sf::Texture& texture_sheet, sf::Sprite& sprite) override;

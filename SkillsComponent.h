@@ -45,9 +45,11 @@ private:
 	float  buffDuration;
 	float  buffCooldown;
 
-	int	   buffLevel = 1;
-	int	   buffMaxLevel = 5;
-	float  buffCritRate = 5.f;
+	int	   buffLevel      = 1;
+	int	   buffMaxLevel   = 5;
+
+	float  buffCritRate   = 5.f;
+	float  buffMissChance = 5.f;
 
 	//Sounds
 	std::unordered_map<SkillType, std::pair<sf::SoundBuffer, sf::Sound>> sounds;

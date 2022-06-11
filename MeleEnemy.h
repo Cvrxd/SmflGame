@@ -6,10 +6,15 @@ enum class MeleEnemyType { MIMIC = 0, BRINGER_OF_DEATH,
 
 class MeleEnemy : public Enemy
 {
+	using HealthBar = EnemyGUI::EnemyHealthBar;
+	using LevelIcon = EnemyGUI::EnemyLevelIcon;
+
+	//Variables
 	MeleEnemyType type;
 
-	EnemyGUI::EnemyHealthBar healthBar;
-	EnemyGUI::EnemyLevelIcon levelIcon;
+	//GUI
+	HealthBar     healthBar;
+	LevelIcon     levelIcon;
 
 	//Init functions
 	void initComponents            (sf::Texture& texture_sheet, sf::Sprite& sprite) override;

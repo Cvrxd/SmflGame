@@ -12,7 +12,7 @@ class Button;
 class MainMenuState : public State
 {
 private:
-	using ButtonsMap    = std::unordered_map<std::string, std::unique_ptr<GUI::Button>>;
+	using ButtonsMap          = std::unordered_map<std::string, std::unique_ptr<GUI::Button>>;
 
 	struct MainMenuSounds
 	{
@@ -26,12 +26,14 @@ private:
 		Sound           clickSound;
 	};
 
-	//variables 
+	//Variables 
 	sf::Font            font;
 	sf::Texture         backgroundTexture;
 	sf::RectangleShape  background;
 
+	//Buttons
 	ButtonsMap          buttons;
+
 	//Sounds
 	MainMenuSounds      sounds;
 

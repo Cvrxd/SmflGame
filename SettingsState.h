@@ -14,6 +14,8 @@ private:
 	using VidoModesVector   = std::vector<sf::VideoMode>;
 
 	//Variables
+	float offsetYforDropDownLists = 0.f;
+
 	sf::Texture         backgroundTexture;
 	sf::RectangleShape  background;
 	sf::Font            font;

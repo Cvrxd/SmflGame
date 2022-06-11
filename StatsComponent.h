@@ -31,6 +31,7 @@ public:
 	int currentSkillDamage;
 
 	float critRate;
+	float missChance;
 
 	//Constructor
 	StatsComponent    (const int& level) noexcept;

@@ -161,15 +161,20 @@ inline void SkillsComponent::initAllAnimations()
 
 inline void SkillsComponent::initPopUpText()
 {
+	//Skills pop up text
 	this->popUpKeysMap[SkillType::BUFF] = "BUFF";
+	this->popUpTextComponent.addText(this->popUpKeysMap[SkillType::BUFF], sf::Color::Red, 35);
 
+	//this->popUpKeysMap[SkillType::THUNDER_STRIKE] = "THUNDER STRIKE";
+	//this->popUpTextComponent.addText(this->popUpKeysMap[SkillType::THUNDER_STRIKE], sf::Color::Yellow, 35);
+
+
+	//Potions pop up text
 	this->mpPopUpKey.first  = MANA;
 	this->mpPopUpKey.second = "MP: +3";
 
 	this->hpPopUpKey.first  = HEALTH;
 	this->hpPopUpKey.second = "HP: +3";
-
-	this->popUpTextComponent.addText(this->popUpKeysMap[SkillType::BUFF], sf::Color::Red, 35);
 
 	this->popUpTextComponent.addText(this->hpPopUpKey.second, sf::Color::Green, 35);
 	this->popUpTextComponent.addText(this->mpPopUpKey.second, sf::Color(102, 178, 255), 35);
@@ -355,7 +360,9 @@ void SkillsComponent::updatePlayerBuff(const float& dt, const sf::Vector2f& play
 		this->isBuffed = true;
 		this->usingBuff = true;
 		this->buffTimer.restart();
-		this->statsComponent.critRate += this->buffCritRate;
+
+		this->statsComponent.critRate   += this->buffCritRate;
+		this->statsComponent.missChance += this->buffMissChance;
 
 		//Sound
 		this->playSkillSound(SkillType::BUFF);
@@ -369,7 +376,10 @@ void SkillsComponent::updatePlayerBuff(const float& dt, const sf::Vector2f& play
 		if (this->buffTimer.getElapsedTime().asSeconds() > this->buffDuration)
 		{
 			this->isBuffed = false;
-			this->statsComponent.critRate -= this->buffCritRate;
+
+			this->statsComponent.critRate    -= this->buffCritRate;
+			this->statsComponent.missChance  -= this->buffMissChance;
+
 			this->buffTimer.restart();
 		}
 	}
@@ -395,6 +405,10 @@ void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position
 
 			//Sound
 			this->playSkillSound(this->playerSkills[currentRender].first);
+
+			//Pop up text
+			this->updatePopUpText(this->popUpKeysMap[this->playerSkills[currentRender].first]);
+
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
 		{
@@ -488,6 +502,7 @@ void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position
 	if (this->playAnimation && this->playerSkills[currentRender].first != SkillType::EMPTY)
 	{
 		this->keyTime = 0;
+
 		if (this->skillsAnimations[this->playerSkills[currentRender].first].play("USE", dt, true))
 		{
 			this->playAnimation = false;

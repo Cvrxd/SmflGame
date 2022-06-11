@@ -126,6 +126,11 @@ const bool GUI::Button::isPressed() const
 		return false;
 }
 
+const sf::Vector2f GUI::Button::getPosition() const
+{
+	return this->shape.getPosition();
+}
+
 std::string GUI::Button::getText()
 {
 	return this->text.getString();
@@ -243,6 +248,12 @@ const unsigned short& GUI::DropDownList::getActiveBoxId() const
 {
 	return this->activeBox->getId();
 }
+
+const sf::Vector2f GUI::DropDownList::getPosition() const
+{
+	return this->activeBox.operator*().getPosition();
+}
+
 
 const bool GUI::DropDownList::getKeyTime()
 {

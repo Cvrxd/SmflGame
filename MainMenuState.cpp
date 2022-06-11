@@ -153,7 +153,7 @@ MainMenuState::MainMenuState(StateData* state_data) noexcept
 	this->initBackground();
 	this->initFonts();	   
 	this->initKeybinds(); 
-	this->initButtons();  
+	this->initButtons(); 
 }
 
 MainMenuState::~MainMenuState()

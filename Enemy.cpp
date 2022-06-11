@@ -88,8 +88,9 @@ void Enemy::initStats()
 
 void Enemy::initPopUpTextComponent()
 {
-	this->popUpTextComponent.addText("IMMUNE", sf::Color::White, 40);
-	this->popUpTextComponent.addText("CRIT", sf::Color::Red, 40);
+	this->popUpTextComponent.addText ("IMMUNE", sf::Color::White, 40);
+	this->popUpTextComponent.addText ("CRIT", sf::Color::Red, 40);
+	this->popUpTextComponent.addText ("MISS", sf::Color(200, 200, 200), 40);
 }
 
 //Functions 

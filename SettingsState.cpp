@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "SettingsState.h"
 
+#define UPDATE_DROP_DOWN_LIST_OFFSET this->offsetYforDropDownLists += 90.f
+
 //Initialisation functions
 inline void SettingsState::initVariables()
 {
@@ -15,7 +17,7 @@ inline void SettingsState::initText()
 	this->optionsText.setFillColor(sf::Color(255, 255, 255, 200));
 
 	this->optionsText.setString(
-		"Resolution \n\nFullscreen \n\nVsync \n\nAntializating"
+		" Resolution \n\n\n Fullscreen \n\n\n Vsync \n\n\n Frame limit"
 	);
 }
 
@@ -69,21 +71,39 @@ inline void SettingsState::initGUI()
 		sf::Color(100, 100, 100, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
 	);
 
-	//Resolution list
-	std::vector<std::string> modes_str;
+	//Drop down lists
+	this->dropDownLists.reserve(7);
 
-	modes_str.reserve(this->videoModes.size());
+	std::vector<std::string> video_modes_str;
+
+	video_modes_str.reserve(this->videoModes.size());
 
 	for (auto& el : this->videoModes)
 	{
-		modes_str.push_back(std::to_string(el.width) + " x " + std::to_string(el.height));
+		video_modes_str.push_back(std::to_string(el.width) + " x " + std::to_string(el.height));
 	}
 
-	std::string text_list[] = { "1920 x 1080", "800 x 600", "640 x 480" };
-	this->dropDownLists["RESOLUTION"] = std::make_unique<GUI::DropDownList>(280, 225, 200, 50, font, modes_str.data(),
-		static_cast<unsigned int>(modes_str.size()), 0);
-	//
+	this->dropDownLists["RESOLUTION"] = std::make_unique<GUI::DropDownList>(350, 225 + this->offsetYforDropDownLists, 200, 50, font, video_modes_str.data(),
+		static_cast<unsigned int>(video_modes_str.size()), 0);
 
+	UPDATE_DROP_DOWN_LIST_OFFSET;
+	
+	std::string text_list[] = { "ON" , "OFF" };
+
+	this->dropDownLists["FULLSCREEN"] = std::make_unique<GUI::DropDownList>(350, 225 + this->offsetYforDropDownLists, 200, 50, font, text_list,
+		static_cast<unsigned int>(text_list->length()), 0);
+	
+	UPDATE_DROP_DOWN_LIST_OFFSET;
+
+	this->dropDownLists["VSYNC"] = std::make_unique<GUI::DropDownList>(350, 225 + this->offsetYforDropDownLists, 200, 50, font, text_list,
+		static_cast<unsigned int>(text_list->length()), 0);
+
+	UPDATE_DROP_DOWN_LIST_OFFSET;
+
+	std::string frame_limits[] = { "120" , "60", "30" };
+
+	this->dropDownLists["FRAME_LIMIT"] = std::make_unique<GUI::DropDownList>(350, 225 + this->offsetYforDropDownLists, 200, 50, font, frame_limits,
+		static_cast<unsigned int>(frame_limits->length()), 0);
 }
 
 //Constructor
@@ -127,10 +147,12 @@ inline void SettingsState::updateGUI(const float& dt)
 	//Apply selected changes
 	if (this->buttons["APPLY"]->isPressed())
 	{
-		//Test
-		this->stateData->gfxSettings->resolution = this->videoModes[this->dropDownLists["RESOLUTION"]->getActiveBoxId()];
-
-		this->window->create(this->stateData->gfxSettings->resolution, this->stateData->gfxSettings->title, sf::Style::Default);
+		if(this->stateData->gfxSettings->resolution != this->videoModes[this->dropDownLists["RESOLUTION"]->getActiveBoxId()]);
+		{
+			this->stateData->gfxSettings->resolution = this->videoModes[this->dropDownLists["RESOLUTION"]->getActiveBoxId()];
+			this->window->create(this->stateData->gfxSettings->resolution, this->stateData->gfxSettings->title, sf::Style::Default);
+		}
+		
 	}
 
 	//Quit state

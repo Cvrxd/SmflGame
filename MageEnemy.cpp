@@ -217,7 +217,15 @@ inline void MageEnemy::updateAttack(const float& dt)
 		{
 			if (this->player->getHitRange().getGlobalBounds().intersects(this->castRange.getGlobalBounds()))
 			{
-				this->player->loseHP(this->statsComponent.damagePhysical);
+				if (std::rand() % 100 <= this->player->getStatsComponent()->missChance)
+				{
+					//Pop up text
+					this->updatePopUpText("MISS");
+				}
+				else
+				{
+					this->player->loseHP(this->statsComponent.damagePhysical);
+				}
 			}
 			this->isAttaking = false;
 		}

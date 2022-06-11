@@ -10,18 +10,23 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		this->sprite.setScale(6.f, 6.f);
 		
 		//Skill variables
-		this->offsetX = 80.f;
-		this->offsetY = 50.f;
+		this->skillSprite.second.setScale(4.f, 4.f);
+		this->skilloffsetX = -40.f;
+		this->skilloffsetY = -15.f;
 
-		this->skillSprtite.second.setScale(2.f, 3.f);
+		//Skill impact on player
+		this->skillImpactSprtite.second.setScale(2.f, 3.f);
+		this->skillImpactoffsetX = 80.f;
+		this->skillImpactoffsetY = 50.f;
 
-		this->skillColdown = 5.f;
+		//Skill core variables
+		this->skillColdown     = 5.f;
 		this->skillRangeRadius = 500.f;
 
-		this->skillRange.setFillColor(sf::Color::Transparent);
-		this->skillRange.setRadius(this->skillRangeRadius);
-		this->skillRange.setOutlineThickness(1.f);
-		this->skillRange.setOutlineColor(sf::Color::Red);
+		this->skillRange.setFillColor        (sf::Color::Transparent);
+		this->skillRange.setRadius           (this->skillRangeRadius);
+		this->skillRange.setOutlineThickness (1.f);
+		this->skillRange.setOutlineColor     (sf::Color::Red);
 
 		//Attack time
 		this->attackCountMAX  = 2;
@@ -31,9 +36,9 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		this->skillReistance = SkillType::DARK_BOLT;
 
 		//Init components
-		this->createHitboxComponent(this->sprite, 200.f, 200.f, 120.f, 150.f);
-		this->createMovementComponent(150.f, 900.f, 250.f);
-		this->createAnimationComponent(texture_sheet);
+		this->createHitboxComponent    (this->sprite, 200.f, 200.f, 120.f, 150.f);
+		this->createMovementComponent  (170.f, 1000.f, 250.f);
+		this->createAnimationComponent (texture_sheet);
 
 		//Sets origins
 		this->setOriginLeft = [&sprite]() 
@@ -52,19 +57,24 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 
 		this->sprite.setScale(4.f, 4.f);
 
-		//Skill variables
-		this->offsetX = 260.f;
-		this->offsetY = 400.f;
+		//Boss skill sprite
+		this->skillSprite.second.setScale(5.f, 5.f);
+		this->skilloffsetX = 30.f;
+		this->skilloffsetY = 50.f;
 
-		this->skillSprtite.second.setScale(6.f, 6.f);
+		//Skill impact on player
+		this->skillImpactSprtite.second.setScale(4.f, 4.f);
+		this->skillImpactoffsetX = 100.f;
+		this->skillImpactoffsetY = 120.f;
 
-		this->skillColdown = 5.f;
+		//Skill core variables
+		this->skillColdown     = 5.f;
 		this->skillRangeRadius = 600.f;
 
-		this->skillRange.setFillColor(sf::Color::Transparent);
-		this->skillRange.setRadius(this->skillRangeRadius);
-		this->skillRange.setOutlineThickness(1.f);
-		this->skillRange.setOutlineColor(sf::Color::Red);
+		this->skillRange.setFillColor        (sf::Color::Transparent);
+		this->skillRange.setRadius           (this->skillRangeRadius);
+		this->skillRange.setOutlineThickness (1.f);
+		this->skillRange.setOutlineColor     (sf::Color::Red);
 
 		//Attack time
 		this->attackCountMAX = 1;
@@ -74,8 +84,8 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		this->magicalResistance = true;
 
 		//Init components
-		this->createHitboxComponent    (this->sprite, 300.f, 300.f, 300.f, 350.f);
-		this->createMovementComponent  (100.f, 800.f, 230.f);
+		this->createHitboxComponent    (this->sprite, 420.f, 300.f, 260.f, 350.f);
+		this->createMovementComponent  (130.f, 900.f, 230.f);
 		this->createAnimationComponent (texture_sheet);
 
 		//Sets origins
@@ -86,7 +96,7 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		};
 		this->setOriginRight = [&sprite]()
 		{
-			sprite.setOrigin (250.f, 0.f);
+			sprite.setOrigin (290.f, 0.f);
 			sprite.setScale  (-4.f, 4.f);
 		};
 
@@ -96,12 +106,17 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 
 		this->sprite.setScale(3.2f, 3.2f);
 		
-		//Skill variables
-		this->offsetX = 50.f;
-		this->offsetY = 200.f;
+		//Boss skill sprite
+		this->skillSprite.second.setScale(4.f, 4.f);
+		this->skilloffsetX = -5.f;
+		this->skilloffsetY = 0.f;
 
-		this->skillSprtite.second.setScale (6.f, 6.f);
+		//Skill impact on player
+		this->skillImpactSprtite.second.setScale(6.f, 6.f);
+		this->skillImpactoffsetX = 50.f;
+		this->skillImpactoffsetY = 200.f;
 
+		//Skill core variables
 		this->skillColdown     = 5.f;
 		this->skillRangeRadius = 500.f;
 
@@ -141,59 +156,70 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 
 inline void BossEnemy::createAnimationComponent(sf::Texture& texture_sheet)
 {
+	//Skill effect on boss
+	this->skillSprite.first.loadFromFile("Textures/animations/enemy_skills/boss_skill.png");
+
+	//Skill efect on player
 	switch (this->type)
 	{
 	case BossType::NIGHTBORN:
 
-		this->skillSprtite.first.loadFromFile("Textures/animations/enemy_skills/nightborn_skill.png");
+		this->skillImpactSprtite.first.loadFromFile("Textures/animations/enemy_skills/nightborn_skill.png");
 		break;
 	case BossType::FIRE_DEMON:
 
-		this->skillSprtite.first.loadFromFile("Textures/animations/enemy_skills/fire_demon_skill.png");
+		this->skillImpactSprtite.first.loadFromFile("Textures/animations/enemy_skills/fire_demon_skill.png");
 		break;
 	case BossType::SAMURAI:
 
-		this->skillSprtite.first.loadFromFile("Textures/animations/enemy_skills/samurai_skill.png");
+		this->skillImpactSprtite.first.loadFromFile("Textures/animations/enemy_skills/samurai_skill.png");
 		break;
 	default:
 		break;
 	}
 
-	this->skillAniamtion = { &this->skillSprtite.second, &this->skillSprtite.first };
+	this->skillAnimation        = { &this->skillSprite.second, &this->skillSprite.first };
+	this->skillImpactAniamtion  = { &this->skillImpactSprtite.second, &this->skillImpactSprtite.first };
 
 	this->addAnimations();
 }
 
 inline void BossEnemy::addAnimations()
 {
+	//Boss skill using animatiom
+	this->skillAnimation.addAnimation("PLAY", 0, 0, 8, 0, 48, 48, 10.f);
+
+	//Unique animations
 	switch (this->type)
 	{
 	case BossType::NIGHTBORN:
-		this->animationComponent.addAnimation("MOVE", 0, 1, 5, 1, 80, 80, 20.f);
-		this->animationComponent.addAnimation("ATTACK", 0, 2, 11, 2, 80, 80, 10.f);
-		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 4, 3, 80, 80, 10.f);
-		this->animationComponent.addAnimation("DEATH", 0, 4, 22, 4, 80, 80, 8.f);
+		this->animationComponent.addAnimation ("MOVE", 0, 1, 5, 1, 80, 80, 20.f);
+		this->animationComponent.addAnimation ("ATTACK", 0, 2, 11, 2, 80, 80, 10.f);
+		this->animationComponent.addAnimation ("TAKE_HIT", 0, 3, 4, 3, 80, 80, 10.f);
+		this->animationComponent.addAnimation ("DEATH", 0, 4, 22, 4, 80, 80, 8.f);
 
-		this->skillAniamtion.addAnimation("PLAY", 0, 0, 11, 0, 106, 32, 10.f);
+		this->skillImpactAniamtion.addAnimation("PLAY", 0, 0, 11, 0, 106, 32, 10.f);
 		break;
-	case BossType::FIRE_DEMON:
-		this->animationComponent.addAnimation("MOVE", 0, 1, 11, 1, 288, 160, 20.f);
-		this->animationComponent.addAnimation("ATTACK", 0, 2, 14, 2, 288, 160, 10.f);
-		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 4, 3, 288, 160, 10.f);
-		this->animationComponent.addAnimation("DEATH", 0, 4, 21, 4, 288, 160, 10.f);
 
-		this->skillAniamtion.addAnimation("PLAY", 0, 0, 49, 0, 100, 100, 5.f);
+	case BossType::FIRE_DEMON:
+		this->animationComponent.addAnimation ("MOVE", 0, 1, 11, 1, 288, 160, 15.f);
+		this->animationComponent.addAnimation ("ATTACK", 0, 2, 14, 2, 288, 160, 10.f);
+		this->animationComponent.addAnimation ("TAKE_HIT", 0, 3, 4, 3, 288, 160, 10.f);
+		this->animationComponent.addAnimation ("DEATH", 0, 4, 21, 4, 288, 160, 10.f);
+
+		this->skillImpactAniamtion.addAnimation("PLAY", 0, 0, 43, 0, 64, 64, 2.f);
 		break;
 
 	case BossType::SAMURAI:
-		this->animationComponent.addAnimation("MOVE", 0, 2, 7, 2, 200, 200, 10.f);
-		this->animationComponent.addAnimation("ATTACK", 0, 0, 5, 0, 200, 200, 13.f);
-		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 3, 3, 200, 200, 14.f);
-		this->animationComponent.addAnimation("DEATH", 0, 1, 5, 1, 200, 200, 15.f);
-		this->animationComponent.addAnimation("IDLE", 0, 4, 7, 4, 200, 200, 15.f);
+		this->animationComponent.addAnimation ("MOVE", 0, 2, 7, 2, 200, 200, 10.f);
+		this->animationComponent.addAnimation ("ATTACK", 0, 0, 5, 0, 200, 200, 13.f);
+		this->animationComponent.addAnimation ("TAKE_HIT", 0, 3, 3, 3, 200, 200, 14.f);
+		this->animationComponent.addAnimation ("DEATH", 0, 1, 5, 1, 200, 200, 15.f);
+		this->animationComponent.addAnimation ("IDLE", 0, 4, 7, 4, 200, 200, 15.f);
 
-		this->skillAniamtion.addAnimation("PLAY", 0, 0, 5, 0, 32, 64, 20.f);
+		this->skillImpactAniamtion.addAnimation ("PLAY", 0, 0, 5, 0, 32, 64, 20.f);
 		break;
+
 	default:
 		break;
 	}
@@ -218,6 +244,8 @@ inline void BossEnemy::updateAttack(const float& dt)
 		this->player->getHitRange().getGlobalBounds().intersects(this->skillRange.getGlobalBounds()))
 	{
 		this->isUsingSkill = true;
+		this->bossSkill    = true;
+
 		this->skillTimer.restart();
 	}
 
@@ -241,9 +269,17 @@ inline void BossEnemy::updateAttack(const float& dt)
 	{
 		if (this->animationComponent.play("ATTACK", dt, true))
 		{
-			if (this->player->getHitRange().getGlobalBounds().intersects(this->getGlobalBounds()))
+			if (this->player->getHitRange().getGlobalBounds().intersects(this->getGlobalBounds()) && !this->isDead)
 			{
-				this->player->loseHP(this->statsComponent.damagePhysical);
+				if (std::rand() % 100 <= this->player->getStatsComponent()->missChance)
+				{
+					//Pop up text
+					this->updatePopUpText("MISS");
+				}
+				else
+				{
+					this->player->loseHP(this->statsComponent.damagePhysical);
+				}
 			}
 			this->isAttaking = false;
 		}
@@ -256,12 +292,13 @@ inline void BossEnemy::updateAttack(const float& dt)
 
 		if (this->animationComponent.play("ATTACK", dt, true))
 		{
-			if (this->player->getHitRange().getGlobalBounds().intersects(this->skillRange.getGlobalBounds()))
+			if (this->player->getHitRange().getGlobalBounds().intersects(this->skillRange.getGlobalBounds()) && !this->isDead)
 			{
-				this->player->loseHP(this->statsComponent.damagePhysical * 2);
+				this->player->loseHP(this->statsComponent.damagePhysical + this->statsComponent.damagePhysical / 2);
 
 				this->bossSkillImpact = true;
 			}
+
 			this->isUsingSkill = false;
 		}
 	}
@@ -269,11 +306,23 @@ inline void BossEnemy::updateAttack(const float& dt)
 	//Skill impact on player
 	if (this->bossSkillImpact)
 	{
-		this->skillSprtite.second.setPosition(this->player->getPosition().x - this->offsetX, this->player->getPosition().y - this->offsetY);
+		this->skillImpactSprtite.second.setPosition(
+			this->player->getPosition().x - this->skillImpactoffsetX, 
+			this->player->getPosition().y - this->skillImpactoffsetY);
 
-		if (this->skillAniamtion.play("PLAY", dt, true))
+		if (this->skillImpactAniamtion.play("PLAY", dt, true))
 		{
 			this->bossSkillImpact = false;
+		}
+	}
+
+	if (this->bossSkill)
+	{
+		this->skillSprite.second.setPosition(this->getPosition().x + this->skilloffsetX, this->getPosition().y + this->skilloffsetY);
+
+		if (this->skillAnimation.play("PLAY", dt, true))
+		{
+			this->bossSkill = false;
 		}
 	}
 }
@@ -525,9 +574,14 @@ void BossEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 	{
 		target.draw(this->skillsImpactSprites[*this->playerUsingSkill].first);
 	}
+
+	if (this->bossSkill)
+	{
+		target.draw(this->skillSprite.second);
+	}
 	if (this->bossSkillImpact)
 	{
-		target.draw(this->skillSprtite.second);
+		target.draw(this->skillImpactSprtite.second);
 	}
 
 	//Render pop up text

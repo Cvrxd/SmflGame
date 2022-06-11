@@ -7,6 +7,9 @@ enum class MageEnemyType {DARK_MAGE = 0, FIRE_MAGE, WIZZARD};
 
 class MageEnemy : public Enemy
 {
+	using HealthBar = EnemyGUI::EnemyHealthBar;
+	using LevelIcon = EnemyGUI::EnemyLevelIcon;
+
 	//Core variables
 	MageEnemyType type;
 
@@ -19,8 +22,9 @@ class MageEnemy : public Enemy
 	sf::CircleShape castRange;
 	sf::CircleShape innerRange;
 
-	EnemyGUI::EnemyHealthBar healthBar;
-	EnemyGUI::EnemyLevelIcon levelIcon;
+	//GUI
+	HealthBar healthBar;
+	LevelIcon levelIcon;
 
 	//Init functions
 	void initComponents              (sf::Texture& texture_sheet, sf::Sprite& sprite)  override;
