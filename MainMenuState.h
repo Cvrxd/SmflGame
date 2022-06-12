@@ -27,11 +27,16 @@ private:
 	};
 
 	//Variables 
+	unsigned int        difficultyLvl = 1;
+
 	sf::Font            font;
 	sf::Texture         backgroundTexture;
 	sf::RectangleShape  background;
 
-	//Buttons
+	sf::Text            difficultyText;
+	sf::Text            difficultyLvlText;
+
+	//GUI
 	ButtonsMap          buttons;
 
 	//Sounds
@@ -42,21 +47,24 @@ private:
 	void initSounds      ();
 	void initBackground  ();
 	void initFonts       ();
-	void initButtons     ();
+	void initGUI         ();
 	void initKeybinds    ()                           override;
 
 	//Update functions
 	void updateInput     (const float& dt)            override;
-	void updateButtons   ();
+	void updateGUI       ();
+	void updateText      ();
 
 	//render functions
-	void renderButtons   (sf::RenderTarget& target);
+	void renderGUI       (sf::RenderTarget& target);
 
 public:
 	MainMenuState (StateData* state_data)              noexcept;
 	virtual ~MainMenuState()                           override;
 
 	//Functions
+	void playMusic();
+
 	void update  (const float& dt)                     override;
 	void render  (sf::RenderTarget* target = nullptr)  override;
 };

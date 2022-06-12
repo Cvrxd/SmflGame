@@ -25,10 +25,12 @@ inline void MainMenuState::initSounds()
 inline void MainMenuState::initBackground()
 {
 	this->background.setSize(sf::Vector2f(static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)));
+
 	if (!this->backgroundTexture.loadFromFile("Textures/background/mainmenu_background.png"))
 	{
 		throw("Failed to load background main menu");
 	}
+
 	this->background.setTexture(&this->backgroundTexture); 
 }
 
@@ -58,8 +60,28 @@ inline void MainMenuState::initFonts()
 	}
 }
 
-inline void MainMenuState::initButtons()
+inline void MainMenuState::initGUI()
 {
+	//Text
+	this->difficultyText.setFont(this->font);
+	this->difficultyText.setCharacterSize(50);
+	this->difficultyText.setFillColor(sf::Color::White);
+	this->difficultyText.setString("Difficulty: ");
+
+	this->difficultyText.setPosition(this->background.getSize().x - 550.f, this->background.getPosition().y + 100.f);
+
+	this->difficultyLvlText.setFont(this->font);
+	this->difficultyLvlText.setCharacterSize(50);
+	this->difficultyLvlText.setFillColor(sf::Color::Magenta);
+	this->difficultyLvlText.setString("Normal");
+	this->difficultyLvlText.setOutlineThickness(2.f);
+	this->difficultyLvlText.setOutlineColor(sf::Color::White);
+
+	this->difficultyLvlText.setPosition(this->difficultyText.getPosition().x + 300.f, this->difficultyText.getPosition().y);
+
+
+
+	//Buttons
 	this->buttons["GAME_STATE"] = std::make_unique<GUI::Button>(100.f, 100.f, 300.f, 70.f,
 		&this->font, "New Game", 70,
 		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
@@ -83,7 +105,20 @@ inline void MainMenuState::initButtons()
 		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
 		sf::Color(100, 100, 100, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
 	);
-	
+
+	this->buttons["DIFFICULTY_LESS"] = std::make_unique<GUI::Button>(this->difficultyLvlText.getPosition().x - 30.f, this->difficultyLvlText.getPosition().y + 50.f,
+		100.f, 75.f,
+		&this->font, "<-", 60,
+		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
+		sf::Color(100, 100, 100, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
+		);
+
+	this->buttons["DIFFICULTY_MORE"] = std::make_unique<GUI::Button>(this->difficultyLvlText.getPosition().x + 80.f, this->difficultyLvlText.getPosition().y + 50.f,
+		100.f, 75.f,
+		&this->font, "->", 60,
+		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
+		sf::Color(100, 100, 100, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
+		);
 }
 
 //Update functions
@@ -92,12 +127,38 @@ inline void MainMenuState::updateInput(const float& dt)
 
 }
 
-inline void MainMenuState::updateButtons()
+inline void MainMenuState::updateGUI()
 {
-	//updates all buttons
+	//Updates all buttons
 	for (auto& el : this->buttons)
 	{
 		el.second->update(this->mousePosWindow);
+	}
+
+	//Decrease difficulty button
+	if (this->buttons["DIFFICULTY_LESS"]->isPressed() && this->getKeyTime())
+	{
+		this->sounds.clickSound.second.play();
+
+		if (--this->difficultyLvl <= 1)
+		{
+			this->difficultyLvl = 1;
+		}
+
+		this->updateText();
+	}
+
+	//Increase difficulty button
+	if (this->buttons["DIFFICULTY_MORE"]->isPressed() && this->getKeyTime())
+	{
+		this->sounds.clickSound.second.play();
+
+		if (++this->difficultyLvl == 4)
+		{
+			this->difficultyLvl = 3;
+		}
+
+		this->updateText();
 	}
 
 	//New game start
@@ -105,7 +166,7 @@ inline void MainMenuState::updateButtons()
 	{
 		this->sounds.clickSound.second.play();
 
-		this->states->push(new GameState(this->stateData));
+		this->states->push(new GameState(this->stateData, this->difficultyLvl));
 		this->sounds.music.stop();
 	}
 
@@ -130,14 +191,46 @@ inline void MainMenuState::updateButtons()
 	{
 		this->sounds.clickSound.second.play();
 
-		this->sounds.music.stop();
+		this->sounds.music.pause();
 		this->endState();
 	}
 }
 
-//Render functions
-inline void MainMenuState::renderButtons(sf::RenderTarget& target)
+inline void MainMenuState::updateText()
 {
+	switch (this->difficultyLvl)
+	{
+	case 1:
+		this->difficultyLvlText.setFillColor(sf::Color::Magenta);
+
+		this->difficultyLvlText.setString("Normal");
+		break;
+	case 2:
+		this->difficultyLvlText.setFillColor(sf::Color::Red);
+
+		this->difficultyLvlText.setString("Hard");
+		break;
+	case 3:
+		this->difficultyLvlText.setFillColor(sf::Color::Black);
+
+		this->difficultyLvlText.setString("Insane");
+		break;
+	default:
+		this->difficultyLvlText.setFillColor(sf::Color::White);
+
+		this->difficultyLvlText.setString("???");
+		break;
+	}
+}
+
+//Render functions
+inline void MainMenuState::renderGUI(sf::RenderTarget& target)
+{
+	//Text
+	target.draw(this->difficultyText);
+	target.draw(this->difficultyLvlText);
+
+	//Buttons
 	for (auto& el : this->buttons)
 	{
 		el.second->render(target);
@@ -148,24 +241,25 @@ inline void MainMenuState::renderButtons(sf::RenderTarget& target)
 MainMenuState::MainMenuState(StateData* state_data) noexcept
 	: State(state_data)
 {
-	this->initVariables();
-	this->initSounds();
-	this->initBackground();
-	this->initFonts();	   
-	this->initKeybinds(); 
-	this->initButtons(); 
+	this->initVariables  ();
+	this->initSounds     ();
+	this->initBackground ();
+	this->initFonts      ();	   
+	this->initKeybinds   (); 
+	this->initGUI        ();
 }
 
 MainMenuState::~MainMenuState()
 {
 }
 
-//Oublic functions 
+//Public functions 
 void MainMenuState::update(const float& dt)
 {
-	this->updateInput(dt);
-	this->updateMousePosition();
-	this->updateButtons();
+	this->updateKeyTime       (dt);
+	this->updateInput         (dt);
+	this->updateMousePosition ();
+	this->updateGUI           ();
 }
 
 void MainMenuState::render(sf::RenderTarget* target)
@@ -177,7 +271,7 @@ void MainMenuState::render(sf::RenderTarget* target)
 
 	target->draw(this->background);
 
-	this->renderButtons(*target);
+	this->renderGUI(*target);
 
 	//REMOVE LATER JUST DEBUG!!!
 	/*sf::Text mouseText;
@@ -187,4 +281,9 @@ void MainMenuState::render(sf::RenderTarget* target)
 	mouseText.setString(std::to_string(this->mousPosView.x) + " " + std::to_string(this->mousPosView.y));
 
 	target->draw(mouseText);*/
+}
+
+void MainMenuState::playMusic()
+{
+	this->sounds.music.play();
 }

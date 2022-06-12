@@ -207,6 +207,7 @@ inline void MeleEnemy::addAnimations()
 		this->animationComponent.addAnimation("ATTACK", 0, 0, 3, 0, 108, 108, 10.f);
 		this->animationComponent.addAnimation("TAKE_HIT", 0, 2, 1, 2, 108, 108, 20.f);
 		this->animationComponent.addAnimation("DEATH", 0, 2, 3, 2, 108, 108, 20.f);
+		this->animationComponent.addAnimation("IDLE", 0, 3, 3, 3, 108, 108, 15.f);
 		break;
 	case MeleEnemyType::BRINGER_OF_DEATH:
 		this->animationComponent.addAnimation("MOVE", 0, 0, 7, 0, 140, 93, 20.f);
@@ -300,21 +301,29 @@ inline void MeleEnemy::updateAttack(const float& dt)
 
 inline void MeleEnemy::updateMovement(const float& dt)
 {
-	if (this->player->getPosition().x > this->getPosition().x)
+	if (!this->getGlobalBounds().intersects(this->player->getGlobalBounds()))
 	{
-		this->move(1.f, 0.f, dt);
+		if (this->player->getPosition().x > this->getPosition().x)
+		{
+			this->move(1.f, 0.f, dt);
+		}
+		else if (this->player->getPosition().x < this->getPosition().x)
+		{
+			this->move(-1.f, 0.f, dt);
+		}
+
+		if (this->player->getPosition().y < this->getPosition().y)
+		{
+			this->move(0.f, -1.f, dt);
+		}
+		else if (this->player->getPosition().y > this->getPosition().y)
+		{
+			this->move(0, 1.f, dt);
+		}
 	}
-	else if (this->player->getPosition().x < this->getPosition().x)
+	else
 	{
-		this->move(-1.f, 0.f, dt);
-	}
-	if (this->player->getPosition().y < this->getPosition().y)
-	{
-		this->move(0.f, -1.f, dt);
-	}
-	else if (this->player->getPosition().y > this->getPosition().y)
-	{
-		this->move(0, 1.f, dt);
+		this->stopVelocity();
 	}
 }
 
@@ -380,7 +389,11 @@ inline void MeleEnemy::updateAnimations(const float& dt)
 		}
 	}
 
-	if (this->movementComponent.getState(MOVING_RIGHT))
+	if (this->movementComponent.getState(IDLE))
+	{
+		this->animationComponent.play("IDLE", dt);
+	}
+	else if (this->movementComponent.getState(MOVING_RIGHT))
 	{
 		this->setOriginRight();
 		this->animationComponent.play("MOVE", dt, this->movementComponent.getVelocity().x, this->movementComponent.getMaxVelocity());

@@ -6,7 +6,15 @@
 //Initialisation functions
 inline void SettingsState::initVariables()
 {
+	//Init videomedes
 	this->videoModes = std::move(sf::VideoMode::getFullscreenModes());
+
+	//Init frame limits
+	this->frameLimits.resize(3);
+
+	this->frameLimits[0] = 120;
+	this->frameLimits[1] = 60;
+	this->frameLimits[2] = 30;
 }
 
 inline void SettingsState::initText()
@@ -59,6 +67,7 @@ inline void SettingsState::initFonts()
 
 inline void SettingsState::initGUI()
 {
+	//Buttons
 	this->buttons["EXIT_STATE"] = std::make_unique<GUI::Button>(815.f, 850.f, 180.f, 75.f,
 		&this->font, "Quit", 50,
 		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
@@ -74,6 +83,7 @@ inline void SettingsState::initGUI()
 	//Drop down lists
 	this->dropDownLists.reserve(7);
 
+	//Videomodes
 	std::vector<std::string> video_modes_str;
 
 	video_modes_str.reserve(this->videoModes.size());
@@ -83,11 +93,13 @@ inline void SettingsState::initGUI()
 		video_modes_str.push_back(std::to_string(el.width) + " x " + std::to_string(el.height));
 	}
 
+	//Resolution
 	this->dropDownLists["RESOLUTION"] = std::make_unique<GUI::DropDownList>(350, 225 + this->offsetYforDropDownLists, 200, 50, font, video_modes_str.data(),
 		static_cast<unsigned int>(video_modes_str.size()), 0);
 
 	UPDATE_DROP_DOWN_LIST_OFFSET;
 	
+	//Fullscreen
 	std::string text_list[] = { "ON" , "OFF" };
 
 	this->dropDownLists["FULLSCREEN"] = std::make_unique<GUI::DropDownList>(350, 225 + this->offsetYforDropDownLists, 200, 50, font, text_list,
@@ -95,11 +107,13 @@ inline void SettingsState::initGUI()
 	
 	UPDATE_DROP_DOWN_LIST_OFFSET;
 
+	//Verctical sync
 	this->dropDownLists["VSYNC"] = std::make_unique<GUI::DropDownList>(350, 225 + this->offsetYforDropDownLists, 200, 50, font, text_list,
 		static_cast<unsigned int>(text_list->length()), 0);
 
 	UPDATE_DROP_DOWN_LIST_OFFSET;
 
+	//Frame limit
 	std::string frame_limits[] = { "120" , "60", "30" };
 
 	this->dropDownLists["FRAME_LIMIT"] = std::make_unique<GUI::DropDownList>(350, 225 + this->offsetYforDropDownLists, 200, 50, font, frame_limits,
@@ -145,14 +159,39 @@ inline void SettingsState::updateGUI(const float& dt)
 	} 
 
 	//Apply selected changes
-	if (this->buttons["APPLY"]->isPressed())
+	if (this->buttons["APPLY"]->isPressed() && this->getKeyTime())
 	{
-		if(this->stateData->gfxSettings->resolution != this->videoModes[this->dropDownLists["RESOLUTION"]->getActiveBoxId()]);
+		//Resolution update
+		if (this->stateData->gfxSettings->resolution != this->videoModes[this->dropDownLists["RESOLUTION"]->getActiveBoxId()]);
 		{
 			this->stateData->gfxSettings->resolution = this->videoModes[this->dropDownLists["RESOLUTION"]->getActiveBoxId()];
 			this->window->create(this->stateData->gfxSettings->resolution, this->stateData->gfxSettings->title, sf::Style::Default);
 		}
-		
+
+		//Vectical sync update
+		this->stateData->gfxSettings->vertucalSync != this->dropDownLists["VSYNC"]->getActiveBoxId() - 1;
+
+		if (this->stateData->gfxSettings->vertucalSync)
+		{
+			this->window->setVerticalSyncEnabled(this->dropDownLists["VSYNC"]->getActiveBoxId());
+		}
+
+		//Fullscrren update
+		this->stateData->gfxSettings->fullscreen = this->dropDownLists["FULLSCREEN"]->getActiveBoxId() -1;
+
+		if (this->stateData->gfxSettings->fullscreen)
+		{
+			this->window->create(this->stateData->gfxSettings->resolution, this->stateData->gfxSettings->title, sf::Style::Fullscreen);
+		}
+
+		//Frame limit update
+		if (this->stateData->gfxSettings->framerateLimit != this->frameLimits[this->dropDownLists["FRAME_LIMIT"]->getActiveBoxId()])
+		{
+			this->stateData->gfxSettings->framerateLimit = this->frameLimits[this->dropDownLists["FRAME_LIMIT"]->getActiveBoxId()];
+
+			this->window->setFramerateLimit(this->stateData->gfxSettings->framerateLimit);
+		}
+
 	}
 
 	//Quit state
@@ -164,6 +203,7 @@ inline void SettingsState::updateGUI(const float& dt)
 
 void SettingsState::update(const float& dt)
 {
+	this->updateKeyTime(dt);
 	this->updateInput(dt);
 	this->updateMousePosition();
 	this->updateGUI(dt);

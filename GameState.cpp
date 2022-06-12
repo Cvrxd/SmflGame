@@ -99,12 +99,12 @@ inline void GameState::initEnemies()
 	//this->bosses.emplace_back(BossType::SAMURAI, 5, 100, 900, this->textures["ENEMY_SAMURAI"], &this->player, this->enemiesSounds);
 
 	this->meleEnemies.reserve(3);
-	//this->meleEnemies.emplace_back(MeleEnemyType::MIMIC, 5, 700, 700, this->textures["ENEMY_MIMIC"], &this->player, this->enemiesSounds);
+	this->meleEnemies.emplace_back(MeleEnemyType::MIMIC, 5, 700, 700, this->textures["ENEMY_MIMIC"], &this->player, this->enemiesSounds);
 	//this->meleEnemies.emplace_back(MeleEnemyType::NOMAND, 5, 700, 700, this->textures["ENEMY_NOMAND"], &this->player, this->enemiesSounds);
 	//this->meleEnemies.emplace_back(MeleEnemyType::BRINGER_OF_DEATH, 5, 700, 700, this->textures["ENEMY_BRINGER_OF_DEATH"], &this->player, this->enemiesSounds);
 
 	this->mageEnemies.reserve(2);
-	//this->mageEnemies.emplace_back(MageEnemyType::WIZZARD, 100, 400, 400, this->textures["ENEMY_WIZZARD"], &this->player, this->enemiesSounds);
+	this->mageEnemies.emplace_back(MageEnemyType::WIZZARD, 1, 400, 400, this->textures["ENEMY_WIZZARD"], &this->player, this->enemiesSounds);
 
 	this->destroyingEnemies.reserve(2);
 	//this->destroyingEnemies.emplace_back(DestroyingEnemyType::FIRE_WORM, 1, 0, 0, this->textures["ENEMY_FIRE_WORM"], &this->player, this->enemiesSounds);
@@ -242,7 +242,39 @@ inline void GameState::updatePauseMenuButtons()
 	}
 }
 
+//Enemies update general
 inline void GameState::updateEnemies(const float& dt)
+{
+	this->updateBossEnemies      (dt);
+	this->updateDestroyingEnemis (dt);
+	this->updateMageEnemies      (dt);
+	this->updateMeleEnemies      (dt);
+}
+
+//Enemies update separate
+inline void GameState::updateDestroyingEnemis(const float& dt)
+{
+	for (auto& el : this->destroyingEnemies)
+	{
+		if (!el.dead())
+		{
+			el.update(dt, this->mousPosView);
+		}
+	}
+}
+
+inline void GameState::updateMeleEnemies(const float& dt)
+{
+	for (auto& el : this->meleEnemies)
+	{
+		if (!el.dead())
+		{
+			el.update(dt, this->mousPosView);
+		}
+	}
+}
+
+inline void GameState::updateBossEnemies(const float& dt)
 {
 	for (auto& el : this->bosses)
 	{
@@ -251,21 +283,11 @@ inline void GameState::updateEnemies(const float& dt)
 			el.update(dt, this->mousPosView);
 		}
 	}
-	for (auto& el : this->meleEnemies)
-	{
-		if (!el.dead())
-		{
-			el.update(dt, this->mousPosView);
-		}
-	}
+}
+
+inline void GameState::updateMageEnemies(const float& dt)
+{
 	for (auto& el : this->mageEnemies)
-	{
-		if (!el.dead())
-		{
-			el.update(dt, this->mousPosView);
-		}
-	}
-	for (auto& el : this->destroyingEnemies)
 	{
 		if (!el.dead())
 		{
@@ -308,8 +330,10 @@ inline void GameState::renderEnemies(sf::RenderTarget* target)
 }
 
 //Constructor
-GameState::GameState(StateData* state_data)
-	: State(state_data), skillMenuActive(false),
+GameState::GameState(StateData* state_data, const unsigned int& difficultyLvl)
+	: State(state_data), 
+	diffcultyLvl(difficultyLvl),
+	skillMenuActive(false),
 	popUpTextComponent (state_data->font),
 
 	pauseMenu   (*this->window, this->stateData->font), //Pause menu 

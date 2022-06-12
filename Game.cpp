@@ -104,10 +104,11 @@ inline void Game::update()
 
 			if (this->states.top()->getQuit())
 			{
-				// some stuff like saving the game
 				this->states.top()->endState();
 				delete this->states.top();
 				this->states.pop();
+
+				//add saving the game
 			}
 		}
 	}

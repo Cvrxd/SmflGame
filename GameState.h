@@ -23,6 +23,8 @@ class GameState : public State
 {
 private:
 	//variables 
+	const unsigned int diffcultyLvl = 1;
+
 	bool skillMenuActive = false;
 	bool itemsMenuActive = false;
 
@@ -75,16 +77,22 @@ private:
 	//Update functions
 	void updateView              (const float& dt);
 	void updatePauseMenuButtons  ();
-	void updateEnemies           (const float& dt);
 	void updatePlayerInput       (const float& dt);
 	void updateInput             (const float& dt)     override;
 	void updateTileMap           (const float& dt);
+
+	//Enemis update
+	void updateEnemies(const float& dt);
+	void updateDestroyingEnemis(const float& dt);
+	void updateMeleEnemies(const float& dt);
+	void updateBossEnemies(const float& dt);
+	void updateMageEnemies(const float& dt);
 
 	//Render functions
 	void renderEnemies (sf::RenderTarget* target);
 
 public:
-	GameState (StateData* state_data);
+	GameState (StateData* state_data, const unsigned int& difficultyLvl = 1);
 	virtual ~GameState() override;
 
 	//Functions

@@ -12,6 +12,7 @@ private:
 	using ButtonsMap        = std::unordered_map<std::string, std::unique_ptr<GUI::Button>>;
 	using DropDownListsMap  = std::unordered_map<std::string, std::unique_ptr<GUI::DropDownList>>;
 	using VidoModesVector   = std::vector<sf::VideoMode>;
+	using FrameLimitsVector = std::vector<unsigned int>;
 
 	//Variables
 	float offsetYforDropDownLists = 0.f;
@@ -22,6 +23,7 @@ private:
 	sf::Text            optionsText;
 
 	VidoModesVector     videoModes;
+	FrameLimitsVector   frameLimits;
 	ButtonsMap          buttons;
 	DropDownListsMap    dropDownLists;
 

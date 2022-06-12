@@ -197,6 +197,7 @@ inline void BossEnemy::addAnimations()
 		this->animationComponent.addAnimation ("ATTACK", 0, 2, 11, 2, 80, 80, 10.f);
 		this->animationComponent.addAnimation ("TAKE_HIT", 0, 3, 4, 3, 80, 80, 10.f);
 		this->animationComponent.addAnimation ("DEATH", 0, 4, 22, 4, 80, 80, 8.f);
+		this->animationComponent.addAnimation ("IDLE", 0, 0, 8, 0, 80, 80, 10.f);
 
 		this->skillImpactAniamtion.addAnimation("PLAY", 0, 0, 11, 0, 106, 32, 10.f);
 		break;
@@ -206,6 +207,7 @@ inline void BossEnemy::addAnimations()
 		this->animationComponent.addAnimation ("ATTACK", 0, 2, 14, 2, 288, 160, 10.f);
 		this->animationComponent.addAnimation ("TAKE_HIT", 0, 3, 4, 3, 288, 160, 10.f);
 		this->animationComponent.addAnimation ("DEATH", 0, 4, 21, 4, 288, 160, 10.f);
+		this->animationComponent.addAnimation ("IDLE", 0, 0, 5, 0, 288, 160, 13.f);
 
 		this->skillImpactAniamtion.addAnimation("PLAY", 0, 0, 43, 0, 64, 64, 2.f);
 		break;
@@ -215,7 +217,7 @@ inline void BossEnemy::addAnimations()
 		this->animationComponent.addAnimation ("ATTACK", 0, 0, 5, 0, 200, 200, 13.f);
 		this->animationComponent.addAnimation ("TAKE_HIT", 0, 3, 3, 3, 200, 200, 14.f);
 		this->animationComponent.addAnimation ("DEATH", 0, 1, 5, 1, 200, 200, 15.f);
-		this->animationComponent.addAnimation ("IDLE", 0, 4, 7, 4, 200, 200, 15.f);
+		this->animationComponent.addAnimation ("IDLE", 0, 4, 7, 4, 200, 200, 10.f);
 
 		this->skillImpactAniamtion.addAnimation ("PLAY", 0, 0, 5, 0, 32, 64, 20.f);
 		break;
@@ -333,30 +335,29 @@ inline void BossEnemy::updateMovement(const float& dt)
 	this->skillRange.setPosition(this->getPosition().x - this->skillRangeRadius, this->getPosition().y - this->skillRangeRadius);
 
 	//Movement
-	if (this->player->getPosition().x > this->getPosition().x)
+	if (!this->getGlobalBounds().intersects(this->player->getGlobalBounds()))
 	{
-		this->move(1.f, 0.f, dt);
-	}
-	else if (this->player->getPosition().x < this->getPosition().x)
-	{
-		this->move(-1.f, 0.f, dt);
+		if (this->player->getPosition().x > this->getPosition().x)
+		{
+			this->move(1.f, 0.f, dt);
+		}
+		else if (this->player->getPosition().x < this->getPosition().x)
+		{
+			this->move(-1.f, 0.f, dt);
+		}
+		
+		if (this->player->getPosition().y < this->getPosition().y)
+		{
+			this->move(0.f, -1.f, dt);
+		}
+		else if (this->player->getPosition().y > this->getPosition().y)
+		{
+			this->move(0, 1.f, dt);
+		}
 	}
 	else
 	{
-		this->stopVelocityX();
-	}
-
-	if (this->player->getPosition().y < this->getPosition().y)
-	{
-		this->move(0.f, -1.f, dt);
-	}
-	else if (this->player->getPosition().y > this->getPosition().y)
-	{
-		this->move(0, 1.f, dt);
-	}
-	else
-	{
-		this->stopVelocityY();
+		this->stopVelocity();
 	}
 }
 
@@ -430,7 +431,11 @@ inline void BossEnemy::updateAnimations(const float& dt)
 	}
 
 	//Movement animations
-	if (this->movementComponent.getState(MOVING_RIGHT))
+	if (this->movementComponent.getState(IDLE))
+	{
+		this->animationComponent.play("IDLE", dt);
+	}
+	else if (this->movementComponent.getState(MOVING_RIGHT))
 	{
 		this->setOriginRight();
 		this->animationComponent.play("MOVE", dt, this->movementComponent.getVelocity().x, this->movementComponent.getMaxVelocity());
