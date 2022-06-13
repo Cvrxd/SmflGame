@@ -46,6 +46,7 @@ inline void GameState::initFonts()
 inline void GameState::initTextures()
 {
 	this->textures["PLAYER_SHEET"].loadFromFile("Textures/characters/player/test_sheet.png");
+	
 
 	//Monsters
 	this->textures["ENEMY_NIGHT_BORN"].loadFromFile("Textures/enemies/boses/NightBorne.png");
@@ -99,13 +100,15 @@ inline void GameState::initEnemies()
 	//this->bosses.emplace_back(BossType::SAMURAI, 5, 100, 900, this->textures["ENEMY_SAMURAI"], &this->player, this->enemiesSounds);
 
 	this->meleEnemies.reserve(3);
-	this->meleEnemies.emplace_back(MeleEnemyType::MIMIC, 5, 700, 700, this->textures["ENEMY_MIMIC"], &this->player, this->enemiesSounds);
+	//this->meleEnemies.emplace_back(MeleEnemyType::KNIGHT1, 5, 700, 700, this->textures["ENEMY_KNIGHT1"], &this->player, this->enemiesSounds);
 	//this->meleEnemies.emplace_back(MeleEnemyType::NOMAND, 5, 700, 700, this->textures["ENEMY_NOMAND"], &this->player, this->enemiesSounds);
 	//this->meleEnemies.emplace_back(MeleEnemyType::BRINGER_OF_DEATH, 5, 700, 700, this->textures["ENEMY_BRINGER_OF_DEATH"], &this->player, this->enemiesSounds);
 
 	this->mageEnemies.reserve(2);
-	this->mageEnemies.emplace_back(MageEnemyType::WIZZARD, 1, 400, 400, this->textures["ENEMY_WIZZARD"], &this->player, this->enemiesSounds);
+	//this->mageEnemies.emplace_back(MageEnemyType::DARK_MAGE, 1, 400, 400, this->textures["ENEMY_DARK_MAGE"], &this->player, this->enemiesSounds);
+	//this->mageEnemies.emplace_back(MageEnemyType::FIRE_MAGE, 1, 500, 400, this->textures["ENEMY_FIRE_MAGE"], &this->player, this->enemiesSounds);
 
+	
 	this->destroyingEnemies.reserve(2);
 	//this->destroyingEnemies.emplace_back(DestroyingEnemyType::FIRE_WORM, 1, 0, 0, this->textures["ENEMY_FIRE_WORM"], &this->player, this->enemiesSounds);
 }

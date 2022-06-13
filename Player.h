@@ -17,6 +17,7 @@ private:
 	//Booleans for animations
 	bool& isBuffed;
 
+	bool castingSpell   = false;
 	bool showPopUpText  = false;
 	bool isAttacking    = false;
 	bool isHit          = false;

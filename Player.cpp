@@ -179,7 +179,7 @@ inline void Player::updateAttack(const float& dt, sf::Vector2f mouse_pos_view)
 			this->isAttacking = false;
 		}
 	}
-
+	
 	//Get git animation
 	if (this->isHit)
 	{

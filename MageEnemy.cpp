@@ -14,7 +14,7 @@ inline void MageEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		
 		//Attack time
 		this->attackCountMAX = 1;
-		this->attackColdown = 2.f;
+		this->attackColdown = 3.5f;
 
 		//Resistance
 		this->skillReistance = SkillType::DARK_POSION;
@@ -58,7 +58,7 @@ inline void MageEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		this->sprite.setScale(3.f, 3.f);
 
 		//Attack time
-		this->attackCountMAX = 2;
+		this->attackCountMAX = 1;
 		this->attackColdown = 3.f;
 
 		//Resistance
@@ -155,22 +155,22 @@ inline void MageEnemy::addAnimations()
 	switch (this->type)
 	{
 	case MageEnemyType::DARK_MAGE:
-		this->animationComponent.addAnimation("IDLE", 0, 1, 7, 1, 250, 250, 20.f);
-		this->animationComponent.addAnimation("MOVE", 0, 1, 7, 1, 250, 250, 20.f);
+		this->animationComponent.addAnimation("IDLE", 0, 4, 7, 4, 250, 250, 15.f);
+		this->animationComponent.addAnimation("MOVE", 0, 1, 7, 1, 250, 250, 12.f);
 		this->animationComponent.addAnimation("CAST", 0, 3, 15, 3, 250, 250, 10.f);
 		this->animationComponent.addAnimation("TAKE_HIT", 0, 2, 2, 2, 250, 250, 20.f);
-		this->animationComponent.addAnimation("DEATH", 0, 0, 6, 0, 250, 250, 15.f);
+		this->animationComponent.addAnimation("DEATH", 0, 0, 6, 0, 250, 250, 12.f);
 		break;
 	case MageEnemyType::FIRE_MAGE:
-		this->animationComponent.addAnimation("IDLE", 0, 2, 7, 2, 150, 150, 20.f);
-		this->animationComponent.addAnimation("MOVE", 0, 2, 7, 2, 150, 150, 20.f);
+		this->animationComponent.addAnimation("IDLE", 0, 4, 7, 4, 150, 150, 15.f);
+		this->animationComponent.addAnimation("MOVE", 0, 2, 7, 2, 150, 150, 12.f);
 		this->animationComponent.addAnimation("CAST", 0, 0, 7, 0, 150, 150, 15.f);
 		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 3, 3, 150, 150, 20.f);
-		this->animationComponent.addAnimation("DEATH", 0, 1, 6, 1, 150, 150, 15.f);
+		this->animationComponent.addAnimation("DEATH", 0, 1, 6, 1, 150, 150, 12.f);
 		break;
 	case MageEnemyType::WIZZARD:
 		this->animationComponent.addAnimation("IDLE", 0, 3, 5, 3, 231, 190, 20.f);
-		this->animationComponent.addAnimation("MOVE", 0, 4, 7, 4, 231, 190, 11.f);
+		this->animationComponent.addAnimation("MOVE", 0, 4, 7, 4, 231, 190, 9.f);
 		this->animationComponent.addAnimation("CAST", 0, 0, 7, 0, 231, 190, 15.f);
 		this->animationComponent.addAnimation("TAKE_HIT", 0, 2, 3, 2, 231, 190, 20.f);
 		this->animationComponent.addAnimation("DEATH", 0, 1, 6, 1, 231, 190, 11.f);

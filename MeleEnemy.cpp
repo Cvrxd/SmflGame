@@ -214,30 +214,35 @@ inline void MeleEnemy::addAnimations()
 		this->animationComponent.addAnimation("ATTACK", 0, 1, 9, 1, 140, 93, 10.f);
 		this->animationComponent.addAnimation("TAKE_HIT", 0, 2, 2, 2, 140, 93, 20.f);
 		this->animationComponent.addAnimation("DEATH", 2, 2, 11, 2, 140, 93, 15.f);
+		this->animationComponent.addAnimation("IDLE", 0, 3, 7, 3, 140, 93, 15.f);
 		break;
 	case MeleEnemyType::KNIGHT1:
 		this->animationComponent.addAnimation("MOVE", 0, 2, 7, 2, 180, 180, 13.f);
 		this->animationComponent.addAnimation("ATTACK", 0, 0, 6, 0, 180, 180, 11.f);
 		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 3, 3, 180, 180, 14.f);
 		this->animationComponent.addAnimation("DEATH", 0, 1, 10, 1, 180, 180, 11.f);
+		this->animationComponent.addAnimation("IDLE", 0, 4, 10, 4, 180, 180, 11.f);
 		break;
 	case MeleEnemyType::HUNTRESS:
 		this->animationComponent.addAnimation("MOVE", 0, 2, 7, 2, 150, 150, 13.f);
 		this->animationComponent.addAnimation("ATTACK", 0, 0, 4, 0, 150, 150, 11.f);
 		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 2, 3, 150, 150, 14.f);
 		this->animationComponent.addAnimation("DEATH", 0, 1, 7, 1, 150, 150, 11.f);
+		this->animationComponent.addAnimation("IDLE", 0, 4, 7, 4, 150, 150, 11.f);
 		break;
 	case MeleEnemyType::MARTIAL_HERO1:
 		this->animationComponent.addAnimation("MOVE", 0, 2, 7, 2, 200, 200, 10.f);
 		this->animationComponent.addAnimation("ATTACK", 0, 0, 5, 0, 200, 200, 13.f);
 		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 3, 3, 200, 200, 14.f);
 		this->animationComponent.addAnimation("DEATH", 0, 1, 5, 1, 200, 200, 15.f);
+		this->animationComponent.addAnimation("IDLE", 0, 4, 3, 4, 200, 200, 15.f);
 		break;
 	case MeleEnemyType::MARTIAL_HERO2:
 		this->animationComponent.addAnimation("MOVE", 0, 2, 7, 2, 200, 200, 10.f);
 		this->animationComponent.addAnimation("ATTACK", 0, 0, 3, 0, 200, 200, 19.f);
 		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 2, 3, 200, 200, 14.f);
 		this->animationComponent.addAnimation("DEATH", 0, 1, 6, 1, 200, 200, 15.f);
+		this->animationComponent.addAnimation("IDLE", 0, 4, 5, 4, 200, 200, 15.f);
 		break;
 	case MeleEnemyType::NOMAND:
 		this->animationComponent.addAnimation("MOVE", 0, 1, 7, 1, 64, 64, 20.f);
