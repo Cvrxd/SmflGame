@@ -8,7 +8,12 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 	{
 	case BossType::NIGHTBORN:
 		this->sprite.setScale(6.f, 6.f);
-		
+
+		//Sound keys
+		this->soundTime = 6.f;
+		this->skillSoundKey = "NIGHTBORN_SKILL";
+		this->soundKey      = "NIGHTBORN_SOUND";
+
 		//Skill variables
 		this->skillSprite.second.setScale(4.f, 4.f);
 		this->skilloffsetX = -40.f;
@@ -57,6 +62,11 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 
 		this->sprite.setScale(4.f, 4.f);
 
+		//Sound keys
+		this->soundTime = 6.f;
+		this->skillSoundKey = "FIRE_DEMON_SKILL";
+		this->soundKey      = "FIRE_DEMON_SOUND";
+
 		//Boss skill sprite
 		this->skillSprite.second.setScale(5.f, 5.f);
 		this->skilloffsetX = 30.f;
@@ -84,7 +94,7 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		this->magicalResistance = true;
 
 		//Init components
-		this->createHitboxComponent    (this->sprite, 420.f, 300.f, 260.f, 350.f);
+		this->createHitboxComponent    (this->sprite, 470.f, 300.f, 260.f, 350.f);
 		this->createMovementComponent  (130.f, 900.f, 230.f);
 		this->createAnimationComponent (texture_sheet);
 
@@ -106,6 +116,11 @@ inline void BossEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 
 		this->sprite.setScale(3.2f, 3.2f);
 		
+		//Sound keys
+		this->soundTime = 5.f;
+		this->skillSoundKey = "SAMURAI_SKILL";
+		this->soundKey      = "SAMURAI_SOUND";
+
 		//Boss skill sprite
 		this->skillSprite.second.setScale(4.f, 4.f);
 		this->skilloffsetX = -5.f;
@@ -249,6 +264,9 @@ inline void BossEnemy::updateAttack(const float& dt)
 		this->bossSkill    = true;
 
 		this->skillTimer.restart();
+
+		//Sound
+		this->soundBox.playSound(this->skillSoundKey);
 	}
 
 	//Attacking coldown update
@@ -552,10 +570,11 @@ void BossEnemy::update(const float& dt, sf::Vector2f mouse_pos_view)
 {
 	this->movementComponent.update(dt);
 
-	this->updatePlayerImpact(dt);
-	this->updateAttack(dt);
-	this->updateMovement(dt);
-	this->updateAnimations(dt);
+	this->updatePlayerImpact (dt);
+	this->updateAttack       (dt);
+	this->updateMovement     (dt);
+	this->updateAnimations   (dt);
+	this->updateSound        ();
 
 	this->healthBar.update(dt, this->getPosition());
 	this->levelIcon.update(dt, this->getPosition());

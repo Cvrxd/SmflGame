@@ -3,7 +3,7 @@
 
 class Enemy;
 
-enum class MageEnemyType {DARK_MAGE = 0, FIRE_MAGE, WIZZARD};
+enum class MageEnemyType {DARK_MAGE = 0, FIRE_MAGE, WIZZARD, NECROMANCER};
 
 class MageEnemy : public Enemy
 {

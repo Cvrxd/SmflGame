@@ -3,7 +3,7 @@
 
 class Enemy;
 
-enum class DestroyingEnemyType { FIRE_SKULL = 0, FIRE_WORM};
+enum class DestroyingEnemyType { FIRE_SKULL = 0, FIRE_WORM, DRAGON};
 
 class DestroyingEnemy : public Enemy
 {
@@ -12,6 +12,8 @@ class DestroyingEnemy : public Enemy
 	using LevelIcon          = EnemyGUI::EnemyLevelIcon;
 
 	//Variables
+	std::string          destroySoundKey;
+
 	DestroyingEnemyType  type;
 	PairSpriteTexture    destroyingSprite;
 	AnimationComponent   destroyingAnimation;

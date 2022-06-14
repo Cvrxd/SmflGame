@@ -9,15 +9,18 @@ private:
 	using HealthBar           = EnemyGUI::EnemyHealthBar;
 	using LevelIcon           = EnemyGUI::EnemyLevelIcon;
 
-	//Variables
-	BossType   type;
+	//Sound keys
+	std::string skillSoundKey;
 
-	sf::Clock  skillTimer;
-	float      skillColdown;
+	//Variables
+	BossType    type;
+
+	sf::Clock   skillTimer;
+	float       skillColdown;
 
 	//GUI
-	HealthBar  healthBar;
-	LevelIcon  levelIcon;
+	HealthBar   healthBar;
+	LevelIcon   levelIcon;
 
 	//Boss skill variables
 	float              skillRangeRadius;

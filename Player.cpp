@@ -144,7 +144,7 @@ inline void Player::updateAttack(const float& dt, sf::Vector2f mouse_pos_view)
 	this->dealDMG = false;
 
 	//Updating attacking button
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !this->castingSpell)
 	{
 		this->isAttacking = true;
 		this->isHit       = true;
@@ -180,6 +180,19 @@ inline void Player::updateAttack(const float& dt, sf::Vector2f mouse_pos_view)
 		}
 	}
 	
+	//Casting spell animation rotation
+	if (this->castingSpell)
+	{
+		if (mouse_pos_view.x < this->hitboxComponent.getPositionHitbox().x)
+		{
+			SPTIRES_SETSCALE_LEFT;
+		}
+		else
+		{
+			SPTIRES_SETSCALE_RIGHT;
+		}
+	}
+
 	//Get git animation
 	if (this->isHit)
 	{
@@ -219,6 +232,15 @@ inline void Player::updateAttack(const float& dt, sf::Vector2f mouse_pos_view)
 
 inline void Player::updateAnimations(const float& dt, sf::Vector2f mouse_pos_view)
 {
+	//Casting spell animation
+	if (this->castingSpell)
+	{
+		if (this->animationComponent.play("CAST_SPELL", dt, true))
+		{
+			this->castingSpell = false;
+		}
+	}
+
 	//Changing movement animation if player is buffed
 	if (this->isBuffed)
 	{
@@ -303,7 +325,7 @@ Player::Player(const float& x, const float& y, sf::Texture& texture_sheet, const
 	statsComponent      (1),
 	popUpTextComponent  (font),
 	animationComponent  (&this->sprite, &texture_sheet),
-	skillsComponent     (this->statsComponent, font, this->isUsingSkill, this->currentSkilltype, this->currentskillDamage, this->isBuffed),
+	skillsComponent     (this->statsComponent, font, this->isUsingSkill, this->currentSkilltype, this->currentskillDamage, this->isBuffed, this->castingSpell),
 
 	moveKey ("MOVE"), dashKey ("DASH"), currentKey (&moveKey)
 {
@@ -461,6 +483,12 @@ void Player::usePotions(const Potions& potion_type)
 void Player::pauseSounds()
 {
 	this->soundBox.pauseMovementSound();
+	this->skillsComponent.pauseSounds();
+}
+
+void Player::resumeSounds()
+{
+	this->skillsComponent.resumeSounds();
 }
 
 void Player::update(const float& dt, sf::Vector2f mouse_pos_view)

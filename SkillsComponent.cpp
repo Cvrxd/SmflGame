@@ -229,12 +229,13 @@ inline void SkillsComponent::playSkillSound(const SkillType& type)
 }
 
 //Constructor
-SkillsComponent::SkillsComponent(StatsComponent& statsComponent, const sf::Font& font, bool& isUsingSkill, SkillType& currentSkillType, int& currentSkillDamage, bool& isBuffed) noexcept
+SkillsComponent::SkillsComponent(StatsComponent& statsComponent, const sf::Font& font, bool& isUsingSkill, SkillType& currentSkillType, 
+	int& currentSkillDamage, bool& isBuffed, bool& castingSpell) noexcept
 	: 
 	statsComponent     (statsComponent),
 	popUpTextComponent (font),
 
-	currentRender(-1), playAnimation(false), usingPotion(false), usingBuff(false), isBuffed(isBuffed),
+	currentRender(-1), playAnimation(false), usingPotion(false), usingBuff(false), isBuffed(isBuffed), castingSpell(castingSpell),
 	keyTime(0.f), keyTimeMax(15.f), potionKeyTime(0.f), potionKeyTimeMax(5.f), buffDuration(5.f), buffCooldown(15.f),
 	skillsSize(8), usingSkill(isUsingSkill), currentSkillType(currentSkillType), currentSkillDamage(currentSkillDamage)
 {
@@ -289,6 +290,29 @@ int& SkillsComponent::getHpPotions()
 	return this->healthPotions.second;
 }
 
+//Public Functions
+void SkillsComponent::pauseSounds()
+{
+	for (auto& el : this->sounds)
+	{
+		if (el.second.second.getStatus() == sf::Sound::Status::Playing)
+		{
+			el.second.second.pause();
+		}
+	}
+}
+
+void SkillsComponent::resumeSounds()
+{
+	for (auto& el : this->sounds)
+	{
+		if (el.second.second.getStatus() == sf::Sound::Status::Paused)
+		{
+			el.second.second.play();
+		}
+	}
+}
+
 void SkillsComponent::addPotion(const Potions& potion_type)
 {
 	switch (potion_type)
@@ -322,7 +346,6 @@ void SkillsComponent::usePotion(const Potions& potion_type)
 	this->playSkillSound(SkillType::POTION);
 }
 
-//Public Functions
 void SkillsComponent::addSkill(const SkillType& skill_type, const short& slot)
 {
 	this->playerSkills[slot].first = skill_type;
@@ -400,7 +423,10 @@ void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position
 			currentRender = 0;
 
 			_SKILLS_COMPONENT_SET_SKILL_POSITION;
+
 			this->playAnimation = true;
+			this->castingSpell  = true;
+
 			skillTimer.restart();
 
 			//Sound
@@ -415,6 +441,10 @@ void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position
 			currentRender = 1;
 
 			_SKILLS_COMPONENT_SET_SKILL_POSITION;
+
+			this->playAnimation = true;
+			this->castingSpell = true;
+
 			this->playAnimation = true;
 			skillTimer.restart();
 
@@ -426,7 +456,10 @@ void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position
 			currentRender = 2;
 
 			_SKILLS_COMPONENT_SET_SKILL_POSITION;
+
 			this->playAnimation = true;
+			this->castingSpell = true;
+
 			skillTimer.restart();
 
 			//Sound
@@ -437,7 +470,10 @@ void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position
 			currentRender = 3;
 
 			_SKILLS_COMPONENT_SET_SKILL_POSITION;
+
 			this->playAnimation = true;
+			this->castingSpell = true;
+
 			skillTimer.restart();
 
 			//Sound

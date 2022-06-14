@@ -45,8 +45,8 @@ inline void GameState::initFonts()
 
 inline void GameState::initTextures()
 {
+	//Player
 	this->textures["PLAYER_SHEET"].loadFromFile("Textures/characters/player/test_sheet.png");
-	
 
 	//Monsters
 	this->textures["ENEMY_NIGHT_BORN"].loadFromFile("Textures/enemies/boses/NightBorne.png");
@@ -66,10 +66,12 @@ inline void GameState::initTextures()
 	this->textures["ENEMY_DARK_MAGE"].loadFromFile("Textures/enemies/mages/dark_mage.png");
 	this->textures["ENEMY_FIRE_MAGE"].loadFromFile("Textures/enemies/mages/fire_mage.png");
 	this->textures["ENEMY_WIZZARD"].loadFromFile("Textures/enemies/mages/wizzard.png");
+	this->textures["ENEMY_NECROMANCER"].loadFromFile("Textures/enemies/mages/necromancer.png");
 
 	//Destroying enemies
 	this->textures["ENEMY_FIRE_SKULL"].loadFromFile("Textures/enemies/destroying/fire-skull.png");
 	this->textures["ENEMY_FIRE_WORM"].loadFromFile("Textures/enemies/destroying/fire_worm.png");
+	this->textures["ENEMY_DRAGON"].loadFromFile("Textures/enemies/destroying/dragon.png");
 }
 
 inline void GameState::initPauseMenu()
@@ -101,16 +103,15 @@ inline void GameState::initEnemies()
 
 	this->meleEnemies.reserve(3);
 	//this->meleEnemies.emplace_back(MeleEnemyType::KNIGHT1, 5, 700, 700, this->textures["ENEMY_KNIGHT1"], &this->player, this->enemiesSounds);
-	//this->meleEnemies.emplace_back(MeleEnemyType::NOMAND, 5, 700, 700, this->textures["ENEMY_NOMAND"], &this->player, this->enemiesSounds);
+	this->meleEnemies.emplace_back(MeleEnemyType::BRINGER_OF_DEATH, 5, 700, 700, this->textures["ENEMY_BRINGER_OF_DEATH"], &this->player, this->enemiesSounds);
 	//this->meleEnemies.emplace_back(MeleEnemyType::BRINGER_OF_DEATH, 5, 700, 700, this->textures["ENEMY_BRINGER_OF_DEATH"], &this->player, this->enemiesSounds);
 
 	this->mageEnemies.reserve(2);
 	//this->mageEnemies.emplace_back(MageEnemyType::DARK_MAGE, 1, 400, 400, this->textures["ENEMY_DARK_MAGE"], &this->player, this->enemiesSounds);
-	//this->mageEnemies.emplace_back(MageEnemyType::FIRE_MAGE, 1, 500, 400, this->textures["ENEMY_FIRE_MAGE"], &this->player, this->enemiesSounds);
-
+	//this->mageEnemies.emplace_back(MageEnemyType::NECROMANCER, 1, 500, 400, this->textures["ENEMY_NECROMANCER"], &this->player, this->enemiesSounds);
 	
 	this->destroyingEnemies.reserve(2);
-	//this->destroyingEnemies.emplace_back(DestroyingEnemyType::FIRE_WORM, 1, 0, 0, this->textures["ENEMY_FIRE_WORM"], &this->player, this->enemiesSounds);
+	//this->destroyingEnemies.emplace_back(DestroyingEnemyType::DRAGON, 1, 0, 0, this->textures["ENEMY_DRAGON"], &this->player, this->enemiesSounds);
 }
 
 inline void GameState::initPlayerGUI()
@@ -165,11 +166,18 @@ inline void GameState::updateInput(const float& dt)
 
 		if (!this->paused)
 		{
-			this->player.pauseSounds();
+			//Pausing sounds
+			this->pauseSounds();
+
+			//Pausing state
 			this->pauseState();
 		}
 		else
 		{
+			//Unpausing sounds
+			this->resumeSounds();
+
+			//Unpausing state
 			this->unpausedState();
 			this->skillMenuActive = false;
 			this->itemsMenuActive = false;
@@ -230,6 +238,9 @@ inline void GameState::updatePauseMenuButtons()
 		this->pauseMenu.playClickSound();
 
 		this->unpausedState();
+
+		//Resuming sounds
+		this->resumeSounds();
 	}
 	else if (this->pauseMenu.isButtonPressed("SKILLS"))
 	{
@@ -328,6 +339,79 @@ inline void GameState::renderEnemies(sf::RenderTarget* target)
 		if (!el.dead())
 		{
 			el.render(this->renderTexture, &this->core_shader);
+		}
+	}
+}
+
+//Functions
+inline void GameState::pauseSounds()
+{
+	//Pausing player Sounds
+	this->player.pauseSounds();
+
+	//Pausing enemies sounds
+	for (auto& el : this->destroyingEnemies)
+	{
+		if (!el.dead())
+		{
+			el.pauseSounds();
+		}
+	}
+	for (auto& el : this->mageEnemies)
+	{
+		if (!el.dead())
+		{
+			el.pauseSounds();
+		}
+	}
+	for (auto& el : this->bosses)
+	{
+		if (!el.dead())
+		{
+			el.pauseSounds();
+		}
+	}
+	for (auto& el : this->meleEnemies)
+	{
+		if (!el.dead())
+		{
+			el.pauseSounds();
+		}
+	}
+}
+
+inline void GameState::resumeSounds()
+{
+	//Resume player sounds
+	this->player.resumeSounds();
+
+	//Resuming enemies sounds
+	for (auto& el : this->destroyingEnemies)
+	{
+		if (!el.dead())
+		{
+			el.resumeSounds();
+		}
+	}
+	for (auto& el : this->mageEnemies)
+	{
+		if (!el.dead())
+		{
+			el.resumeSounds();
+		}
+	}
+	for (auto& el : this->bosses)
+	{
+		if (!el.dead())
+		{
+			el.resumeSounds();
+		}
+	}
+	for (auto& el : this->meleEnemies)
+	{
+		if (!el.dead())
+		{
+			el.resumeSounds();
 		}
 	}
 }

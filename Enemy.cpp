@@ -93,13 +93,41 @@ void Enemy::initPopUpTextComponent()
 	this->popUpTextComponent.addText ("MISS", sf::Color(200, 200, 200), 40);
 }
 
-//Functions 
+//Update functions 
 void Enemy::updatePopUpText(const std::string& key)
 {
 	this->popUpTextKey = key;
 	this->popUpTextComponent.prepareText(this->popUpTextKey);
 	this->popUpTextTimer.restart();
 	this->showPopUpText = true;
+}
+
+void Enemy::updateSound()
+{
+	if (this->soundTime < this->soundTimer.getElapsedTime().asSeconds() && !this->isDead)
+	{
+		this->soundTimer.restart();
+
+		this->soundBox.playSound(this->soundKey);
+	}
+}
+
+//Render functions
+void Enemy::renderPopUpText(sf::RenderTarget& target)
+{
+	//Render pop up text
+	if (this->showPopUpText)
+	{
+		if (this->popUpTextTimer.getElapsedTime().asSeconds() > this->popUpTextComponent.getpTextExpireTime())
+		{
+			this->showPopUpText = false;
+			this->popUpTextComponent.resetText(this->popUpTextKey);
+		}
+		else
+		{
+			this->popUpTextComponent.popUpText(target, this->popUpTextKey, this->getPosition());
+		}
+	}
 }
 
 //Constructor
@@ -119,28 +147,23 @@ Enemy::Enemy(const int& level, const float& x, const float& y, sf::Texture& text
 	this->initPopUpTextComponent();
 }
 
-void Enemy::renderPopUpText(sf::RenderTarget& target)
-{
-	//Render pop up text
-	if (this->showPopUpText)
-	{
-		if (this->popUpTextTimer.getElapsedTime().asSeconds() > this->popUpTextComponent.getpTextExpireTime())
-		{
-			this->showPopUpText = false;
-			this->popUpTextComponent.resetText(this->popUpTextKey);
-		}
-		else
-		{
-			this->popUpTextComponent.popUpText(target, this->popUpTextKey, this->getPosition());
-		}
-	}
-}
-
 Enemy::~Enemy()
 {
 }
 
+//Accessors
 const bool& Enemy::dead()
 {
 	return this->isDead;
+}
+
+//Functions
+void Enemy::pauseSounds()
+{
+	this->soundBox.pauseSounds();
+}
+
+void Enemy::resumeSounds()
+{
+	this->soundBox.resumeSounds();
 }

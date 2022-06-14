@@ -1,10 +1,9 @@
-
 //Core
+#include<memory>
 #include<algorithm>
 #include<stack>
 #include<map>
 #include<unordered_map>
-#include<memory>
 #include<set>
 #include<vector>
 #include<queue>
@@ -15,7 +14,7 @@
 #include<cmath>
 #include<thread>
 #include<random>
-#include <cstdlib>
+#include<cstdlib>
 
 //SFML
 #include<SFML/Audio.hpp>

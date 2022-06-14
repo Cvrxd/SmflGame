@@ -19,6 +19,7 @@ protected:
 
 	//Variables
 	std::string popUpTextKey;
+	std::string soundKey;
 
 	//Resistance
 	SkillType skillReistance = SkillType::EMPTY;
@@ -39,7 +40,9 @@ protected:
 	//Timers
 	sf::Clock attackTimer;
 	sf::Clock popUpTextTimer;
+	sf::Clock soundTimer;
 
+	float   soundTime;
 	float   attackColdown;
 	int     attackCount;
 	int     attackCountMAX;
@@ -93,6 +96,7 @@ protected:
 	virtual void updateAttack        (const float& dt)    = 0;
 	virtual void updateMovement      (const float& dt)    = 0;
 	virtual void updateAnimations    (const float& dt)    = 0;
+	virtual void updateSound         ();
 	virtual void updatePopUpText     (const std::string& key);
 
 	//Render
@@ -104,5 +108,10 @@ public:
 
 	//Accessors
 	const bool& dead();
+
+	//Functions
+	virtual void pauseSounds();
+	virtual void resumeSounds();
+	
 };
 

@@ -9,6 +9,10 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 	case MeleEnemyType::MIMIC:
 		this->sprite.setScale(3.f, 3.f);
 
+		//Sound
+		this->soundKey  = "MIMIC_SOUND";
+		this->soundTime = 5.25f;
+
 		//Attack coldown
 		this->attackCountMAX = 3;
 		this->attackColdown = 3.f;
@@ -34,7 +38,12 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		};
 		break;
 	case MeleEnemyType::BRINGER_OF_DEATH:
+
 		this->sprite.setScale(3.f, 3.f);
+
+		//Sound
+		this->soundKey = "BRINGER_OF_DEATH_SOUND";
+		this->soundTime = 6.5f;
 
 		//Attack coldown
 		this->attackCountMAX = 1;
@@ -44,7 +53,7 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		this->magicalResistance = true;
 
 		//Init components
-		this->createHitboxComponent(this->sprite, 250.f, 120.f, 100.f, 200.f);
+		this->createHitboxComponent(this->sprite, 210.f, 120.f, 100.f, 200.f);
 		this->createMovementComponent(150.f, 850.f, 200.f);
 		this->createAnimationComponent(texture_sheet);
 
@@ -61,7 +70,12 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		};
 		break;
 	case MeleEnemyType::KNIGHT1:
+
 		this->sprite.setScale(2.5f, 2.5f);
+
+		//Sound
+		this->soundKey = "KNIGHT1_SOUND";
+		this->soundTime = 6.5f;
 
 		//Attack coldown
 		this->attackCountMAX = 1;
@@ -88,7 +102,12 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		};
 		break;
 	case MeleEnemyType::HUNTRESS:
+
 		this->sprite.setScale(3.f, 3.f);
+
+		//Sound
+		this->soundKey = "HUNTRESS_SOUND";
+		this->soundTime = 6.f;
 
 		//Attack coldown
 		this->attackCountMAX = 3;
@@ -115,7 +134,12 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		};
 		break;
 	case MeleEnemyType::MARTIAL_HERO1:
+
 		this->sprite.setScale(2.6f, 2.6f);
+
+		//Sound
+		this->soundKey = "MARTIAL_HERO2_SOUND";
+		this->soundTime = 5.f;
 
 		//Attack coldown
 		this->attackCountMAX = 2;
@@ -139,14 +163,19 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		};
 		break;
 	case MeleEnemyType::MARTIAL_HERO2:
+
 		this->sprite.setScale(3.f, 3.f);
+
+		//Sound
+		this->soundKey = "MARTIAL_HERO2_SOUND";
+		this->soundTime = 5.2f;
 
 		//Attack coldown
 		this->attackCountMAX = 1;
 		this->attackColdown = 2.f;
 
 		//Init components
-		this->createHitboxComponent(this->sprite, 180.f, 100.f, 150.f, 160.f);
+		this->createHitboxComponent(this->sprite, 150.f, 100.f, 150.f, 160.f);
 		this->createMovementComponent(170.f, 1000.f, 200.f);
 		this->createAnimationComponent(texture_sheet);
 
@@ -164,7 +193,12 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 	break;
 
 	case MeleEnemyType::NOMAND:
+
 		this->sprite.setScale(4.f, 4.f);
+
+		//Sound
+		this->soundKey = "NOMAND_SOUND";
+		this->soundTime = 6.2f;
 
 		//Attack coldown
 		this->attackCountMAX = 1;
@@ -238,11 +272,11 @@ inline void MeleEnemy::addAnimations()
 		this->animationComponent.addAnimation("IDLE", 0, 4, 3, 4, 200, 200, 15.f);
 		break;
 	case MeleEnemyType::MARTIAL_HERO2:
-		this->animationComponent.addAnimation("MOVE", 0, 2, 7, 2, 200, 200, 10.f);
-		this->animationComponent.addAnimation("ATTACK", 0, 0, 3, 0, 200, 200, 19.f);
-		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 2, 3, 200, 200, 14.f);
-		this->animationComponent.addAnimation("DEATH", 0, 1, 6, 1, 200, 200, 15.f);
-		this->animationComponent.addAnimation("IDLE", 0, 4, 5, 4, 200, 200, 15.f);
+		this->animationComponent.addAnimation("MOVE", 0, 2, 7, 2, 126, 126, 10.f);
+		this->animationComponent.addAnimation("ATTACK", 0, 0, 6, 0, 126, 126, 14.f);
+		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 2, 3, 126, 126, 14.f);
+		this->animationComponent.addAnimation("DEATH", 0, 1, 6, 1, 126, 126, 15.f);
+		this->animationComponent.addAnimation("IDLE", 0, 4, 5, 4, 126, 126, 15.f);
 		break;
 	case MeleEnemyType::NOMAND:
 		this->animationComponent.addAnimation("MOVE", 0, 1, 7, 1, 64, 64, 20.f);
@@ -506,7 +540,6 @@ MeleEnemy::MeleEnemy(const MeleEnemyType& type, const int& level, const float& x
 	this->setPosition(x, y);
 }
 
-
 MeleEnemy::~MeleEnemy()
 {
 }
@@ -516,10 +549,11 @@ void MeleEnemy::update(const float& dt, sf::Vector2f mouse_pos_view)
 {
 	this->movementComponent.update(dt);
 
-	this->updatePlayerImpact(dt);
-	this->updateAttack(dt);
-	this->updateMovement(dt);
-	this->updateAnimations(dt);
+	this->updatePlayerImpact (dt);
+	this->updateAttack       (dt);
+	this->updateMovement     (dt);
+	this->updateAnimations   (dt);
+	this->updateSound        ();
 
 	this->healthBar.update(dt, this->getPosition());
 	this->levelIcon.update(dt, this->getPosition());

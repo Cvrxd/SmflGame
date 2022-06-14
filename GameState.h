@@ -91,6 +91,10 @@ private:
 	//Render functions
 	void renderEnemies (sf::RenderTarget* target);
 
+	//Functions
+	void pauseSounds  ();
+	void resumeSounds ();
+
 public:
 	GameState (StateData* state_data, const unsigned int& difficultyLvl = 1);
 	virtual ~GameState() override;

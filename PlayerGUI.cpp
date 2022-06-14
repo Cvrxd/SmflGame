@@ -1296,6 +1296,10 @@ inline void ItemsMune::updateButtons(sf::Vector2i& mousePosWindow)
 
 			if (this->playerStats->coins >= 50)
 			{
+				//Sound
+				this->playSound("UNLOCK_ITEM");
+
+				//Unlock
 				this->unlockItem(it.operator*().first);
 				this->playerStats->loseCoins(50);
 
@@ -1326,6 +1330,10 @@ inline void ItemsMune::updateButtons(sf::Vector2i& mousePosWindow)
 			//Upgrade item
 			if (this->playerStats->coins >= this->itemsLvl[el.first] * 20 && this->itemsLvl[el.first] != this->maxLevel)
 			{
+				//Sound
+				this->playSound("UPGRADE_ITEM");
+
+				//Upgrade
 				this->playerStats->loseCoins(this->itemsLvl[el.first] * 20);
 				this->upgradeItem(el.first);
 			}

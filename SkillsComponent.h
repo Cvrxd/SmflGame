@@ -25,6 +25,7 @@ private:
 	using PotionsCount          = std::pair<Potions, int>;
 	using MapSkillsTextures     = std::unordered_map<SkillType, std::pair<sf::Sprite, sf::Texture>>;
 	using MapSkillsAnimations   = std::unordered_map<SkillType, AnimationComponent>;
+	using SoundsMap             = std::unordered_map<SkillType, std::pair<sf::SoundBuffer, sf::Sound>>;
 
 	//Variables
 	sf::Clock skillTimer;
@@ -52,7 +53,7 @@ private:
 	float  buffMissChance = 5.f;
 
 	//Sounds
-	std::unordered_map<SkillType, std::pair<sf::SoundBuffer, sf::Sound>> sounds;
+	SoundsMap sounds;
 
 	//Potions
 	PotionsCount        healthPotions;
@@ -92,6 +93,7 @@ private:
 	bool   usingBuff;
 	bool   showPopUpText;
 
+	bool&  castingSpell;
 	bool&  usingSkill;
 	bool&  isBuffed;
 	int&   currentSkillDamage;
@@ -118,7 +120,7 @@ private:
 	void playSkillSound  (const SkillType& type);
 
 public:
-	SkillsComponent  (StatsComponent& statsComponent, const sf::Font& font, bool& isUsingSkill, SkillType& usingSkillType, int& currentSkillDamage, bool& isBuffed) noexcept;
+	SkillsComponent  (StatsComponent& statsComponent, const sf::Font& font, bool& isUsingSkill, SkillType& usingSkillType, int& currentSkillDamage, bool& isBuffed, bool& castingSpell) noexcept;
 	~SkillsComponent ();
 
 	//Accessors
@@ -133,6 +135,9 @@ public:
 	int&                    getHpPotions     ();
 
 	//Functions
+	void pauseSounds  ();
+	void resumeSounds ();
+
 	void addPotion         (const Potions& potion_type);
 	void usePotion         (const Potions& potion_type);
 

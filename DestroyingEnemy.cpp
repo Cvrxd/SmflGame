@@ -4,6 +4,8 @@
 //Init functions
 inline void DestroyingEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sprite)
 {
+	this->destroySoundKey = "DESTROY_ENEMY_SOUND";
+
 	switch (this->type)
 	{
 	case DestroyingEnemyType::FIRE_SKULL:
@@ -36,7 +38,7 @@ inline void DestroyingEnemy::initComponents(sf::Texture& texture_sheet, sf::Spri
 
 		//Init resistance
 		this->skillReistance = SkillType::FIRE_EXPLOSION;
-		this->physicalResistance = true;
+		//this->physicalResistance = true;
 
 		//Init components
 		this->createHitboxComponent(this->sprite, 70.f, 120.f, 150.f, 120.f);
@@ -55,6 +57,29 @@ inline void DestroyingEnemy::initComponents(sf::Texture& texture_sheet, sf::Spri
 			sprite.setScale(3.f, 3.f);
 		};
 		break;
+	case DestroyingEnemyType::DRAGON:
+		this->sprite.setScale(3.f, 3.f);
+
+		//Init resistance
+		this->skillReistance = SkillType::FIRE_EXPLOSION;
+		this->physicalResistance = true;
+
+		//Init components
+		this->createHitboxComponent(this->sprite, 50.f, 40.f, 150.f, 120.f);
+		this->createMovementComponent(160.f, 1000.f, 180.f);
+		this->createAnimationComponent(texture_sheet);
+
+		//Sets origins
+		this->setOriginLeft = [&sprite]()
+		{
+			sprite.setOrigin(100.f, 0.f);
+			sprite.setScale(-3.f, 3.f);
+		};
+		this->setOriginRight = [&sprite]()
+		{
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setScale(3.f, 3.f);
+		};
 	default:
 		break;
 	}
@@ -75,6 +100,10 @@ inline void DestroyingEnemy::createAnimationComponent(sf::Texture& texture_sheet
 		this->destroyingSprite.second.loadFromFile("Textures/animations/hit/destroying1.png");
 		this->destroyingAnimation = { &this->destroyingSprite.first, &this->destroyingSprite.second };
 		break;
+	case DestroyingEnemyType::DRAGON:
+		this->destroyingSprite.first.setScale(4.f, 4.f);
+		this->destroyingSprite.second.loadFromFile("Textures/animations/hit/destroying1.png");
+		this->destroyingAnimation = { &this->destroyingSprite.first, &this->destroyingSprite.second };
 	default:
 		break;
 	}
@@ -100,6 +129,13 @@ inline void DestroyingEnemy::addAnimations()
 		this->animationComponent.addAnimation("DEATH", 0, 1, 7, 1, 90, 90, 20.f);
 		this->destroyingAnimation.addAnimation("DESTROY", 0, 0, 6, 0, 81, 66, 10.f);
 		break;
+	case DestroyingEnemyType::DRAGON:
+		this->animationComponent.addAnimation("MOVE", 1, 0, 7, 0, 62, 72, 11.f);
+		this->animationComponent.addAnimation("ATTACK", 8, 0, 15, 0, 60, 72, 15.f);
+		this->animationComponent.addAnimation("TAKE_HIT", 14, 0, 17, 0, 60, 72, 20.f);
+		this->animationComponent.addAnimation("DEATH", 0, 1, 7, 1, 90, 60, 10.f);
+		this->destroyingAnimation.addAnimation("DESTROY", 0, 0, 6, 0, 81, 66, 10.f);
+		break;
 	default:
 		break;
 	}
@@ -122,6 +158,9 @@ inline void DestroyingEnemy::updateAttack(const float& dt)
 	if (this->player->getHitRange().getGlobalBounds().intersects(this->getGlobalBounds()) && !this->isDead)
 	{
 		this->statsComponent.hp = 0;
+
+		//Sound
+		this->soundBox.playSound(this->destroySoundKey);
 	}
 }
 

@@ -4,6 +4,10 @@
 //Init functions
 inline void MageEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sprite)
 {
+	//Sound key
+	this->soundKey  = "MAGE_SOUND";
+	this->soundTime = 10.f;
+
 	switch (this->type)
 	{
 	case MageEnemyType::DARK_MAGE:
@@ -11,7 +15,7 @@ inline void MageEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		this->offsetY = 0;
 
 		this->sprite.setScale(2.f, 2.f);
-		
+
 		//Attack time
 		this->attackCountMAX = 1;
 		this->attackColdown = 3.5f;
@@ -140,7 +144,57 @@ inline void MageEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 			sprite.setScale(1.5f, 1.5f);
 		};
 		break;
+
+	case MageEnemyType::NECROMANCER:
+		this->offsetX = 0;
+		this->offsetY = 0;
+
+		this->sprite.setScale(2.5f, 2.5f);
+
+		//Sound time
+		this->soundTime = 9.f;
+
+		//Attack time
+		this->attackCountMAX = 1;
+		this->attackColdown = 3.f;
+
+		//Resistance
+		this->skillReistance = SkillType::DARK_POSION;
+
+		//Init spell cast range
+		this->castR  = 600.f;
+		this->ineerR = 300.f;
+
+		this->castRange.setRadius(this->castR);
+		this->castRange.setFillColor(sf::Color::Transparent);
+		this->castRange.setOutlineColor(sf::Color::Red);
+		this->castRange.setOutlineThickness(1.f);
+
+		this->innerRange.setRadius(this->ineerR);
+		this->innerRange.setFillColor(sf::Color::Transparent);
+		this->innerRange.setOutlineColor(sf::Color::Green);
+		this->innerRange.setOutlineThickness(1.f);
+
+		//Init components
+		this->createHitboxComponent(this->sprite, 130.f, 130.f, 120.f, 140.f);
+		this->createMovementComponent(180.f, 1200.f, 200.f);
+		this->createAnimationComponent(texture_sheet);
+
+		//Sets origins
+		this->setOriginLeft = [&sprite]()
+		{
+			sprite.setOrigin(170.f, 0.f);
+			sprite.setScale(-2.5f, 2.5f);
+		};
+		this->setOriginRight = [&sprite]()
+		{
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setScale(2.5f, 2.5f);
+		};
+		break;
+
 	default:
+
 		break;
 	}
 }
@@ -174,6 +228,13 @@ inline void MageEnemy::addAnimations()
 		this->animationComponent.addAnimation("CAST", 0, 0, 7, 0, 231, 190, 15.f);
 		this->animationComponent.addAnimation("TAKE_HIT", 0, 2, 3, 2, 231, 190, 20.f);
 		this->animationComponent.addAnimation("DEATH", 0, 1, 6, 1, 231, 190, 11.f);
+		break;
+	case MageEnemyType::NECROMANCER:
+		this->animationComponent.addAnimation("IDLE", 0, 0, 7, 0, 160, 128, 13.f);
+		this->animationComponent.addAnimation("MOVE", 0, 1, 7, 1, 160, 128, 8.f);
+		this->animationComponent.addAnimation("CAST", 0, 2, 12, 2, 160, 128, 13.f);
+		this->animationComponent.addAnimation("TAKE_HIT", 0, 5, 4, 5, 160, 128, 20.f);
+		this->animationComponent.addAnimation("DEATH", 0, 6, 9, 6, 160, 128, 11.f);
 		break;
 	default:
 		break;
@@ -457,12 +518,13 @@ inline void MageEnemy::updatePlayerImpact(const float& dt)
 	}
 }
 
-
 //Constructors
 MageEnemy::MageEnemy(const MageEnemyType& type, const int& level, const float& x, const float& y, 
 	sf::Texture& texture_sheet, Player* player, EnemySoundBox& sounds) noexcept
 	:Enemy(level, x, y, texture_sheet, player, sounds),
-	type(type), healthBar(&this->statsComponent.hp), levelIcon(&level, &this->player->getStatsComponent()->level, this->player->getFont())
+	type(type), 
+	healthBar(&this->statsComponent.hp), 
+	levelIcon(&level, &this->player->getStatsComponent()->level, this->player->getFont())
 {
 	this->initComponents(texture_sheet, this->sprite);
 	this->setPosition(x, y);
@@ -477,13 +539,14 @@ void MageEnemy::update(const float& dt, sf::Vector2f mouse_pos_view)
 {
 	this->movementComponent.update(dt);
 
-	this->updatePlayerImpact(dt);
-	this->updateAttack(dt);
-	this->updateMovement(dt);
-	this->updateAnimations(dt);
+	this->updatePlayerImpact (dt);
+	this->updateAttack       (dt);
+	this->updateMovement     (dt);
+	this->updateAnimations   (dt);
+	this->updateSound        ();
 
-	this->healthBar.update(dt, this->getPosition());
-	this->levelIcon.update(dt, this->getPosition());
+	this->healthBar.update (dt, this->getPosition());
+	this->levelIcon.update (dt, this->getPosition());
 
 	this->hitboxComponent.update();
 }
@@ -491,8 +554,6 @@ void MageEnemy::update(const float& dt, sf::Vector2f mouse_pos_view)
 void MageEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 {
 	target.draw(this->sprite, shader);
-	//target.draw(this->castRange);
-	//target.draw(this->innerRange);
 
 	if (this->hitImpact)
 	{
@@ -513,5 +574,8 @@ void MageEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 	this->healthBar.render(target);
 	this->levelIcon.render(target);
 
+	//Debug
+    //target.draw(this->castRange);
+	//target.draw(this->innerRange);
 	//this->hitboxComponent.render(target);
 }
