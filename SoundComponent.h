@@ -31,14 +31,51 @@ struct GuiSoundsBox
 			this->sounds["CLICK"].second.setBuffer(this->sounds["CLICK"].first);
 			this->sounds["CLICK"].second.setVolume(10.f);
 		}
+
+		void stopSounds()
+		{
+			for (auto& el : this->sounds)
+			{
+				if (el.second.second.getStatus() != sf::Music::Stopped)
+				{
+					el.second.second.stop();
+				}
+			}
+		}
 	};
 
 class GameStateSoundBox
 {
 private:
-//Variables
-	
+	using MusicMap = std::unordered_map<std::string, sf::Music>;
+
+	//Variables
+	MusicMap music;
+
+	float volume          = 2.f;
+	const float volumeMAX = 5.f;
+
+	//Functions
+	void initMusic();
 public:
+	GameStateSoundBox();
+	~GameStateSoundBox();
+
+	//Accessors
+	void setVolume(const float& volume);
+
+	//Functions
+	void pauseThemeMusic();
+	void playThemeMusic();
+	void stopThemeMusic();
+
+	void pausePauseMenuMusic();
+	void playPauseMenuMusic();
+	void stopPauseMenuMusic();
+
+	void pauseBossFightMusic();
+	void playBossFightMusic();
+	void stopBossFightMusic();
 
 };
 
@@ -56,14 +93,14 @@ class PlayerSoundBox
 		//Movement sound to play
 		sf::Sound* movementSound;
 
+		//Intit functions
+		void initSounds();
+
 	public:
-		PlayerSoundBox   () noexcept;
+		PlayerSoundBox   ();
 		~PlayerSoundBox  ();
 
 		//Functions
-		void addWalkingSound       (const std::string& path);
-		void addRunningSound       (const std::string& path);
-
 		void changeMovementSound   (const bool& running);
 		void changeMovementVolume  (const bool& increase);
 

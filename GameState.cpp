@@ -25,7 +25,10 @@ inline void GameState::initRenderTextures()
 	this->renderTexture.create(this->stateData->gfxSettings->resolution.width, this->stateData->gfxSettings->resolution.height);
 
 	this->renderSprite.setTexture(this->renderTexture.getTexture());
-	this->renderSprite.setTextureRect(sf::IntRect(0, 0, this->stateData->gfxSettings->resolution.width, this->stateData->gfxSettings->resolution.height));
+
+	this->renderSprite.setTextureRect(sf::IntRect(0, 0, 
+		this->stateData->gfxSettings->resolution.width, 
+		this->stateData->gfxSettings->resolution.height));
 }
 
 inline void GameState::initView()
@@ -306,6 +309,7 @@ inline void GameState::updateMageEnemies(const float& dt)
 		if (!el.dead())
 		{
 			el.update(dt, this->mousPosView);
+
 		}
 	}
 }
@@ -418,7 +422,9 @@ inline void GameState::resumeSounds()
 
 //Constructor
 GameState::GameState(StateData* state_data, const unsigned int& difficultyLvl)
-	: State(state_data), 
+	: 
+	State(state_data), 
+
 	diffcultyLvl(difficultyLvl),
 	skillMenuActive(false),
 	popUpTextComponent (state_data->font),
@@ -428,7 +434,7 @@ GameState::GameState(StateData* state_data, const unsigned int& difficultyLvl)
 	playerGUI   (this->player, this->font), // Player GUI
 	skillsMenu  (this->player, this->playerGUI,this->font, this->guiSounds,static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
 	itemsMenu   (this->player, this->playerGUI, this->font, this->guiSounds, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // items menu
-	tileMap     (this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg") //Tile map
+	tileMap     ("map/game_map.txt") //Tile map
 {
 	this->initRenderTextures();
 	this->initView();
@@ -439,7 +445,6 @@ GameState::GameState(StateData* state_data, const unsigned int& difficultyLvl)
 	this->initSounds();
 	this->initEnemies();
 	this->initShaders();
-	this->initTileMap();
 	this->initPlayerGUI();
 }
 
@@ -450,32 +455,32 @@ GameState::~GameState()
 //Public functions
 void GameState::update(const float& dt)
 {
-	this->updateMousePosition(&this->view);
-	this->updateKeyTime(dt);
-	this->updateInput(dt);
+	this->updateMousePosition (&this->view);
+	this->updateKeyTime       (dt);
+	this->updateInput         (dt);
 	
-	if (!this->paused) //Unpaused
+	if (!this->paused) //Update game
 	{
-		this->updateView(dt);
-		this->updateEnemies(dt);
-		this->updatePlayerInput(dt);
-		this->updateTileMap(dt);
-		this->player.update(dt, this->mousPosView);
+		this->updateView        (dt);
+		this->updateEnemies     (dt);
+		this->updatePlayerInput (dt);
+		this->updateTileMap     (dt);
+		this->player.update     (dt, this->mousPosView);
 
-		//GUI UPDATE
+		//Player gui update
 		this->playerGUI.update(dt);
 	} 
-	else if (this->paused && this->skillMenuActive)
+	else if (this->paused && this->skillMenuActive) //Update skills menu
 	{
 		this->playerGUI.skillsMenUpdate(dt);
 		this->skillsMenu.update(this->mousePosWindow, dt);
 	}
-	else if (this->paused && this->itemsMenuActive)
+	else if (this->paused && this->itemsMenuActive) //Update items menu
 	{
 		this->playerGUI.itemsMenuUpdate(dt);
 		this->itemsMenu.update(this->mousePosWindow, dt);
 	}
-	else//Paused
+	else                                            //Update pause menu
 	{
 		this->pauseMenu.update(this->mousePosWindow);
 		this->updatePauseMenuButtons();
@@ -493,19 +498,12 @@ void GameState::render(sf::RenderTarget* target)
 	this->renderTexture.clear();
 	this->renderTexture.setView(this->view);
 
-	//tile map and player render
-	//Using shader
-	this->tileMap.renderGameState(this->renderTexture, this->player.getCenter(), &this->core_shader);
-
-	this->renderEnemies(target);
-	this->player.render(this->renderTexture, &this->core_shader);
-
-	this->tileMap.renderAbove(this->renderTexture, this->player.getCenter(), &this->core_shader);
-
-	//player GUI render
-	this->renderTexture.setView(this->renderTexture.getDefaultView());
-	this->playerGUI.render(this->renderTexture);
-
+	this->tileMap.renderGameState  (this->renderTexture, this->player.getCenter(), &this->core_shader);  //Render tile map
+	this->renderEnemies            (target);                                                             //Render all enemies
+	this->player.render            (this->renderTexture, &this->core_shader);                            //Render player
+	this->tileMap.renderAbove      (this->renderTexture, this->player.getCenter(), &this->core_shader);  //Render tiles above entities
+	this->renderTexture.setView    (this->renderTexture.getDefaultView());                               //Seting view
+	this->playerGUI.render         (this->renderTexture);                                                //Render player GUI
 
 	if (this->paused && !this->skillMenuActive && !this->itemsMenuActive) //Pause menu render
 	{
@@ -523,6 +521,8 @@ void GameState::render(sf::RenderTarget* target)
 	//Render renderTexure
 	this->renderTexture.display();
 	this->renderSprite.setTexture(this->renderTexture.getTexture());
+
+	//Final rendering using render sprite
 	target->draw(this->renderSprite);
 }
 

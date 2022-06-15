@@ -87,8 +87,6 @@ inline void Player::addAnimations()
 
 inline void Player::initSounds()
 {
-	this->soundBox.addWalkingSound("Sounds/game_state/player/walking.wav");
-	this->soundBox.addRunningSound("Sounds/game_state/player/running.wav");
 }
 
 //Sound functions

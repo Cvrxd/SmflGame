@@ -5,20 +5,14 @@
 //Player sound Box======
 //======================
 
-//Constructors
-PlayerSoundBox::PlayerSoundBox() noexcept
-	:movementSound(nullptr)
+//Init functions
+void PlayerSoundBox::initSounds()
 {
-}
-
-PlayerSoundBox::~PlayerSoundBox()
-{
-}
-
-//Functions
-void PlayerSoundBox::addWalkingSound(const std::string& path)
-{
-	this->sounds["WALKING"].first.loadFromFile(path);
+	//Walking sound
+	if (!this->sounds["WALKING"].first.loadFromFile("Sounds/game_state/player/walking.wav"))
+	{
+		throw("UNABLE TO LOAD PLAYER WALKING SOUND");
+	}
 	this->sounds["WALKING"].second.setBuffer(this->sounds["WALKING"].first);
 	this->sounds["WALKING"].second.setVolume(this->movementVolumeMin);
 	this->sounds["WALKING"].second.setLoop(true);
@@ -27,11 +21,12 @@ void PlayerSoundBox::addWalkingSound(const std::string& path)
 
 	this->movementSound->play();
 	this->movementSound->pause();
-}
 
-void PlayerSoundBox::addRunningSound(const std::string& path)
-{
-	this->sounds["RUNNING"].first.loadFromFile(path);
+	//Running sound
+	if (!this->sounds["RUNNING"].first.loadFromFile("Sounds/game_state/player/running.wav"))
+	{
+		throw("UNABLE TO LOAD PLAYER WALKING SOUND");
+	}
 	this->sounds["RUNNING"].second.setBuffer(this->sounds["RUNNING"].first);
 	this->sounds["RUNNING"].second.setVolume(this->movementVolumeMin);
 	this->sounds["RUNNING"].second.setLoop(true);
@@ -40,6 +35,25 @@ void PlayerSoundBox::addRunningSound(const std::string& path)
 	this->sounds["RUNNING"].second.pause();
 }
 
+//Constructors
+PlayerSoundBox::PlayerSoundBox() 
+	:movementSound(nullptr)
+{
+	this->initSounds();
+}
+
+PlayerSoundBox::~PlayerSoundBox()
+{
+	for (auto& el : this->sounds)
+	{
+		if (el.second.second.getStatus() != sf::Music::Stopped)
+		{
+			el.second.second.stop();
+		}
+	}
+}
+
+//Public functions
 void PlayerSoundBox::changeMovementSound(const bool& running)
 {
 	if (running)
@@ -91,7 +105,6 @@ void PlayerSoundBox::unpauseMovementSound()
 	}
 }
 
-<<<<<<< HEAD
 //=======================
 //GameState sound Box====
 //=======================
@@ -104,11 +117,11 @@ inline void GameStateSoundBox::initMusic()
 	{
 		throw("UNABLE TO LOAD THEME MUSIC");
 	}
-	if (!this->music["PAUSE"].openFromFile("Sounds/game_state/music/pause_menu_music.wav"))
+	if (!this->music["PAUSE"].openFromFile("Sounds/game_state/music/pause_menu_music.ogg"))
 	{
 		throw("UNABLE TO LOAD PAUSE MENU MUSIC");
 	}
-	if (!this->music["BOSS_FIGHT"].openFromFile("Sounds/game_state/music/boss_fight_music.wav"))
+	if (!this->music["BOSS_FIGHT"].openFromFile("Sounds/game_state/music/boss_fight_music.ogg"))
 	{
 		throw("UNABLE TO LOAD BOSS FIGHT MUSIC");
 	}
@@ -307,9 +320,9 @@ inline void EnemySoundBox::initSound()
 	this->sounds["KNIGHT1_SOUND"].second.setBuffer(this->sounds["KNIGHT1_SOUND"].first);
 	this->sounds["KNIGHT1_SOUND"].second.setVolume(1.f);
 
-	this->sounds["MARTIAL_HERO2_SOUND"].first.loadFromFile("Sounds/game_state/enemies_sounds/martial_hero2_sound.wav");
-	this->sounds["MARTIAL_HERO2_SOUND"].second.setBuffer(this->sounds["MARTIAL_HERO2_SOUND"].first);
-	this->sounds["MARTIAL_HERO2_SOUND"].second.setVolume(1.5f);
+	this->sounds["MALE_ENEMY_SOUND"].first.loadFromFile("Sounds/game_state/enemies_sounds/male_enemy_sound.wav");
+	this->sounds["MALE_ENEMY_SOUND"].second.setBuffer(this->sounds["MARTIAL_HERO2_SOUND"].first);
+	this->sounds["MALE_ENEMY_SOUND"].second.setVolume(1.5f);
 
 	this->sounds["MIMIC_SOUND"].first.loadFromFile("Sounds/game_state/enemies_sounds/mimic_sound.wav");
 	this->sounds["MIMIC_SOUND"].second.setBuffer(this->sounds["MIMIC_SOUND"].first);
@@ -337,6 +350,13 @@ EnemySoundBox::EnemySoundBox() noexcept
 
 EnemySoundBox::~EnemySoundBox()
 {
+	for (auto& el : this->sounds)
+	{
+		if (el.second.second.getStatus() != sf::Music::Stopped)
+		{
+			el.second.second.stop();
+		}
+	}
 }
 
 //Functions

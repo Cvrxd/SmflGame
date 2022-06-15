@@ -138,7 +138,7 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		this->sprite.setScale(2.6f, 2.6f);
 
 		//Sound
-		this->soundKey = "MARTIAL_HERO2_SOUND";
+		this->soundKey = "MALE_ENEMY_SOUND";
 		this->soundTime = 5.f;
 
 		//Attack coldown
@@ -167,7 +167,7 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		this->sprite.setScale(3.f, 3.f);
 
 		//Sound
-		this->soundKey = "MARTIAL_HERO2_SOUND";
+		this->soundKey = "MALE_ENEMY_SOUND";
 		this->soundTime = 5.2f;
 
 		//Attack coldown
@@ -197,7 +197,7 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		this->sprite.setScale(4.f, 4.f);
 
 		//Sound
-		this->soundKey = "NOMAND_SOUND";
+		this->soundKey = "MALE_ENEMY_SOUND";
 		this->soundTime = 6.2f;
 
 		//Attack coldown

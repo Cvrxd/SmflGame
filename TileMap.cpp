@@ -180,6 +180,7 @@ TileMap::TileMap(const float& gridSize, const int& width, const int& hight, cons
 }
 
 TileMap::TileMap(const std::string& file_name)
+	:fromX(0), toX(0), fromY(0), toY(0)
 {
 	this->loadFromFile(file_name);
 }
