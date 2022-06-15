@@ -91,6 +91,137 @@ void PlayerSoundBox::unpauseMovementSound()
 	}
 }
 
+<<<<<<< HEAD
+//=======================
+//GameState sound Box====
+//=======================
+
+//Init functions
+inline void GameStateSoundBox::initMusic()
+{
+	//Loading game music
+	if (!this->music["THEME"].openFromFile("Sounds/game_state/music/background_music.ogg"))
+	{
+		throw("UNABLE TO LOAD THEME MUSIC");
+	}
+	if (!this->music["PAUSE"].openFromFile("Sounds/game_state/music/pause_menu_music.wav"))
+	{
+		throw("UNABLE TO LOAD PAUSE MENU MUSIC");
+	}
+	if (!this->music["BOSS_FIGHT"].openFromFile("Sounds/game_state/music/boss_fight_music.wav"))
+	{
+		throw("UNABLE TO LOAD BOSS FIGHT MUSIC");
+	}
+
+	//Music loop
+	this->music["THEME"].setLoop      (true);
+	this->music["PAUSE"].setLoop      (true);
+	this->music["BOSS_FIGHT"].setLoop (true);
+  
+	//Music volume
+	this->music["THEME"].setVolume      (this->volume);
+	this->music["PAUSE"].setVolume      (this->volume);
+	this->music["BOSS_FIGHT"].setVolume (this->volume);
+}
+
+//Constructor
+GameStateSoundBox::GameStateSoundBox()
+{
+	this->initMusic();
+}
+
+GameStateSoundBox::~GameStateSoundBox()
+{
+	//Stoping all music
+	this->stopBossFightMusic();
+	this->stopPauseMenuMusic();
+	this->stopThemeMusic();
+}
+
+//Accessors
+void GameStateSoundBox::setVolume(const float& volume)
+{
+	for (auto& el : this->music)
+	{
+		el.second.setVolume(volume);
+	}
+
+	this->volume = volume;
+}
+
+//Public functions
+void GameStateSoundBox::pauseThemeMusic()
+{
+	if (this->music["THEME"].getStatus() != sf::Music::Paused)
+	{
+		this->music["THEME"].pause();
+	}
+}
+
+void GameStateSoundBox::playThemeMusic()
+{
+	if (this->music["THEME"].getStatus() != sf::Music::Playing)
+	{
+		this->music["THEME"].play();
+	}
+}
+
+void GameStateSoundBox::stopThemeMusic()
+{
+	if (this->music["THEME"].getStatus() != sf::Music::Stopped)
+	{
+		this->music["THEME"].stop();
+	}
+}
+
+void GameStateSoundBox::pausePauseMenuMusic()
+{
+	if (this->music["PAUSE"].getStatus() != sf::Music::Paused)
+	{
+		this->music["PAUSE"].pause();
+	}
+}
+
+void GameStateSoundBox::playPauseMenuMusic()
+{
+	if (this->music["PAUSE"].getStatus() != sf::Music::Playing)
+	{
+		this->music["PAUSE"].play();
+	}
+}
+
+void GameStateSoundBox::stopPauseMenuMusic()
+{
+	if (this->music["PAUSE"].getStatus() != sf::Music::Stopped)
+	{
+		this->music["PAUSE"].stop();
+	}
+}
+
+void GameStateSoundBox::pauseBossFightMusic()
+{
+	if (this->music["BOSS_FIGHT"].getStatus() != sf::Music::Paused)
+	{
+		this->music["BOSS_FIGHT"].pause();
+	}
+}
+
+void GameStateSoundBox::playBossFightMusic()
+{
+	if (this->music["BOSS_FIGHT"].getStatus() != sf::Music::Playing)
+	{
+		this->music["BOSS_FIGHT"].play();
+	}
+}
+
+void GameStateSoundBox::stopBossFightMusic()
+{
+	if (this->music["BOSS_FIGHT"].getStatus() != sf::Music::Stopped)
+	{
+		this->music["BOSS_FIGHT"].stop();
+	}
+}
+
 //======================
 //Enemies sound Box=====
 //======================

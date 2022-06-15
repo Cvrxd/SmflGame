@@ -33,6 +33,15 @@ struct GuiSoundsBox
 		}
 	};
 
+class GameStateSoundBox
+{
+private:
+//Variables
+	
+public:
+
+};
+
 class PlayerSoundBox
 	{
 	private:

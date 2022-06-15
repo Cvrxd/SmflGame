@@ -28,6 +28,7 @@ private:
 	bool skillMenuActive = false;
 	bool itemsMenuActive = false;
 
+	bool bossFight;
 	//Player buff
 	bool isBuffed        = false;
 

@@ -525,3 +525,4 @@ void GameState::render(sf::RenderTarget* target)
 	this->renderSprite.setTexture(this->renderTexture.getTexture());
 	target->draw(this->renderSprite);
 }
+
