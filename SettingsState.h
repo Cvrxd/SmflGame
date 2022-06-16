@@ -35,13 +35,16 @@ private:
 	void initGUI         ();
 	void initKeybinds    ()                   override;
 
+	//Update functions
+	void updateGuiPosition();
+
 public:
 	SettingsState (StateData* state_data)     noexcept;
 	virtual ~SettingsState();
 
-	//Accessors
-
 	//Functions
+	void updateTopState()                                    override;
+
 	void updateInput  (const float& dt)                      override;
 	void updateGUI    (const float& dt);
 	void update       (const float& dt)                      override;

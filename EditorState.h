@@ -64,6 +64,8 @@ public:
 	virtual ~EditorState();
 
 	//Functions
+	void updateTopState()                            override;
+
 	void update  (const float& dt)                    override;
 	void render  (sf::RenderTarget* target = nullptr) override;
 };

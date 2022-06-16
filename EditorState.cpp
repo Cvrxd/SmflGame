@@ -72,9 +72,9 @@ inline void EditorState::initFonts()
 
 inline void EditorState::initTexts()
 {
-	this->cursorText.setFont(this->font);
-	this->cursorText.setCharacterSize(15);
-	this->cursorText.setFillColor(sf::Color::White);
+	this->cursorText.setFont          (this->font);
+	this->cursorText.setCharacterSize (15);
+	this->cursorText.setFillColor     (sf::Color::White);
 }
 
 inline void EditorState::initButtons()
@@ -258,19 +258,25 @@ inline void EditorState::renderGUI(sf::RenderTarget& target)
 
 //Constructor
 EditorState::EditorState(StateData* state_data) noexcept
-	: State(state_data),
-	tileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg"),
-	pauseMenu(*this->stateData->window, this->stateData->font)
+	: 
+	State(state_data),
+
+	tileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg"), //Tilemap
+	pauseMenu(*this->stateData->window, this->stateData->font)                 //Pause menu
 {
-	this->initVariables();
-	this->initView();
-	this->initBackground();
-	this->initFonts();	  
-	this->initTexts();
-	this->initKeybinds(); 
-	this->initPauseMenu();
-	this->initButtons(); 
-	this->initGUI();
+	//State type
+	this->type = STATE_TYPE::EDITOR_STATE;
+
+	//Init functions
+	this->initVariables  ();
+	this->initView       ();
+	this->initBackground ();
+	this->initFonts      ();	  
+	this->initTexts      ();
+	this->initKeybinds   (); 
+	this->initPauseMenu  ();
+	this->initButtons    (); 
+	this->initGUI        ();
 }
 
 EditorState::~EditorState()
@@ -278,18 +284,22 @@ EditorState::~EditorState()
 }
 
 //Public functions 
+void EditorState::updateTopState()
+{
+}
+
 void EditorState::update(const float& dt)
 {
-	this->updateMousePosition(&this->view);
-	this->updateKeyTime(dt);
-	this->updateInput(dt);
+	this->updateMousePosition (&this->view);
+	this->updateKeyTime       (dt);
+	this->updateInput         (dt);
 
 	if (!this->paused)//Unpaused
 	{
-		this->updateView(dt);
-		this->updateGUI(dt);
-		this->updateButtons();
-		this->updateEditorInput(dt);
+		this->updateView        (dt);
+		this->updateGUI         (dt);
+		this->updateButtons     ();
+		this->updateEditorInput (dt);
 	}
 	else //Paused
 	{
@@ -307,15 +317,14 @@ void EditorState::render(sf::RenderTarget* target)
 		target = this->window;
 	}
 
-	target->setView(this->view);
-	this->tileMap.renderEditorState(*target);
+	target->setView                 (this->view);                      //Set view
+	this->tileMap.renderEditorState (*target);                         //Render tilemap
+	target->setView                 (this->window->getDefaultView());  //Set view
+	this->renderButtons             (*target);                         //Render buttons
+	this->renderGUI                 (*target);                         //Render gui
 
-	target->setView(this->window->getDefaultView());
-	this->renderButtons(*target);
-
-	this->renderGUI(*target);
-
-	if (this->paused)
+	//Pause menu render
+	if (this->paused) 
 	{
 		target->setView(this->window->getDefaultView());
 		this->pauseMenu.render(*target);

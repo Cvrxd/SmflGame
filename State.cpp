@@ -25,6 +25,11 @@ void State::unpausedState()
 	this->paused = false;
 }
 
+const STATE_TYPE& State::getStateType() const
+{
+	return this->type;
+}
+
 //Accessors
 const bool& State::getQuit() const
 {

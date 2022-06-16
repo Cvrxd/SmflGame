@@ -63,6 +63,9 @@ public:
 	virtual ~MainMenuState()                           override;
 
 	//Functions
+	void updateTopState()                              override;
+
+	void updateGuiPosition();
 	void playMusic();
 
 	void update  (const float& dt)                     override;

@@ -6,6 +6,8 @@ struct GraphicsSettings;
 class Player;
 class State;
 
+enum class STATE_TYPE {GAME_STATE = 0, SETTINGS_STATE, EDITOR_STATE, MAIN_MENU_STATE};
+
 struct StateData
 {
 	using SupportedKeysMap = std::unordered_map<std::string, int>;
@@ -26,6 +28,9 @@ protected:
 	using StatesStack   = std::stack<State*>;
 	using KeysMap       = std::unordered_map<std::string, int>;
 	using TexturesMap   = std::map<std::string, sf::Texture>;
+
+	//State type
+	STATE_TYPE type;
 
 	//Core variables
 	bool    quit;
@@ -71,11 +76,16 @@ public:
 	void unpausedState  ();
 	
 	//Accessors
+	const STATE_TYPE& getStateType() const;
+
 	const bool& getQuit     ()  const;
 	const bool	getKeyTime  ();
- 
+
 	//End state
 	virtual void endState   ();
+
+	//Update, render
+	virtual void updateTopState()                              = 0;
 
 	virtual void update  (const float& dt)                     = 0;
 	virtual void render  (sf::RenderTarget* target = nullptr)  = 0;

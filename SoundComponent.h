@@ -52,8 +52,8 @@ private:
 	//Variables
 	MusicMap music;
 
-	float volume          = 2.f;
-	const float volumeMAX = 5.f;
+	float volume          = 2.10f;
+	const float volumeMAX = 3.f;
 
 	//Functions
 	void initMusic();
@@ -64,70 +64,76 @@ public:
 	//Accessors
 	void setVolume(const float& volume);
 
+	const float& getVolume    ()   const;
+	const float& getVolumeMax ()   const;
+
 	//Functions
+	void increaseVolume();
+	void decreaseVolume();
+
 	void pauseThemeMusic();
-	void playThemeMusic();
-	void stopThemeMusic();
+	void playThemeMusic ();
+	void stopThemeMusic ();
 
 	void pausePauseMenuMusic();
-	void playPauseMenuMusic();
-	void stopPauseMenuMusic();
+	void playPauseMenuMusic ();
+	void stopPauseMenuMusic ();
 
 	void pauseBossFightMusic();
-	void playBossFightMusic();
-	void stopBossFightMusic();
+	void playBossFightMusic ();
+	void stopBossFightMusic ();
 
 };
 
 class PlayerSoundBox
-	{
-	private:
-		using SoundsMap = std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>>;
+{
+private:
+	using SoundsMap = std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>>;
 
-		//Variables
-		float movementVolumeMin = 0.1f;
-		float movementVolumeMax = 0.5f;
+	//Variables
+	float movementVolumeMin = 0.1f;
+	float movementVolumeMax = 0.5f;
 
-		SoundsMap sounds;
+	SoundsMap sounds;
 
-		//Movement sound to play
-		sf::Sound* movementSound;
+	//Movement sound to play
+	sf::Sound* movementSound;
 
-		//Intit functions
-		void initSounds();
+	//Intit functions
+	void initSounds();
 
-	public:
-		PlayerSoundBox   ();
-		~PlayerSoundBox  ();
+public:
+	PlayerSoundBox();
+	~PlayerSoundBox();
 
-		//Functions
-		void changeMovementSound   (const bool& running);
-		void changeMovementVolume  (const bool& increase);
+	//Functions
+	void changeMovementSound(const bool& running);
+	void changeMovementVolume(const bool& increase);
 
-		void pauseMovementSound    ();
-		void unpauseMovementSound  ();
-	};
+	void pauseMovementSound();
+	void unpauseMovementSound();
+};
 
 class EnemySoundBox
-	{
-	private:
-		using SoundsMap = std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>>;
-		using SkillsImpactSoundsMap = std::unordered_map<SkillType, std::pair<sf::SoundBuffer, sf::Sound>>;
+{
+private:
+	using SoundsMap = std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>>;
+	using SkillsImpactSoundsMap = std::unordered_map<SkillType, std::pair<sf::SoundBuffer, sf::Sound>>;
 
-		//Variables
-		SoundsMap              sounds;
-		SkillsImpactSoundsMap  skillsImpact;
+	//Variables
+	SoundsMap              sounds;
+	SkillsImpactSoundsMap  skillsImpact;
 
-		//Init functions
-		void initSound();
-	public:
-		EnemySoundBox() noexcept;
-		~EnemySoundBox();
+	//Init functions
+	void initSound();
+public:
+	EnemySoundBox() noexcept;
+	~EnemySoundBox();
 
-		//Functions
-		void playSound(const SkillType& sound);
-		void playSound(const std::string& sound);
+	//Functions
+	void playSound(const SkillType& sound);
+	void playSound(const std::string& sound);
 
-		void pauseSounds();
-		void resumeSounds();
-	};
+	void pauseSounds();
+	void resumeSounds();
+};

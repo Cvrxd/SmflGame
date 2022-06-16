@@ -147,6 +147,20 @@ sf::Text& GUI::Button::getSfText()
 }
 
 //Seters
+void GUI::Button::setPosition(const float& x, const float& y)
+{
+	this->shape.setPosition(x, y);
+
+	this->text.setPosition(this->shape.getPosition().x + 20, this->shape.getPosition().y + 8);
+}
+
+void GUI::Button::setPosition(const sf::Vector2f& position)
+{
+	this->shape.setPosition(position);
+
+	this->text.setPosition(this->shape.getPosition().x + 20, this->shape.getPosition().y + 8);
+}
+
 void GUI::Button::setText(std::string text)
 {
 	this->text.setString(text);

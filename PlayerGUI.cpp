@@ -532,7 +532,8 @@ inline void SkillsLevelingComponent::updateSkillColor(const SkillType& type, con
 	skill_menu_icon.operator*().second.setOutlineColor(color);
 
 	//Quick slot icon color
-	int index;
+	int index = 0;
+
 	for (int i = 0; i < 4; ++i)
 	{
 		if (this->playerSkills->at(i).first == type)
@@ -547,33 +548,16 @@ inline void SkillsLevelingComponent::updateSkillColor(const SkillType& type, con
 	this->quickSlotBars->at(index).first.setOutlineColor(color);
 }
 
-//Sound functions
-inline void SkillsLevelingComponent::playSound(const std::string& sound)
-{
-	this->guiSounds.sounds[sound].second.play();
-}
-
-//Constructors
-SkillsLevelingComponent::SkillsLevelingComponent(SkillsComponent& skillsComponent, PlayerGUI& playerGUI, sf::Font& font, GuiSoundsBox& guiSounds) noexcept
-	:skillsComponent(skillsComponent), playerGUI(playerGUI), font(font), guiSounds(guiSounds)
-{
-}
-
-SkillsLevelingComponent::~SkillsLevelingComponent()
-{
-
-}
-
 inline void SkillsLevelingComponent::upgradeSkill(const SkillType& type)
 {
-	if (this->playerGUI.statsComponent.crystals >= this->skillLevels[type] * 10 && this->playerGUI.statsComponent.skillPoints != 0
+	if (this->playerGUI.statsComponent.crystals >= this->skillLevels[type] * this->skillCostModifier && this->playerGUI.statsComponent.skillPoints != 0
 		&& this->skillLevels[type] != this->skillMaxLevel)
 	{
 		++this->skillLevels[type];
 		--this->playerGUI.statsComponent.skillPoints;
 
 		//Losing crystals
-		this->playerGUI.statsComponent.loseCrystals(this->skillLevels[type] * 10);
+		this->playerGUI.statsComponent.loseCrystals(this->skillLevels[type] * this->skillCostModifier);
 
 		//Skills component update
 		this->skillsComponent.upgradeSkill(type);
@@ -596,13 +580,30 @@ inline void SkillsLevelingComponent::upgradeSkill(const SkillType& type)
 		default:
 			break;
 		}
-		
+
 		//Updating text for next level
 		this->updateTexts();
 
 		//Sound
 		this->playSound("UPGRADE_SKILL");
 	}
+}
+
+//Sound functions
+inline void SkillsLevelingComponent::playSound(const std::string& sound)
+{
+	this->guiSounds.sounds[sound].second.play();
+}
+
+//Constructors
+SkillsLevelingComponent::SkillsLevelingComponent(SkillsComponent& skillsComponent, PlayerGUI& playerGUI, sf::Font& font, GuiSoundsBox& guiSounds) noexcept
+	:skillsComponent(skillsComponent), playerGUI(playerGUI), font(font), guiSounds(guiSounds)
+{
+}
+
+SkillsLevelingComponent::~SkillsLevelingComponent()
+{
+
 }
 
 //Public functions
@@ -900,13 +901,18 @@ inline void SkillsMenu::updateButtons(sf::Vector2i& mousePosWindow)
 		{
 			if (it.operator*().second->isPressed() && this->getKeyTime())
 			{
+				//Sound
 				this->playSound("CLICK");
 
 				if (this->player.getStatsComponent()->skillPoints > 0)
 				{
+					//Unlock
 					this->unlockSkill(it.operator*().first);
+
+					//--Player skill points
 					--this->player.getStatsComponent()->skillPoints;
 
+					//Delete button
 					if (it == --this->unclockButtons.end())
 					{
 						this->unclockButtons.erase(it);
@@ -948,13 +954,17 @@ inline void SkillsMenu::playSound(const std::string& sound)
 
 //Constructor
 SkillsMenu::SkillsMenu(Player& player, PlayerGUI& playerGUI, sf::Font& font, GuiSoundsBox& guiSounds, const float& x, const float& y) noexcept
-	:player(player), playerGUI(playerGUI), font(font), guiSounds(guiSounds), keyTime(0.f), keyTimeMax(10.f), skillsSize(9),
+	:player(player), 
+	playerGUI(playerGUI), 
+	font(font), 
+	guiSounds(guiSounds),
+	keyTime(0.f), keyTimeMax(10.f), skillsSize(9),
 	skillsLevelingComponent(*this->player.getSkillComponent(), playerGUI, font, guiSounds)
 {
-	this->initBackground(x, y);
-	this->initTexts();
-	this->initSkillIcons();
-	this->initButtons();
+	this->initBackground (x, y);
+	this->initTexts      ();
+	this->initSkillIcons ();
+	this->initButtons    ();
 
 	//Init other components variables
 	this->playerGUI.initSkillIcons(&this->skillsIcons);
@@ -973,6 +983,12 @@ const bool SkillsMenu::getKeyTime() const
 }
 
 //Public unctions
+void SkillsMenu::stopSonds()
+{
+	this->guiSounds.stopSounds();
+}
+
+
 void SkillsMenu::unlockSkill(const SkillType& type)
 {
 	this->playSound("UNLOCK_SKILL");
@@ -983,9 +999,9 @@ void SkillsMenu::unlockSkill(const SkillType& type)
 
 void SkillsMenu::update(sf::Vector2i& mousePosWindow, const float& dt)
 {
-	this->updateKeyTime(dt);
-	this->updateButtons(mousePosWindow);
-	this->updateText();
+	this->updateKeyTime (dt);
+	this->updateButtons (mousePosWindow);
+	this->updateText    ();
 
 	//SKills leveling component
 	this->skillsLevelingComponent.update(mousePosWindow, dt);
@@ -1026,16 +1042,16 @@ inline void ItemsMune::initVariables()
 
 inline void ItemsMune::initTextures()
 {
-	this->textures["ITEMS"].loadFromFile("Textures/hud/inventory_hud/items32_simple_transparent.png");
-	this->textures["COIN"].loadFromFile("Textures/hud/game_hud/coin.png");
+	this->textures["ITEMS"].loadFromFile ("Textures/hud/inventory_hud/items32_simple_transparent.png");
+	this->textures["COIN"].loadFromFile  ("Textures/hud/game_hud/coin.png");
 }
 
 inline void ItemsMune::initBackground(const float& x, const float& y)
 {
 	//Background
-	this->background.setSize(sf::Vector2f(x / 1.5f, y / 1.7f + 50));
-	this->background.setFillColor(sf::Color(20, 20, 20, 200));
-	this->background.setPosition(x / 2.f - this->background.getSize().x / 2.f, y / 2.f - this->background.getSize().y / 2.f);
+	this->background.setSize      (sf::Vector2f(x / 1.5f, y / 1.7f + 50));
+	this->background.setFillColor (sf::Color(20, 20, 20, 200));
+	this->background.setPosition  (x / 2.f - this->background.getSize().x / 2.f, y / 2.f - this->background.getSize().y / 2.f);
 }
 
 inline void ItemsMune::initItemsIcons()
@@ -1125,6 +1141,7 @@ inline void ItemsMune::initAnimations()
 	for (auto& el : this->unclockButtons)
 	{
 		this->coinsSprites[el.first].setScale(2.f, 2.f);
+
 		this->coinsSprites[el.first].setPosition(this->itemsIcons[el.first].getPosition().x + 210,
 			this->itemsIcons[el.first].getPosition().y + 2);
 
@@ -1142,10 +1159,11 @@ inline void ItemsMune::initOffsets()
 inline void ItemsMune::updateItemGrade(const Items& item,const sf::Color& color)
 {
 	//Color update
-	this->itemsIcons[item].setOutlineThickness(3.f);
-	this->upgradeItemsIcons[item].setOutlineThickness(3.f);
-	this->itemsIcons[item].setOutlineColor(color);
-	this->upgradeItemsIcons[item].setOutlineColor(color);
+	this->itemsIcons[item].setOutlineThickness        (3.f);
+	this->upgradeItemsIcons[item].setOutlineThickness (3.f);
+
+	this->itemsIcons[item].setOutlineColor            (color);
+	this->upgradeItemsIcons[item].setOutlineColor     (color);
 
 	//Stats text update
 	if (item == Items::NECKLASE && item == Items::RING)
@@ -1199,10 +1217,10 @@ inline void ItemsMune::unlockItem(const Items& item)
 	this->playerStats->upgradeItem(item, this->itemsLvl[item]);
 
 	//Stat text
-	this->statsTexts[item].setCharacterSize(30);
-	this->statsTexts[item].setFillColor(sf::Color::White);
-	this->statsTexts[item].setFont(this->font);
-	this->statsTexts[item].setPosition(this->itemsIcons[item].getPosition().x + 70, this->itemsIcons[item].getPosition().y);
+	this->statsTexts[item].setCharacterSize (30);
+	this->statsTexts[item].setFillColor     (sf::Color::White);
+	this->statsTexts[item].setFont          (this->font);
+	this->statsTexts[item].setPosition      (this->itemsIcons[item].getPosition().x + 70, this->itemsIcons[item].getPosition().y);
 
 	if (item == Items::NECKLASE && item == Items::RING)
 	{
@@ -1223,12 +1241,12 @@ inline void ItemsMune::unlockItem(const Items& item)
 	}
 
 	//Create another icon
-	this->upgradeItemsIcons[item].setOutlineThickness(1.f);
-	this->upgradeItemsIcons[item].setOutlineColor(sf::Color::White);
-	this->upgradeItemsIcons[item].setSize(this->itemsIcons[item].getSize());
-	this->upgradeItemsIcons[item].setTexture(this->itemsIcons[item].getTexture());
-	this->upgradeItemsIcons[item].setTextureRect(this->itemsIcons[item].getTextureRect());
-	this->upgradeItemsIcons[item].setPosition(this->offsetX, this->offsetY);
+	this->upgradeItemsIcons[item].setOutlineThickness (1.f);
+	this->upgradeItemsIcons[item].setOutlineColor     (sf::Color::White);
+	this->upgradeItemsIcons[item].setSize             (this->itemsIcons[item].getSize());
+	this->upgradeItemsIcons[item].setTexture          (this->itemsIcons[item].getTexture());
+	this->upgradeItemsIcons[item].setTextureRect      (this->itemsIcons[item].getTextureRect());
+	this->upgradeItemsIcons[item].setPosition         (this->offsetX, this->offsetY);
 
 	//Create upgrade button
 	this->upgradeButtons[item] = std::make_unique<GUI::Button>(this->offsetX + 40.f, this->offsetY - 12.f,
@@ -1278,8 +1296,8 @@ inline void ItemsMune::upgradeItem(const Items& item)
 	//If max level
 	if (this->itemsLvl[item] == this->maxLevel)
 	{
-		this->upgradeButtons[item]->setText("MAX level");
-		this->upgradeTexts[item].setString("");
+		this->upgradeButtons[item]->setText ("MAX level");
+		this->upgradeTexts[item].setString  ("");
 	}
 }
 
@@ -1294,15 +1312,18 @@ inline void ItemsMune::updateButtons(sf::Vector2i& mousePosWindow)
 		{
 			this->playSound("CLICK");
 
-			if (this->playerStats->coins >= 50)
+			if (this->playerStats->coins >= this->itemUnlockCost)
 			{
 				//Sound
 				this->playSound("UNLOCK_ITEM");
 
 				//Unlock
 				this->unlockItem(it.operator*().first);
-				this->playerStats->loseCoins(50);
 
+				//Player lose coins
+				this->playerStats->loseCoins(this->itemUnlockCost);
+
+				//Delete unlock button
 				if (it == --this->unclockButtons.end())
 				{
 					this->unclockButtons.erase(it);
@@ -1328,13 +1349,13 @@ inline void ItemsMune::updateButtons(sf::Vector2i& mousePosWindow)
 			this->playSound("CLICK");
 
 			//Upgrade item
-			if (this->playerStats->coins >= this->itemsLvl[el.first] * 20 && this->itemsLvl[el.first] != this->maxLevel)
+			if (this->playerStats->coins >= this->itemsLvl[el.first] * this->itemCostModidfier && this->itemsLvl[el.first] != this->maxLevel)
 			{
 				//Sound
 				this->playSound("UPGRADE_ITEM");
 
 				//Upgrade
-				this->playerStats->loseCoins(this->itemsLvl[el.first] * 20);
+				this->playerStats->loseCoins(this->itemsLvl[el.first] * this->itemCostModidfier);
 				this->upgradeItem(el.first);
 			}
 		}
@@ -1404,14 +1425,14 @@ ItemsMune::ItemsMune(Player& player, PlayerGUI& playerGUI, sf::Font& font, GuiSo
 	: player(player), playerGui(playerGUI), font(font), guiSounds(sounds), // references
 	keyTime(0), keyTimeMax(20.f) // key time
 {
-	this->initVariables();
-	this->initTextures();
-	this->initBackground(x, y);
-	this->initItemsIcons();
-	this->initTexts();
-	this->initButtons();
-	this->initAnimations();
-	this->initOffsets();
+	this->initVariables  ();
+	this->initTextures   ();
+	this->initBackground (x, y);
+	this->initItemsIcons ();
+	this->initTexts      (); 
+	this->initButtons    ();
+	this->initAnimations ();
+	this->initOffsets    ();
 }
 
 ItemsMune::~ItemsMune()
@@ -1419,18 +1440,23 @@ ItemsMune::~ItemsMune()
 }
 
 //Public functions
+void ItemsMune::stopSounds()
+{
+	this->guiSounds.stopSounds();
+}
+
 void ItemsMune::update(sf::Vector2i& mousePosWindow, const float& dt)
 {
-	this->updateKeyTime(dt);
-	this->updateAnimations(dt);
-	this->updateButtons(mousePosWindow);
+	this->updateKeyTime    (dt);
+	this->updateAnimations (dt);
+	this->updateButtons    (mousePosWindow);
 }
 
 void ItemsMune::render(sf::RenderTarget& target, sf::Vector2i& mousePosWindow)
 {
 	target.draw(this->background);
 
-	this->renderButtons(target, mousePosWindow);
-	this->renderText(target);
-	this->renderIcons(target);
+	this->renderButtons (target, mousePosWindow);
+	this->renderText    (target);
+	this->renderIcons   (target);
 }

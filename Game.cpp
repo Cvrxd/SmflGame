@@ -4,9 +4,9 @@
 //Itialisation
 inline void Game::initVariables()
 {
-	this->window = NULL;
-	this->dt = 0.f;
-	this->gridSize = 54.f;
+	this->window    = NULL;
+	this->dt        = 0.f;
+	this->gridSize  = 54.f;
 }
 
 inline void Game::initGraphicsSettings()
@@ -49,19 +49,22 @@ inline void Game::initKeys()
 	ifs.close();
 	 
 	//Debug
-	for (auto& el : this->supportedKeys)
+	/*for (auto& el : this->supportedKeys)
 	{
 		std::cout << el.first << " " << el.second <<"\n";
-	}
+	}*/
 }
 
 inline void Game::initStateData()
 {
-	this->stateData.window = this->window;
-	this->stateData.states = &this->states;
-	this->stateData.supportedKeys = &this->supportedKeys;
-	this->stateData.gfxSettings = &this->gfxSettings;
-	this->stateData.gridSize = this->gridSize;
+	//Core variables
+	this->stateData.window         = this->window;
+	this->stateData.states         = &this->states;
+	this->stateData.supportedKeys  = &this->supportedKeys;
+	this->stateData.gfxSettings    = &this->gfxSettings;
+	this->stateData.gridSize       = this->gridSize;
+
+	//Loading font
 	if (!this->stateData.font.loadFromFile("Fonts/Greybeard.ttf"))
 	{
 		throw("ERROR::GAMESTATE::COULD NOT LOAD FONT");
@@ -104,11 +107,16 @@ inline void Game::update()
 
 			if (this->states.top()->getQuit())
 			{
+				//Deliting top state
 				this->states.top()->endState();
 				delete this->states.top();
 				this->states.pop();
-
-				//add saving the game
+				
+				//Update new top state after deleting previous top state
+				if (!this->states.empty())
+				{
+					this->states.top()->updateTopState();
+				}
 			}
 		}
 	}

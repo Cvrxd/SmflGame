@@ -5,8 +5,9 @@
 inline void MageEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sprite)
 {
 	//Sound key
-	this->soundKey  = "MAGE_SOUND";
-	this->soundTime = 10.f;
+	this->spellCastSoundKey = "MAGE_SPELL_CAST_SOUND";
+	this->soundKey          = "MAGE_SOUND";
+	this->soundTime         = 10.f;
 
 	switch (this->type)
 	{
@@ -267,6 +268,9 @@ inline void MageEnemy::updateAttack(const float& dt)
 		{
 			this->isAttaking = true;
 			++this->attackCount;
+
+			//Sound
+			this->soundBox.playSound(this->spellCastSoundKey);
 		}
 	}
 

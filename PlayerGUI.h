@@ -125,7 +125,9 @@ private:
 	VectorLevelSkills*    playerSkills;
 
 	//Core
+	int             skillCostModifier = 10;
 	int             unlockSkillsCount = 0;
+
 	short unsigned  skillMaxLevel     = 5;
 
 	float           offsetY           = 30.f;
@@ -243,6 +245,8 @@ public:
 	const bool getKeyTime () const;
 
 	//Functions
+	void stopSonds();
+
 	void unlockSkill  (const SkillType& type);
 
 	void update       (sf::Vector2i& mousePosWindow, const float& dt);
@@ -276,6 +280,9 @@ private:
 
 	//Core
 	sf::RectangleShape background;
+
+	int     itemCostModidfier   = 20;
+	int     itemUnlockCost      = 50;
 
 	int     maxLevel            = 5;
 	int     unlockedItemsCount  = 0;
@@ -338,7 +345,9 @@ public:
 	ItemsMune (Player& player, PlayerGUI& playerGUI, sf::Font& font, GuiSoundsBox& sounds, const float& x, const float& y) noexcept;
 	~ItemsMune ();
 
-	//Fonctions
+	//Functions
+	void stopSounds();
+
 	void update  (sf::Vector2i& mousePosWindow, const float& dt);
 	void render  (sf::RenderTarget& target, sf::Vector2i& mousePosWindow);
 };

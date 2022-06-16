@@ -22,7 +22,9 @@ class PopUpTextComponent;
 class GameState : public State
 {
 private:
-	//variables 
+	using VolumeButtons = std::pair<std::unique_ptr<GUI::Button>, std::unique_ptr<GUI::Button>>;
+
+	//Variables 
 	const unsigned int diffcultyLvl = 1;
 
 	bool skillMenuActive = false;
@@ -48,6 +50,10 @@ private:
 	TileMap     tileMap;
 	Player      player;
 
+	//Gui
+	VolumeButtons volumeButtons;
+	sf::Text      volumeText;
+
 	//Pop up text
 	PopUpTextComponent popUpTextComponent;
 
@@ -58,8 +64,9 @@ private:
 	std::vector<DestroyingEnemy>    destroyingEnemies;
 
 	//Sounds
-	EnemySoundBox   enemiesSounds;
-	GuiSoundsBox    guiSounds;
+	EnemySoundBox     enemiesSounds;
+	GuiSoundsBox      guiSounds;
+	GameStateSoundBox gameMusic;
 
 	//Init functions
 	void initRenderTextures  ();
@@ -76,21 +83,24 @@ private:
 	void initSounds          ();
 
 	//Update functions
-	void updateView              (const float& dt);
+	void updateVolumeGui         ();
 	void updatePauseMenuButtons  ();
+	void updateVolumeText        ();
+	void updateView              (const float& dt);
 	void updatePlayerInput       (const float& dt);
 	void updateInput             (const float& dt)     override;
 	void updateTileMap           (const float& dt);
 
 	//Enemis update
-	void updateEnemies(const float& dt);
-	void updateDestroyingEnemis(const float& dt);
-	void updateMeleEnemies(const float& dt);
-	void updateBossEnemies(const float& dt);
-	void updateMageEnemies(const float& dt);
+	void updateEnemies           (const float& dt);
+	void updateDestroyingEnemis  (const float& dt);
+	void updateMeleEnemies       (const float& dt);
+	void updateBossEnemies       (const float& dt);
+	void updateMageEnemies       (const float& dt);
 
 	//Render functions
-	void renderEnemies (sf::RenderTarget* target);
+	void renderPauseMenuGui (sf::RenderTarget& target);
+	void renderEnemies      (sf::RenderTarget& target);
 
 	//Functions
 	void pauseSounds  ();
@@ -101,6 +111,8 @@ public:
 	virtual ~GameState() override;
 
 	//Functions
+	void updateTopState()                              override;
+
 	void update  (const float& dt)                     override;
 	void render  (sf::RenderTarget* target = nullptr)  override;
 };

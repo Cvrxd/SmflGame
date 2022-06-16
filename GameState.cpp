@@ -79,10 +79,34 @@ inline void GameState::initTextures()
 
 inline void GameState::initPauseMenu()
 {
+	//Pause menu buttons
 	this->pauseMenu.addButton("CONTINUE", 350.f, -20.f,"Continue");
 	this->pauseMenu.addButton("SKILLS", 500.f, 20.f, "Skills");
 	this->pauseMenu.addButton("ITEMS", 650.f, 20.f, "items");
 	this->pauseMenu.addButton("QUIT", 800.f, 40.f,"Quit");
+
+	//Volume text
+	this->volumeText.setFont          (this->font);
+	this->volumeText.setCharacterSize (40);
+	this->volumeText.setString        ("Music volume: 75%");
+	this->volumeText.setFillColor     (sf::Color(255, 255, 255, 200));
+	this->volumeText.setPosition      (static_cast<float>(this->window->getSize().x) - 400.f, 100.f);
+
+	//Volume buttons
+	this->volumeButtons.first = std::make_unique<GUI::Button>(this->volumeText.getPosition().x + 240.f, this->volumeText.getPosition().y + 20.f, 
+		70.f, 60.f,
+		&this->font, "-", 65,
+		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
+		sf::Color(70, 70, 70, 0),      sf::Color(150, 150, 150, 0),   sf::Color(20, 20, 20, 0)
+		);
+
+	this->volumeButtons.second = std::make_unique<GUI::Button>(
+		this->volumeButtons.first->getPosition().x + 60.f, this->volumeButtons.first->getPosition().y, 
+		70.f, 60.f,
+		&this->font, "+", 65,
+		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
+		sf::Color(70, 70, 70, 0),      sf::Color(150, 150, 150, 0),   sf::Color(20, 20, 20, 0)
+		);
 }
 
 inline void GameState::initShaders()
@@ -100,13 +124,13 @@ inline void GameState::initPlayers()
 inline void GameState::initEnemies()
 {
 	this->bosses.reserve(3);
-	//this->bosses.emplace_back(BossType::FIRE_DEMON, 5, 100, 900, this->textures["ENEMY_FIRE_DEMON"], &this->player, this->enemiesSounds);
+	this->bosses.emplace_back(BossType::FIRE_DEMON, 5, 100, 900, this->textures["ENEMY_FIRE_DEMON"], &this->player, this->enemiesSounds);
 	//this->bosses.emplace_back(BossType::NIGHTBORN, 5, 100, 900, this->textures["ENEMY_NIGHT_BORN"], &this->player, this->enemiesSounds);
 	//this->bosses.emplace_back(BossType::SAMURAI, 5, 100, 900, this->textures["ENEMY_SAMURAI"], &this->player, this->enemiesSounds);
 
 	this->meleEnemies.reserve(3);
 	//this->meleEnemies.emplace_back(MeleEnemyType::KNIGHT1, 5, 700, 700, this->textures["ENEMY_KNIGHT1"], &this->player, this->enemiesSounds);
-	this->meleEnemies.emplace_back(MeleEnemyType::BRINGER_OF_DEATH, 5, 700, 700, this->textures["ENEMY_BRINGER_OF_DEATH"], &this->player, this->enemiesSounds);
+	//this->meleEnemies.emplace_back(MeleEnemyType::BRINGER_OF_DEATH, 5, 700, 700, this->textures["ENEMY_BRINGER_OF_DEATH"], &this->player, this->enemiesSounds);
 	//this->meleEnemies.emplace_back(MeleEnemyType::BRINGER_OF_DEATH, 5, 700, 700, this->textures["ENEMY_BRINGER_OF_DEATH"], &this->player, this->enemiesSounds);
 
 	this->mageEnemies.reserve(2);
@@ -129,9 +153,15 @@ inline void GameState::initTileMap()
 
 inline void GameState::initSounds()
 {
+	this->gameMusic.playThemeMusic();
 }
 
 //Update functions
+inline void GameState::updateVolumeText()
+{
+	this->volumeText.setString("Music volume: "+ std::to_string(static_cast<int>(this->gameMusic.getVolume() * 100 / this->gameMusic.getVolumeMax())) + '%');
+}
+
 inline void GameState::updatePlayerInput(const float& dt)
 {
 	//check for keyboard key player
@@ -174,11 +204,37 @@ inline void GameState::updateInput(const float& dt)
 
 			//Pausing state
 			this->pauseState();
+
+			//Pausing music
+			if (!this->bossFight)
+			{
+				this->gameMusic.pauseThemeMusic();
+			}
+			else
+			{
+				this->gameMusic.pauseBossFightMusic();
+			}
+
+			this->gameMusic.playPauseMenuMusic();
 		}
 		else
 		{
 			//Unpausing sounds
 			this->resumeSounds();
+
+			//Pausing music
+			if (!this->bossFight)
+			{
+				this->gameMusic.playThemeMusic();
+			}
+			else
+			{
+				this->gameMusic.playBossFightMusic();
+			}
+
+			this->gameMusic.stopPauseMenuMusic();
+			this->skillsMenu.stopSonds();
+			this->itemsMenu.stopSounds();
 
 			//Unpausing state
 			this->unpausedState();
@@ -191,6 +247,30 @@ inline void GameState::updateInput(const float& dt)
 inline void GameState::updateTileMap(const float& dt)
 {
 	this->tileMap.update(&this->player, this->viewGridPosition, dt);
+}
+
+inline void GameState::updateVolumeGui()
+{
+	this->volumeButtons.first->update(this->mousePosWindow);
+	this->volumeButtons.second->update(this->mousePosWindow);
+
+	//Decreasing volume button
+	if (this->volumeButtons.first->isPressed() && this->getKeyTime())
+	{
+		this->guiSounds.sounds["CLICK"].second.play();
+		this->gameMusic.decreaseVolume();
+
+		this->updateVolumeText();
+	}
+
+	//Increasing volume button
+	if (this->volumeButtons.second->isPressed() && this->getKeyTime())
+	{
+		this->guiSounds.sounds["CLICK"].second.play();
+		this->gameMusic.increaseVolume();
+
+		this->updateVolumeText();
+	}
 }
 
 inline void GameState::updateView(const float& dt)
@@ -244,6 +324,21 @@ inline void GameState::updatePauseMenuButtons()
 
 		//Resuming sounds
 		this->resumeSounds();
+
+		//Resuming music
+		if (!this->bossFight)
+		{
+			this->gameMusic.playThemeMusic();
+		}
+		else
+		{
+			this->gameMusic.playBossFightMusic();
+		}
+
+		this->gameMusic.stopPauseMenuMusic();
+		this->skillsMenu.stopSonds();
+		this->itemsMenu.stopSounds();
+
 	}
 	else if (this->pauseMenu.isButtonPressed("SKILLS"))
 	{
@@ -310,12 +405,14 @@ inline void GameState::updateMageEnemies(const float& dt)
 		{
 			el.update(dt, this->mousPosView);
 
+			//Update collision
+			this->tileMap.updateTilesCollision(&el, el.getGridPosition(static_cast<int>(this->gridSize)), dt);
 		}
 	}
 }
 
 //Render functions
-inline void GameState::renderEnemies(sf::RenderTarget* target)
+inline void GameState::renderEnemies(sf::RenderTarget& target)
 {
 	for (auto& el : this->bosses)
 	{
@@ -345,6 +442,16 @@ inline void GameState::renderEnemies(sf::RenderTarget* target)
 			el.render(this->renderTexture, &this->core_shader);
 		}
 	}
+}
+
+inline void GameState::renderPauseMenuGui(sf::RenderTarget& target)
+{
+	//Volume text
+	target.draw(this->volumeText);
+
+	//Volume regulation buttons
+	this->volumeButtons.first->render(target);
+	this->volumeButtons.second->render(target);
 }
 
 //Functions
@@ -425,27 +532,32 @@ GameState::GameState(StateData* state_data, const unsigned int& difficultyLvl)
 	: 
 	State(state_data), 
 
-	diffcultyLvl(difficultyLvl),
-	skillMenuActive(false),
+	diffcultyLvl       (difficultyLvl),
+	skillMenuActive    (false),
 	popUpTextComponent (state_data->font),
 
-	pauseMenu   (*this->window, this->stateData->font), //Pause menu 
+	pauseMenu   (*this->window, this->stateData->font),                                //Pause menu 
 	player      (500,500, this->textures["PLAYER_SHEET"], this->font, this->isBuffed), //Player
-	playerGUI   (this->player, this->font), // Player GUI
-	skillsMenu  (this->player, this->playerGUI,this->font, this->guiSounds,static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
-	itemsMenu   (this->player, this->playerGUI, this->font, this->guiSounds, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // items menu
-	tileMap     ("map/game_map.txt") //Tile map
+	playerGUI   (this->player, this->font),                                            //Player GUI
+	tileMap     ("map/game_map.txt"),                                                  //Tile Map
+
+	skillsMenu  (this->player, this->playerGUI,this->font, this->guiSounds, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
+	itemsMenu   (this->player, this->playerGUI, this->font, this->guiSounds, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)) // items menu                                                //Tile map
 {
-	this->initRenderTextures();
-	this->initView();
-	this->initFonts();
-	this->initKeybinds();
-	this->initTextures();
-	this->initPauseMenu();
-	this->initSounds();
-	this->initEnemies();
-	this->initShaders();
-	this->initPlayerGUI();
+	//State type
+	this->type = STATE_TYPE::GAME_STATE;
+
+	//Init functions
+	this->initRenderTextures ();
+	this->initView           ();
+	this->initFonts          ();
+	this->initKeybinds       ();
+	this->initTextures       ();
+	this->initPauseMenu      ();
+	this->initSounds         ();
+	this->initEnemies        ();
+	this->initShaders        ();
+	this->initPlayerGUI      ();
 }
 
 GameState::~GameState()
@@ -453,6 +565,10 @@ GameState::~GameState()
 }
 
 //Public functions
+void GameState::updateTopState()
+{
+}
+
 void GameState::update(const float& dt)
 {
 	this->updateMousePosition (&this->view);
@@ -483,7 +599,9 @@ void GameState::update(const float& dt)
 	else                                            //Update pause menu
 	{
 		this->pauseMenu.update(this->mousePosWindow);
+
 		this->updatePauseMenuButtons();
+		this->updateVolumeGui();
 	}
 }
 
@@ -499,7 +617,7 @@ void GameState::render(sf::RenderTarget* target)
 	this->renderTexture.setView(this->view);
 
 	this->tileMap.renderGameState  (this->renderTexture, this->player.getCenter(), &this->core_shader);  //Render tile map
-	this->renderEnemies            (target);                                                             //Render all enemies
+	this->renderEnemies            (*target);                                                            //Render all enemies
 	this->player.render            (this->renderTexture, &this->core_shader);                            //Render player
 	this->tileMap.renderAbove      (this->renderTexture, this->player.getCenter(), &this->core_shader);  //Render tiles above entities
 	this->renderTexture.setView    (this->renderTexture.getDefaultView());                               //Seting view
@@ -507,7 +625,8 @@ void GameState::render(sf::RenderTarget* target)
 
 	if (this->paused && !this->skillMenuActive && !this->itemsMenuActive) //Pause menu render
 	{
-		this->pauseMenu.render(this->renderTexture);
+		this->pauseMenu.render   (this->renderTexture);
+		this->renderPauseMenuGui (this->renderTexture);
 	}
 	else if(this->paused && this->skillMenuActive && !this->itemsMenuActive) //Skills menu render
 	{
@@ -525,4 +644,3 @@ void GameState::render(sf::RenderTarget* target)
 	//Final rendering using render sprite
 	target->draw(this->renderSprite);
 }
-

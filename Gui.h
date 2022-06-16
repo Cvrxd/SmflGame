@@ -54,12 +54,15 @@ namespace GUI
 		sf::Text&				getSfText();
 
 		//Seters
-		void setText  (std::string text);
-		void setId    (const short unsigned& id);
+		void setPosition (const float& x, const float& y);
+		void setPosition (const sf::Vector2f& position);
+
+		void setText     (std::string text);
+		void setId       (const short unsigned& id);
 
 		//Functions
-		void update   (const sf::Vector2i& mousePosition);
-		void render   (sf::RenderTarget& target);
+		void update      (const sf::Vector2i& mousePosition);
+		void render      (sf::RenderTarget& target);
 
 	};
 

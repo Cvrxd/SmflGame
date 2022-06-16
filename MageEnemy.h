@@ -13,6 +13,8 @@ class MageEnemy : public Enemy
 	//Core variables
 	MageEnemyType type;
 
+	std::string   spellCastSoundKey;
+
 	float castR;
 	float ineerR;
 

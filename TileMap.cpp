@@ -40,7 +40,7 @@ inline void TileMap::updateLevelCollision(Entity* entity, const float& dt)
 	}
 }
 
-inline void TileMap::updateTilesCollision(Entity* entity, const sf::Vector2i& gridPosition, const float& dt)
+void TileMap::updateTilesCollision(Entity* entity, const sf::Vector2i& gridPosition, const float& dt)
 {
 	//Tiles Collision
 	this->fromX = gridPosition.x - 20;

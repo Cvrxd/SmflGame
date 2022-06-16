@@ -19,10 +19,10 @@ inline void SettingsState::initVariables()
 
 inline void SettingsState::initText()
 {
-	this->optionsText.setFont(this->font);
-	this->optionsText.setPosition(sf::Vector2f(100.f, 250.f)); 
-	this->optionsText.setCharacterSize(30);
-	this->optionsText.setFillColor(sf::Color(255, 255, 255, 200));
+	this->optionsText.setFont          (this->font);
+	this->optionsText.setPosition      (sf::Vector2f(100.f, 250.f)); 
+	this->optionsText.setCharacterSize (30);
+	this->optionsText.setFillColor     (sf::Color(255, 255, 255, 200));
 
 	this->optionsText.setString(
 		" Resolution \n\n\n Fullscreen \n\n\n Vsync \n\n\n Frame limit"
@@ -32,6 +32,7 @@ inline void SettingsState::initText()
 inline void SettingsState::initBackground()
 {
 	this->background.setSize(sf::Vector2f(static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)));
+
 	if (!this->backgroundTexture.loadFromFile("Textures/background/mainmenu_background.png"))
 	{
 		throw("Failed to load background main menu");
@@ -57,6 +58,17 @@ inline void SettingsState::initKeybinds()
 	ifs.close();
 }
 
+inline void SettingsState::updateGuiPosition()
+{
+	this->buttons["EXIT_STATE"]->setPosition(
+		static_cast<float>(this->window->getSize().x / 2.f) - 100.f, 
+		static_cast<float>(this->window->getSize().y) - 150.f);
+
+	this->buttons["APPLY"]->setPosition(
+		static_cast<float>(this->window->getSize().x) / 2.f - 110.f, 
+		static_cast<float>(this->window->getSize().y) - 300.f);
+}
+
 inline void SettingsState::initFonts()
 {
 	if (!this->font.loadFromFile("Fonts/Greybeard.ttf"))
@@ -68,13 +80,19 @@ inline void SettingsState::initFonts()
 inline void SettingsState::initGUI()
 {
 	//Buttons
-	this->buttons["EXIT_STATE"] = std::make_unique<GUI::Button>(815.f, 850.f, 180.f, 75.f,
+	this->buttons["EXIT_STATE"] = std::make_unique<GUI::Button>(
+		static_cast<float>(this->window->getSize().x / 2.f) - 100.f,
+        static_cast<float>(this->window->getSize().y) - 150.f,
+		180.f, 75.f,
 		&this->font, "Quit", 50,
 		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
 		sf::Color(100, 100, 100, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
 	);
 
-	this->buttons["APPLY"] = std::make_unique<GUI::Button>(800.f, 700.f, 180.f, 75.f,
+	this->buttons["APPLY"] = std::make_unique<GUI::Button>(
+		static_cast<float>(this->window->getSize().x) / 2.f - 110.f,
+		static_cast<float>(this->window->getSize().y) - 300.f,
+		180.f, 75.f,
 		&this->font, "Apply", 50,
 		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
 		sf::Color(100, 100, 100, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
@@ -124,21 +142,28 @@ inline void SettingsState::initGUI()
 SettingsState::SettingsState(StateData* state_data) noexcept
 	: State(state_data)
 {
-	this->initVariables();
-	this->initBackground();
-	this->initFonts();	  //init fonts 
-	this->initKeybinds(); //init key binds from ini
-	this->initGUI();  //init gui
-	this->initText();
+	//State type
+	this->type = STATE_TYPE::SETTINGS_STATE;
+
+	//Init functions
+	this->initVariables  ();
+	this->initBackground ();
+	this->initFonts      ();
+	this->initKeybinds   ();   
+	this->initGUI        (); 
+	this->initText       ();
 }
 
 SettingsState::~SettingsState()
 {
 }
 
-//Accessors
-
 //Functions
+void SettingsState::updateTopState()
+{
+	this->updateGuiPosition();
+}
+
 inline void SettingsState::updateInput(const float& dt)
 {
 
@@ -162,26 +187,34 @@ inline void SettingsState::updateGUI(const float& dt)
 	if (this->buttons["APPLY"]->isPressed() && this->getKeyTime())
 	{
 		//Resolution update
-		if (this->stateData->gfxSettings->resolution != this->videoModes[this->dropDownLists["RESOLUTION"]->getActiveBoxId()]);
+		if (this->stateData->gfxSettings->resolution != this->videoModes[this->dropDownLists["RESOLUTION"]->getActiveBoxId()])
 		{
 			this->stateData->gfxSettings->resolution = this->videoModes[this->dropDownLists["RESOLUTION"]->getActiveBoxId()];
 			this->window->create(this->stateData->gfxSettings->resolution, this->stateData->gfxSettings->title, sf::Style::Default);
 		}
 
 		//Vectical sync update
-		this->stateData->gfxSettings->vertucalSync != this->dropDownLists["VSYNC"]->getActiveBoxId() - 1;
+		this->stateData->gfxSettings->vertucalSync = static_cast<bool>(this->dropDownLists["VSYNC"]->getActiveBoxId() - 1);
 
 		if (this->stateData->gfxSettings->vertucalSync)
 		{
-			this->window->setVerticalSyncEnabled(this->dropDownLists["VSYNC"]->getActiveBoxId());
+			this->window->setVerticalSyncEnabled(true);
+		}
+		else
+		{
+			this->window->setVerticalSyncEnabled(false);
 		}
 
 		//Fullscrren update
-		this->stateData->gfxSettings->fullscreen = this->dropDownLists["FULLSCREEN"]->getActiveBoxId() -1;
+		this->stateData->gfxSettings->fullscreen = static_cast<bool>(this->dropDownLists["FULLSCREEN"]->getActiveBoxId() -1);
 
 		if (this->stateData->gfxSettings->fullscreen)
 		{
 			this->window->create(this->stateData->gfxSettings->resolution, this->stateData->gfxSettings->title, sf::Style::Fullscreen);
+		}
+		else
+		{
+			this->window->create(this->stateData->gfxSettings->resolution, this->stateData->gfxSettings->title, sf::Style::Default);
 		}
 
 		//Frame limit update
@@ -192,6 +225,8 @@ inline void SettingsState::updateGUI(const float& dt)
 			this->window->setFramerateLimit(this->stateData->gfxSettings->framerateLimit);
 		}
 
+		//Update gui elevemnts position
+		this->updateGuiPosition();
 	}
 
 	//Quit state
@@ -203,10 +238,10 @@ inline void SettingsState::updateGUI(const float& dt)
 
 void SettingsState::update(const float& dt)
 {
-	this->updateKeyTime(dt);
-	this->updateInput(dt);
-	this->updateMousePosition();
-	this->updateGUI(dt);
+	this->updateKeyTime       (dt);
+	this->updateInput         (dt);
+	this->updateMousePosition ();
+	this->updateGUI           (dt);
 }
 
 inline void SettingsState::renderGUI(sf::RenderTarget& target)
@@ -236,7 +271,7 @@ void SettingsState::render(sf::RenderTarget* target)
 
 	this->renderGUI(*target);
 
-	//REMOVE LATER JUST DEBUG!!!
+	//DEBUG
 	/*sf::Text mouseText;
 	mouseText.setPosition(this->mousPosView.x, this->mousPosView.y - 20);
 	mouseText.setFont(this->font);

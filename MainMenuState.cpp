@@ -68,7 +68,9 @@ inline void MainMenuState::initGUI()
 	this->difficultyText.setFillColor(sf::Color::White);
 	this->difficultyText.setString("Difficulty: ");
 
-	this->difficultyText.setPosition(this->background.getSize().x - 550.f, this->background.getPosition().y + 100.f);
+	this->difficultyText.setPosition(
+		static_cast<float>(this->window->getSize().x) - 550.f, 
+		static_cast<float>(this->window->getPosition().y) + 100.f);
 
 	this->difficultyLvlText.setFont(this->font);
 	this->difficultyLvlText.setCharacterSize(50);
@@ -78,8 +80,6 @@ inline void MainMenuState::initGUI()
 	this->difficultyLvlText.setOutlineColor(sf::Color::White);
 
 	this->difficultyLvlText.setPosition(this->difficultyText.getPosition().x + 300.f, this->difficultyText.getPosition().y);
-
-
 
 	//Buttons
 	this->buttons["GAME_STATE"] = std::make_unique<GUI::Button>(100.f, 100.f, 300.f, 70.f,
@@ -241,6 +241,10 @@ inline void MainMenuState::renderGUI(sf::RenderTarget& target)
 MainMenuState::MainMenuState(StateData* state_data) noexcept
 	: State(state_data)
 {
+	//State type
+	this->type = STATE_TYPE::MAIN_MENU_STATE;
+
+	//Init functions
 	this->initVariables  ();
 	this->initSounds     ();
 	this->initBackground ();
@@ -254,6 +258,12 @@ MainMenuState::~MainMenuState()
 }
 
 //Public functions 
+void MainMenuState::updateTopState()
+{
+	this->updateGuiPosition();
+	this->playMusic();
+}
+
 void MainMenuState::update(const float& dt)
 {
 	this->updateKeyTime       (dt);
@@ -283,7 +293,29 @@ void MainMenuState::render(sf::RenderTarget* target)
 	target->draw(mouseText);*/
 }
 
+void MainMenuState::updateGuiPosition()
+{
+	this->difficultyText.setPosition(
+		static_cast<float>(this->window->getSize().x) - 550.f,
+		static_cast<float>(this->window->getPosition().y) + 100.f);
+
+	this->difficultyLvlText.setPosition(
+		this->difficultyText.getPosition().x + 300.f, 
+		this->difficultyText.getPosition().y);
+
+	this->buttons["DIFFICULTY_LESS"]->setPosition(
+		this->difficultyLvlText.getPosition().x - 30.f, 
+		this->difficultyLvlText.getPosition().y + 50.f);
+
+	this->buttons["DIFFICULTY_MORE"]->setPosition(
+		this->difficultyLvlText.getPosition().x + 80.f,
+		this->difficultyLvlText.getPosition().y + 50.f);
+}
+
 void MainMenuState::playMusic()
 {
-	this->sounds.music.play();
+	if (this->sounds.music.getStatus() != sf::Music::Playing)
+	{
+		this->sounds.music.play();
+	}
 }

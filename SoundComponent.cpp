@@ -162,7 +162,43 @@ void GameStateSoundBox::setVolume(const float& volume)
 	this->volume = volume;
 }
 
+const float& GameStateSoundBox::getVolume() const
+{
+	return this->volume;
+}
+
+const float& GameStateSoundBox::getVolumeMax() const
+{
+	return this->volumeMAX;
+}
+
 //Public functions
+//Volume
+void GameStateSoundBox::increaseVolume()
+{
+	this->volume += 0.15f;
+
+	if (this->volume > this->volumeMAX)
+	{
+		this->volume = this->volumeMAX;
+	}
+
+	this->setVolume(this->volume);
+}
+
+void GameStateSoundBox::decreaseVolume()
+{
+	this->volume -= 0.15f;
+
+	if (this->volume < 0)
+	{
+		this->volume = 0;
+	}
+
+	this->setVolume(this->volume);
+}
+
+//Music
 void GameStateSoundBox::pauseThemeMusic()
 {
 	if (this->music["THEME"].getStatus() != sf::Music::Paused)
@@ -297,6 +333,10 @@ inline void EnemySoundBox::initSound()
 	this->sounds["MAGE_SOUND"].first.loadFromFile("Sounds/game_state/enemies_sounds/mage_sound.wav");
 	this->sounds["MAGE_SOUND"].second.setBuffer(this->sounds["MAGE_SOUND"].first);
 	this->sounds["MAGE_SOUND"].second.setVolume(1.5f);
+
+	this->sounds["MAGE_SPELL_CAST_SOUND"].first.loadFromFile("Sounds/game_state/enemies_sounds/mage_spell_cast_sound.wav");
+	this->sounds["MAGE_SPELL_CAST_SOUND"].second.setBuffer(this->sounds["MAGE_SPELL_CAST_SOUND"].first);
+	this->sounds["MAGE_SPELL_CAST_SOUND"].second.setVolume(1.5f);
 
 	//Bosses sounds
 	this->sounds["FIRE_DEMON_SOUND"].first.loadFromFile("Sounds/game_state/enemies_sounds/fire_demon_sound.wav");

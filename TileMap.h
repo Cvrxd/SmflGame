@@ -43,7 +43,6 @@ private:
 
 	//Update functions
 	void updateLevelCollision  (Entity* entity, const float& dt);
-	void updateTilesCollision  (Entity* entity, const sf::Vector2i& gridPosition, const float& dt);
 
 public:
 	TileMap  (const float& gridSize, const int& width, const int& hight, const std::string& textureFile) noexcept;
@@ -53,6 +52,9 @@ public:
 	//Accessors
 	const sf::Texture&	getTileTextureSheet  ()       const;
 	const sf::Vector2f& getMaxSizeF          ()       const;
+
+	//Collision
+	void updateTilesCollision(Entity* entity, const sf::Vector2i& gridPosition, const float& dt);
 
 	//Core Functions
 	void addTile       (const int& x, const int& y, const sf::IntRect& texture_rect, const bool& collision, const short& type);
