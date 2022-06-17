@@ -6,7 +6,7 @@
 //======================
 
 //Init functions
-void PlayerSoundBox::initSounds()
+inline void PlayerSoundBox::initSounds()
 {
 	//Walking sound
 	if (!this->sounds["WALKING"].first.loadFromFile("Sounds/game_state/player/walking.wav"))
@@ -14,7 +14,7 @@ void PlayerSoundBox::initSounds()
 		throw("UNABLE TO LOAD PLAYER WALKING SOUND");
 	}
 	this->sounds["WALKING"].second.setBuffer(this->sounds["WALKING"].first);
-	this->sounds["WALKING"].second.setVolume(this->movementVolumeMin);
+	this->sounds["WALKING"].second.setVolume(this->volumeMin);
 	this->sounds["WALKING"].second.setLoop(true);
 
 	this->movementSound = &this->sounds["WALKING"].second;
@@ -28,7 +28,7 @@ void PlayerSoundBox::initSounds()
 		throw("UNABLE TO LOAD PLAYER WALKING SOUND");
 	}
 	this->sounds["RUNNING"].second.setBuffer(this->sounds["RUNNING"].first);
-	this->sounds["RUNNING"].second.setVolume(this->movementVolumeMin);
+	this->sounds["RUNNING"].second.setVolume(this->volumeMin);
 	this->sounds["RUNNING"].second.setLoop(true);
 
 	this->sounds["RUNNING"].second.play();
@@ -78,16 +78,43 @@ void PlayerSoundBox::changeMovementVolume(const bool& increase)
 {
 	if (increase)
 	{
-		if (this->movementSound->getVolume() != this->movementVolumeMax)
+		if (this->movementSound->getVolume() != this->volumeMax)
 		{
-			this->movementSound->setVolume(this->movementVolumeMax);
+			this->movementSound->setVolume(this->volumeMax);
 		}
 	}
 	else
 	{
-		if (this->movementSound->getVolume() != this->movementVolumeMin)
+		if (this->movementSound->getVolume() != this->volumeMin)
 		{
-			this->movementSound->setVolume(this->movementVolumeMax);
+			this->movementSound->setVolume(this->volumeMax);
+		}
+	}
+}
+
+void PlayerSoundBox::increaseVolume()
+{
+	this->volumeMin = this->volumeMin + (this->volumeMin * VOLUME_MODIFIER / 100.f);
+	this->volumeMax = this->volumeMax + (this->volumeMax * VOLUME_MODIFIER / 100.f);
+
+	for (auto& el : this->sounds)
+	{
+		el.second.second.setVolume(this->volumeMin);
+	}
+}
+
+void PlayerSoundBox::decreaseVolume()
+{
+	this->volumeMin = this->volumeMin - (this->volumeMin * VOLUME_MODIFIER / 100.f);
+	this->volumeMax = this->volumeMax - (this->volumeMax * VOLUME_MODIFIER / 100.f);
+
+	for (auto& el : this->sounds)
+	{
+		el.second.second.setVolume(this->volumeMin);
+
+		if (el.second.second.getVolume() < 0)
+		{
+			el.second.second.setVolume(0);
 		}
 	}
 }
@@ -146,9 +173,9 @@ GameStateSoundBox::GameStateSoundBox()
 GameStateSoundBox::~GameStateSoundBox()
 {
 	//Stoping all music
-	this->stopBossFightMusic();
-	this->stopPauseMenuMusic();
-	this->stopThemeMusic();
+	this->stopBossFightMusic ();
+	this->stopPauseMenuMusic ();
+	this->stopThemeMusic     ();
 }
 
 //Accessors
@@ -451,3 +478,40 @@ void EnemySoundBox::resumeSounds()
 		}
 	}
 }
+
+void EnemySoundBox::increaseVolume()
+{
+	for (auto& el : this->sounds)
+	{
+		el.second.second.setVolume(el.second.second.getVolume() + (el.second.second.getVolume() * VOLUME_MODIFIER / 100.f));
+	}
+
+	for (auto& el : this->skillsImpact)
+	{
+		el.second.second.setVolume(el.second.second.getVolume() + (el.second.second.getVolume() * VOLUME_MODIFIER / 100.f));
+	}
+}
+
+void EnemySoundBox::decreaseVolume()
+{
+	for (auto& el : this->sounds)
+	{
+		el.second.second.setVolume(el.second.second.getVolume() - (el.second.second.getVolume() * VOLUME_MODIFIER / 100.f));
+
+		if (el.second.second.getVolume() < 0)
+		{
+			el.second.second.setVolume(0);
+		}
+	}
+
+	for (auto& el : this->skillsImpact)
+	{
+		el.second.second.setVolume(el.second.second.getVolume() - (el.second.second.getVolume() * VOLUME_MODIFIER / 100.f));
+
+		if (el.second.second.getVolume() < 0)
+		{
+			el.second.second.setVolume(0);
+		}
+	}
+}
+

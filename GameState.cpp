@@ -88,7 +88,7 @@ inline void GameState::initPauseMenu()
 	//Volume text
 	this->volumeText.setFont          (this->font);
 	this->volumeText.setCharacterSize (40);
-	this->volumeText.setString        ("Music volume: 75%");
+	this->volumeText.setString        ("Music volume: " + std::to_string(static_cast<int>(this->gameStateSoundBox.getVolume() * 100 / this->gameStateSoundBox.getVolumeMax())) + '%');
 	this->volumeText.setFillColor     (sf::Color(255, 255, 255, 200));
 	this->volumeText.setPosition      (static_cast<float>(this->window->getSize().x) - 400.f, 100.f);
 
@@ -124,21 +124,21 @@ inline void GameState::initPlayers()
 inline void GameState::initEnemies()
 {
 	this->bosses.reserve(3);
-	this->bosses.emplace_back(BossType::FIRE_DEMON, 5, 100, 900, this->textures["ENEMY_FIRE_DEMON"], &this->player, this->enemiesSounds);
-	//this->bosses.emplace_back(BossType::NIGHTBORN, 5, 100, 900, this->textures["ENEMY_NIGHT_BORN"], &this->player, this->enemiesSounds);
-	//this->bosses.emplace_back(BossType::SAMURAI, 5, 100, 900, this->textures["ENEMY_SAMURAI"], &this->player, this->enemiesSounds);
+	this->bosses.emplace_back(BossType::FIRE_DEMON, 5, 100, 900, this->textures["ENEMY_FIRE_DEMON"], &this->player, this->enemiesSoundBox);
+	//this->bosses.emplace_back(BossType::NIGHTBORN, 5, 100, 900, this->textures["ENEMY_NIGHT_BORN"], &this->player, this->enemiesSoundBox);
+	//this->bosses.emplace_back(BossType::SAMURAI, 5, 100, 900, this->textures["ENEMY_SAMURAI"], &this->player, this->enemiesSoundBox);
 
 	this->meleEnemies.reserve(3);
-	//this->meleEnemies.emplace_back(MeleEnemyType::KNIGHT1, 5, 700, 700, this->textures["ENEMY_KNIGHT1"], &this->player, this->enemiesSounds);
-	//this->meleEnemies.emplace_back(MeleEnemyType::BRINGER_OF_DEATH, 5, 700, 700, this->textures["ENEMY_BRINGER_OF_DEATH"], &this->player, this->enemiesSounds);
-	//this->meleEnemies.emplace_back(MeleEnemyType::BRINGER_OF_DEATH, 5, 700, 700, this->textures["ENEMY_BRINGER_OF_DEATH"], &this->player, this->enemiesSounds);
+	//this->meleEnemies.emplace_back(MeleEnemyType::KNIGHT1, 5, 700, 700, this->textures["ENEMY_KNIGHT1"], &this->player, this->enemiesSoundBox);
+	//this->meleEnemies.emplace_back(MeleEnemyType::BRINGER_OF_DEATH, 5, 700, 700, this->textures["ENEMY_BRINGER_OF_DEATH"], &this->player, this->enemiesSoundBox);
+	//this->meleEnemies.emplace_back(MeleEnemyType::BRINGER_OF_DEATH, 5, 700, 700, this->textures["ENEMY_BRINGER_OF_DEATH"], &this->player, this->enemiesSoundBox);
 
 	this->mageEnemies.reserve(2);
-	//this->mageEnemies.emplace_back(MageEnemyType::DARK_MAGE, 1, 400, 400, this->textures["ENEMY_DARK_MAGE"], &this->player, this->enemiesSounds);
-	//this->mageEnemies.emplace_back(MageEnemyType::NECROMANCER, 1, 500, 400, this->textures["ENEMY_NECROMANCER"], &this->player, this->enemiesSounds);
+	//this->mageEnemies.emplace_back(MageEnemyType::DARK_MAGE, 1, 400, 400, this->textures["ENEMY_DARK_MAGE"], &this->player, this->enemiesSoundBox);
+	//this->mageEnemies.emplace_back(MageEnemyType::NECROMANCER, 1, 500, 400, this->textures["ENEMY_NECROMANCER"], &this->player, this->enemiesSoundBox);
 	
 	this->destroyingEnemies.reserve(2);
-	//this->destroyingEnemies.emplace_back(DestroyingEnemyType::DRAGON, 1, 0, 0, this->textures["ENEMY_DRAGON"], &this->player, this->enemiesSounds);
+	//this->destroyingEnemies.emplace_back(DestroyingEnemyType::DRAGON, 1, 0, 0, this->textures["ENEMY_DRAGON"], &this->player,this->enemiesSoundBox);
 }
 
 inline void GameState::initPlayerGUI()
@@ -153,13 +153,13 @@ inline void GameState::initTileMap()
 
 inline void GameState::initSounds()
 {
-	this->gameMusic.playThemeMusic();
+	this->gameStateSoundBox.playThemeMusic();
 }
 
 //Update functions
 inline void GameState::updateVolumeText()
 {
-	this->volumeText.setString("Music volume: "+ std::to_string(static_cast<int>(this->gameMusic.getVolume() * 100 / this->gameMusic.getVolumeMax())) + '%');
+	this->volumeText.setString("Music volume: "+ std::to_string(static_cast<int>(this->gameStateSoundBox.getVolume() * 100 / this->gameStateSoundBox.getVolumeMax())) + '%');
 }
 
 inline void GameState::updatePlayerInput(const float& dt)
@@ -205,39 +205,21 @@ inline void GameState::updateInput(const float& dt)
 			//Pausing state
 			this->pauseState();
 
-			//Pausing music
-			if (!this->bossFight)
-			{
-				this->gameMusic.pauseThemeMusic();
-			}
-			else
-			{
-				this->gameMusic.pauseBossFightMusic();
-			}
-
-			this->gameMusic.playPauseMenuMusic();
+			//Playing pause menu music
+			this->gameStateSoundBox.playPauseMenuMusic();
 		}
 		else
 		{
 			//Unpausing sounds
 			this->resumeSounds();
 
-			//Pausing music
-			if (!this->bossFight)
-			{
-				this->gameMusic.playThemeMusic();
-			}
-			else
-			{
-				this->gameMusic.playBossFightMusic();
-			}
-
-			this->gameMusic.stopPauseMenuMusic();
-			this->skillsMenu.stopSonds();
-			this->itemsMenu.stopSounds();
+			//Stoping gui and pause menu sounds
+			this->gameStateSoundBox.stopPauseMenuMusic();
+			this->guiSounBox.stopSounds();
 
 			//Unpausing state
 			this->unpausedState();
+
 			this->skillMenuActive = false;
 			this->itemsMenuActive = false;
 		}
@@ -257,19 +239,30 @@ inline void GameState::updateVolumeGui()
 	//Decreasing volume button
 	if (this->volumeButtons.first->isPressed() && this->getKeyTime())
 	{
-		this->guiSounds.sounds["CLICK"].second.play();
-		this->gameMusic.decreaseVolume();
+		//Sound
+		this->guiSounBox.sounds["CLICK"].second.play();
 
+		//Decreasing volume
+		this->decreaseVolume();
+
+		//Updating volume value text
 		this->updateVolumeText();
 	}
 
 	//Increasing volume button
 	if (this->volumeButtons.second->isPressed() && this->getKeyTime())
 	{
-		this->guiSounds.sounds["CLICK"].second.play();
-		this->gameMusic.increaseVolume();
+		if (this->gameStateSoundBox.getVolume() != this->gameStateSoundBox.getVolumeMax())
+		{
+			//Sound
+			this->guiSounBox.sounds["CLICK"].second.play();
 
-		this->updateVolumeText();
+			//Increasing volume
+			this->increaseVolume();
+
+			//Updating volume value text
+			this->updateVolumeText();
+		}
 	}
 }
 
@@ -325,19 +318,10 @@ inline void GameState::updatePauseMenuButtons()
 		//Resuming sounds
 		this->resumeSounds();
 
-		//Resuming music
-		if (!this->bossFight)
-		{
-			this->gameMusic.playThemeMusic();
-		}
-		else
-		{
-			this->gameMusic.playBossFightMusic();
-		}
+		//Stoping gui and pause menu sounds
+		this->gameStateSoundBox.stopPauseMenuMusic();
 
-		this->gameMusic.stopPauseMenuMusic();
-		this->skillsMenu.stopSonds();
-		this->itemsMenu.stopSounds();
+		this->guiSounBox.stopSounds();
 
 	}
 	else if (this->pauseMenu.isButtonPressed("SKILLS"))
@@ -454,11 +438,21 @@ inline void GameState::renderPauseMenuGui(sf::RenderTarget& target)
 	this->volumeButtons.second->render(target);
 }
 
-//Functions
+//Sound functions
 inline void GameState::pauseSounds()
 {
-	//Pausing player Sounds
+	//Pausing player sounds
 	this->player.pauseSounds();
+
+	//Pausing music
+	if (!this->bossFight)
+	{
+		this->gameStateSoundBox.pauseThemeMusic();
+	}
+	else
+	{
+		this->gameStateSoundBox.pauseBossFightMusic();
+	}
 
 	//Pausing enemies sounds
 	for (auto& el : this->destroyingEnemies)
@@ -493,8 +487,18 @@ inline void GameState::pauseSounds()
 
 inline void GameState::resumeSounds()
 {
-	//Resume player sounds
-	this->player.resumeSounds();
+	//Resuming player sounds
+	this->player.playSounds();
+
+	//Resuming music
+	if (!this->bossFight)
+	{
+		this->gameStateSoundBox.playThemeMusic();
+	}
+	else
+	{
+		this->gameStateSoundBox.playBossFightMusic();
+	}
 
 	//Resuming enemies sounds
 	for (auto& el : this->destroyingEnemies)
@@ -527,6 +531,22 @@ inline void GameState::resumeSounds()
 	}
 }
 
+inline void GameState::increaseVolume()
+{
+	this->gameStateSoundBox.increaseVolume ();
+	this->enemiesSoundBox.increaseVolume   ();
+	this->guiSounBox.increaseVolume        ();
+	this->player.increaseSoundsVolume      ();
+}
+
+inline void GameState::decreaseVolume()
+{
+	this->gameStateSoundBox.decreaseVolume ();
+	this->enemiesSoundBox.decreaseVolume   ();
+	this->guiSounBox.decreaseVolume        ();
+	this->player.decreaseSoundsVolume      ();
+}
+
 //Constructor
 GameState::GameState(StateData* state_data, const unsigned int& difficultyLvl)
 	: 
@@ -537,12 +557,12 @@ GameState::GameState(StateData* state_data, const unsigned int& difficultyLvl)
 	popUpTextComponent (state_data->font),
 
 	pauseMenu   (*this->window, this->stateData->font),                                //Pause menu 
-	player      (500,500, this->textures["PLAYER_SHEET"], this->font, this->isBuffed), //Player
+	player      (500, 500, this->textures["PLAYER_SHEET"], this->font, this->isBuffed), //Player
 	playerGUI   (this->player, this->font),                                            //Player GUI
 	tileMap     ("map/game_map.txt"),                                                  //Tile Map
 
-	skillsMenu  (this->player, this->playerGUI,this->font, this->guiSounds, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
-	itemsMenu   (this->player, this->playerGUI, this->font, this->guiSounds, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)) // items menu                                                //Tile map
+	skillsMenu  (this->player, this->playerGUI,this->font, this->guiSounBox, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
+	itemsMenu   (this->player, this->playerGUI, this->font, this->guiSounBox, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)) // items menu                                                //Tile map
 {
 	//State type
 	this->type = STATE_TYPE::GAME_STATE;

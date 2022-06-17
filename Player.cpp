@@ -15,6 +15,9 @@
 //Initialasation functions
 inline void Player::initVariables()
 {
+	//Sprite
+	this->sprite.setScale(2.8f, 2.8f);
+
 	//Player damage range
 	this->damageRange.setSize(sf::Vector2f(150, 250));
 	this->damageRange.setOutlineThickness(1.f);
@@ -327,12 +330,10 @@ Player::Player(const float& x, const float& y, sf::Texture& texture_sheet, const
 
 	moveKey ("MOVE"), dashKey ("DASH"), currentKey (&moveKey)
 {
-	this->initVariables();
-	this->initComponents(texture_sheet);
-	this->setPosition(x, y);
-	this->initSounds();
-
-	this->sprite.setScale(2.8f, 2.8f);
+	this->initVariables  ();
+	this->initComponents (texture_sheet);
+	this->setPosition    (x, y);
+	this->initSounds     ();
 }
 
 Player::~Player()
@@ -388,6 +389,35 @@ const sf::CircleShape& Player::getHitRange()
 const sf::RectangleShape& Player::getDamageRange()
 {
 	return this->damageRange;
+}
+
+//Sounds functions
+void Player::increaseSoundsVolume()
+{
+	this->soundBox.increaseVolume();
+
+	this->skillsComponent.increaseSoundsVolume();
+}
+
+void Player::decreaseSoundsVolume()
+{
+	this->soundBox.decreaseVolume();
+
+	this->skillsComponent.decreaseSoundsVolume();
+}
+
+void Player::pauseSounds()
+{
+	this->soundBox.pauseMovementSound();
+
+	this->skillsComponent.pauseSounds();
+}
+
+void Player::playSounds()
+{
+	this->soundBox.unpauseMovementSound();
+
+	this->skillsComponent.resumeSounds();
 }
 
 //Stats functions
@@ -478,17 +508,6 @@ void Player::usePotions(const Potions& potion_type)
 }
 
 //Functions
-void Player::pauseSounds()
-{
-	this->soundBox.pauseMovementSound();
-	this->skillsComponent.pauseSounds();
-}
-
-void Player::resumeSounds()
-{
-	this->skillsComponent.resumeSounds();
-}
-
 void Player::update(const float& dt, sf::Vector2f mouse_pos_view)
 {
 	//Uodating hit range

@@ -27,6 +27,7 @@ private:
 	using MapSkillsAnimations   = std::unordered_map<SkillType, AnimationComponent>;
 	using SoundsMap             = std::unordered_map<SkillType, std::pair<sf::SoundBuffer, sf::Sound>>;
 
+
 	//Variables
 	sf::Clock skillTimer;
 	sf::Clock buffTimer;
@@ -53,7 +54,7 @@ private:
 	float  buffMissChance = 5.f;
 
 	//Sounds
-	SoundsMap sounds;
+	SoundsMap           sounds;
 
 	//Potions
 	PotionsCount        healthPotions;
@@ -117,8 +118,7 @@ private:
 	
 	//Core functions
 	void useSkill        (const SkillType& skill_type);
-	void playSkillSound  (const SkillType& type);
-
+	void playSkillSound  (const SkillType& skill_type);
 public:
 	SkillsComponent  (StatsComponent& statsComponent, const sf::Font& font, bool& isUsingSkill, SkillType& usingSkillType, int& currentSkillDamage, bool& isBuffed, bool& castingSpell) noexcept;
 	~SkillsComponent ();
@@ -126,18 +126,22 @@ public:
 	//Accessors
 	const std::vector<std::pair<SkillType, int>>& getPlayerSkills();
 
-	const int&              getBuffMaxLevel  ()    const;
-	const int&              getBuffLevel     ()    const;
-	const sf::CircleShape&  getDamageArea    ();
-	const bool              getKeyTime()           const;
-	const bool              getBuffKeyTime   ()    const;
-	int&                    getMpPotions     ();
-	int&                    getHpPotions     ();
+	const int&                getBuffMaxLevel  ()    const;
+	const int&                getBuffLevel     ()    const;
+	const sf::CircleShape&    getDamageArea    ();
+	const bool                getKeyTime()           const;
+	const bool                getBuffKeyTime   ()    const;
+	int&                      getMpPotions     ();
+	int&                      getHpPotions     ();
+
+	//Sound functions
+	void increaseSoundsVolume();
+	void decreaseSoundsVolume();
+
+	void resumeSounds      ();
+	void pauseSounds       ();
 
 	//Functions
-	void pauseSounds  ();
-	void resumeSounds ();
-
 	void addPotion         (const Potions& potion_type);
 	void usePotion         (const Potions& potion_type);
 

@@ -60,7 +60,7 @@ private:
 	PopUpTextComponent  popUpTextComponent;
 
 	//Sounds
-	PlayerSoundBox      soundBox;
+	PlayerSoundBox     soundBox;
 
 	//Animations
 	VectorSprites       sprites;
@@ -88,20 +88,28 @@ private:
 
 public:
 	Player(const float& x, const float& y, sf::Texture& texture_sheet, const sf::Font& font, bool& isBuffed) noexcept;
+
 	virtual ~Player();
 
 	//Accessors
-	const SkillType& getUsingSkilltype    ();
-	const int&       getUsingSkilldamage  ();
-	const sf::Font&  getFont              ();
-	void             setPlayerGUI         (PlayerGUI& playerGUI);
+	const SkillType&            getUsingSkilltype    ();
+	const int&                  getUsingSkilldamage  ();
+	const sf::Font&             getFont              ();
+	void                        setPlayerGUI         (PlayerGUI& playerGUI);
 
-	const bool&                 usingSkill         ();
-	const bool&	                isDealingDmg       ();
-	StatsComponent*             getStatsComponent  ();
-	SkillsComponent*            getSkillComponent  ();
-	const sf::CircleShape&      getHitRange        ();
-	const sf::RectangleShape&   getDamageRange     ();
+	const bool&                 usingSkill           ();
+	const bool&	                isDealingDmg         ();
+	StatsComponent*             getStatsComponent    ();
+	SkillsComponent*            getSkillComponent    ();
+	const sf::CircleShape&      getHitRange          ();
+	const sf::RectangleShape&   getDamageRange       ();
+
+	//Sound functions
+	void increaseSoundsVolume();
+	void decreaseSoundsVolume();
+
+	void pauseSounds();
+	void playSounds();
 
 	//Stats functions
 	void gainEXP       (const unsigned& exp);
@@ -122,9 +130,6 @@ public:
 	void usePotions    (const Potions& potion_type);
 
 	//Functions
-	void pauseSounds  ();
-	void resumeSounds ();
-
 	void update        (const float& dt, sf::Vector2f mouse_pos_view)          override;
 	void render        (sf::RenderTarget& target, sf::Shader* shader = NULL)   override;
 };

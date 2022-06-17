@@ -3,46 +3,73 @@
 
 class SkillsComponent;
 
+#define VOLUME_MODIFIER 26.f
+
 struct GuiSoundsBox
+{
+	using SoundsMap = std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>>;
+
+	SoundsMap sounds;
+
+	GuiSoundsBox()
 	{
-		using SoundsMap = std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>>;
+		this->sounds["UPGRADE_SKILL"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/spell_upgrade.wav");
+		this->sounds["UPGRADE_SKILL"].second.setBuffer(this->sounds["UPGRADE_SKILL"].first);
+		this->sounds["UPGRADE_SKILL"].second.setVolume(2.f);
 
-		SoundsMap sounds;
+		this->sounds["UNLOCK_SKILL"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/spell_unlock.wav");
+		this->sounds["UNLOCK_SKILL"].second.setBuffer(this->sounds["UNLOCK_SKILL"].first);
+		this->sounds["UNLOCK_SKILL"].second.setVolume(2.f);
 
-		GuiSoundsBox()
+		this->sounds["UNLOCK_ITEM"].first.loadFromFile("Sounds/game_state/items_menu_sounds/unlock_item.wav");
+		this->sounds["UNLOCK_ITEM"].second.setBuffer(this->sounds["UNLOCK_ITEM"].first);
+		this->sounds["UNLOCK_ITEM"].second.setVolume(2.f);
+
+		this->sounds["UPGRADE_ITEM"].first.loadFromFile("Sounds/game_state/items_menu_sounds/upgrade_item.wav");
+		this->sounds["UPGRADE_ITEM"].second.setBuffer(this->sounds["UPGRADE_ITEM"].first);
+		this->sounds["UPGRADE_ITEM"].second.setVolume(2.f);
+
+		this->sounds["CLICK"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/click.wav");
+		this->sounds["CLICK"].second.setBuffer(this->sounds["CLICK"].first);
+		this->sounds["CLICK"].second.setVolume(10.f);
+	}
+
+	void stopSounds()
+	{
+		for (auto& el : this->sounds)
 		{
-			this->sounds["UPGRADE_SKILL"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/spell_upgrade.wav");
-			this->sounds["UPGRADE_SKILL"].second.setBuffer(this->sounds["UPGRADE_SKILL"].first);
-			this->sounds["UPGRADE_SKILL"].second.setVolume(2.f);
-
-			this->sounds["UNLOCK_SKILL"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/spell_unlock.wav");
-			this->sounds["UNLOCK_SKILL"].second.setBuffer(this->sounds["UNLOCK_SKILL"].first);
-			this->sounds["UNLOCK_SKILL"].second.setVolume(2.f);
-
-			this->sounds["UNLOCK_ITEM"].first.loadFromFile("Sounds/game_state/items_menu_sounds/unlock_item.wav");
-			this->sounds["UNLOCK_ITEM"].second.setBuffer(this->sounds["UNLOCK_ITEM"].first);
-			this->sounds["UNLOCK_ITEM"].second.setVolume(2.f);
-
-			this->sounds["UPGRADE_ITEM"].first.loadFromFile("Sounds/game_state/items_menu_sounds/upgrade_item.wav");
-			this->sounds["UPGRADE_ITEM"].second.setBuffer(this->sounds["UPGRADE_ITEM"].first);
-			this->sounds["UPGRADE_ITEM"].second.setVolume(2.f);
-
-			this->sounds["CLICK"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/click.wav");
-			this->sounds["CLICK"].second.setBuffer(this->sounds["CLICK"].first);
-			this->sounds["CLICK"].second.setVolume(10.f);
-		}
-
-		void stopSounds()
-		{
-			for (auto& el : this->sounds)
+			if (el.second.second.getStatus() != sf::Music::Stopped)
 			{
-				if (el.second.second.getStatus() != sf::Music::Stopped)
-				{
-					el.second.second.stop();
-				}
+				el.second.second.stop();
 			}
 		}
-	};
+	}
+
+	void increaseVolume()
+	{
+		for (auto& el : this->sounds)
+		{
+			el.second.second.setVolume(el.second.second.getVolume() + (el.second.second.getVolume() * VOLUME_MODIFIER / 100.f));
+		}
+
+		this->sounds["CLICK"].second.setVolume(10.f);
+	}
+
+	void decreaseVolume()
+	{
+		for (auto& el : this->sounds)
+		{
+			el.second.second.setVolume(el.second.second.getVolume() - (el.second.second.getVolume() * VOLUME_MODIFIER / 100.f));
+
+			if (el.second.second.getVolume() < 0)
+			{
+				el.second.second.setVolume(0);
+			}
+		}
+
+		this->sounds["CLICK"].second.setVolume(10.f);
+	}
+};
 
 class GameStateSoundBox
 {
@@ -52,7 +79,7 @@ private:
 	//Variables
 	MusicMap music;
 
-	float volume          = 2.10f;
+	float volume          = 1.7f;
 	const float volumeMAX = 3.f;
 
 	//Functions
@@ -91,8 +118,8 @@ private:
 	using SoundsMap = std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>>;
 
 	//Variables
-	float movementVolumeMin = 0.1f;
-	float movementVolumeMax = 0.5f;
+	float volumeMin = 0.1f;
+	float volumeMax = 0.5f;
 
 	SoundsMap sounds;
 
@@ -107,17 +134,20 @@ public:
 	~PlayerSoundBox();
 
 	//Functions
-	void changeMovementSound(const bool& running);
-	void changeMovementVolume(const bool& increase);
+	void changeMovementSound  (const bool& running);
+	void changeMovementVolume (const bool& increase);
 
-	void pauseMovementSound();
-	void unpauseMovementSound();
+	void increaseVolume       ();
+	void decreaseVolume       ();
+
+	void pauseMovementSound   ();
+	void unpauseMovementSound ();
 };
 
 class EnemySoundBox
 {
 private:
-	using SoundsMap = std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>>;
+	using SoundsMap             = std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>>;
 	using SkillsImpactSoundsMap = std::unordered_map<SkillType, std::pair<sf::SoundBuffer, sf::Sound>>;
 
 	//Variables
@@ -131,9 +161,12 @@ public:
 	~EnemySoundBox();
 
 	//Functions
-	void playSound(const SkillType& sound);
-	void playSound(const std::string& sound);
+	void playSound    (const SkillType& sound);
+	void playSound    (const std::string& sound);
 
-	void pauseSounds();
-	void resumeSounds();
+	void pauseSounds  ();
+	void resumeSounds ();
+
+	void increaseVolume();
+	void decreaseVolume();
 };

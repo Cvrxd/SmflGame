@@ -7,6 +7,8 @@
 										     this->skillsEndingSprite.first.setPosition(skill_position.x - 100, skill_position.y - 150);\
 											 this->damageArea.setPosition(skill_position.x - 300, skill_position.y - 300)
 
+#define SKILLS_SOUNDS_VOLUME_MODIFIER 20.f
+
 //Init fuctions
 inline void SkillsComponent::initSounds()
 {
@@ -80,11 +82,11 @@ inline void SkillsComponent::initAllSkills()
 	}
 
 	//Items
-	this->healthPotions.first = HEALTH;
-	this->manaPotions.first = MANA;
+	this->healthPotions.first   = HEALTH;
+	this->manaPotions.first     = MANA;
 
-	this->healthPotions.second = 3;
-	this->manaPotions.second = 3;
+	this->healthPotions.second  = 3;
+	this->manaPotions.second    = 3;
 }
 
 inline void SkillsComponent::initAllAnimations()
@@ -112,12 +114,12 @@ inline void SkillsComponent::initAllAnimations()
 	this->skillsAnimations[SkillType::BUFF] = AnimationComponent(&this->skillTextures[SkillType::BUFF].first, &this->skillTextures[SkillType::BUFF].second);
 
 	SkillType type;
-	for(int i = 0; i < this->skillsSize; ++i)
+	for (int i = 0; i < this->skillsSize; ++i)
 	{
 		type = this->allSkills[i].first;
 		this->skillsAnimations[type] = AnimationComponent(&this->skillTextures[type].first, &this->skillTextures[type].second);
 	}
-	
+
 
 	//Add animations
 	//Potion animations
@@ -170,10 +172,10 @@ inline void SkillsComponent::initPopUpText()
 
 
 	//Potions pop up text
-	this->mpPopUpKey.first  = MANA;
+	this->mpPopUpKey.first = MANA;
 	this->mpPopUpKey.second = "MP: +3";
 
-	this->hpPopUpKey.first  = HEALTH;
+	this->hpPopUpKey.first = HEALTH;
 	this->hpPopUpKey.second = "HP: +3";
 
 	this->popUpTextComponent.addText(this->hpPopUpKey.second, sf::Color::Green, 35);
@@ -184,7 +186,7 @@ inline void SkillsComponent::initPopUpText()
 inline void SkillsComponent::updateClock(const float& dt)
 {
 	//Update key time
-	this->keyTime += 10.f * dt;
+	this->keyTime       += 10.f * dt;
 	this->potionKeyTime += 10.f * dt;
 
 	//Skills duration
@@ -229,20 +231,20 @@ inline void SkillsComponent::playSkillSound(const SkillType& type)
 }
 
 //Constructor
-SkillsComponent::SkillsComponent(StatsComponent& statsComponent, const sf::Font& font, bool& isUsingSkill, SkillType& currentSkillType, 
+SkillsComponent::SkillsComponent(StatsComponent& statsComponent, const sf::Font& font, bool& isUsingSkill, SkillType& currentSkillType,
 	int& currentSkillDamage, bool& isBuffed, bool& castingSpell) noexcept
-	: 
-	statsComponent     (statsComponent),
-	popUpTextComponent (font),
+	:
+	statsComponent(statsComponent),
+	popUpTextComponent(font),
 
 	currentRender(-1), playAnimation(false), usingPotion(false), usingBuff(false), isBuffed(isBuffed), castingSpell(castingSpell),
 	keyTime(0.f), keyTimeMax(15.f), potionKeyTime(0.f), potionKeyTimeMax(5.f), buffDuration(5.f), buffCooldown(15.f),
 	skillsSize(8), usingSkill(isUsingSkill), currentSkillType(currentSkillType), currentSkillDamage(currentSkillDamage)
 {
-	this->initSounds         ();
-	this->initAllSkills      ();
-	this->initAllAnimations  ();
-	this->initPopUpText      ();
+	this->initSounds        ();
+	this->initAllSkills     ();
+	this->initAllAnimations ();
+	this->initPopUpText     ();
 }
 
 SkillsComponent::~SkillsComponent()
@@ -290,7 +292,29 @@ int& SkillsComponent::getHpPotions()
 	return this->healthPotions.second;
 }
 
-//Public Functions
+//Sounds functions 
+void SkillsComponent::increaseSoundsVolume()
+{
+	for (auto& el : this->sounds)
+	{
+		el.second.second.setVolume(el.second.second.getVolume() + (el.second.second.getVolume() * SKILLS_SOUNDS_VOLUME_MODIFIER / 100.f));
+	}
+
+}
+
+void SkillsComponent::decreaseSoundsVolume()
+{
+	for (auto& el : this->sounds)
+	{
+		el.second.second.setVolume(el.second.second.getVolume() - (el.second.second.getVolume() * SKILLS_SOUNDS_VOLUME_MODIFIER / 100.f));
+
+		if (el.second.second.getVolume() < 0)
+		{
+			el.second.second.setVolume(0);
+		}
+	}
+}
+
 void SkillsComponent::pauseSounds()
 {
 	for (auto& el : this->sounds)
@@ -313,6 +337,7 @@ void SkillsComponent::resumeSounds()
 	}
 }
 
+//Public Functions
 void SkillsComponent::addPotion(const Potions& potion_type)
 {
 	switch (potion_type)
@@ -368,7 +393,7 @@ void SkillsComponent::upgradeSkill(const SkillType& skill_type)
 	}
 	else
 	{
-		std::find_if(this->playerSkills.begin(), this->playerSkills.end(), [&skill_type](const std::pair<SkillType, int>& temp) 
+		std::find_if(this->playerSkills.begin(), this->playerSkills.end(), [&skill_type](const std::pair<SkillType, int>& temp)
 			{
 				return temp.first == skill_type;
 			}).operator*().second++;
@@ -384,7 +409,7 @@ void SkillsComponent::updatePlayerBuff(const float& dt, const sf::Vector2f& play
 		this->usingBuff = true;
 		this->buffTimer.restart();
 
-		this->statsComponent.critRate   += this->buffCritRate;
+		this->statsComponent.critRate += this->buffCritRate;
 		this->statsComponent.missChance += this->buffMissChance;
 
 		//Sound
@@ -393,15 +418,15 @@ void SkillsComponent::updatePlayerBuff(const float& dt, const sf::Vector2f& play
 		//Pop up text
 		this->updatePopUpText(this->popUpKeysMap[SkillType::BUFF]);
 	}
-	
+
 	if (this->isBuffed)
 	{
 		if (this->buffTimer.getElapsedTime().asSeconds() > this->buffDuration)
 		{
 			this->isBuffed = false;
 
-			this->statsComponent.critRate    -= this->buffCritRate;
-			this->statsComponent.missChance  -= this->buffMissChance;
+			this->statsComponent.critRate -= this->buffCritRate;
+			this->statsComponent.missChance -= this->buffMissChance;
 
 			this->buffTimer.restart();
 		}
@@ -425,7 +450,7 @@ void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position
 			_SKILLS_COMPONENT_SET_SKILL_POSITION;
 
 			this->playAnimation = true;
-			this->castingSpell  = true;
+			this->castingSpell = true;
 
 			skillTimer.restart();
 
@@ -492,7 +517,7 @@ void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position
 			//Pop up text
 			this->updatePopUpText(this->mpPopUpKey.second);
 		}
-		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::E) && this->healthPotions.second != 0)
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) && this->healthPotions.second != 0)
 		{
 			this->usingPotion = true;
 			this->usePotion(HEALTH);
@@ -501,7 +526,7 @@ void SkillsComponent::update(const float& dt, const sf::Vector2f& skill_position
 			this->updatePopUpText(this->hpPopUpKey.second);
 		}
 	}
-	
+
 	//Potion animations
 	if (this->usingPotion)
 	{

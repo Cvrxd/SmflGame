@@ -22,6 +22,7 @@ class PopUpTextComponent;
 class GameState : public State
 {
 private:
+
 	using VolumeButtons = std::pair<std::unique_ptr<GUI::Button>, std::unique_ptr<GUI::Button>>;
 
 	//Variables 
@@ -64,9 +65,9 @@ private:
 	std::vector<DestroyingEnemy>    destroyingEnemies;
 
 	//Sounds
-	EnemySoundBox     enemiesSounds;
-	GuiSoundsBox      guiSounds;
-	GameStateSoundBox gameMusic;
+	EnemySoundBox            enemiesSoundBox;
+	GuiSoundsBox             guiSounBox;
+	GameStateSoundBox        gameStateSoundBox;
 
 	//Init functions
 	void initRenderTextures  ();
@@ -102,9 +103,12 @@ private:
 	void renderPauseMenuGui (sf::RenderTarget& target);
 	void renderEnemies      (sf::RenderTarget& target);
 
-	//Functions
-	void pauseSounds  ();
-	void resumeSounds ();
+	//Soun functions
+	void pauseSounds    ();
+	void resumeSounds   ();
+
+	void increaseVolume ();
+	void decreaseVolume ();
 
 public:
 	GameState (StateData* state_data, const unsigned int& difficultyLvl = 1);
