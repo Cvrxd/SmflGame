@@ -3,35 +3,42 @@
 
 class SkillsComponent;
 
-#define VOLUME_MODIFIER 26.f
+#define VOLUME_MODIFIER 15.f
 
 struct GuiSoundsBox
 {
-	using SoundsMap = std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>>;
+	using SoundsMap  = std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>>;
+	using VolumesMap = std::unordered_map<std::string, float>;
 
-	SoundsMap sounds;
+	SoundsMap   sounds;
+	VolumesMap  volumes;
 
 	GuiSoundsBox()
 	{
+		this->volumes["UPGRADE_SKILL"] = 2.f;
 		this->sounds["UPGRADE_SKILL"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/spell_upgrade.wav");
 		this->sounds["UPGRADE_SKILL"].second.setBuffer(this->sounds["UPGRADE_SKILL"].first);
-		this->sounds["UPGRADE_SKILL"].second.setVolume(2.f);
+		this->sounds["UPGRADE_SKILL"].second.setVolume(this->volumes["UPGRADE_SKILL"]);
 
+		this->volumes["UNLOCK_SKILL"] = 2.f;
 		this->sounds["UNLOCK_SKILL"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/spell_unlock.wav");
 		this->sounds["UNLOCK_SKILL"].second.setBuffer(this->sounds["UNLOCK_SKILL"].first);
-		this->sounds["UNLOCK_SKILL"].second.setVolume(2.f);
+		this->sounds["UNLOCK_SKILL"].second.setVolume(this->volumes["UNLOCK_SKILL"]);
 
+		this->volumes["UNLOCK_ITEM"] = 2.f;
 		this->sounds["UNLOCK_ITEM"].first.loadFromFile("Sounds/game_state/items_menu_sounds/unlock_item.wav");
 		this->sounds["UNLOCK_ITEM"].second.setBuffer(this->sounds["UNLOCK_ITEM"].first);
-		this->sounds["UNLOCK_ITEM"].second.setVolume(2.f);
+		this->sounds["UNLOCK_ITEM"].second.setVolume(this->volumes["UNLOCK_ITEM"]);
 
+		this->volumes["UPGRADE_ITEM"] = 2.f;
 		this->sounds["UPGRADE_ITEM"].first.loadFromFile("Sounds/game_state/items_menu_sounds/upgrade_item.wav");
 		this->sounds["UPGRADE_ITEM"].second.setBuffer(this->sounds["UPGRADE_ITEM"].first);
-		this->sounds["UPGRADE_ITEM"].second.setVolume(2.f);
+		this->sounds["UPGRADE_ITEM"].second.setVolume(this->volumes["UPGRADE_ITEM"]);
 
+		this->volumes["CLICK"] = 10.f;
 		this->sounds["CLICK"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/click.wav");
 		this->sounds["CLICK"].second.setBuffer(this->sounds["CLICK"].first);
-		this->sounds["CLICK"].second.setVolume(10.f);
+		this->sounds["CLICK"].second.setVolume(this->volumes["CLICK"]);
 	}
 
 	void stopSounds()
@@ -49,17 +56,17 @@ struct GuiSoundsBox
 	{
 		for (auto& el : this->sounds)
 		{
-			el.second.second.setVolume(el.second.second.getVolume() + (el.second.second.getVolume() * VOLUME_MODIFIER / 100.f));
+			el.second.second.setVolume(el.second.second.getVolume() + (this->volumes[el.first] * VOLUME_MODIFIER / 100.f));
 		}
 
-		this->sounds["CLICK"].second.setVolume(10.f);
+		this->sounds["CLICK"].second.setVolume(this->volumes["CLICK"]);
 	}
 
 	void decreaseVolume()
 	{
 		for (auto& el : this->sounds)
 		{
-			el.second.second.setVolume(el.second.second.getVolume() - (el.second.second.getVolume() * VOLUME_MODIFIER / 100.f));
+			el.second.second.setVolume(el.second.second.getVolume() - (this->volumes[el.first] * VOLUME_MODIFIER / 100.f));
 
 			if (el.second.second.getVolume() < 0)
 			{
@@ -67,7 +74,17 @@ struct GuiSoundsBox
 			}
 		}
 
-		this->sounds["CLICK"].second.setVolume(10.f);
+		this->sounds["CLICK"].second.setVolume(this->volumes["CLICK"]);
+	}
+
+	void setVolume(const float& volume)
+	{
+		for (auto& el : this->sounds)
+		{
+			el.second.second.setVolume(volume);
+		}
+
+		this->sounds["CLICK"].second.setVolume(this->volumes["CLICK"]);
 	}
 };
 
@@ -133,6 +150,9 @@ public:
 	PlayerSoundBox();
 	~PlayerSoundBox();
 
+	//Accessors
+	void setVolume(const float& volume);
+
 	//Functions
 	void changeMovementSound  (const bool& running);
 	void changeMovementVolume (const bool& increase);
@@ -147,18 +167,30 @@ public:
 class EnemySoundBox
 {
 private:
-	using SoundsMap             = std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>>;
-	using SkillsImpactSoundsMap = std::unordered_map<SkillType, std::pair<sf::SoundBuffer, sf::Sound>>;
+	using SoundsMap              = std::unordered_map<std::string, std::pair<sf::SoundBuffer, sf::Sound>>;
+	using SkillsImpactSoundsMap  = std::unordered_map<SkillType, std::pair<sf::SoundBuffer, sf::Sound>>;
+	using SoundsVolumeMap        = std::unordered_map<std::string, float>;
+	using SkillsImpactVolumeMap  = std::unordered_map<SkillType, float>;
 
 	//Variables
+	//Sounds
 	SoundsMap              sounds;
 	SkillsImpactSoundsMap  skillsImpact;
 
+	//Volumes
+	SoundsVolumeMap        soundsVolumes;
+	SkillsImpactVolumeMap  skillsImpactVolumes;
+
 	//Init functions
-	void initSound();
+	void initSound   ();
+	void initVolumes ();
+
 public:
 	EnemySoundBox() noexcept;
 	~EnemySoundBox();
+
+	//Accessors
+	void setVolume    (const float& volume);
 
 	//Functions
 	void playSound    (const SkillType& sound);

@@ -26,7 +26,7 @@ private:
 	using MapSkillsTextures     = std::unordered_map<SkillType, std::pair<sf::Sprite, sf::Texture>>;
 	using MapSkillsAnimations   = std::unordered_map<SkillType, AnimationComponent>;
 	using SoundsMap             = std::unordered_map<SkillType, std::pair<sf::SoundBuffer, sf::Sound>>;
-
+	using SoundsVolumesMap      = std::unordered_map<SkillType, float>;
 
 	//Variables
 	sf::Clock skillTimer;
@@ -55,6 +55,7 @@ private:
 
 	//Sounds
 	SoundsMap           sounds;
+	SoundsVolumesMap    soundsVolumes;
 
 	//Potions
 	PotionsCount        healthPotions;
@@ -135,11 +136,12 @@ public:
 	int&                      getHpPotions     ();
 
 	//Sound functions
-	void increaseSoundsVolume();
-	void decreaseSoundsVolume();
+	void setSoundsVolume      (const float& volume);
+	void increaseSoundsVolume ();
+	void decreaseSoundsVolume ();
 
-	void resumeSounds      ();
-	void pauseSounds       ();
+	void resumeSounds         ();
+	void pauseSounds          ();
 
 	//Functions
 	void addPotion         (const Potions& potion_type);

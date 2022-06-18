@@ -6,11 +6,20 @@
 //============================//
 
 // Constructor
-GUI::Button::Button(const float& x, const float& y, const float& width, const float& height,
-	sf::Font* font, const std::string& text, const unsigned& charcter_size,
-	const sf::Color& text_idle_color, const sf::Color& text_hover_color, const sf::Color& text_active_color,
-	const sf::Color& idleColor, const sf::Color& hoverColor, const sf::Color& activeColor,
-	const sf::Color& outlineIdleColor, const sf::Color& outlineHoverColor, const sf::Color& outlineActiveColor,
+GUI::Button::Button(
+	const float& x, const float& y, 
+	const float& width, const float& height,
+	sf::Font* font, const std::string& text, 
+	const unsigned& charcter_size,
+	const sf::Color& text_idle_color, 
+	const sf::Color& text_hover_color, 
+	const sf::Color& text_active_color,
+	const sf::Color& idleColor, 
+	const sf::Color& hoverColor, 
+	const sf::Color& activeColor,
+	const sf::Color& outlineIdleColor, 
+	const sf::Color& outlineHoverColor, 
+	const sf::Color& outlineActiveColor,
 	short unsigned id) noexcept
 
 	: textIdleColor(text_idle_color), textHoverColor(text_hover_color), texActiveColor(text_active_color), id(id),
@@ -341,17 +350,18 @@ void GUI::DropDownList::render(sf::RenderTarget& target)
 //Initialisation
 inline void GUI::TextureSelector::initBounds(const float& x, const float& y, const float& width_bounds, const float& height_bounds)
 {
-	this->bounds.setSize(sf::Vector2f(width_bounds, height_bounds));
-	this->bounds.setPosition(x + gridSize, y);
-	this->bounds.setFillColor(sf::Color(50, 50, 50, 100));
-	this->bounds.setOutlineThickness(1.f);
-	this->bounds.setOutlineColor(sf::Color(255, 255, 255, 200));
+	this->bounds.setSize             (sf::Vector2f(width_bounds, height_bounds));
+	this->bounds.setPosition         (x + gridSize, y);
+	this->bounds.setFillColor        (sf::Color(50, 50, 50, 100));
+	this->bounds.setOutlineThickness (1.f);
+	this->bounds.setOutlineColor     (sf::Color(255, 255, 255, 200));
 }
 
 inline void GUI::TextureSelector::initSpriteSheet(const float& x, const float& y, const sf::Texture& texture_sheet)
 {
 	this->sheet.setTexture(texture_sheet);
 	this->sheet.setPosition(x + this->gridSize, y);
+
 	if (this->sheet.getGlobalBounds().width > this->bounds.getGlobalBounds().width)
 	{
 		this->sheet.setTextureRect(sf::IntRect(0, 0, int(this->bounds.getGlobalBounds().width), int(this->sheet.getGlobalBounds().height)));
@@ -365,14 +375,14 @@ inline void GUI::TextureSelector::initSpriteSheet(const float& x, const float& y
 inline void GUI::TextureSelector::initSelector_TextureRect(const float& x, const float& y)
 {
 	//Selector
-	this->selector.setPosition(x + gridSize, y);
-	this->selector.setSize(sf::Vector2f(static_cast<float>(this->gridSize), static_cast<float>(this->gridSize)));
-	this->selector.setFillColor(sf::Color::Transparent);
-	this->selector.setOutlineThickness(2.f);
-	this->selector.setOutlineColor(sf::Color::Red);
+	this->selector.setPosition         (x + gridSize, y);
+	this->selector.setSize             (sf::Vector2f(static_cast<float>(this->gridSize), static_cast<float>(this->gridSize)));
+	this->selector.setFillColor        (sf::Color::Transparent);
+	this->selector.setOutlineThickness (2.f);
+	this->selector.setOutlineColor     (sf::Color::Red);
 
 	//Texture rect
-	this->textureRect.width = static_cast<int>(this->gridSize);
+	this->textureRect.width  = static_cast<int>(this->gridSize);
 	this->textureRect.height = static_cast<int>(this->gridSize);
 }
 
@@ -381,12 +391,12 @@ GUI::TextureSelector::TextureSelector(const float& x, const float& y, const floa
 	const unsigned& gridSize ,const sf::Texture& texture_sheet, sf::Font& font) noexcept
 	:active(false), hiden(false), gridSize(gridSize), keyTime(0.f), keyTimeMax(5.f)
 {
-	this->initBounds(x, y, width_bounds, hight_bounds);
-	this->initSpriteSheet(x, y, texture_sheet);
-	this->initSelector_TextureRect(x, y);
+	this->initBounds               (x, y, width_bounds, hight_bounds);
+	this->initSpriteSheet          (x, y, texture_sheet);
+	this->initSelector_TextureRect (x, y);
 
 	this->hideButton = std::make_unique<GUI::Button>(x - 40, y - 10, 50.f, 50.f,
-		&font, "TS", 30,
+		&font, "H", 30,
 		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
 		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
 	);
@@ -437,6 +447,14 @@ void GUI::TextureSelector::update(const sf::Vector2i& mousePosWIndow,const float
 
 	if (this->hideButton->isPressed() && this->getKeyTime())
 	{
+		if (this->hiden)
+		{
+			this->hideButton->setText("H");
+		}
+		else
+		{
+			this->hideButton->setText("S");
+		}
 		this->hiden = !this->hiden;
 	}
 

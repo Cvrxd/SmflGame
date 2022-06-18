@@ -58,7 +58,7 @@ inline void EditorState::initGUI()
 	this->selectorRect.setTextureRect(this->textureRect);
 
 	this->textureSelector =  std::make_unique<GUI::TextureSelector>(
-		100.f, 20.f, 1280.f, 640.f, static_cast<unsigned int>(this->stateData->gridSize), 
+		100.f, 20.f, 1580.f, 840.f, static_cast<unsigned int>(this->stateData->gridSize), 
 		this->tileMap.getTileTextureSheet(), this->font);
 }
 
@@ -261,7 +261,7 @@ EditorState::EditorState(StateData* state_data) noexcept
 	: 
 	State(state_data),
 
-	tileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/test22.jpg"), //Tilemap
+	tileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/tileset.jpg"), //Tilemap
 	pauseMenu(*this->stateData->window, this->stateData->font)                 //Pause menu
 {
 	//State type
@@ -294,14 +294,14 @@ void EditorState::update(const float& dt)
 	this->updateKeyTime       (dt);
 	this->updateInput         (dt);
 
-	if (!this->paused)//Unpaused
+	if (!this->paused)  //Unpaused
 	{
 		this->updateView        (dt);
 		this->updateGUI         (dt);
 		this->updateButtons     ();
 		this->updateEditorInput (dt);
 	}
-	else //Paused
+	else                //Paused
 	{
 		this->pauseMenu.update(this->mousePosWindow);
 		this->updatePauseMenuButtons();
@@ -312,19 +312,13 @@ void EditorState::update(const float& dt)
 
 void EditorState::render(sf::RenderTarget* target)
 {
-	if (!target)
-	{
-		target = this->window;
-	}
-
 	target->setView                 (this->view);                      //Set view
 	this->tileMap.renderEditorState (*target);                         //Render tilemap
 	target->setView                 (this->window->getDefaultView());  //Set view
 	this->renderButtons             (*target);                         //Render buttons
 	this->renderGUI                 (*target);                         //Render gui
 
-	//Pause menu render
-	if (this->paused) 
+	if (this->paused)                                                  //Pause menu render
 	{
 		target->setView(this->window->getDefaultView());
 		this->pauseMenu.render(*target);

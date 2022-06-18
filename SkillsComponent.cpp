@@ -7,11 +7,12 @@
 										     this->skillsEndingSprite.first.setPosition(skill_position.x - 100, skill_position.y - 150);\
 											 this->damageArea.setPosition(skill_position.x - 300, skill_position.y - 300)
 
-#define SKILLS_SOUNDS_VOLUME_MODIFIER 20.f
+#define SKILLS_SOUNDS_VOLUME_MODIFIER 10.f
 
 //Init fuctions
 inline void SkillsComponent::initSounds()
 {
+	//Loading sounds
 	this->sounds[SkillType::BUFF].first.loadFromFile("Sounds/game_state/spell_sounds/buff.wav");
 	this->sounds[SkillType::BUFF].second.setBuffer(this->sounds[SkillType::BUFF].first);
 	this->sounds[SkillType::BUFF].second.setVolume(5.f);
@@ -51,6 +52,12 @@ inline void SkillsComponent::initSounds()
 	this->sounds[SkillType::POTION].first.loadFromFile("Sounds/game_state/spell_sounds/potion.wav");
 	this->sounds[SkillType::POTION].second.setBuffer(this->sounds[SkillType::POTION].first);
 	this->sounds[SkillType::POTION].second.setVolume(3.f);
+
+	//Init volumes
+	for (auto& el : this->sounds)
+	{
+		this->soundsVolumes[el.first] = el.second.second.getVolume();
+	}
 }
 
 inline void SkillsComponent::initAllSkills()
@@ -293,11 +300,19 @@ int& SkillsComponent::getHpPotions()
 }
 
 //Sounds functions 
+void SkillsComponent::setSoundsVolume(const float& volume)
+{
+	for (auto& el : this->sounds)
+	{
+		el.second.second.setVolume(volume);
+	}
+}
+
 void SkillsComponent::increaseSoundsVolume()
 {
 	for (auto& el : this->sounds)
 	{
-		el.second.second.setVolume(el.second.second.getVolume() + (el.second.second.getVolume() * SKILLS_SOUNDS_VOLUME_MODIFIER / 100.f));
+		el.second.second.setVolume(el.second.second.getVolume() + (this->soundsVolumes[el.first] * SKILLS_SOUNDS_VOLUME_MODIFIER / 100.f));
 	}
 
 }
@@ -306,7 +321,7 @@ void SkillsComponent::decreaseSoundsVolume()
 {
 	for (auto& el : this->sounds)
 	{
-		el.second.second.setVolume(el.second.second.getVolume() - (el.second.second.getVolume() * SKILLS_SOUNDS_VOLUME_MODIFIER / 100.f));
+		el.second.second.setVolume(el.second.second.getVolume() - (this->soundsVolumes[el.first] * SKILLS_SOUNDS_VOLUME_MODIFIER / 100.f));
 
 		if (el.second.second.getVolume() < 0)
 		{

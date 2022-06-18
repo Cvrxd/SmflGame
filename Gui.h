@@ -30,11 +30,19 @@ namespace GUI
 		sf::Text   text;
 
 	public:
-		Button(const float& x, const float& y, const float& width, const float& height,
-			sf::Font* font, const std::string& text, const unsigned& charcter_size,
-			const sf::Color& text_idle_color, const sf::Color& text_hover_color, const sf::Color& text_active_color,
-			const sf::Color& idleColor, const sf::Color& hoverColor, const sf::Color& activeColor, 
-			const sf::Color& outlineIdleColor = sf::Color::Transparent, const sf::Color& outlineHoverColor = sf::Color::Transparent, const sf::Color& outlineActiveColor = sf::Color::Transparent,
+		Button(const float& x, const float& y,        //Position
+			const float& width, const float& height,  //Width and hidth of button
+			sf::Font* font, const std::string& text,  //Font, text
+			const unsigned& charcter_size,            //Character size
+			const sf::Color& text_idle_color    = sf::Color(100, 100, 100, 200), 
+			const sf::Color& text_hover_color   = sf::Color(250, 250, 250, 250), 
+			const sf::Color& text_active_color  = sf::Color(20, 20, 20, 50),
+			const sf::Color& idleColor          = sf::Color(100, 100, 100, 0),
+			const sf::Color& hoverColor         = sf::Color(150, 150, 150, 0),
+			const sf::Color& activeColor        = sf::Color(70, 70, 70, 0),
+			const sf::Color& outlineIdleColor   = sf::Color::Transparent, 
+			const sf::Color& outlineHoverColor  = sf::Color::Transparent, 
+			const sf::Color& outlineActiveColor = sf::Color::Transparent,
 			short unsigned id = 0)                  noexcept;
 
 		Button              (const GUI::Button& other)       noexcept;

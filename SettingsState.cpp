@@ -58,17 +58,6 @@ inline void SettingsState::initKeybinds()
 	ifs.close();
 }
 
-inline void SettingsState::updateGuiPosition()
-{
-	this->buttons["EXIT_STATE"]->setPosition(
-		static_cast<float>(this->window->getSize().x / 2.f) - 100.f, 
-		static_cast<float>(this->window->getSize().y) - 150.f);
-
-	this->buttons["APPLY"]->setPosition(
-		static_cast<float>(this->window->getSize().x) / 2.f - 110.f, 
-		static_cast<float>(this->window->getSize().y) - 300.f);
-}
-
 inline void SettingsState::initFonts()
 {
 	if (!this->font.loadFromFile("Fonts/Greybeard.ttf"))
@@ -83,20 +72,12 @@ inline void SettingsState::initGUI()
 	this->buttons["EXIT_STATE"] = std::make_unique<GUI::Button>(
 		static_cast<float>(this->window->getSize().x / 2.f) - 100.f,
         static_cast<float>(this->window->getSize().y) - 150.f,
-		180.f, 75.f,
-		&this->font, "Quit", 50,
-		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
-		sf::Color(100, 100, 100, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
-	);
+		180.f, 75.f, &this->font, "Quit", 50);
 
 	this->buttons["APPLY"] = std::make_unique<GUI::Button>(
 		static_cast<float>(this->window->getSize().x) / 2.f - 110.f,
 		static_cast<float>(this->window->getSize().y) - 300.f,
-		180.f, 75.f,
-		&this->font, "Apply", 50,
-		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
-		sf::Color(100, 100, 100, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
-	);
+		180.f, 75.f, &this->font, "Apply", 50);
 
 	//Drop down lists
 	this->dropDownLists.reserve(7);
@@ -136,6 +117,18 @@ inline void SettingsState::initGUI()
 
 	this->dropDownLists["FRAME_LIMIT"] = std::make_unique<GUI::DropDownList>(350, 225 + this->offsetYforDropDownLists, 200, 50, font, frame_limits,
 		static_cast<unsigned int>(frame_limits->length()), 0);
+}
+
+//Update functions
+inline void SettingsState::updateGuiPosition()
+{
+	this->buttons["EXIT_STATE"]->setPosition(
+		static_cast<float>(this->window->getSize().x / 2.f) - 100.f,
+		static_cast<float>(this->window->getSize().y) - 150.f);
+
+	this->buttons["APPLY"]->setPosition(
+		static_cast<float>(this->window->getSize().x) / 2.f - 110.f,
+		static_cast<float>(this->window->getSize().y) - 300.f);
 }
 
 //Constructor
@@ -261,11 +254,6 @@ inline void SettingsState::renderGUI(sf::RenderTarget& target)
 
 void SettingsState::render(sf::RenderTarget* target)
 {
-	if (!target)
-	{
-		target = this->window;
-	}
-
 	target->draw(this->background);
 	target->draw(this->optionsText);
 

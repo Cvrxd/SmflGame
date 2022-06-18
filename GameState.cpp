@@ -541,10 +541,19 @@ inline void GameState::increaseVolume()
 
 inline void GameState::decreaseVolume()
 {
-	this->gameStateSoundBox.decreaseVolume ();
-	this->enemiesSoundBox.decreaseVolume   ();
-	this->guiSounBox.decreaseVolume        ();
-	this->player.decreaseSoundsVolume      ();
+	if (this->gameStateSoundBox.getVolume() == 0)
+	{
+		this->enemiesSoundBox.setVolume(0);
+		this->guiSounBox.setVolume(0);
+		this->player.getSkillComponent()->setSoundsVolume(0);
+	}
+	else
+	{
+		this->gameStateSoundBox.decreaseVolume();
+		this->enemiesSoundBox.decreaseVolume();
+		this->guiSounBox.decreaseVolume();
+		this->player.decreaseSoundsVolume();
+	}
 }
 
 //Constructor
@@ -556,10 +565,10 @@ GameState::GameState(StateData* state_data, const unsigned int& difficultyLvl)
 	skillMenuActive    (false),
 	popUpTextComponent (state_data->font),
 
-	pauseMenu   (*this->window, this->stateData->font),                                //Pause menu 
+	pauseMenu   (*this->window, this->stateData->font),                                 //Pause menu 
 	player      (500, 500, this->textures["PLAYER_SHEET"], this->font, this->isBuffed), //Player
-	playerGUI   (this->player, this->font),                                            //Player GUI
-	tileMap     ("map/game_map.txt"),                                                  //Tile Map
+	playerGUI   (this->player, this->font, *state_data->window),                         //Player GUI
+	tileMap     ("map/game_map.txt"),                                                   //Tile Map
 
 	skillsMenu  (this->player, this->playerGUI,this->font, this->guiSounBox, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
 	itemsMenu   (this->player, this->playerGUI, this->font, this->guiSounBox, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)) // items menu                                                //Tile map
@@ -627,11 +636,6 @@ void GameState::update(const float& dt)
 
 void GameState::render(sf::RenderTarget* target)
 {
-	if (!target)
-	{
-		target = this->window;
-	}
-
 	//Set render texture
 	this->renderTexture.clear();
 	this->renderTexture.setView(this->view);

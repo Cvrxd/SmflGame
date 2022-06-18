@@ -53,6 +53,15 @@ PlayerSoundBox::~PlayerSoundBox()
 	}
 }
 
+//Accessors
+void PlayerSoundBox::setVolume(const float& volume)
+{
+	for (auto& el : this->sounds)
+	{
+		el.second.second.setVolume(volume);
+	}
+}
+
 //Public functions
 void PlayerSoundBox::changeMovementSound(const bool& running)
 {
@@ -409,10 +418,26 @@ inline void EnemySoundBox::initSound()
 	this->sounds["DESTROY_ENEMY_SOUND"].second.setVolume(2.f);
 }
 
+inline void EnemySoundBox::initVolumes()
+{
+	//Sounds volumes
+	for (auto& el : this->sounds)
+	{
+		this->soundsVolumes[el.first] = el.second.second.getVolume();
+	}
+
+	//Skill impact volumes
+	for (auto& el : this->skillsImpact)
+	{
+		this->skillsImpactVolumes[el.first] = el.second.second.getVolume();
+	}
+}
+
 //Constructor
 EnemySoundBox::EnemySoundBox() noexcept
 {
-	this->initSound();
+	this->initSound   ();
+	this->initVolumes ();
 }
 
 EnemySoundBox::~EnemySoundBox()
@@ -423,6 +448,19 @@ EnemySoundBox::~EnemySoundBox()
 		{
 			el.second.second.stop();
 		}
+	}
+}
+
+//Accessors
+void EnemySoundBox::setVolume(const float& volume)
+{
+	for (auto& el : this->sounds)
+	{
+		el.second.second.setVolume(volume);
+	}
+	for (auto& el : this->skillsImpact)
+	{
+		el.second.second.setVolume(volume);
 	}
 }
 
@@ -483,12 +521,12 @@ void EnemySoundBox::increaseVolume()
 {
 	for (auto& el : this->sounds)
 	{
-		el.second.second.setVolume(el.second.second.getVolume() + (el.second.second.getVolume() * VOLUME_MODIFIER / 100.f));
+		el.second.second.setVolume(el.second.second.getVolume() + (this->soundsVolumes[el.first] * VOLUME_MODIFIER / 100.f));
 	}
 
 	for (auto& el : this->skillsImpact)
 	{
-		el.second.second.setVolume(el.second.second.getVolume() + (el.second.second.getVolume() * VOLUME_MODIFIER / 100.f));
+		el.second.second.setVolume(el.second.second.getVolume() + (this->skillsImpactVolumes[el.first] * VOLUME_MODIFIER / 100.f));
 	}
 }
 
@@ -496,7 +534,7 @@ void EnemySoundBox::decreaseVolume()
 {
 	for (auto& el : this->sounds)
 	{
-		el.second.second.setVolume(el.second.second.getVolume() - (el.second.second.getVolume() * VOLUME_MODIFIER / 100.f));
+		el.second.second.setVolume(el.second.second.getVolume() - (this->soundsVolumes[el.first] * VOLUME_MODIFIER / 100.f));
 
 		if (el.second.second.getVolume() < 0)
 		{
@@ -506,7 +544,7 @@ void EnemySoundBox::decreaseVolume()
 
 	for (auto& el : this->skillsImpact)
 	{
-		el.second.second.setVolume(el.second.second.getVolume() - (el.second.second.getVolume() * VOLUME_MODIFIER / 100.f));
+		el.second.second.setVolume(el.second.second.getVolume() + (this->skillsImpactVolumes[el.first] * VOLUME_MODIFIER / 100.f));
 
 		if (el.second.second.getVolume() < 0)
 		{

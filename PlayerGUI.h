@@ -29,8 +29,9 @@ private:
 	float mpOffset      = 0.f;
 	float armorOffset   = 0.f;
 
-	sf::Clock skillTimer;
-	sf::Font& font;
+	sf::Clock          skillTimer;
+	sf::Font&          font;
+	sf::RenderWindow&  window;
 
 	//Player variables
 	Player&          player;
@@ -73,7 +74,7 @@ private:
 
 public:
 	//Constructor
-	PlayerGUI (Player& player, sf::Font& font) noexcept;
+	PlayerGUI (Player& player, sf::Font& font, sf::RenderWindow& window) noexcept;
 	~PlayerGUI();
 
 	//Accessors

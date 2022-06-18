@@ -63,7 +63,7 @@ inline void PlayerGUI::initQuickSlotBars()
 	{
 		this->quickSlotBars[i].first.setSize(sf::Vector2f(48.f, 48.f));
 		this->quickSlotBars[i].first.setFillColor(sf::Color(200,200, 200, 100));
-		this->quickSlotBars[i].first.setPosition(static_cast<float>(650 + (i * 100)), 920.f);
+		this->quickSlotBars[i].first.setPosition(static_cast<float>(static_cast<float>(this->window.getSize().x) * 33.f / 100.f + (i * 100)), 920.f);
 		this->quickSlotBars[i].first.setOutlineColor(sf::Color::White);
 		this->quickSlotBars[i].first.setOutlineThickness(1.f);
 	}
@@ -95,12 +95,12 @@ inline void PlayerGUI::initTextsIcons()
 	this->iconsShapes["QUICK_SLOT_ARROW_LEFT"].setTexture(&this->textures["QUICK_SLOT_HUD"]);
 	this->iconsShapes["QUICK_SLOT_ARROW_LEFT"].setTextureRect(sf::IntRect(0, 0, 50, 84));
 	this->iconsShapes["QUICK_SLOT_ARROW_LEFT"].setSize(sf::Vector2f(60, 100));
-	this->iconsShapes["QUICK_SLOT_ARROW_LEFT"].setPosition(520, 895);
+	//this->iconsShapes["QUICK_SLOT_ARROW_LEFT"].setPosition(static_cast<float>(this->window.getSize().x) * 27.f / 100.f, 895);
 
 	this->iconsShapes["QUICK_SLOT_ARROW_RIGHT"].setTexture(&this->textures["QUICK_SLOT_HUD"]);
 	this->iconsShapes["QUICK_SLOT_ARROW_RIGHT"].setTextureRect(sf::IntRect(165, 0, 48, 84));
 	this->iconsShapes["QUICK_SLOT_ARROW_RIGHT"].setSize(sf::Vector2f(60, 100));
-	this->iconsShapes["QUICK_SLOT_ARROW_RIGHT"].setPosition(1380, 895);
+	//this->iconsShapes["QUICK_SLOT_ARROW_RIGHT"].setPosition(static_cast<float>(this->window.getSize().x) * 70.f / 100.f, 895);
 
 	this->iconsShapes["LEVEL"].setTexture(&this->textures["ICON_SHEET"]);
 	this->iconsShapes["LEVEL"].setTextureRect(sf::IntRect(158,54,32,29));
@@ -156,12 +156,15 @@ inline void PlayerGUI::initTextsIcons()
 		this->texts["SLOT" + std::to_string(i)].setFillColor(sf::Color::White);
 		this->texts["SLOT" + std::to_string(i)].setCharacterSize(25);
 		this->texts["SLOT" + std::to_string(i)].setString(std::to_string(i+1));
-		this->texts["SLOT" + std::to_string(i)].setPosition(static_cast<float>(650 + (i * 100))+ 5, 915.f);
+		this->texts["SLOT" + std::to_string(i)].setPosition(static_cast<float>(static_cast<float>(this->window.getSize().x) * 33.f / 100.f + (i * 100))+ 5, 915.f);
 	}
 	
 	this->texts["SLOT4"].setString("F");
 	this->texts["SLOT5"].setString("Q");
 	this->texts["SLOT6"].setString("E");
+
+	this->iconsShapes["QUICK_SLOT_ARROW_RIGHT"].setPosition(this->texts["SLOT6"].getPosition().x + 100.f, 895);
+	this->iconsShapes["QUICK_SLOT_ARROW_LEFT"].setPosition(this->texts["SLOT0"].getPosition().x - 100.f, 895);
 }
 
 inline void PlayerGUI::initAniamtions()
@@ -272,14 +275,15 @@ inline void PlayerGUI::renderQuickSlotBars(sf::RenderTarget& target)
 }
 
 //Constructor
-PlayerGUI::PlayerGUI(Player& player, sf::Font& font) noexcept
-	:player(player), font(font), statsComponent(*this->player.getStatsComponent())
+PlayerGUI::PlayerGUI(Player& player, sf::Font& font, sf::RenderWindow& window) noexcept
+	:player(player), font(font), window(window),
+	statsComponent(*this->player.getStatsComponent())
 {
-	this->initVariables();
-	this->initStatBars();
-	this->initQuickSlotBars();
-	this->initTextsIcons();
-	this->initAniamtions();
+	this->initVariables     ();
+	this->initStatBars      ();
+	this->initQuickSlotBars ();
+	this->initTextsIcons    ();
+	this->initAniamtions    ();
 }
 
 PlayerGUI::~PlayerGUI()
@@ -365,9 +369,9 @@ void PlayerGUI::upgradePlayerBuff(const int& level)
 
 void PlayerGUI::update(const float& dt)
 {
-	this->updateAnimations(dt);
-	this->updateBars();
-	this->updateTextIcons();
+	this->updateAnimations (dt);
+	this->updateBars       ();
+	this->updateTextIcons  ();
 }
 
 void PlayerGUI::render(sf::RenderTarget& target)
@@ -403,14 +407,14 @@ void PlayerGUI::render(sf::RenderTarget& target)
 
 void PlayerGUI::skillsMenUpdate(const float& dt)
 {
-	this->updateAnimations(dt);
-	this->updateTextIcons();
+	this->updateAnimations (dt);
+	this->updateTextIcons  ();
 }
 
 void PlayerGUI::itemsMenuUpdate(const float& dt)
 {
-	this->updateAnimations(dt);
-	this->updateTextIcons();
+	this->updateAnimations (dt);
+	this->updateTextIcons  ();
 }
 
 //===============================================
@@ -420,9 +424,9 @@ void PlayerGUI::itemsMenuUpdate(const float& dt)
 //Init functions
 inline void SkillsLevelingComponent::initVariables(VectorSkillIcons& originalSkillsIcons, VectorQuickSlotBars& quickSlotBars)
 {
-	this->originalSkillsIcons = &originalSkillsIcons;
-	this->quickSlotBars = &quickSlotBars;
-	this->playerSkills = &this->skillsComponent.getPlayerSkills();
+	this->originalSkillsIcons  = &originalSkillsIcons;
+	this->quickSlotBars        = &quickSlotBars;
+	this->playerSkills         = &this->skillsComponent.getPlayerSkills();
 
 	this->crystalsSprites.reserve(4);
 	this->crystalsAnimations.reserve(4);
@@ -443,12 +447,9 @@ void SkillsLevelingComponent::initSkill(const SkillType& type)
 		this->originalSkillsIcons->at(4).second.getPosition().y + this->offsetY + 70.f * ++this->unlockSkillsCount);
 
 	//Button
-	this->buttons[type] = std::make_unique<GUI::Button>(this->skillsIcons[type].getPosition().x + 50, this->skillsIcons[type].getPosition().y - 5,
-		150.f, 45.f,
-		&this->font, "Upgrade", 35,
-		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
-		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
-	);
+	this->buttons[type] = std::make_unique<GUI::Button>(
+		this->skillsIcons[type].getPosition().x + 50, this->skillsIcons[type].getPosition().y - 5,
+		150.f, 45.f, &this->font, "Upgrade", 35);
 
 	//Text
 	this->texts[type].setPosition(this->skillsIcons[type].getPosition().x + 230, this->skillsIcons[type].getPosition().y + 5);
@@ -777,25 +778,13 @@ inline void SkillsMenu::initSkillIcons()
 inline void SkillsMenu::initButtons()
 {
 	this->buttons["HP_UP"] = std::make_unique<GUI::Button>(this->statIcons[0].getPosition().x + 200, this->statIcons[0].getPosition().y + 28,
-		70.f, 50.f,
-		&this->font, "+", 50,
-		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
-		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
-	);
+		70.f, 50.f, &this->font, "+", 50);
 
 	this->buttons["MP_UP"] = std::make_unique<GUI::Button>(this->statIcons[1].getPosition().x + 200, this->statIcons[1].getPosition().y + 28,
-		70.f, 50.f,
-		&this->font, "+", 50,
-		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
-		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
-	);
+		70.f, 50.f, &this->font, "+", 50);
 
 	this->buttons["ARMOR_UP"] = std::make_unique<GUI::Button>(this->statIcons[2].getPosition().x + 200, this->statIcons[2].getPosition().y + 28,
-		70.f, 50.f,
-		&this->font, "+", 50,
-		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
-		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
-	);
+		70.f, 50.f, &this->font, "+", 50);
 
 	for (auto& el : this->skillsIcons)
 	{
@@ -1127,12 +1116,9 @@ inline void ItemsMune::initButtons()
 {
 	for (auto& el : this->itemsIcons)
 	{
-		this->unclockButtons[el.first] = std::make_unique<GUI::Button>(el.second.getPosition().x + 50, el.second.getPosition().y - 10,
-			110.f, 40.f,
-			&this->font, "Unlock", 30,
-			sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
-			sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
-		);
+		this->unclockButtons[el.first] = std::make_unique<GUI::Button>(
+			el.second.getPosition().x + 50, el.second.getPosition().y - 10,
+			110.f, 40.f, &this->font, "Unlock", 30);
 	}
 }
 

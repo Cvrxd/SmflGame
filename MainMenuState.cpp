@@ -83,28 +83,16 @@ inline void MainMenuState::initGUI()
 
 	//Buttons
 	this->buttons["GAME_STATE"] = std::make_unique<GUI::Button>(100.f, 100.f, 300.f, 70.f,
-		&this->font, "New Game", 70,
-		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
-		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
-	);
+		&this->font, "New Game", 70);
 
 	this->buttons["SETTINGS_STATE"] = std::make_unique<GUI::Button>(100.f, 250.f, 300.f, 70.f,
-		&this->font, "Settings", 70,
-		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
-		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
-	);
+		&this->font, "Settings", 70);
 
 	this->buttons["EDITOR_STATE"] = std::make_unique<GUI::Button>(100.f, 400.f, 250.f, 70.f,
-		&this->font, "Editor", 70,
-		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
-		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
-	);
+		&this->font, "Editor", 70);
 
 	this->buttons["EXIT_STATE"] = std::make_unique<GUI::Button>(100.f, 550.f, 180.f, 75.f,
-		&this->font, "Quit", 70,
-		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
-		sf::Color(100, 100, 100, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
-	);
+		&this->font, "Quit", 70);
 
 	this->buttons["DIFFICULTY_LESS"] = std::make_unique<GUI::Button>(this->difficultyLvlText.getPosition().x - 30.f, this->difficultyLvlText.getPosition().y + 50.f,
 		100.f, 75.f,
@@ -264,35 +252,6 @@ void MainMenuState::updateTopState()
 	this->playMusic();
 }
 
-void MainMenuState::update(const float& dt)
-{
-	this->updateKeyTime       (dt);
-	this->updateInput         (dt);
-	this->updateMousePosition ();
-	this->updateGUI           ();
-}
-
-void MainMenuState::render(sf::RenderTarget* target)
-{
-	if (!target)
-	{
-		target = this->window;
-	}
-
-	target->draw(this->background);
-
-	this->renderGUI(*target);
-
-	//REMOVE LATER JUST DEBUG!!!
-	/*sf::Text mouseText;
-	mouseText.setPosition(this->mousPosView.x, this->mousPosView.y - 20);
-	mouseText.setFont(this->font);
-	mouseText.setCharacterSize(12);
-	mouseText.setString(std::to_string(this->mousPosView.x) + " " + std::to_string(this->mousPosView.y));
-
-	target->draw(mouseText);*/
-}
-
 void MainMenuState::updateGuiPosition()
 {
 	this->difficultyText.setPosition(
@@ -300,11 +259,11 @@ void MainMenuState::updateGuiPosition()
 		static_cast<float>(this->window->getPosition().y) + 100.f);
 
 	this->difficultyLvlText.setPosition(
-		this->difficultyText.getPosition().x + 300.f, 
+		this->difficultyText.getPosition().x + 300.f,
 		this->difficultyText.getPosition().y);
 
 	this->buttons["DIFFICULTY_LESS"]->setPosition(
-		this->difficultyLvlText.getPosition().x - 30.f, 
+		this->difficultyLvlText.getPosition().x - 30.f,
 		this->difficultyLvlText.getPosition().y + 50.f);
 
 	this->buttons["DIFFICULTY_MORE"]->setPosition(
@@ -318,4 +277,28 @@ void MainMenuState::playMusic()
 	{
 		this->sounds.music.play();
 	}
+}
+
+void MainMenuState::update(const float& dt)
+{
+	this->updateKeyTime       (dt);
+	this->updateInput         (dt);
+	this->updateMousePosition ();
+	this->updateGUI           ();
+}
+
+void MainMenuState::render(sf::RenderTarget* target)
+{
+	target->draw(this->background);
+
+	this->renderGUI(*target);
+
+	//REMOVE LATER JUST DEBUG!!!
+	/*sf::Text mouseText;
+	mouseText.setPosition(this->mousPosView.x, this->mousPosView.y - 20);
+	mouseText.setFont(this->font);
+	mouseText.setCharacterSize(12);
+	mouseText.setString(std::to_string(this->mousPosView.x) + " " + std::to_string(this->mousPosView.y));
+
+	target->draw(mouseText);*/
 }

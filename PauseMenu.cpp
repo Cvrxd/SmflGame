@@ -60,11 +60,7 @@ void PauseMenu::addButton(const std::string& key, const float& y, const float& m
 	float hight  = 70.f;
 	float x      = (this->container.getPosition().x + this->container.getSize().x / 2.f - width / 2.f) + modifier_x;
 
-	this->buttons[key] = std::make_unique<GUI::Button>(x, y, width, hight,
-		&this->font, text, 60,
-		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
-		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
-	);
+	this->buttons[key] = std::make_unique<GUI::Button>(x, y, width, hight, &this->font, text, 60);
 }
 
 void PauseMenu::update(const sf::Vector2i& mousePosition)
