@@ -1,6 +1,6 @@
 #pragma once
 
-enum TileTypes { DEFAULT = 0, ABOVE, DAMAGING };
+enum TileTypes { DEFAULT = 0, ABOVE, DAMAGING, LIGHT };
 
 class Tile
 {

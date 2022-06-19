@@ -430,6 +430,19 @@ const bool GUI::TextureSelector::getKeyTime()
 	}
 }
 
+void GUI::TextureSelector::pressButton()
+{
+	if (this->hiden)
+	{
+		this->hideButton->setText("H");
+	}
+	else
+	{
+		this->hideButton->setText("S");
+	}
+	this->hiden = !this->hiden;
+}
+
 //Functions
 inline void GUI::TextureSelector::updateKeyTime(const float& dt)
 {

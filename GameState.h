@@ -7,6 +7,7 @@
 #include "MeleEnemy.h"
 #include "MageEnemy.h"
 #include "DestroyingEnemy.h"
+#include "MapTrapsComonent.h"
 
 class State;
 class PauseMenu;
@@ -18,6 +19,7 @@ class MeleEnemy;
 class MageEnemy;
 class DestroyingEnemy;
 class PopUpTextComponent;
+class MapTrapsComonent;
 
 class GameState : public State
 {
@@ -55,8 +57,9 @@ private:
 	VolumeButtons volumeButtons;
 	sf::Text      volumeText;
 
-	//Pop up text
+	//Components
 	PopUpTextComponent popUpTextComponent;
+	MapTrapsComonent   mapTrapsComponent;
 
 	//Entities
 	std::vector<BossEnemy>          bosses;
@@ -82,6 +85,7 @@ private:
 	void initPlayerGUI       ();
 	void initTileMap         ();
 	void initSounds          ();
+	void createTraps         ();
 
 	//Update functions
 	void updateVolumeGui         ();

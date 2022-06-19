@@ -140,9 +140,10 @@ namespace GUI
 		~TextureSelector();
 
 		//Accessors
-		const sf::IntRect&	getTextureRect()   const;
-		const bool&			getActive()        const;
-		const bool			getKeyTime();
+		const sf::IntRect&	getTextureRect ()   const;
+		const bool&			getActive      ()    const;
+		const bool			getKeyTime     ();
+		void                pressButton    ();
 
 		//Fuctions
 		void updateKeyTime  (const float& dt);

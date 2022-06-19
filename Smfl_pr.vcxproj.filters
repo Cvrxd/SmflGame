@@ -132,6 +132,9 @@
     <ClCompile Include="PopUpTextComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="MapTrapsComonent.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -217,6 +220,9 @@
     </ClInclude>
     <ClInclude Include="PopUpTextComponent.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MapTrapsComonent.h">
+      <Filter>Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

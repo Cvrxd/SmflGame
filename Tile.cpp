@@ -69,13 +69,18 @@ void Tile::render(sf::RenderTarget& target, const sf::Vector2f& player_position,
 {
 	if (shader)
 	{
-		shader->setUniform("hasTexture", true);
-		shader->setUniform("lightPos", player_position);
+		if (this->type == LIGHT)
+		{
+			shader->setUniform("hasTexture", true);
+			shader->setUniform("lightPos", this->shape.getPosition());
 
-		target.draw(this->shape, shader);
+		}
+		else
+		{
+			shader->setUniform("hasTexture", true);
+			shader->setUniform("lightPos", player_position);
+		}
 	}
-	else
-	{
-		target.draw(this->shape);
-	}
+
+	target.draw(this->shape, shader);
 }

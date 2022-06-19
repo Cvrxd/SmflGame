@@ -88,25 +88,17 @@ inline void GameState::initPauseMenu()
 	//Volume text
 	this->volumeText.setFont          (this->font);
 	this->volumeText.setCharacterSize (40);
-	this->volumeText.setString        ("Music volume: " + std::to_string(static_cast<int>(this->gameStateSoundBox.getVolume() * 100 / this->gameStateSoundBox.getVolumeMax())) + '%');
+	this->volumeText.setString        ("SOunds volume: " + std::to_string(static_cast<int>(this->gameStateSoundBox.getVolume() * 100 / this->gameStateSoundBox.getVolumeMax())) + '%');
 	this->volumeText.setFillColor     (sf::Color(255, 255, 255, 200));
 	this->volumeText.setPosition      (static_cast<float>(this->window->getSize().x) - 400.f, 100.f);
 
 	//Volume buttons
 	this->volumeButtons.first = std::make_unique<GUI::Button>(this->volumeText.getPosition().x + 240.f, this->volumeText.getPosition().y + 20.f, 
-		70.f, 60.f,
-		&this->font, "-", 65,
-		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
-		sf::Color(70, 70, 70, 0),      sf::Color(150, 150, 150, 0),   sf::Color(20, 20, 20, 0)
-		);
+		70.f, 60.f, &this->font, "-", 65);
 
 	this->volumeButtons.second = std::make_unique<GUI::Button>(
 		this->volumeButtons.first->getPosition().x + 60.f, this->volumeButtons.first->getPosition().y, 
-		70.f, 60.f,
-		&this->font, "+", 65,
-		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
-		sf::Color(70, 70, 70, 0),      sf::Color(150, 150, 150, 0),   sf::Color(20, 20, 20, 0)
-		);
+		70.f, 60.f, &this->font, "+", 65);
 }
 
 inline void GameState::initShaders()
@@ -124,7 +116,7 @@ inline void GameState::initPlayers()
 inline void GameState::initEnemies()
 {
 	this->bosses.reserve(3);
-	this->bosses.emplace_back(BossType::FIRE_DEMON, 5, 100, 900, this->textures["ENEMY_FIRE_DEMON"], &this->player, this->enemiesSoundBox);
+	//this->bosses.emplace_back(BossType::FIRE_DEMON, 5, 100, 900, this->textures["ENEMY_FIRE_DEMON"], &this->player, this->enemiesSoundBox);
 	//this->bosses.emplace_back(BossType::NIGHTBORN, 5, 100, 900, this->textures["ENEMY_NIGHT_BORN"], &this->player, this->enemiesSoundBox);
 	//this->bosses.emplace_back(BossType::SAMURAI, 5, 100, 900, this->textures["ENEMY_SAMURAI"], &this->player, this->enemiesSoundBox);
 
@@ -156,10 +148,15 @@ inline void GameState::initSounds()
 	this->gameStateSoundBox.playThemeMusic();
 }
 
+inline void GameState::createTraps()
+{
+	this->mapTrapsComponent.addTrap(700.f, 700.f, TrapType::FIRE_TRAP);
+}
+
 //Update functions
 inline void GameState::updateVolumeText()
 {
-	this->volumeText.setString("Music volume: "+ std::to_string(static_cast<int>(this->gameStateSoundBox.getVolume() * 100 / this->gameStateSoundBox.getVolumeMax())) + '%');
+	this->volumeText.setString("Sounds volume: "+ std::to_string(static_cast<int>(this->gameStateSoundBox.getVolume() * 100 / this->gameStateSoundBox.getVolumeMax())) + '%');
 }
 
 inline void GameState::updatePlayerInput(const float& dt)
@@ -277,27 +274,27 @@ inline void GameState::updateView(const float& dt)
 	this->viewGridPosition.y = static_cast<int>(this->view.getCenter().y / this->stateData->gridSize);
 
 	//World view
-	/*if (this->tileMap->getMaxSizeF().x >= this->view.getSize().x)
+	/*if (this->tileMap.getMaxSizeF().x >= this->view.getSize().x)
 	{
 		if (this->view.getCenter().x - this->view.getSize().x / 2.f < 0.f)
 		{
 			this->view.setCenter(0.f + this->view.getSize().x / 2.f, this->view.getCenter().y);
 		}
-		else if (this->view.getCenter().x + this->view.getSize().x / 2.f > this->tileMap->getMaxSizeF().x)
+		else if (this->view.getCenter().x + this->view.getSize().x / 2.f > this->tileMap.getMaxSizeF().x)
 		{
-			this->view.setCenter(this->tileMap->getMaxSizeF().x - this->view.getSize().x / 2.f, this->view.getCenter().y);
+			this->view.setCenter(this->tileMap.getMaxSizeF().x - this->view.getSize().x / 2.f, this->view.getCenter().y);
 		}
 	}
 
-	if (this->tileMap->getMaxSizeF().y >= this->view.getSize().y)
+	if (this->tileMap.getMaxSizeF().y >= this->view.getSize().y)
 	{
 		if (this->view.getCenter().y - this->view.getSize().y / 2.f < 0.f)
 		{
 			this->view.setCenter(this->view.getCenter().x, 0.f + this->view.getSize().y / 2.f);
 		}
-		else if (this->view.getCenter().y + this->view.getSize().y / 2.f > this->tileMap->getMaxSizeF().y)
+		else if (this->view.getCenter().y + this->view.getSize().y / 2.f > this->tileMap.getMaxSizeF().y)
 		{
-			this->view.setCenter(this->view.getCenter().x, this->tileMap->getMaxSizeF().y - this->view.getSize().y / 2.f);
+			this->view.setCenter(this->view.getCenter().x, this->tileMap.getMaxSizeF().y - this->view.getSize().y / 2.f);
 		}
 	}*/
 
@@ -565,13 +562,14 @@ GameState::GameState(StateData* state_data, const unsigned int& difficultyLvl)
 	skillMenuActive    (false),
 	popUpTextComponent (state_data->font),
 
-	pauseMenu   (*this->window, this->stateData->font),                                 //Pause menu 
-	player      (500, 500, this->textures["PLAYER_SHEET"], this->font, this->isBuffed), //Player
-	playerGUI   (this->player, this->font, *state_data->window),                         //Player GUI
-	tileMap     ("map/game_map.txt"),                                                   //Tile Map
+	pauseMenu          (*this->window, this->stateData->font),                                  //Pause menu 
+	player             (500, 500, this->textures["PLAYER_SHEET"], this->font, this->isBuffed),  //Player
+	playerGUI          (this->player, this->font, *state_data->window),                         //Player GUI
+	tileMap            ("map/game_map.txt"),                                                    //Tile Map
+	mapTrapsComponent  (this->player, this->diffcultyLvl, 4),
 
-	skillsMenu  (this->player, this->playerGUI,this->font, this->guiSounBox, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
-	itemsMenu   (this->player, this->playerGUI, this->font, this->guiSounBox, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)) // items menu                                                //Tile map
+	skillsMenu         (this->player, this->playerGUI,this->font, this->guiSounBox, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
+	itemsMenu          (this->player, this->playerGUI, this->font, this->guiSounBox, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)) // items menu                                                //Tile map
 {
 	//State type
 	this->type = STATE_TYPE::GAME_STATE;
@@ -587,6 +585,7 @@ GameState::GameState(StateData* state_data, const unsigned int& difficultyLvl)
 	this->initEnemies        ();
 	this->initShaders        ();
 	this->initPlayerGUI      ();
+	this->createTraps        ();
 }
 
 GameState::~GameState()
@@ -606,11 +605,12 @@ void GameState::update(const float& dt)
 	
 	if (!this->paused) //Update game
 	{
-		this->updateView        (dt);
-		this->updateEnemies     (dt);
-		this->updatePlayerInput (dt);
-		this->updateTileMap     (dt);
-		this->player.update     (dt, this->mousPosView);
+		this->updateView               (dt);
+		this->updateEnemies            (dt);
+		this->updatePlayerInput        (dt);
+		this->updateTileMap            (dt);
+		this->player.update            (dt, this->mousPosView);
+		this->mapTrapsComponent.update (dt);
 
 		//Player gui update
 		this->playerGUI.update(dt);
@@ -642,6 +642,7 @@ void GameState::render(sf::RenderTarget* target)
 
 	this->tileMap.renderGameState  (this->renderTexture, this->player.getCenter(), &this->core_shader);  //Render tile map
 	this->renderEnemies            (*target);                                                            //Render all enemies
+	this->mapTrapsComponent.render (this->renderTexture);                                                //Render traps
 	this->player.render            (this->renderTexture, &this->core_shader);                            //Render player
 	this->tileMap.renderAbove      (this->renderTexture, this->player.getCenter(), &this->core_shader);  //Render tiles above entities
 	this->renderTexture.setView    (this->renderTexture.getDefaultView());                               //Seting view

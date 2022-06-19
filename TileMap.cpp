@@ -246,14 +246,14 @@ void TileMap::saveToFile(const std::string& file_name)
 	if (ofile.is_open())
 	{
 		ofile << this->maxSizeLevelGrid.x << " " << this->maxSizeLevelGrid.y << '\n'
-			<< this->gridSizeI << '\n'
+			<< this->gridSizeF << '\n'
 			<< this->textureFile << '\n';
 
 		for (auto& el_x : this->map)
 		{
 			for (auto& el : el_x)
 			{
-				ofile << el.getX() << " " << el.getY() << " " << el.getAsString() << " "; //DONT SAVE LAST SPASE, FIX LATER !!!
+				ofile << el.getX() << " " << el.getY() << " " << el.getAsString() << " ";
 			}
 		}
 	}

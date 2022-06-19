@@ -124,6 +124,12 @@ inline void EditorState::updateInput(const float& dt)
 			this->unpausedState();
 		}
 	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Tab) && this->getKeyTime())
+	{
+		this->textureSelector->pressButton();
+	}
+
+	
 }
 
 inline void EditorState::updateEditorInput(const float& dt)
@@ -261,7 +267,7 @@ EditorState::EditorState(StateData* state_data) noexcept
 	: 
 	State(state_data),
 
-	tileMap(this->stateData->gridSize, 100, 100, "Textures/tiles/tileset.jpg"), //Tilemap
+	tileMap(this->stateData->gridSize, 50, 50, "Textures/tiles/tileset.jpg"), //Tilemap
 	pauseMenu(*this->stateData->window, this->stateData->font)                 //Pause menu
 {
 	//State type
