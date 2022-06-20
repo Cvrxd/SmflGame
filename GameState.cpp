@@ -150,7 +150,21 @@ inline void GameState::initSounds()
 
 inline void GameState::createTraps()
 {
-	this->mapTrapsComponent.addTrap(700.f, 700.f, TrapType::FIRE_TRAP);
+	this->mapTrapsComponent.addTrap(650.f, 700.f, TrapType::FIRE_TRAP);
+	this->mapTrapsComponent.addTrap(1450.f, 520.f, TrapType::SPIKE_TRAP);
+	this->mapTrapsComponent.addTrap(1530.f, 1000.f, TrapType::FIRE_TRAP);
+	this->mapTrapsComponent.addTrap(650.f, 1360.f, TrapType::FIRE_TRAP);
+	this->mapTrapsComponent.addTrap(950.f, 1770.f, TrapType::SPIKE_TRAP);
+	this->mapTrapsComponent.addTrap(500.f, 2350.f, TrapType::SPIKE_TRAP);
+	this->mapTrapsComponent.addTrap(1360.f, 2680.f, TrapType::FIRE_TRAP);
+	this->mapTrapsComponent.addTrap(1860.f, 1230.f, TrapType::SPIKE_TRAP);
+	this->mapTrapsComponent.addTrap(1300.f, 1670.f, TrapType::FIRE_TRAP);
+	this->mapTrapsComponent.addTrap(2380.f, 1700.f, TrapType::SPIKE_TRAP);
+	this->mapTrapsComponent.addTrap(2020.f, 2900.f, TrapType::FIRE_TRAP);
+	this->mapTrapsComponent.addTrap(2396.f, 2650.f, TrapType::SPIKE_TRAP);
+	this->mapTrapsComponent.addTrap(2810.f, 1840.f, TrapType::FIRE_TRAP);
+	this->mapTrapsComponent.addTrap(2700.f, 1425.f, TrapType::SPIKE_TRAP);
+	this->mapTrapsComponent.addTrap(2690, 620.f, TrapType::FIRE_TRAP);
 }
 
 //Update functions
@@ -438,6 +452,9 @@ inline void GameState::renderPauseMenuGui(sf::RenderTarget& target)
 //Sound functions
 inline void GameState::pauseSounds()
 {
+	//Pausing traps sounds
+	this->mapTrapsComponent.pauseSounds();
+
 	//Pausing player sounds
 	this->player.pauseSounds();
 
@@ -484,6 +501,9 @@ inline void GameState::pauseSounds()
 
 inline void GameState::resumeSounds()
 {
+	//Resuming traps sound
+	this->mapTrapsComponent.playSounds();
+
 	//Resuming player sounds
 	this->player.playSounds();
 
@@ -530,26 +550,29 @@ inline void GameState::resumeSounds()
 
 inline void GameState::increaseVolume()
 {
-	this->gameStateSoundBox.increaseVolume ();
-	this->enemiesSoundBox.increaseVolume   ();
-	this->guiSounBox.increaseVolume        ();
-	this->player.increaseSoundsVolume      ();
+	this->gameStateSoundBox. increaseVolume        ();
+	this->enemiesSoundBox.   increaseVolume        ();
+	this->guiSounBox.        increaseVolume        ();
+	this->player.            increaseSoundsVolume  ();
+	this->mapTrapsComponent. increaseSoundsVolume  ();
 }
 
 inline void GameState::decreaseVolume()
 {
 	if (this->gameStateSoundBox.getVolume() == 0)
 	{
-		this->enemiesSoundBox.setVolume(0);
-		this->guiSounBox.setVolume(0);
-		this->player.getSkillComponent()->setSoundsVolume(0);
+		this->enemiesSoundBox.setVolume                   (0);
+		this->guiSounBox.setVolume                        (0);
+		this->player.getSkillComponent()->setSoundsVolume (0);
+		this->mapTrapsComponent.setSoundsVolume           (0);
 	}
 	else
 	{
-		this->gameStateSoundBox.decreaseVolume();
-		this->enemiesSoundBox.decreaseVolume();
-		this->guiSounBox.decreaseVolume();
-		this->player.decreaseSoundsVolume();
+		this->gameStateSoundBox.decreaseVolume       ();
+		this->enemiesSoundBox.decreaseVolume         ();
+		this->guiSounBox.decreaseVolume              ();
+		this->player.decreaseSoundsVolume            ();
+		this->mapTrapsComponent.decreaseSoundsVolume ();
 	}
 }
 
@@ -566,7 +589,7 @@ GameState::GameState(StateData* state_data, const unsigned int& difficultyLvl)
 	player             (500, 500, this->textures["PLAYER_SHEET"], this->font, this->isBuffed),  //Player
 	playerGUI          (this->player, this->font, *state_data->window),                         //Player GUI
 	tileMap            ("map/game_map.txt"),                                                    //Tile Map
-	mapTrapsComponent  (this->player, this->diffcultyLvl, 4),
+	mapTrapsComponent  (this->player, this->diffcultyLvl, this->trapsCount),
 
 	skillsMenu         (this->player, this->playerGUI,this->font, this->guiSounBox, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
 	itemsMenu          (this->player, this->playerGUI, this->font, this->guiSounBox, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)) // items menu                                                //Tile map

@@ -5,7 +5,9 @@
 
 //Constructor
 MovementComponent::MovementComponent(sf::Sprite& sprite, const float& maxVelocity, const float& acceleration, const float& deceleration) noexcept
-	:sprite(&sprite), maxVelocity(maxVelocity), acceleration(acceleration), deceleration(deceleration), maxVelocityOriginal(maxVelocity)
+	:sprite(&sprite), 
+	maxVelocity(maxVelocity),   maxVelocityOriginal(maxVelocity),
+	acceleration(acceleration), deceleration(deceleration)
 {
 	
 }

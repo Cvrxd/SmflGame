@@ -133,7 +133,7 @@ inline void SettingsState::updateGuiPosition()
 
 //Constructor
 SettingsState::SettingsState(StateData* state_data) noexcept
-	: State(state_data)
+	: State(state_data), activeDropDownList(nullptr)
 {
 	//State type
 	this->type = STATE_TYPE::SETTINGS_STATE;
@@ -171,10 +171,29 @@ inline void SettingsState::updateGUI(const float& dt)
 	}
 
 	//update drop down list
-	for (auto& el : this->dropDownLists)
+	if (this->activeDropDownList == nullptr) //Update all untile no active lists
 	{
-		el.second->update(this->mousePosWindow, dt);
-	} 
+		for (auto& el : this->dropDownLists)
+		{
+			el.second->update(this->mousePosWindow, dt);
+
+			if (el.second->isActive()) //Make active
+			{
+				this->activeDropDownList = &el.second;
+			}
+		}
+	}
+	else
+	{
+		if (!this->activeDropDownList->operator*().isActive())//If not active make nullptr
+		{
+			this->activeDropDownList = nullptr;
+		}
+		else
+		{
+			this->activeDropDownList->operator*().update(this->mousePosWindow, dt); //If acctive, update
+		}
+	}
 
 	//Apply selected changes
 	if (this->buttons["APPLY"]->isPressed() && this->getKeyTime())

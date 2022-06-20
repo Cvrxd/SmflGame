@@ -29,6 +29,7 @@ private:
 
 	//Variables 
 	const unsigned int diffcultyLvl = 1;
+	const unsigned int trapsCount   = 15;
 
 	bool skillMenuActive = false;
 	bool itemsMenuActive = false;

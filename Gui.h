@@ -96,8 +96,9 @@ namespace GUI
 		~DropDownList();
 
 		//Accessors
-		const unsigned short&  getActiveBoxId() const;
-		const sf::Vector2f     getPosition() const;
+		const unsigned short&  getActiveBoxId ()  const;
+		const sf::Vector2f     getPosition    ()  const;
+		const bool&            isActive       ()  const;
 
 		//Functions
 		const bool  getKeyTime     ();

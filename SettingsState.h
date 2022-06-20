@@ -13,7 +13,7 @@ private:
 	using DropDownListsMap  = std::unordered_map<std::string, std::unique_ptr<GUI::DropDownList>>;
 	using VidoModesVector   = std::vector<sf::VideoMode>;
 	using FrameLimitsVector = std::vector<unsigned int>;
-
+	using ActiveBoxPtr      = std::unique_ptr<GUI::DropDownList>*;
 	//Variables
 	float offsetYforDropDownLists = 0.f;
 
@@ -26,6 +26,7 @@ private:
 	FrameLimitsVector   frameLimits;
 	ButtonsMap          buttons;
 	DropDownListsMap    dropDownLists;
+	ActiveBoxPtr        activeDropDownList;
 
 	//Init functions
 	void initVariables   ();

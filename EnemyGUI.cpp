@@ -36,12 +36,10 @@ void EnemyGUI::EnemyHealthBar::updateOffsetX()
 
 void EnemyGUI::EnemyHealthBar::update(const float& dt, const sf::Vector2f& position)
 {
-	this->backgroundRect.setPosition(position.x - 30, position.y - 20);
-	this->healthRect.setPosition(position.x + this->offsetX - 30, position.y - 20);
+	this->backgroundRect. setPosition (position.x - 30, position.y - 20);
+	this->healthRect.     setPosition (position.x + this->offsetX - 30, position.y - 20);
 
-	
-	this->healthRect.setSize(sf::Vector2f(this->backgroundRect.getSize().x / this->hpMAX * *(this->hp), 
-		this->healthRect.getSize().y));
+	this->healthRect.setSize(sf::Vector2f(this->backgroundRect.getSize().x / this->hpMAX * *(this->hp), this->healthRect.getSize().y));
 
 }
 
@@ -113,8 +111,8 @@ void EnemyGUI::EnemyLevelIcon::updateOffsetX()
 
 void EnemyGUI::EnemyLevelIcon::update(const float& dt, const sf::Vector2f& position)
 {
-	this->lvlText.setPosition(position.x + 5 - this->offsetX, position.y - 25);
-	this->backgroundRect.setPosition(position.x -45, position.y - 25);
+	this->lvlText.        setPosition (position.x + 5 - this->offsetX, position.y - 25);
+	this->backgroundRect. setPosition (position.x -45, position.y - 25);
 }
 
 void EnemyGUI::EnemyLevelIcon::render(sf::RenderTarget& target)

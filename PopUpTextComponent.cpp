@@ -21,15 +21,16 @@ const float& PopUpTextComponent::getpTextExpireTime() const
 //Functions
 void PopUpTextComponent::addText(const std::string& text, const sf::Color& color, const unsigned int& characterSize)
 {
-	this->textsMap[text].setFont(this->font);
-	this->textsMap[text].setCharacterSize(characterSize);
-	this->textsMap[text].setString(text);
-	this->textsMap[text].setFillColor(color);
+	this->textsMap[text].setFont          (this->font);
+	this->textsMap[text].setCharacterSize (characterSize);
+	this->textsMap[text].setString        (text);
+	this->textsMap[text].setFillColor     (color);
 }
 
 void PopUpTextComponent::popUpText(sf::RenderTarget& target, const std::string& key, const sf::Vector2f position)
 {
 	this->textsMap[key].setPosition(position.x - this->offsetX, position.y - this->offsetY - ++this->modifierY);
+
 	target.draw(this->textsMap[key]);
 }
 

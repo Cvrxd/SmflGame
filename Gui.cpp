@@ -21,99 +21,105 @@ GUI::Button::Button(
 	const sf::Color& outlineHoverColor, 
 	const sf::Color& outlineActiveColor,
 	short unsigned id) noexcept
-
-	: textIdleColor(text_idle_color), textHoverColor(text_hover_color), texActiveColor(text_active_color), id(id),
+	: 
+	textIdleColor     (text_idle_color),    textHoverColor   (text_hover_color),  texActiveColor  (text_active_color), id(id),
 	outlineActiveColor(outlineActiveColor), outlineHoverColor(outlineHoverColor), outlineIdleColor(outlineIdleColor),
-	idleColor(idleColor), activeColor(activeColor), hoverColor(hoverColor), font(font), buttonState(BTN_IDLE)
+	idleColor         (idleColor),          activeColor      (activeColor),       hoverColor      (hoverColor), 
+	font(font), 
+	buttonState(BTN_IDLE)
 {
-	this->shape.setPosition(sf::Vector2f(x, y));
-	this->shape.setSize(sf::Vector2f(width, height));
-	this->shape.setFillColor(this->idleColor);
-	this->shape.setOutlineThickness(1.f);
-	this->shape.setOutlineColor(this->outlineIdleColor);
+	//Button shape
+	this->shape.setPosition         (sf::Vector2f(x, y));
+	this->shape.setSize             (sf::Vector2f(width, height));
+	this->shape.setFillColor        (this->idleColor);
+	this->shape.setOutlineThickness (1.f);
+	this->shape.setOutlineColor     (this->outlineIdleColor);
 
-	this->text.setFont(*this->font);
-	this->text.setString(text);
-	this->text.setFillColor(this->textIdleColor);
-	this->text.setCharacterSize(charcter_size);
-	this->text.setPosition(this->shape.getPosition().x + 20, this->shape.getPosition().y + 8);
+	//Button text
+	this->text.setFont          (*this->font);
+	this->text.setString        (text);
+	this->text.setFillColor     (this->textIdleColor);
+	this->text.setCharacterSize (charcter_size);
+	this->text.setPosition      (this->shape.getPosition().x + 20, this->shape.getPosition().y + 8);
 }
 
 GUI::Button::Button(const GUI::Button& other) noexcept
 {
-	this->activeColor = other.activeColor;
-	this->buttonState = other.buttonState;
-	this->font = other.font;
-	this->hoverColor = other.hoverColor;
-	this->id = other.id;
-	this->idleColor = other.idleColor;
+	this->activeColor        = other.activeColor;
+	this->buttonState        = other.buttonState;
+	this->font               = other.font;
+	this->hoverColor         = other.hoverColor;
+	this->id                 = other.id;
+	this->idleColor          = other.idleColor;
 	this->outlineActiveColor = other.outlineActiveColor;
-	this->outlineHoverColor = other.outlineHoverColor;
-	this->idleColor = other.outlineIdleColor;
-	this->shape = other.shape;
-	this->texActiveColor = other.texActiveColor;
-	this->text = other.text;
-	this->textHoverColor = other.textHoverColor;
-	this->textIdleColor = other.textIdleColor;
+	this->outlineHoverColor  = other.outlineHoverColor;
+	this->idleColor          = other.outlineIdleColor;
+	this->shape              = other.shape;
+	this->texActiveColor     = other.texActiveColor;
+	this->text               = other.text;
+	this->textHoverColor     = other.textHoverColor;
+	this->textIdleColor      = other.textIdleColor;
 }
 
 GUI::Button::Button(GUI::Button&& other) noexcept
 {
-	this->activeColor = other.activeColor;
-	this->buttonState = other.buttonState;
-	this->font = other.font;
-	this->hoverColor = other.hoverColor;
-	this->id = other.id;
-	this->idleColor = other.idleColor;
-	this->outlineActiveColor = other.outlineActiveColor;
-	this->outlineHoverColor = other.outlineHoverColor;
-	this->idleColor = other.outlineIdleColor;
-	this->shape = other.shape;
-	this->texActiveColor = other.texActiveColor;
-	this->text = other.text;
-	this->textHoverColor = other.textHoverColor;
-	this->textIdleColor = other.textIdleColor;
+	this->activeColor         = std::move(other.activeColor);
+	this->buttonState         = std::move(other.buttonState);
+	this->font                = other.font;
+	this->hoverColor          = std::move(other.hoverColor);
+	this->id                  = other.id;
+	this->idleColor           = std::move(other.idleColor);
+	this->outlineActiveColor  = std::move(other.outlineActiveColor);
+	this->outlineHoverColor   = std::move(other.outlineHoverColor);
+	this->idleColor           = std::move(other.outlineIdleColor);
+	this->shape               = std::move(other.shape);
+	this->texActiveColor      = std::move(other.texActiveColor);
+	this->text                = std::move(other.text);
+	this->textHoverColor      = std::move(other.textHoverColor);
+	this->textIdleColor       = std::move(other.textIdleColor);
 }
 
 GUI::Button& GUI::Button::operator= (const GUI::Button& other) noexcept
 {
 	if (this != &other)
 	{
-		this->activeColor = other.activeColor;
-		this->buttonState = other.buttonState;
-		this->font = other.font;
-		this->hoverColor = other.hoverColor;
-		this->id = other.id;
-		this->idleColor = other.idleColor;
-		this->outlineActiveColor = other.outlineActiveColor;
-		this->outlineHoverColor = other.outlineHoverColor;
-		this->idleColor = other.outlineIdleColor;
-		this->shape = other.shape;
-		this->texActiveColor = other.texActiveColor;
-		this->text = other.text;
-		this->textHoverColor = other.textHoverColor;
-		this->textIdleColor = other.textIdleColor;
+		this->activeColor         = other.activeColor;
+		this->buttonState         = other.buttonState;
+		this->font                = other.font;
+		this->hoverColor          = other.hoverColor;
+		this->id                  = other.id;
+		this->idleColor           = other.idleColor;
+		this->outlineActiveColor  = other.outlineActiveColor;
+		this->outlineHoverColor   = other.outlineHoverColor;
+		this->idleColor           = other.outlineIdleColor;
+		this->shape               = other.shape;
+		this->texActiveColor      = other.texActiveColor;
+		this->text                = other.text;
+		this->textHoverColor      = other.textHoverColor;
+		this->textIdleColor       = other.textIdleColor;
 	}
 	return *this;
 }
 
 GUI::Button& GUI::Button::operator=(GUI::Button&& other) noexcept
 {
-	this->activeColor = other.activeColor;
-	this->buttonState = other.buttonState;
-	this->font = other.font;
-	this->hoverColor = other.hoverColor;
-	this->id = other.id;
-	this->idleColor = other.idleColor;
-	this->outlineActiveColor = other.outlineActiveColor;
-	this->outlineHoverColor = other.outlineHoverColor;
-	this->idleColor = other.outlineIdleColor;
-	this->shape = other.shape;
-	this->texActiveColor = other.texActiveColor;
-	this->text = other.text;
-	this->textHoverColor = other.textHoverColor;
-	this->textIdleColor = other.textIdleColor;
-
+	if (this != &other)
+	{
+		this->activeColor         = std::move(other.activeColor);
+		this->buttonState         = std::move(other.buttonState);
+		this->font                = other.font;
+		this->hoverColor          = std::move(other.hoverColor);
+		this->id                  = other.id;
+		this->idleColor           = std::move(other.idleColor);
+		this->outlineActiveColor  = std::move(other.outlineActiveColor);
+		this->outlineHoverColor   = std::move(other.outlineHoverColor);
+		this->idleColor           = std::move(other.outlineIdleColor);
+		this->shape               = std::move(other.shape);
+		this->texActiveColor      = std::move(other.texActiveColor);
+		this->text                = std::move(other.text);
+		this->textHoverColor      = std::move(other.textHoverColor);
+		this->textIdleColor       = std::move(other.textIdleColor);
+	}
 	return *this;
 }
 
@@ -277,6 +283,11 @@ const sf::Vector2f GUI::DropDownList::getPosition() const
 	return this->activeBox.operator*().getPosition();
 }
 
+const bool& GUI::DropDownList::isActive() const
+{
+	return this->showDropBox;
+}
+
 
 const bool GUI::DropDownList::getKeyTime()
 {
@@ -389,14 +400,17 @@ inline void GUI::TextureSelector::initSelector_TextureRect(const float& x, const
 //Constructor
 GUI::TextureSelector::TextureSelector(const float& x, const float& y, const float& width_bounds, const float& hight_bounds, 
 	const unsigned& gridSize ,const sf::Texture& texture_sheet, sf::Font& font) noexcept
-	:active(false), hiden(false), gridSize(gridSize), keyTime(0.f), keyTimeMax(5.f)
+	:active(false), 
+	hiden(false), 
+	gridSize(gridSize), 
+	keyTime(0.f), keyTimeMax(5.f)
 {
 	this->initBounds               (x, y, width_bounds, hight_bounds);
 	this->initSpriteSheet          (x, y, texture_sheet);
 	this->initSelector_TextureRect (x, y);
 
 	this->hideButton = std::make_unique<GUI::Button>(x - 40, y - 10, 50.f, 50.f,
-		&font, "H", 30,
+		&font, "H", 40,
 		sf::Color(100, 100, 100, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
 		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0)
 	);
@@ -493,7 +507,7 @@ void GUI::TextureSelector::update(const sf::Vector2i& mousePosWIndow,const float
 
 			//Update texture rect
 			this->textureRect.left = static_cast<int>(this->selector.getPosition().x - this->bounds.getPosition().x);
-			this->textureRect.top = static_cast<int>(this->selector.getPosition().y - this->bounds.getPosition().y);
+			this->textureRect.top  = static_cast<int>(this->selector.getPosition().y - this->bounds.getPosition().y);
 		}
 	}
 }

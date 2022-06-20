@@ -1,33 +1,33 @@
 #include "stdafx.h"
 #include "MapTrapsComonent.h"
 
+#define TRAPS_VOLUME_MODIFIER 15.f
+
 //=======================
 //Trap===================
 //=======================
 
 //Init functions
-inline void MapTrapsComonent::Trap::initAnimations(sf::Texture& texture)
+inline void MapTrapsComonent::Trap::initAnimations()
 {
-	this->animationComponent = { &this->sprite, &texture };
-
 	switch (this->type)
 	{
 	case TrapType::BEAR_TRAP:
 
 		this->sprite.setScale(3.f, 3.f);
-		this->animationComponent.addAnimation("PLAY", 0, 0, 3, 0, 32, 32, 10.f);
+		this->animationComponent.addAnimation("PLAY", 0, 0, 3, 0, 32, 32, 15.f);
 
 		break;
 	case TrapType::FIRE_TRAP:
 
 		this->sprite.setScale(3.f, 3.f);
-		this->animationComponent.addAnimation("PLAY", 0, 0, 13, 0, 32, 41, 7.f);
+		this->animationComponent.addAnimation("PLAY", 0, 0, 13, 0, 32, 41, 10.f);
 
 		break;
 	case TrapType::SPIKE_TRAP:
 
 		this->sprite.setScale(3.f, 3.f);
-		this->animationComponent.addAnimation("PLAY", 0, 0, 13, 0, 32, 32, 7.f);
+		this->animationComponent.addAnimation("PLAY", 0, 0, 13, 0, 32, 32, 10.f);
 
 		break;
 	default:
@@ -37,35 +37,17 @@ inline void MapTrapsComonent::Trap::initAnimations(sf::Texture& texture)
 
 //Constructors
 MapTrapsComonent::Trap::Trap(const sf::Vector2f& position, const TrapType& type, sf::Texture& texture, const int& damage) noexcept
-	:damage(damage), type(type)
+	:texture(texture), 
+	damage(damage), 
+	type(type), 
+	animationComponent(&this->sprite, &this->texture)
 {
-	//this->sprite.setTexture(texture);
-	this->sprite.setPosition(position);
-	this->initAnimations(texture);
-}
-
-MapTrapsComonent::Trap::Trap(Trap&& other) noexcept
-	:damage(other.damage), sprite(std::move(other.sprite)), type(other.type)
-{
-	this->animationComponent = std::move(other.animationComponent);
+	this->sprite.setPosition (position);
+	this->initAnimations     ();
 }
 
 MapTrapsComonent::Trap::~Trap()
 {
-}
-
-//Operators
-MapTrapsComonent::Trap& MapTrapsComonent::Trap::operator=(Trap&& other) noexcept
-{
-	if (this != &other)
-	{
-		this->damage = other.damage;
-		this->type = other.type;
-		this->sprite = std::move(other.sprite);
-		this->animationComponent = std::move(other.animationComponent);
-
-	}
-	return *this;
 }
 
 //Accessors
@@ -74,17 +56,17 @@ const int& MapTrapsComonent::Trap::getDamage() const
 	return this->damage;
 }
 
+const TrapType& MapTrapsComonent::Trap::getType() const
+{
+	return this->type;
+}
+
 //Public functions
 bool MapTrapsComonent::Trap::updateAnimation(const float& dt)
 {
-	if (this->animationComponent.play("PLAY", dt, true))
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	this->animationComponent.play("PLAY", dt);
+
+	return this->animationComponent.isDone("PLAY");
 }
 
 bool MapTrapsComonent::Trap::update(const float& dt, const sf::FloatRect& playerBounds)
@@ -125,22 +107,114 @@ inline void MapTrapsComonent::initTextures()
 	}
 }
 
-//Constructor
-MapTrapsComonent::MapTrapsComonent(Player& player, const int& gameDifficulty, const int& trapsCount)
-	:trapsCount(trapsCount), gameDifficulty(gameDifficulty), player(player)
+inline void MapTrapsComonent::initSounds()
 {
-	this->initTextures  ();
+	//Loading soundBuffers
+	if (!this->sounds[TrapType::FIRE_TRAP].first.loadFromFile("Sounds/game_state/traps/fire_trap.wav"))
+	{
+		throw("UNABLE TO LOAD fire_trap.wav");
+	}
+	if (!this->sounds[TrapType::SPIKE_TRAP].first.loadFromFile("Sounds/game_state/traps/spike_trap.wav"))
+	{
+		throw("UNABLE TO LOAD spike_trap.wav");
+	}
+
+	//Volume and sound
+	for (auto& el : this->sounds)
+	{
+		el.second.second.setBuffer(el.second.first);
+		el.second.second.setVolume(this->trapVolume);
+	}
+}
+
+//Sound functions
+inline void MapTrapsComonent::playTrapSound(const TrapType& sound)
+{
+	if (this->sounds[sound].second.getStatus() != sf::Sound::Playing)
+	{
+		this->sounds[sound].second.play();
+	}
+}
+
+//Constructor
+MapTrapsComonent::MapTrapsComonent(Player& player, const unsigned int& gameDifficulty, const unsigned int& trapsCount)
+	:trapsCount(trapsCount), 
+	gameDifficulty(gameDifficulty), 
+	player(player),
+	trapVolume(2.f)
+{
 	this->traps.reserve (trapsCount);
+	this->initTextures  ();
+	this->initSounds    ();
 }
 
 MapTrapsComonent::~MapTrapsComonent()
 {
+	this->stopSounds();
+}
+
+//Sounds functions
+void MapTrapsComonent::stopSounds()
+{
+	for (auto& el : this->sounds)
+	{
+		if (el.second.second.getStatus() != sf::Sound::Stopped)
+		{
+			el.second.second.stop();
+		}
+	}
+}
+
+void MapTrapsComonent::playSounds()
+{
+	for (auto& el : this->sounds)
+	{
+		if (el.second.second.getStatus() != sf::Sound::Playing)
+		{
+			el.second.second.play();
+		}
+	}
+}
+
+void MapTrapsComonent::pauseSounds()
+{
+	for (auto& el : this->sounds)
+	{
+		if (el.second.second.getStatus() != sf::Sound::Paused)
+		{
+			el.second.second.pause();
+		}
+	}
+}
+
+void MapTrapsComonent::increaseSoundsVolume()
+{
+	for (auto& el : this->sounds)
+	{
+		el.second.second.setVolume(el.second.second.getVolume() + (this->trapVolume * VOLUME_MODIFIER / 100.f));
+	}
+}
+
+void MapTrapsComonent::decreaseSoundsVolume()
+{
+	for (auto& el : this->sounds)
+	{
+		el.second.second.setVolume(el.second.second.getVolume() - (this->trapVolume * VOLUME_MODIFIER / 100.f));
+	}
+}
+
+void MapTrapsComonent::setSoundsVolume(const float& volume)
+{
+	for (auto& el : this->sounds)
+	{
+		el.second.second.setVolume(volume);
+	}
 }
 
 //Public funtions
 void MapTrapsComonent::addTrap(const float& x, const float& y, const TrapType& trap_type)
 {
-	this->traps.push_back(std::move(Trap(sf::Vector2f(x, y), trap_type, this->trapsTextures[trap_type], this->gameDifficulty)));
+	this->traps.emplace_back(sf::Vector2f(x, y), trap_type, this->trapsTextures[trap_type], this->gameDifficulty);
 }
 
 void MapTrapsComonent::update(const float& dt)
@@ -151,7 +225,11 @@ void MapTrapsComonent::update(const float& dt)
 		{
 			if (el.update(dt, this->player.getGlobalBounds()))
 			{
+				//Player lose hp
 				this->player.loseHP(el.getDamage());
+
+				//Sound
+				this->playTrapSound(el.getType());
 			}
 		}
 	}

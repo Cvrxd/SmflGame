@@ -58,4 +58,3 @@ public:
 	void updateLevel    ();
 	void update         ();
 };
-

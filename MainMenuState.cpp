@@ -4,22 +4,23 @@
 //Initialisation
 inline void MainMenuState::initVariables()
 {
+
 }
 
 inline void MainMenuState::initSounds()
 {
 	//Init background music
-	this->sounds.music.openFromFile("Sounds/main_menu/main_menu.ogg");
-	this->sounds.music.setVolume(5.f);
-	this->sounds.music.setLoop(true);
+	this->sounds.music.openFromFile ("Sounds/main_menu/main_menu.ogg");
+	this->sounds.music.setVolume    (5.f);
+	this->sounds.music.setLoop      (true);
 	
 	//Play background music
 	this->sounds.music.play();
 
 	//Click sound
-	this->sounds.clickSound.first.loadFromFile("Sounds/main_menu/click.wav");
-	this->sounds.clickSound.second.setBuffer(this->sounds.clickSound.first);
-	this->sounds.clickSound.second.setVolume(10.f);
+	this->sounds.clickSound.first.loadFromFile ("Sounds/main_menu/click.wav");
+	this->sounds.clickSound.second.setBuffer   (this->sounds.clickSound.first);
+	this->sounds.clickSound.second.setVolume   (10.f);
 }
 
 inline void MainMenuState::initBackground()
@@ -28,7 +29,7 @@ inline void MainMenuState::initBackground()
 
 	if (!this->backgroundTexture.loadFromFile("Textures/background/mainmenu_background.png"))
 	{
-		throw("Failed to load background main menu");
+		throw("Failed to load mainmenu_background.png");
 	}
 
 	this->background.setTexture(&this->backgroundTexture); 
@@ -40,7 +41,7 @@ inline void MainMenuState::initKeybinds()
 
 	if (ifs.is_open())
 	{
-		std::string key = "";
+		std::string key       = "";
 		std::string key_value = "";
 
 		while (ifs >> key >> key_value)
@@ -63,21 +64,21 @@ inline void MainMenuState::initFonts()
 inline void MainMenuState::initGUI()
 {
 	//Text
-	this->difficultyText.setFont(this->font);
-	this->difficultyText.setCharacterSize(50);
-	this->difficultyText.setFillColor(sf::Color::White);
-	this->difficultyText.setString("Difficulty: ");
+	this->difficultyText.setFont          (this->font);
+	this->difficultyText.setCharacterSize (50);
+	this->difficultyText.setFillColor     (sf::Color::White);
+	this->difficultyText.setString        ("Difficulty: ");
 
 	this->difficultyText.setPosition(
 		static_cast<float>(this->window->getSize().x) - 550.f, 
 		static_cast<float>(this->window->getPosition().y) + 100.f);
 
-	this->difficultyLvlText.setFont(this->font);
-	this->difficultyLvlText.setCharacterSize(50);
-	this->difficultyLvlText.setFillColor(sf::Color::Magenta);
-	this->difficultyLvlText.setString("Normal");
-	this->difficultyLvlText.setOutlineThickness(2.f);
-	this->difficultyLvlText.setOutlineColor(sf::Color::White);
+	this->difficultyLvlText.setFont             (this->font);
+	this->difficultyLvlText.setCharacterSize    (50);
+	this->difficultyLvlText.setFillColor        (sf::Color::Magenta);
+	this->difficultyLvlText.setString           ("Normal");
+	this->difficultyLvlText.setOutlineThickness (2.f);
+	this->difficultyLvlText.setOutlineColor     (sf::Color::White);
 
 	this->difficultyLvlText.setPosition(this->difficultyText.getPosition().x + 300.f, this->difficultyText.getPosition().y);
 

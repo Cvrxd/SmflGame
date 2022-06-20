@@ -27,16 +27,19 @@ private:
 
 		Animation (sf::Sprite* sprite, sf::Texture* textureSheet,
 			const int& start_frame_x, const int& start_frame_y,
-			const int& frame_x, const int& frame_y,
-			const int& width, const int& height, const float& animationTimer) noexcept
-			:sprite(sprite), textureSheet(textureSheet), width(width), height(height), animationTimer(animationTimer)
+			const int& frame_x,       const int& frame_y,
+			const int& width,         const int& height, const float& animationTimer) noexcept
+
+			:sprite(sprite), textureSheet(textureSheet), 
+			width(width), height(height), 
+			animationTimer(animationTimer)
 		{
 			this->timer = 0.f;
-			this->done = false;
+			this->done  = false;
 
-			this->startRect = sf::IntRect(start_frame_x * width, start_frame_y * height, width, height);
+			this->startRect   = sf::IntRect(start_frame_x * width, start_frame_y * height, width, height);
 			this->currentRect = this->startRect;
-			this->endRect = sf::IntRect(frame_x * width, frame_y * height, width, height);
+			this->endRect     = sf::IntRect(frame_x * width, frame_y * height, width, height);
 
 			this->sprite->setTexture(*this->textureSheet);
 			this->sprite->setTextureRect(this->startRect);
@@ -44,16 +47,18 @@ private:
 
 		Animation& operator= (const Animation& other)
 		{
-			this->animationTimer = other.animationTimer;
-			this->currentRect = other.currentRect;
-			this->done = other.done;
-			this->endRect = other.endRect;
-			this->height = other.height;
-			this->sprite = other.sprite;
-			this->textureSheet = other.textureSheet;
-			this->timer = other.timer;
-			this->width = other.width;
-
+			if (this != &other)
+			{
+				this->animationTimer = other.animationTimer;
+				this->currentRect    = other.currentRect;
+				this->done           = other.done;
+				this->endRect        = other.endRect;
+				this->height         = other.height;
+				this->sprite         = other.sprite;
+				this->textureSheet   = other.textureSheet;
+				this->timer          = other.timer;
+				this->width          = other.width;
+			}
 			return *this;
 		}
 
@@ -159,8 +164,8 @@ public:
 
 	void addAnimation   (const std::string key,
 		const int& start_frame_x, const int& start_frame_y,
-		const int& frame_x, const int& frame_y,
-		const int& width, const int& height, const float& animationTimer); 
+		const int& frame_x,       const int& frame_y,
+		const int& width,         const int& height, const float& animationTimer); 
 
 	const bool& play  (const std::string& key, const float& dt, const bool priority = false);
 	const bool& play  (const std::string& key, const float& dt, const float& modifier, const float& modifier_max, const bool priority = false);
