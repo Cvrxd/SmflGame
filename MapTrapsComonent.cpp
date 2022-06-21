@@ -169,7 +169,7 @@ void MapTrapsComonent::playSounds()
 {
 	for (auto& el : this->sounds)
 	{
-		if (el.second.second.getStatus() != sf::Sound::Playing)
+		if (el.second.second.getStatus() != sf::Sound::Paused)
 		{
 			el.second.second.play();
 		}

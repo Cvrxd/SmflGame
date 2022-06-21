@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp" />
     <ClCompile Include="BossEnemy.cpp" />
+    <ClCompile Include="EnemiesGenarationInterface.cpp" />
     <ClCompile Include="DestroyingEnemy.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyGUI.cpp" />
@@ -187,6 +188,7 @@
   <ItemGroup>
     <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="BossEnemy.h" />
+    <ClInclude Include="EnemiesGenarationInterface.h" />
     <ClInclude Include="DestroyingEnemy.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyGUI.h" />

@@ -274,11 +274,16 @@ void TileMap::loadFromFile(const std::string& file_name)
 
 		ifile >> size.x >> size.y >> _gridSizeI >> texture_file;
 
-		this->gridSizeF = static_cast<float>(_gridSizeI);
-		this->gridSizeI = _gridSizeI;
+		this->gridSizeF          = static_cast<float>(_gridSizeI);
+		this->gridSizeI          = _gridSizeI;
+
 		this->maxSizeLevelGrid.x = size.x;
 		this->maxSizeLevelGrid.y = size.y;
-		this->textureFile = texture_file;
+
+		this->maxSizeLevelF.x    = static_cast<float>(size.x * _gridSizeI);
+		this->maxSizeLevelF.y    = static_cast<float>(size.y * _gridSizeI + _gridSizeI - 25.f);
+
+		this->textureFile        = texture_file;
 		//Basic
 		
 		this->map.clear();
@@ -379,14 +384,7 @@ void TileMap::renderAbove(sf::RenderTarget& target, const sf::Vector2f& player_p
 	{
 		if (el->getX() < toX && el->getY() < toY && el->getX() > fromX && el->getY() > fromY)
 		{
-			if (shader)
-			{
-				el->render(target, player_position, shader);
-			}
-			else
-			{
-				el->render(target);
-			}
+			el->render(target, player_position, shader);
 		}
 	}
 }

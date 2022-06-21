@@ -531,7 +531,7 @@ MageEnemy::MageEnemy(const MageEnemyType& type, const int& level, const float& x
 	levelIcon(&level, &this->player->getStatsComponent()->level, this->player->getFont())
 {
 	this->initComponents(texture_sheet, this->sprite);
-	this->setPosition(x, y);
+	this->sprite.setPosition(x, y);
 }
 
 MageEnemy::~MageEnemy()

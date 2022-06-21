@@ -7,8 +7,8 @@ private:
 	//Core
 	sf::Sprite*  sprite;
 
-	float offsetX;
-	float offsetY;
+	float offsetX = 0;
+	float offsetY = 0;
 
 	sf::RectangleShape  hitbox;
 	sf::FloatRect       nextPosition;

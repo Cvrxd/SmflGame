@@ -27,7 +27,7 @@ class State
 protected:
 	using StatesStack   = std::stack<State*>;
 	using KeysMap       = std::unordered_map<std::string, int>;
-	using TexturesMap   = std::map<std::string, sf::Texture>;
+	using TexturesMap   = std::unordered_map<std::string, sf::Texture>;
 
 	//State type
 	STATE_TYPE type;

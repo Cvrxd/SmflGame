@@ -338,7 +338,7 @@ DestroyingEnemy::DestroyingEnemy(const DestroyingEnemyType& type, const int& lev
 {
 	this->initStats();
 	this->initComponents(texture_sheet, this->sprite);
-	this->setPosition(x, y);
+	this->sprite.setPosition(x, y);
 }
 
 DestroyingEnemy::~DestroyingEnemy()

@@ -558,7 +558,7 @@ BossEnemy::BossEnemy(const BossType& type, const int& level, const float& x, con
 {
 	this->initStats();
 	this->initComponents(texture_sheet, this->sprite);
-	this->setPosition(x, y);
+	this->sprite.setPosition(x, y);
 }
 
 BossEnemy::~BossEnemy()

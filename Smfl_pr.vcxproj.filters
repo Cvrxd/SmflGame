@@ -34,6 +34,9 @@
     <Filter Include="Entities\Enemies">
       <UniqueIdentifier>{19660820-cb7b-47b9-b518-38903baa46da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameStateComponents">
+      <UniqueIdentifier>{b1f5ba7e-828a-4e43-881e-8eab7f51cb30}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -135,6 +138,9 @@
     <ClCompile Include="MapTrapsComonent.cpp">
       <Filter>Map</Filter>
     </ClCompile>
+    <ClCompile Include="EnemiesGenarationInterface.cpp">
+      <Filter>GameStateComponents</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -223,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="MapTrapsComonent.h">
       <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemiesGenarationInterface.h">
+      <Filter>GameStateComponents</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

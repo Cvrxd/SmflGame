@@ -8,6 +8,7 @@
 #include "MageEnemy.h"
 #include "DestroyingEnemy.h"
 #include "MapTrapsComonent.h"
+#include "EnemiesGenarationInterface.h"
 
 class State;
 class PauseMenu;
@@ -24,17 +25,23 @@ class MapTrapsComonent;
 class GameState : public State
 {
 private:
+	using MeleEnemiesTextures        = std::unordered_map<MeleEnemyType, sf::Texture>;
+	using MageEnemiesTextures        = std::unordered_map<MageEnemyType, sf::Texture>;
+	using DestroyingEnemiesTextures  = std::unordered_map<DestroyingEnemyType, sf::Texture>;
+	using BossesEnemiesTextures      = std::unordered_map<BossType, sf::Texture>;
 
-	using VolumeButtons = std::pair<std::unique_ptr<GUI::Button>, std::unique_ptr<GUI::Button>>;
+	using VolumeButtons              = std::pair<std::unique_ptr<GUI::Button>, std::unique_ptr<GUI::Button>>;
 
 	//Variables 
 	const unsigned int diffcultyLvl = 1;
 	const unsigned int trapsCount   = 15;
+	int                wavesCount   = 0;
 
 	bool skillMenuActive = false;
 	bool itemsMenuActive = false;
 
-	bool bossFight;
+	bool bossFight       = false;
+
 	//Player buff
 	bool isBuffed        = false;
 
@@ -62,16 +69,28 @@ private:
 	PopUpTextComponent popUpTextComponent;
 	MapTrapsComonent   mapTrapsComponent;
 
+	//Sounds
+	EnemySoundBox            enemiesSoundBox;
+	GuiSoundsBox             guiSounBox;
+	GameStateSoundBox        gameStateSoundBox;
+
+	//Enemies textures
+	MeleEnemiesTextures        meleEnemiesTextures;
+	MageEnemiesTextures        mageEnemiesTextures;
+	DestroyingEnemiesTextures  destroyingEnemiestextures;
+	BossesEnemiesTextures      bossesEnemiesTextures;
+
 	//Entities
 	std::vector<BossEnemy>          bosses;
 	std::vector<MeleEnemy>          meleEnemies;
 	std::vector<MageEnemy>          mageEnemies;
 	std::vector<DestroyingEnemy>    destroyingEnemies;
 
-	//Sounds
-	EnemySoundBox            enemiesSoundBox;
-	GuiSoundsBox             guiSounBox;
-	GameStateSoundBox        gameStateSoundBox;
+	//Enemies generation Interfaces
+	EnemiesGenerationI<BossEnemy>        bossesGenerationI;
+	EnemiesGenerationI<MeleEnemy>        meleEnemiesGenerationI;
+	EnemiesGenerationI<MageEnemy>        mageEnemiesGenerationI;
+	EnemiesGenerationI<DestroyingEnemy>  destroyingEnemiesGenerationI;
 
 	//Init functions
 	void initRenderTextures  ();
@@ -89,6 +108,7 @@ private:
 	void createTraps         ();
 
 	//Update functions
+	void updateGameWave          ();
 	void updateVolumeGui         ();
 	void updatePauseMenuButtons  ();
 	void updateVolumeText        ();
@@ -104,11 +124,17 @@ private:
 	void updateBossEnemies       (const float& dt);
 	void updateMageEnemies       (const float& dt);
 
+	//Enemies generation functions
+	void generateMeleEnemies       ();
+	void generateMageEnemies       ();
+	void generateDestroyingEnemies ();
+	void generateBossEnemies       ();
+
 	//Render functions
 	void renderPauseMenuGui (sf::RenderTarget& target);
 	void renderEnemies      (sf::RenderTarget& target);
 
-	//Soun functions
+	//Sounds functions
 	void pauseSounds    ();
 	void resumeSounds   ();
 

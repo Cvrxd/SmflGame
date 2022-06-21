@@ -37,8 +37,10 @@ inline void GameState::initView()
 		static_cast<float>(this->stateData->gfxSettings->resolution.width), 
 		static_cast<float>(this->stateData->gfxSettings->resolution.height)));
 
-	this->view.setCenter(sf::Vector2f(this->stateData->gfxSettings->resolution.width / 2.f, this->stateData->gfxSettings->resolution.height / 2.f));
-	//this->view.zoom(0.f);
+	this->view.setCenter(sf::Vector2f(
+		this->stateData->gfxSettings->resolution.width / 2.f, 
+		this->stateData->gfxSettings->resolution.height / 2.f));
+
 }
 
 inline void GameState::initFonts()
@@ -51,30 +53,30 @@ inline void GameState::initTextures()
 	//Player
 	this->textures["PLAYER_SHEET"].loadFromFile("Textures/characters/player/test_sheet.png");
 
-	//Monsters
-	this->textures["ENEMY_NIGHT_BORN"].loadFromFile("Textures/enemies/boses/NightBorne.png");
-	this->textures["ENEMY_MIMIC"].loadFromFile("Textures/enemies/mele/mimic.png");
-	this->textures["ENEMY_FIRE_DEMON"].loadFromFile("Textures/enemies/boses/fire_demon.png");
-	this->textures["ENEMY_BRINGER_OF_DEATH"].loadFromFile("Textures/enemies/mele/bringer_of_death.png");
-	this->textures["ENEMY_NOMAND"].loadFromFile("Textures/enemies/mele/nomand.png");
+	//Bosses
+	this->bossesEnemiesTextures[BossType::SAMURAI].loadFromFile("Textures/enemies/boses/samurai.png");
+	this->bossesEnemiesTextures[BossType::NIGHTBORN].loadFromFile("Textures/enemies/boses/NightBorne.png");
+	this->bossesEnemiesTextures[BossType::FIRE_DEMON].loadFromFile("Textures/enemies/boses/fire_demon.png");
 
-	//Humans
-	this->textures["ENEMY_KNIGHT1"].loadFromFile("Textures/enemies/mele/knight1.png");
-	this->textures["ENEMY_HUNTRESS"].loadFromFile("Textures/enemies/mele/huntress.png");
-	this->textures["ENEMY_SAMURAI"].loadFromFile("Textures/enemies/boses/samurai.png");
-	this->textures["ENEMY_MARTIAL_HERO1"].loadFromFile("Textures/enemies/mele/martial_hero1.png");
-	this->textures["ENEMY_MARTIAL_HERO2"].loadFromFile("Textures/enemies/mele/martial_hero2.png");
+	//Mele enemies
+	this->meleEnemiesTextures[MeleEnemyType::BRINGER_OF_DEATH].loadFromFile("Textures/enemies/mele/bringer_of_death.png");
+	this->meleEnemiesTextures[MeleEnemyType::NOMAND].loadFromFile("Textures/enemies/mele/nomand.png");
+	this->meleEnemiesTextures[MeleEnemyType::MIMIC].loadFromFile("Textures/enemies/mele/mimic.png");
+	this->meleEnemiesTextures[MeleEnemyType::KNIGHT1].loadFromFile("Textures/enemies/mele/knight1.png");
+	this->meleEnemiesTextures[MeleEnemyType::HUNTRESS].loadFromFile("Textures/enemies/mele/huntress.png");
+	this->meleEnemiesTextures[MeleEnemyType::MARTIAL_HERO1].loadFromFile("Textures/enemies/mele/martial_hero1.png");
+	this->meleEnemiesTextures[MeleEnemyType::MARTIAL_HERO2].loadFromFile("Textures/enemies/mele/martial_hero2.png");
 
 	//Mages
-	this->textures["ENEMY_DARK_MAGE"].loadFromFile("Textures/enemies/mages/dark_mage.png");
-	this->textures["ENEMY_FIRE_MAGE"].loadFromFile("Textures/enemies/mages/fire_mage.png");
-	this->textures["ENEMY_WIZZARD"].loadFromFile("Textures/enemies/mages/wizzard.png");
-	this->textures["ENEMY_NECROMANCER"].loadFromFile("Textures/enemies/mages/necromancer.png");
+	this->mageEnemiesTextures[MageEnemyType::DARK_MAGE].loadFromFile("Textures/enemies/mages/dark_mage.png");
+	this->mageEnemiesTextures[MageEnemyType::FIRE_MAGE].loadFromFile("Textures/enemies/mages/fire_mage.png");
+	this->mageEnemiesTextures[MageEnemyType::WIZZARD].loadFromFile("Textures/enemies/mages/wizzard.png");
+	this->mageEnemiesTextures[MageEnemyType::NECROMANCER].loadFromFile("Textures/enemies/mages/necromancer.png");
 
 	//Destroying enemies
-	this->textures["ENEMY_FIRE_SKULL"].loadFromFile("Textures/enemies/destroying/fire-skull.png");
-	this->textures["ENEMY_FIRE_WORM"].loadFromFile("Textures/enemies/destroying/fire_worm.png");
-	this->textures["ENEMY_DRAGON"].loadFromFile("Textures/enemies/destroying/dragon.png");
+	this->destroyingEnemiestextures[DestroyingEnemyType::FIRE_SKULL].loadFromFile("Textures/enemies/destroying/fire-skull.png");
+	this->destroyingEnemiestextures[DestroyingEnemyType::FIRE_WORM].loadFromFile("Textures/enemies/destroying/fire_worm.png");
+	this->destroyingEnemiestextures[DestroyingEnemyType::DRAGON].loadFromFile("Textures/enemies/destroying/dragon.png");
 }
 
 inline void GameState::initPauseMenu()
@@ -168,6 +170,23 @@ inline void GameState::createTraps()
 }
 
 //Update functions
+inline void GameState::updateGameWave()
+{
+	//Wave count
+	if ((++this->wavesCount) % 5 == 0)
+	{
+		this->bossFight = true;
+
+		//Generate boss enemies
+		this->generateBossEnemies();
+	}
+
+	//Enemies generation
+	this->generateDestroyingEnemies ();
+	this->generateMageEnemies       ();
+	this->generateMeleEnemies       ();
+}
+
 inline void GameState::updateVolumeText()
 {
 	this->volumeText.setString("Sounds volume: "+ std::to_string(static_cast<int>(this->gameStateSoundBox.getVolume() * 100 / this->gameStateSoundBox.getVolumeMax())) + '%');
@@ -284,15 +303,12 @@ inline void GameState::updateView(const float& dt)
 		std::floor(this->player.getPosition().y + (static_cast<float>(this->mousePosWindow.y) - static_cast<float>(this->stateData->gfxSettings->resolution.height / 2)) / 10.f)
 	);
 
-	this->viewGridPosition.x = static_cast<int>(this->view.getCenter().x / this->stateData->gridSize);
-	this->viewGridPosition.y = static_cast<int>(this->view.getCenter().y / this->stateData->gridSize);
-
 	//World view
-	/*if (this->tileMap.getMaxSizeF().x >= this->view.getSize().x)
+	if (this->tileMap.getMaxSizeF().x >= this->view.getSize().x)
 	{
-		if (this->view.getCenter().x - this->view.getSize().x / 2.f < 0.f)
+		if (this->view.getCenter().x - this->view.getSize().x / 2.f < this->gridSize)
 		{
-			this->view.setCenter(0.f + this->view.getSize().x / 2.f, this->view.getCenter().y);
+			this->view.setCenter(this->gridSize + this->view.getSize().x / 2.f, this->view.getCenter().y);
 		}
 		else if (this->view.getCenter().x + this->view.getSize().x / 2.f > this->tileMap.getMaxSizeF().x)
 		{
@@ -302,16 +318,18 @@ inline void GameState::updateView(const float& dt)
 
 	if (this->tileMap.getMaxSizeF().y >= this->view.getSize().y)
 	{
-		if (this->view.getCenter().y - this->view.getSize().y / 2.f < 0.f)
+		if (this->view.getCenter().y - this->view.getSize().y / 2.f < this->gridSize)
 		{
-			this->view.setCenter(this->view.getCenter().x, 0.f + this->view.getSize().y / 2.f);
+			this->view.setCenter(this->view.getCenter().x, this->gridSize + this->view.getSize().y / 2.f);
 		}
 		else if (this->view.getCenter().y + this->view.getSize().y / 2.f > this->tileMap.getMaxSizeF().y)
 		{
 			this->view.setCenter(this->view.getCenter().x, this->tileMap.getMaxSizeF().y - this->view.getSize().y / 2.f);
 		}
-	}*/
+	}
 
+	this->viewGridPosition.x = static_cast<int>(this->view.getCenter().x / static_cast<int>(this->stateData->gridSize));
+	this->viewGridPosition.y = static_cast<int>(this->view.getCenter().y / static_cast<int>(this->stateData->gridSize));
 }
 
 inline void GameState::updatePauseMenuButtons()
@@ -403,6 +421,123 @@ inline void GameState::updateMageEnemies(const float& dt)
 			//Update collision
 			this->tileMap.updateTilesCollision(&el, el.getGridPosition(static_cast<int>(this->gridSize)), dt);
 		}
+	}
+}
+
+//Enemies generation functions
+inline void GameState::generateMeleEnemies()
+{
+	//Enemy type and position
+	MeleEnemyType rndEnemyType = MeleEnemyType::MIMIC;
+	sf::Vector2f  enemyPosition;
+
+	//Enemy lvl and amount
+	int enemyLvl = 1;
+	int enemiesAmount = this->diffcultyLvl * 3 + this->wavesCount / 5;
+
+	this->meleEnemiesGenerationI.clear();
+	this->meleEnemiesGenerationI.reserve(enemiesAmount);
+
+	for (int i = 0; i < enemiesAmount; ++i)
+	{
+		//Enemy type
+		rndEnemyType = static_cast<MeleEnemyType>(std::rand() % this->meleEnemiesTextures.size() - 1);
+
+		//Enemy lvl
+		enemyLvl = 1 + (this->diffcultyLvl * std::rand() % 3);
+
+		//Enemy position
+		enemyPosition.x = static_cast<float>(std::rand() % static_cast<int>(this->tileMap.getMaxSizeF().x));
+		enemyPosition.y = static_cast<float>(std::rand() % static_cast<int>(this->tileMap.getMaxSizeF().y));
+
+		this->meleEnemiesGenerationI.generate(rndEnemyType, enemyLvl, enemyPosition.x, enemyPosition.y, this->meleEnemiesTextures[rndEnemyType], &this->player, this->enemiesSoundBox);
+	}
+}
+
+inline void GameState::generateMageEnemies()
+{
+	//Enemy type and position
+	MageEnemyType rndEnemyType = MageEnemyType::DARK_MAGE;
+	sf::Vector2f  enemyPosition;
+
+	//Enemy lvl and amount
+	int enemyLvl = 1;
+	int enemiesAmount = this->diffcultyLvl * 2 + this->wavesCount / 5;
+
+	this->mageEnemiesGenerationI.clear();
+	this->mageEnemiesGenerationI.reserve(enemiesAmount);
+
+	for (int i = 0; i < enemiesAmount; ++i)
+	{
+		//Enemy type
+		rndEnemyType = static_cast<MageEnemyType>(std::rand() % this->mageEnemiesTextures.size() - 1);
+
+		//Enemy lvl
+		enemyLvl = 1 + (this->diffcultyLvl * std::rand() % 3);
+
+		//Enemy position
+		enemyPosition.x = static_cast<float>(std::rand() % static_cast<int>(this->tileMap.getMaxSizeF().x));
+		enemyPosition.y = static_cast<float>(std::rand() % static_cast<int>(this->tileMap.getMaxSizeF().y));
+
+		this->mageEnemiesGenerationI.generate(rndEnemyType, enemyLvl, enemyPosition.x, enemyPosition.y, this->mageEnemiesTextures[rndEnemyType], &this->player, this->enemiesSoundBox);
+	}
+}
+
+inline void GameState::generateDestroyingEnemies()
+{
+	//Enemy type and position
+	DestroyingEnemyType rndEnemyType = DestroyingEnemyType::FIRE_SKULL;
+	sf::Vector2f  enemyPosition;
+
+	//Enemy lvl and amount
+	int enemyLvl = 1;
+	int enemiesAmount = this->diffcultyLvl * 2 + this->wavesCount / 5;
+
+	this->destroyingEnemiesGenerationI.clear();
+	this->destroyingEnemiesGenerationI.reserve(enemiesAmount);
+
+	for (int i = 0; i < enemiesAmount; ++i)
+	{
+		//Enemy type
+		rndEnemyType = static_cast<DestroyingEnemyType>(std::rand() % this->destroyingEnemiestextures.size() - 1);
+
+		//Enemy lvl
+		enemyLvl = 1 + (this->diffcultyLvl * std::rand() % 3);
+
+		//Enemy position
+		enemyPosition.x = static_cast<float>(std::rand() % static_cast<int>(this->tileMap.getMaxSizeF().x));
+		enemyPosition.y = static_cast<float>(std::rand() % static_cast<int>(this->tileMap.getMaxSizeF().y));
+
+		this->destroyingEnemiesGenerationI.generate(rndEnemyType, enemyLvl, enemyPosition.x, enemyPosition.y, this->destroyingEnemiestextures[rndEnemyType], &this->player, this->enemiesSoundBox);
+	}
+}
+
+inline void GameState::generateBossEnemies()
+{
+	//Enemy type and position
+	BossType rndEnemyType = BossType::SAMURAI;
+	sf::Vector2f  enemyPosition;
+
+	//Enemy lvl and amount
+	int enemyLvl      = 1;
+	int enemiesAmount = this->diffcultyLvl;
+
+	this->bossesGenerationI.clear();
+	this->bossesGenerationI.reserve(enemiesAmount);
+
+	for (int i = 0; i < enemiesAmount; ++i)
+	{
+		//Enemy type
+		rndEnemyType = static_cast<BossType>(std::rand() % this->destroyingEnemiestextures.size() - 1);
+
+		//Enemy lvl
+		enemyLvl = 5 + (this->diffcultyLvl * (std::rand() % 5));
+
+		//Enemy position
+		enemyPosition.x = static_cast<float>(std::rand() % static_cast<int>(this->tileMap.getMaxSizeF().x));
+		enemyPosition.y = static_cast<float>(std::rand() % static_cast<int>(this->tileMap.getMaxSizeF().y));
+
+		this->bossesGenerationI.generate(rndEnemyType, enemyLvl, enemyPosition.x, enemyPosition.y, this->bossesEnemiesTextures[rndEnemyType], &this->player, this->enemiesSoundBox);
 	}
 }
 
@@ -585,6 +720,11 @@ GameState::GameState(StateData* state_data, const unsigned int& difficultyLvl)
 	skillMenuActive    (false),
 	popUpTextComponent (state_data->font),
 
+	bossesGenerationI            (this->bosses),              //Bosses generation interface
+	meleEnemiesGenerationI       (this->meleEnemies),         //Mele enemies generation interface
+	mageEnemiesGenerationI       (this->mageEnemies),         //Mage enemies generation interface
+	destroyingEnemiesGenerationI (this->destroyingEnemies),   //Destroying enemies generation interface
+
 	pauseMenu          (*this->window, this->stateData->font),                                  //Pause menu 
 	player             (500, 500, this->textures["PLAYER_SHEET"], this->font, this->isBuffed),  //Player
 	playerGUI          (this->player, this->font, *state_data->window),                         //Player GUI
@@ -609,6 +749,9 @@ GameState::GameState(StateData* state_data, const unsigned int& difficultyLvl)
 	this->initShaders        ();
 	this->initPlayerGUI      ();
 	this->createTraps        ();
+
+	//Test
+	this->updateGameWave();
 }
 
 GameState::~GameState()
@@ -663,6 +806,7 @@ void GameState::render(sf::RenderTarget* target)
 	this->renderTexture.clear();
 	this->renderTexture.setView(this->view);
 
+	//Rendering
 	this->tileMap.renderGameState  (this->renderTexture, this->player.getCenter(), &this->core_shader);  //Render tile map
 	this->renderEnemies            (*target);                                                            //Render all enemies
 	this->mapTrapsComponent.render (this->renderTexture);                                                //Render traps
@@ -687,7 +831,6 @@ void GameState::render(sf::RenderTarget* target)
 
 	//Render renderTexure
 	this->renderTexture.display();
-	this->renderSprite.setTexture(this->renderTexture.getTexture());
 
 	//Final rendering using render sprite
 	target->draw(this->renderSprite);

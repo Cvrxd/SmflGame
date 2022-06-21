@@ -1,3 +1,9 @@
+
+//SFML
+#include<SFML/Graphics.hpp>
+#include<SFML/Audio.hpp>
+#include<SFML/Window.hpp>
+#include<SFML/System.hpp>
 //Core
 #include<memory>
 #include<algorithm>
@@ -15,9 +21,3 @@
 #include<thread>
 #include<random>
 #include<cstdlib>
-
-//SFML
-#include<SFML/Audio.hpp>
-#include<SFML/Graphics.hpp>
-#include<SFML/Window.hpp>
-#include<SFML/System.hpp>
