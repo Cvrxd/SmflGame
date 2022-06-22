@@ -10,6 +10,7 @@
 #include "MapTrapsComonent.h"
 #include "EnemiesGenarationInterface.h"
 
+
 class State;
 class PauseMenu;
 class TileMap;
@@ -21,6 +22,15 @@ class MageEnemy;
 class DestroyingEnemy;
 class PopUpTextComponent;
 class MapTrapsComonent;
+
+struct RecordInfo
+{
+	size_t wavesCount = 0;
+	size_t kills = 0;
+	size_t bossKills = 0;
+	size_t crystals = 0;
+	size_t coins = 0;
+};
 
 class GameState : public State
 {
@@ -45,6 +55,9 @@ private:
 	//Player buff
 	bool isBuffed        = false;
 
+	//record info
+	RecordInfo&        recordInfo;
+
 	//Core
 	sf::RenderTexture  renderTexture;
 	sf::Sprite         renderSprite;
@@ -66,7 +79,6 @@ private:
 	sf::Text      volumeText;
 
 	//Components
-	PopUpTextComponent popUpTextComponent;
 	MapTrapsComonent   mapTrapsComponent;
 
 	//Sounds
@@ -142,7 +154,7 @@ private:
 	void decreaseVolume ();
 
 public:
-	GameState (StateData* state_data, const unsigned int& difficultyLvl = 1);
+	GameState (StateData* state_data, RecordInfo& recordInfo, const unsigned int& difficultyLvl = 1);
 	virtual ~GameState() override;
 
 	//Functions

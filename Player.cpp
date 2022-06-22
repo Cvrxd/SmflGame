@@ -340,6 +340,27 @@ Player::~Player()
 {
 }
 
+//Kills count
+size_t& Player::getKillsCount()
+{
+	return this->killsCount;
+}
+
+size_t& Player::getBossKillsCount()
+{
+	return this->bossKillsCount;
+}
+
+size_t& Player::getTotalCoins()
+{
+	return this->coinsTotal;
+}
+
+size_t& Player::getTotalCrystals()
+{
+	return this->crystallsTotal;
+}
+
 //Accessors
 const SkillType& Player::getUsingSkilltype()
 {
@@ -349,6 +370,11 @@ const SkillType& Player::getUsingSkilltype()
 const int& Player::getUsingSkilldamage()
 {
 	return this->currentskillDamage;
+}
+
+const int& Player::getLvl() const
+{
+	return this->statsComponent.level;
 }
 
 const sf::Font& Player::getFont()
@@ -474,21 +500,29 @@ void Player::gainArmor(const int& armor)
 
 void Player::gainCrystals(const int& crystals)
 {
+	this->crystallsTotal += crystals;
+
 	this->statsComponent.gainCrystals(crystals);
 }
 
 void Player::loseCrystals(const int& crystals)
 {
+	this->crystallsTotal -= crystals;
+
 	this->statsComponent.loseCrystals(crystals);
 }
 
 void Player::gainCoins(const int& coins)
 {
+	this->coinsTotal += coins;
+
 	this->statsComponent.gainCoins(coins);
 }
 
 void Player::loseCoins(const int& coins)
 {
+	this->coinsTotal -= coins;
+
 	this->statsComponent.loseCoins(coins);
 }
 

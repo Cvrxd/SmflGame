@@ -25,6 +25,12 @@ private:
 	bool isTakingHit    = false;
 	bool isUsingSkill   = false;
 
+	//Record info
+	size_t killsCount     = 0;
+	size_t bossKillsCount = 0;
+	size_t crystallsTotal = 0;
+	size_t coinsTotal     = 0;
+
 	//For hit animations
 	int currentHitAnimation;
 	int currentskillDamage = 1;
@@ -60,7 +66,7 @@ private:
 	PopUpTextComponent  popUpTextComponent;
 
 	//Sounds
-	PlayerSoundBox     soundBox;
+	PlayerSoundBox      soundBox;
 
 	//Animations
 	VectorSprites       sprites;
@@ -92,8 +98,14 @@ public:
 	virtual ~Player();
 
 	//Accessors
+	size_t&                     getKillsCount        ();
+	size_t&                     getBossKillsCount    ();
+	size_t&                     getTotalCoins        ();
+	size_t&                     getTotalCrystals     ();
+
 	const SkillType&            getUsingSkilltype    ();
 	const int&                  getUsingSkilldamage  ();
+	const int&                  getLvl               ()   const;
 	const sf::Font&             getFont              ();
 	void                        setPlayerGUI         (PlayerGUI& playerGUI);
 

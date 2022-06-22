@@ -238,6 +238,9 @@ inline void DestroyingEnemy::updateAnimations(const float& dt)
 			}
 
 			this->player->gainEXP(this->statsComponent.level * 2);
+
+			++this->player->getKillsCount();
+
 			this->isDead = true;
 		}
 	}
@@ -333,8 +336,11 @@ inline void DestroyingEnemy::updatePlayerImpact(const float& dt)
 //Constructors
 DestroyingEnemy::DestroyingEnemy(const DestroyingEnemyType& type, const int& level, const float& x, const float& y, 
 	sf::Texture& texture_sheet, Player* player, EnemySoundBox& sounds) noexcept
-	:Enemy(level, x, y, texture_sheet, player, sounds),
-	type(type), healthBar(&this->statsComponent.hp), levelIcon(&level, &this->player->getStatsComponent()->level, this->player->getFont())
+	:
+	Enemy     (level, x, y, texture_sheet, player, sounds),
+	type      (type), 
+	healthBar (&this->statsComponent.hp), 
+	levelIcon (&level, &this->player->getStatsComponent()->level, this->player->getFont())
 {
 	this->initStats();
 	this->initComponents(texture_sheet, this->sprite);
@@ -350,13 +356,13 @@ void DestroyingEnemy::update(const float& dt, sf::Vector2f mouse_pos_view)
 {
 	this->movementComponent.update(dt);
 
-	this->updatePlayerImpact(dt);
-	this->updateAttack(dt);
-	this->updateMovement(dt);
-	this->updateAnimations(dt);
+	this->updatePlayerImpact (dt);
+	this->updateAttack       (dt);
+	this->updateMovement     (dt);
+	this->updateAnimations   (dt);
 
-	this->healthBar.update(dt, this->getPosition());
-	this->levelIcon.update(dt, this->getPosition());
+	this->healthBar.update   (dt, this->getPosition());
+	this->levelIcon.update   (dt, this->getPosition());
 
 	this->hitboxComponent.update();
 }
@@ -369,6 +375,9 @@ void DestroyingEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 	}
 	else if(!this->isDead)
 	{
+		shader->setUniform("hasTexture", true);
+		shader->setUniform("lightPos", this->player->getPosition());
+
 		target.draw(this->sprite, shader);
 	}
 

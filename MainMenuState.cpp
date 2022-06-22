@@ -110,6 +110,104 @@ inline void MainMenuState::initGUI()
 		);
 }
 
+inline void MainMenuState::initRecrodsInfo()
+{
+	//Swith records info button
+	this->buttons["RECORDS"] = std::make_unique<GUI::Button>(this->difficultyText.getPosition().x, this->difficultyText.getPosition().y + 150.f,
+		180.f, 75.f,
+		&this->font, "Records", 50);
+
+	//Texts
+	//this->texts[""]
+}
+
+inline void MainMenuState::loadRecordInfo()
+{
+	std::ifstream ifile("Saves/Records/normal_record.txt");
+
+	if (ifile.is_open())
+	{
+		ifile >> this->normalRecordInfo.bossKills >> this->normalRecordInfo.kills >> this->normalRecordInfo.wavesCount >>
+			this->normalRecordInfo.coins >> this->normalRecordInfo.crystals;
+	}
+	else
+	{
+		throw("UNABLE TO OPEN Saves/Records/normal_record.txt");
+	}
+
+	ifile.close();
+	ifile.open("Saves/Records/hard_record.txt");
+
+	if (ifile.is_open())
+	{
+		ifile >> this->hardRecordInfo.bossKills >> this->hardRecordInfo.kills >> this->hardRecordInfo.wavesCount >>
+			this->hardRecordInfo.coins >> this->hardRecordInfo.crystals;
+	}
+	else
+	{
+		throw("UNABLE TO OPEN Saves/Records/hard_record.txt");
+	}
+
+	ifile.close();
+	ifile.open("Saves/Records/insane_record.txt");
+
+	if (ifile.is_open())
+	{
+		ifile >> this->insaneRecordInfo.bossKills >> this->insaneRecordInfo.kills >> this->insaneRecordInfo.wavesCount >>
+			this->insaneRecordInfo.coins >> this->insaneRecordInfo.crystals;
+	}
+	else
+	{
+		throw("UNABLE TO OPEN Saves/Records/insane_record.txt");
+	}
+
+	ifile.close();
+}
+
+//Savings functions
+inline void MainMenuState::saveRecordInfo()
+{
+	std::ofstream ofile("Saves/Records/normal_record.txt");
+
+	if (ofile.is_open())
+	{
+		ofile << this->normalRecordInfo.bossKills << ' ' << this->normalRecordInfo.kills << ' ' << this->normalRecordInfo.wavesCount << ' ' <<
+			this->normalRecordInfo.coins << ' ' << this->normalRecordInfo.crystals;
+	}
+	else
+	{
+		throw("UNABLE TO OPEN Saves/Records/normal_record.txt");
+	}
+
+	ofile.close();
+	ofile.open("Saves/Records/hard_record.txt");
+
+	if (ofile.is_open())
+	{
+		ofile << this->hardRecordInfo.bossKills << ' ' << this->hardRecordInfo.kills << ' ' << this->hardRecordInfo.wavesCount << ' ' <<
+			this->hardRecordInfo.coins << ' ' << this->hardRecordInfo.crystals;
+	}
+	else
+	{
+		throw("UNABLE TO OPEN Saves/Records/hard_record.txt");
+	}
+
+	ofile.close();
+	ofile.open("Saves/Records/insane_record.txt");
+
+	if (ofile.is_open())
+	{
+		ofile << this->insaneRecordInfo.bossKills << ' ' << this->insaneRecordInfo.kills << ' ' << this->insaneRecordInfo.wavesCount << ' ' <<
+			this->insaneRecordInfo.coins << ' ' << this->insaneRecordInfo.crystals;
+	}
+	else
+	{
+		throw("UNABLE TO OPEN Saves/Records/insane_record.txt");
+	}
+
+	ofile.close();
+}
+
 //Update functions
 inline void MainMenuState::updateInput(const float& dt)
 {
@@ -138,7 +236,7 @@ inline void MainMenuState::updateGUI()
 	}
 
 	//Increase difficulty button
-	if (this->buttons["DIFFICULTY_MORE"]->isPressed() && this->getKeyTime())
+	else if (this->buttons["DIFFICULTY_MORE"]->isPressed() && this->getKeyTime())
 	{
 		this->sounds.clickSound.second.play();
 
@@ -151,16 +249,31 @@ inline void MainMenuState::updateGUI()
 	}
 
 	//New game start
-	if (this->buttons["GAME_STATE"]->isPressed())
+	else if (this->buttons["GAME_STATE"]->isPressed())
 	{
 		this->sounds.clickSound.second.play();
 
-		this->states->push(new GameState(this->stateData, this->difficultyLvl));
+		switch (this->difficultyLvl)
+		{
+		case 1:
+			this->states->push(new GameState(this->stateData, this->normalRecordInfo, this->difficultyLvl));
+			break;
+		case 2:
+			this->states->push(new GameState(this->stateData, this->hardRecordInfo, this->difficultyLvl));
+			break;
+		case 3:
+			this->states->push(new GameState(this->stateData, this->insaneRecordInfo, this->difficultyLvl));
+			break;
+		default:
+			this->states->push(new GameState(this->stateData, this->normalRecordInfo, this->difficultyLvl));
+			break;
+		}
+
 		this->sounds.music.stop();
 	}
 
 	//Settings
-	if (this->buttons["SETTINGS_STATE"]->isPressed())
+	else if (this->buttons["SETTINGS_STATE"]->isPressed())
 	{
 		this->sounds.clickSound.second.play();
 
@@ -168,7 +281,7 @@ inline void MainMenuState::updateGUI()
 	}
 
 	//Editor
-	if (this->buttons["EDITOR_STATE"]->isPressed())
+	else if (this->buttons["EDITOR_STATE"]->isPressed())
 	{
 		this->sounds.clickSound.second.play();
 
@@ -176,12 +289,24 @@ inline void MainMenuState::updateGUI()
 	}
 
 	//Quit game
-	if (this->buttons["EXIT_STATE"]->isPressed())
+	else if (this->buttons["EXIT_STATE"]->isPressed())
 	{
 		this->sounds.clickSound.second.play();
-
 		this->sounds.music.pause();
+
+		//Save record info
+		this->saveRecordInfo();
+
 		this->endState();
+	}
+
+	//Records
+	else if (this->buttons["RECORDS"]->isPressed())
+	{
+		this->sounds.clickSound.second.play();
+		
+		//Swithc game mode record
+
 	}
 }
 
@@ -212,6 +337,14 @@ inline void MainMenuState::updateText()
 	}
 }
 
+inline void MainMenuState::updateRecordInfo()
+{
+	if (this->buttons["RECORDS"]->getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosWindow)))
+	{
+		
+	}
+}
+
 //Render functions
 inline void MainMenuState::renderGUI(sf::RenderTarget& target)
 {
@@ -234,12 +367,14 @@ MainMenuState::MainMenuState(StateData* state_data) noexcept
 	this->type = STATE_TYPE::MAIN_MENU_STATE;
 
 	//Init functions
-	this->initVariables  ();
-	this->initSounds     ();
-	this->initBackground ();
-	this->initFonts      ();	   
-	this->initKeybinds   (); 
-	this->initGUI        ();
+	this->initVariables   ();
+	this->initSounds      ();
+	this->initBackground  ();
+	this->initFonts       ();	   
+	this->initKeybinds    (); 
+	this->initGUI         ();
+	this->loadRecordInfo  ();
+	this->initRecrodsInfo ();
 }
 
 MainMenuState::~MainMenuState()
@@ -249,8 +384,8 @@ MainMenuState::~MainMenuState()
 //Public functions 
 void MainMenuState::updateTopState()
 {
-	this->updateGuiPosition();
-	this->playMusic();
+	this->updateGuiPosition ();
+	this->playMusic         ();
 }
 
 void MainMenuState::updateGuiPosition()

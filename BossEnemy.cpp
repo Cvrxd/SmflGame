@@ -444,6 +444,9 @@ inline void BossEnemy::updateAnimations(const float& dt)
 
 			this->player->gainEXP(this->statsComponent.level * 5);
 
+			++this->player->getKillsCount();
+			++this->player->getBossKillsCount();
+
 			this->isDead = true;
 		}
 	}
@@ -553,8 +556,11 @@ inline void BossEnemy::updatePlayerImpact(const float& dt)
 //Constructors
 BossEnemy::BossEnemy(const BossType& type, const int& level, const float& x, const float& y, 
 	sf::Texture& texture_sheet, Player* player, EnemySoundBox& sounds) noexcept
-	:Enemy(level, x, y, texture_sheet, player, sounds),
-	type(type), healthBar(&this->statsComponent.hp), levelIcon(&level, &this->player->getStatsComponent()->level, this->player->getFont())
+	:
+	Enemy     (level, x, y, texture_sheet, player, sounds),
+	type      (type),
+	healthBar (&this->statsComponent.hp),
+	levelIcon (&level, &this->player->getStatsComponent()->level, this->player->getFont())
 {
 	this->initStats();
 	this->initComponents(texture_sheet, this->sprite);
@@ -584,6 +590,8 @@ void BossEnemy::update(const float& dt, sf::Vector2f mouse_pos_view)
 
 void BossEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 {
+	shader->setUniform("hasTexture", true);
+	shader->setUniform("lightPos", this->player->getPosition());
 	target.draw(this->sprite, shader);
 
 	if (this->hitImpact)

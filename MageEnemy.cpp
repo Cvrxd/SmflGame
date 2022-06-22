@@ -409,6 +409,7 @@ inline void MageEnemy::updateAnimations(const float& dt)
 		}
 	}
 
+	//Death
 	if (this->statsComponent.hp == 0)
 	{
 		this->stopVelocity();
@@ -417,10 +418,13 @@ inline void MageEnemy::updateAnimations(const float& dt)
 			this->player->gainCrystals(3 * this->statsComponent.level);
 			this->player->gainEXP(this->statsComponent.level * 2);
 
+			++this->player->getKillsCount();
+
 			this->isDead = true;
 		}
 	}
 
+	//Movement
 	if (this->movementComponent.getState(IDLE))
 	{
 		this->animationComponent.play("IDLE", dt);
@@ -525,10 +529,11 @@ inline void MageEnemy::updatePlayerImpact(const float& dt)
 //Constructors
 MageEnemy::MageEnemy(const MageEnemyType& type, const int& level, const float& x, const float& y, 
 	sf::Texture& texture_sheet, Player* player, EnemySoundBox& sounds) noexcept
-	:Enemy(level, x, y, texture_sheet, player, sounds),
-	type(type), 
-	healthBar(&this->statsComponent.hp), 
-	levelIcon(&level, &this->player->getStatsComponent()->level, this->player->getFont())
+	:
+	Enemy     (level, x, y, texture_sheet, player, sounds),
+	type      (type), 
+	healthBar (&this->statsComponent.hp), 
+	levelIcon (&level, &this->player->getStatsComponent()->level, this->player->getFont())
 {
 	this->initComponents(texture_sheet, this->sprite);
 	this->sprite.setPosition(x, y);
@@ -557,6 +562,9 @@ void MageEnemy::update(const float& dt, sf::Vector2f mouse_pos_view)
 
 void MageEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 {
+	shader->setUniform("hasTexture", true);
+	shader->setUniform("lightPos", this->player->getPosition());
+
 	target.draw(this->sprite, shader);
 
 	if (this->hitImpact)

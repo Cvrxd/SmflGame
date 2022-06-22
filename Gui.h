@@ -92,7 +92,8 @@ namespace GUI
 		 
 	public:
 		DropDownList(const float& x, const float& y, const float& width, const float& hight, 
-			sf::Font& font, std::string text_list[], const unsigned& number_of_elements, const unsigned& default_index = 0) noexcept;
+			sf::Font& font, std::string text_list[], 
+			const unsigned& number_of_elements, const unsigned& default_index = 0) noexcept;
 		~DropDownList();
 
 		//Accessors

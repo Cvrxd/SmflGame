@@ -141,6 +141,9 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		this->soundKey = "MALE_ENEMY_SOUND";
 		this->soundTime = 5.f;
 
+		//Resistance
+		this->skillReistance = SkillType::LIGHTNING_STRIKE;
+
 		//Attack coldown
 		this->attackCountMAX = 2;
 		this->attackColdown = 2.f;
@@ -169,6 +172,9 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		//Sound
 		this->soundKey = "MALE_ENEMY_SOUND";
 		this->soundTime = 5.2f;
+
+		//Resistance
+		this->skillReistance = SkillType::BLOOD_SPIKE;
 
 		//Attack coldown
 		this->attackCountMAX = 1;
@@ -199,6 +205,9 @@ inline void MeleEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 		//Sound
 		this->soundKey = "MALE_ENEMY_SOUND";
 		this->soundTime = 6.2f;
+
+		//Resistance
+		this->skillReistance = SkillType::HOLY_STRIKE;
 
 		//Attack coldown
 		this->attackCountMAX = 1;
@@ -416,6 +425,7 @@ inline void MeleEnemy::updateAnimations(const float& dt)
 		}
 	}
 
+	//Death
 	if (this->statsComponent.hp == 0)
 	{
 		this->stopVelocity();
@@ -424,10 +434,13 @@ inline void MeleEnemy::updateAnimations(const float& dt)
 			this->player->gainCoins(3 * this->statsComponent.level);
 			this->player->gainEXP(this->statsComponent.level * 2);
 
+			++this->player->getKillsCount();
+
 			this->isDead = true;
 		}
 	}
 
+	//Movement animation
 	if (this->movementComponent.getState(IDLE))
 	{
 		this->animationComponent.play("IDLE", dt);
@@ -533,8 +546,11 @@ inline void MeleEnemy::updatePlayerImpact(const float& dt)
 //Constructors
 MeleEnemy::MeleEnemy(const MeleEnemyType& type, const int& level, const float& x, const float& y, 
 	sf::Texture& texture_sheet, Player* player, EnemySoundBox& sounds)noexcept
-	:Enemy(level, x, y, texture_sheet, player, sounds),
-	type(type), healthBar(&this->statsComponent.hp), levelIcon(&level, &this->player->getStatsComponent()->level, this->player->getFont())
+	:
+	Enemy     (level, x, y, texture_sheet, player, sounds),
+	type      (type), 
+	healthBar (&this->statsComponent.hp), 
+	levelIcon (&level, &this->player->getStatsComponent()->level, this->player->getFont())
 {
 	this->initComponents(texture_sheet, this->sprite);
 
@@ -564,6 +580,9 @@ void MeleEnemy::update(const float& dt, sf::Vector2f mouse_pos_view)
 
 void MeleEnemy::render(sf::RenderTarget& target, sf::Shader* shader)
 {
+	shader->setUniform("hasTexture", true);
+	shader->setUniform("lightPos", this->player->getPosition());
+
 	target.draw(this->sprite, shader);
 
 	if (this->hitImpact)

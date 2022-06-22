@@ -12,8 +12,10 @@ class Button;
 class MainMenuState : public State
 {
 private:
-	using ButtonsMap = std::unordered_map<std::string, std::unique_ptr<GUI::Button>>;
+	using TextsMap    = std::unordered_map<std::string, sf::Text>;
+	using ButtonsMap  = std::unordered_map<std::string, std::unique_ptr<GUI::Button>>;
 
+	//Main menu sounds
 	struct MainMenuSounds
 	{
 		using Sound = std::pair<sf::SoundBuffer, sf::Sound>;
@@ -36,26 +38,38 @@ private:
 	sf::Text            difficultyText;
 	sf::Text            difficultyLvlText;
 
+	//Record info
+	RecordInfo          normalRecordInfo;
+	RecordInfo          hardRecordInfo;
+	RecordInfo          insaneRecordInfo;
+
 	//GUI
 	ButtonsMap          buttons;
+	TextsMap            texts;
 
 	//Sounds
 	MainMenuSounds      sounds;
 
 	//Init functions
-	void initVariables   ();
-	void initSounds      ();
-	void initBackground  ();
-	void initFonts       ();
-	void initGUI         ();
-	void initKeybinds    ()                           override;
+	void initVariables    ();
+	void initSounds       ();
+	void initBackground   ();
+	void initFonts        ();
+	void initGUI          ();
+	void initRecrodsInfo  ();
+	void initKeybinds     ()                           override;
+
+	//Player record info load and save
+	void loadRecordInfo   ();
+	void saveRecordInfo   ();
 
 	//Update functions
-	void updateInput     (const float& dt)            override;
-	void updateGUI       ();
-	void updateText      ();
+	void updateInput      (const float& dt)            override;
+	void updateGUI        ();
+	void updateText       ();
+	void updateRecordInfo ();
 
-	//render functions
+	//Eender functions
 	void renderGUI       (sf::RenderTarget& target);
 
 public:
