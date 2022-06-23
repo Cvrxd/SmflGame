@@ -180,6 +180,35 @@ inline void PlayerGUI::initAniamtions()
 	this->animationComponent["CRYSTAL"].addAnimation("PLAY", 0, 0, 3, 0, 16, 16, 15.f);
 }
 
+inline void PlayerGUI::initInfoText(const unsigned int& difficulty)
+{
+	switch (difficulty)
+	{
+	case 1:
+		this->infoText.setFillColor(sf::Color::Magenta);
+		break;
+	case 2:
+		this->infoText.setFillColor(sf::Color::Red);
+		break;
+	case 3:
+		this->infoText.setFillColor(sf::Color::Black);
+		break;
+	default:
+		this->infoText.setFillColor(sf::Color::White);
+		break;
+	}
+
+	this->infoText.setOutlineThickness (2.f);
+	this->infoText.setOutlineColor     (sf::Color::White);
+	this->infoText.setFont             (this->font);
+	this->infoText.setCharacterSize    (40);
+	this->infoText.setString           ("Wave: " + std::to_string(this->wavesCount) + "\nKills: " + std::to_string(this->player.getKillsCount()));
+
+	this->infoText.setPosition(
+		static_cast<float>(this->window.getSize().x) - 250.f,
+		static_cast<float>(this->window.getPosition().y) + 100.f);
+}
+
 //Update functions
 inline void PlayerGUI::updateAnimations(const float& dt)
 {
@@ -233,6 +262,11 @@ inline void PlayerGUI::updateTextIcons()
 	this->texts["HP_POTIONS"].setString(std::to_string(*this->hpPotions));
 }
 
+inline void PlayerGUI::updateInfoText()
+{
+	this->infoText.setString("Wave: " + std::to_string(this->wavesCount) + "\nKills: " + std::to_string(this->player.getKillsCount()));
+}
+
 //Render functions
 inline void PlayerGUI::renderQuickSlotBars(sf::RenderTarget& target)
 {
@@ -274,9 +308,15 @@ inline void PlayerGUI::renderQuickSlotBars(sf::RenderTarget& target)
 	target.draw(this->quickSlotBars[6].first);
 }
 
+inline void PlayerGUI::renderInfoText(sf::RenderTarget& target)
+{
+	target.draw(this->infoText);
+}
+
 //Constructor
-PlayerGUI::PlayerGUI(Player& player, sf::Font& font, sf::RenderWindow& window) noexcept
-	:player(player), font(font), window(window),
+PlayerGUI::PlayerGUI(Player& player, sf::Font& font, sf::RenderWindow& window, const int& wavesCount, const unsigned int& difficulty) noexcept
+	:
+	player(player), font(font), window(window), wavesCount(wavesCount), 
 	statsComponent(*this->player.getStatsComponent())
 {
 	this->initVariables     ();
@@ -284,6 +324,7 @@ PlayerGUI::PlayerGUI(Player& player, sf::Font& font, sf::RenderWindow& window) n
 	this->initQuickSlotBars ();
 	this->initTextsIcons    ();
 	this->initAniamtions    ();
+	this->initInfoText      (difficulty);
 }
 
 PlayerGUI::~PlayerGUI()
@@ -304,9 +345,9 @@ sf::Texture& PlayerGUI::getCoinsTexture()
 //Public functions
 void PlayerGUI::initBuffSkill()
 {
-	this->quickSlotBars[4].second.setTexture(this->skillsIcons->at(8).second.getTexture());
-	this->quickSlotBars[4].second.setPosition(this->quickSlotBars[4].first.getPosition());
-	this->quickSlotBars[4].second.setSize(sf::Vector2f(48, 48));
+	this->quickSlotBars[4].second.setTexture  (this->skillsIcons->at(8).second.getTexture());
+	this->quickSlotBars[4].second.setPosition (this->quickSlotBars[4].first.getPosition());
+	this->quickSlotBars[4].second.setSize     (sf::Vector2f(48, 48));
 }
 
 void PlayerGUI::setPotionsCount(int& hp, int& mp)
@@ -372,11 +413,12 @@ void PlayerGUI::update(const float& dt)
 	this->updateAnimations (dt);
 	this->updateBars       ();
 	this->updateTextIcons  ();
+	this->updateInfoText   ();
 }
 
-void PlayerGUI::render(sf::RenderTarget& target)
+void PlayerGUI::render(sf::RenderTarget& target, const bool& showInfoText)
 {
-	this->renderQuickSlotBars(target);
+	this->renderQuickSlotBars (target);
 
 	//Render sprites
 	for (auto& el : this->sprites)
@@ -401,6 +443,11 @@ void PlayerGUI::render(sf::RenderTarget& target)
 	for (auto& el : this->texts)
 	{
 		target.draw(el.second);
+	}
+
+	if (showInfoText)
+	{
+		this->renderInfoText(target);
 	}
 
 }
@@ -1446,3 +1493,52 @@ void ItemsMune::render(sf::RenderTarget& target, sf::Vector2i& mousePosWindow)
 	this->renderText    (target);
 	this->renderIcons   (target);
 }
+
+////===============================================
+////Game Over Menu=================================
+////===============================================
+//
+////Init fucntions
+//inline void GameOverMenu::initMusic()
+//{
+//}
+//
+//inline void GameOverMenu::initGui()
+//{
+//	//Bacground
+//	this->background.setSize      (static_cast<sf::Vector2f>(window.getSize()));
+//	this->background.setFillColor (sf::Color(10, 10, 10, 150));
+//}
+//
+////Constructor
+//GameOverMenu::GameOverMenu(sf::RenderWindow& window)
+//	:window(window)
+//{
+//	this->initMusic ();
+//	this->initGui   ();
+//}
+//
+//GameOverMenu::~GameOverMenu()
+//{
+//}
+//
+////Accessors
+//const bool GameOverMenu::exitButtonIsPressed() const
+//{
+//	return this->exitButton->isPressed();
+//}
+//
+////Public functions
+//void GameOverMenu::update(const float& dt, sf::Vector2i& mousePosWindow)
+//{
+//	//Exit button update
+//	this->exitButton->update(mousePosWindow);
+//}
+//
+//void GameOverMenu::render(sf::RenderTarget& target)
+//{
+//	target.draw(this->background);
+//	target.draw(this->text);
+//	
+//	this->exitButton->render(target);
+//}

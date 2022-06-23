@@ -17,6 +17,9 @@ private:
 	using MapShapes             = std::unordered_map<std::string, sf::RectangleShape>;
 	using vectorSkillTypeShape  = std::vector<std::pair<SkillType, sf::RectangleShape>>;
 
+	//Variables for info text
+	const int& wavesCount;
+	
 	//Variables
 	int*  hpPotions;
 	int*  mpPotions;
@@ -50,6 +53,7 @@ private:
 	VectorPairShapes quickSlotBars;
 
 	//Text and icons
+	sf::Text        infoText;
 	sf::Texture     iconsSheet;
 	VectorText      texts;
 	MapShapes       iconsShapes;
@@ -63,18 +67,21 @@ private:
 	void initQuickSlotBars ();
 	void initTextsIcons    ();
 	void initAniamtions    ();
+	void initInfoText      (const unsigned int& difficulty);
 
 	//Update functions
 	void updateAnimations  (const float& dt);
 	void updateBars        ();
 	void updateTextIcons   ();
+	void updateInfoText    ();
 
 	//Render functions
 	void renderQuickSlotBars (sf::RenderTarget& target);
+	void renderInfoText      (sf::RenderTarget& target);
 
 public:
 	//Constructor
-	PlayerGUI (Player& player, sf::Font& font, sf::RenderWindow& window) noexcept;
+	PlayerGUI (Player& player, sf::Font& font, sf::RenderWindow& window, const int& wavesCount, const unsigned int& difficulty) noexcept;
 	~PlayerGUI();
 
 	//Accessors
@@ -90,7 +97,7 @@ public:
 	void upgradePlayerBuff  (const int& level);
 
 	void update             (const float& dt);
-	void render             (sf::RenderTarget& target);
+	void render             (sf::RenderTarget& target, const bool& showInfoText = true);
 
 	void skillsMenUpdate    (const float& dt);
 	void itemsMenuUpdate    (const float& dt);
@@ -352,3 +359,33 @@ public:
 	void update  (sf::Vector2i& mousePosWindow, const float& dt);
 	void render  (sf::RenderTarget& target, sf::Vector2i& mousePosWindow);
 };
+
+//class GameOverMenu
+//{
+//private:
+//	using ButtonPtr = std::unique_ptr<GUI::Button>;
+//
+//	//Variables
+//	sf::RenderWindow&   window;
+//
+//	sf::RectangleShape  background;
+//	sf::Text            text;
+//	sf::Music           music;
+//	ButtonPtr           exitButton;
+//
+//	//Init functions
+//	void initMusic ();
+//	void initGui   ();
+//
+//public:
+//
+//	GameOverMenu  (sf::RenderWindow& window);
+//	~GameOverMenu ();
+//
+//	//Accessors
+//	const bool exitButtonIsPressed() const;
+//
+//	//Functions
+//	void update(const float& dt, sf::Vector2i& mousePosWindow);
+//	void render(sf::RenderTarget& target);
+//};

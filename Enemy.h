@@ -90,7 +90,6 @@ protected:
 	virtual void initPopUpTextComponent    ();
 
 	//Functions
-	// 
 	//Update
 	virtual void updatePlayerImpact  (const float& dt)    = 0;
 	virtual void updateAttack        (const float& dt)    = 0;
@@ -107,6 +106,10 @@ public:
 	virtual ~Enemy();
 
 	//Accessors
+	virtual const int& getDamage ()   const;
+	virtual const int& getHp     ()   const;
+	virtual const int& getLvl    ()   const;
+
 	const bool& dead();
 
 	//Functions

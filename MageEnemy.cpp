@@ -7,7 +7,7 @@ inline void MageEnemy::initComponents(sf::Texture& texture_sheet, sf::Sprite& sp
 	//Sound key
 	this->spellCastSoundKey = "MAGE_SPELL_CAST_SOUND";
 	this->soundKey          = "MAGE_SOUND";
-	this->soundTime         = 10.f;
+	this->soundTime         = 12.f;
 
 	switch (this->type)
 	{

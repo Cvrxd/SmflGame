@@ -17,6 +17,8 @@ private:
 	//Booleans for animations
 	bool& isBuffed;
 
+	bool deathAniamtion = false;
+	bool isDead         = false;
 	bool castingSpell   = false;
 	bool showPopUpText  = false;
 	bool isAttacking    = false;
@@ -103,12 +105,13 @@ public:
 	size_t&                     getTotalCoins        ();
 	size_t&                     getTotalCrystals     ();
 
+	const sf::Font&             getFont              ();
 	const SkillType&            getUsingSkilltype    ();
 	const int&                  getUsingSkilldamage  ();
 	const int&                  getLvl               ()   const;
-	const sf::Font&             getFont              ();
 	void                        setPlayerGUI         (PlayerGUI& playerGUI);
 
+	const bool&                 dead                 ();
 	const bool&                 usingSkill           ();
 	const bool&	                isDealingDmg         ();
 	StatsComponent*             getStatsComponent    ();
@@ -117,11 +120,11 @@ public:
 	const sf::RectangleShape&   getDamageRange       ();
 
 	//Sound functions
-	void increaseSoundsVolume();
-	void decreaseSoundsVolume();
+	void increaseSoundsVolume ();
+	void decreaseSoundsVolume ();
 
-	void pauseSounds();
-	void playSounds();
+	void pauseSounds          ();
+	void playSounds           ();
 
 	//Stats functions
 	void gainEXP       (const unsigned& exp);

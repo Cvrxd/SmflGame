@@ -75,7 +75,7 @@ inline void Player::addAnimations()
 	this->animationComponent.addAnimation("IDLE", 0, 0, 3, 0, 50, 40, 13.f);
 	this->animationComponent.addAnimation("MOVE", 0, 1, 5, 1, 50, 37, 9.f);
 	this->animationComponent.addAnimation("DASH", 1, 8, 4, 8, 50, 37, 9.f);
-	this->animationComponent.addAnimation("DEATH", 0, 9, 4, 9, 50, 37, 9.f);
+	this->animationComponent.addAnimation("DEATH", 0, 9, 4, 9, 50, 37, 25.f);
 
 	this->animationComponent.addAnimation("ATTACK_FIRST", 0, 4, 8, 4, 50, 37, 8.f);
 	this->animationComponent.addAnimation("CAST_SPELL", 0, 3, 8, 3, 50, 37, 10.f);
@@ -233,62 +233,74 @@ inline void Player::updateAttack(const float& dt, sf::Vector2f mouse_pos_view)
 
 inline void Player::updateAnimations(const float& dt, sf::Vector2f mouse_pos_view)
 {
-	//Casting spell animation
-	if (this->castingSpell)
+	if (!this->deathAniamtion)
 	{
-		if (this->animationComponent.play("CAST_SPELL", dt, true))
+		//Casting spell animation
+		if (this->castingSpell)
 		{
-			this->castingSpell = false;
+			if (this->animationComponent.play("CAST_SPELL", dt, true))
+			{
+				this->castingSpell = false;
+			}
 		}
-	}
 
-	//Changing movement animation if player is buffed
-	if (this->isBuffed)
-	{
-		this->currentKey = &this->dashKey;
-	}
-	else
-	{
-		this->currentKey = &this->moveKey;
-	}
-
-	//Updating movement animations
-	if (this->movementComponent.getState(IDLE))
-	{
-		if (mouse_pos_view.x < this->hitboxComponent.getPositionHitbox().x)
+		//Changing movement animation if player is buffed
+		if (this->isBuffed)
 		{
-			SPTIRES_SETSCALE_LEFT;
+			this->currentKey = &this->dashKey;
 		}
 		else
 		{
-			SPTIRES_SETSCALE_RIGHT;
+			this->currentKey = &this->moveKey;
 		}
 
-		this->animationComponent.play("IDLE", dt);
-	}
-	else if (this->movementComponent.getState(MOVING_RIGHT))
-	{
-		SPTIRES_SETSCALE_RIGHT;
+		//Updating movement animations
+		if (this->movementComponent.getState(IDLE))
+		{
+			if (mouse_pos_view.x < this->hitboxComponent.getPositionHitbox().x)
+			{
+				SPTIRES_SETSCALE_LEFT;
+			}
+			else
+			{
+				SPTIRES_SETSCALE_RIGHT;
+			}
 
-		//Animation
-		this->animationComponent.play(*this->currentKey, dt, this->movementComponent.getVelocity().x, this->movementComponent.getMaxVelocity());
-	}
-	else if (this->movementComponent.getState(MOVING_LEFT))
-	{
-		SPTIRES_SETSCALE_LEFT;
+			this->animationComponent.play("IDLE", dt);
+		}
+		else if (this->movementComponent.getState(MOVING_RIGHT))
+		{
+			SPTIRES_SETSCALE_RIGHT;
 
-		//Animation
-		this->animationComponent.play(*this->currentKey, dt, this->movementComponent.getVelocity().x, this->movementComponent.getMaxVelocity());
+			//Animation
+			this->animationComponent.play(*this->currentKey, dt, this->movementComponent.getVelocity().x, this->movementComponent.getMaxVelocity());
+		}
+		else if (this->movementComponent.getState(MOVING_LEFT))
+		{
+			SPTIRES_SETSCALE_LEFT;
+
+			//Animation
+			this->animationComponent.play(*this->currentKey, dt, this->movementComponent.getVelocity().x, this->movementComponent.getMaxVelocity());
+		}
+		else if (this->movementComponent.getState(MOVE_UP))
+		{
+			//Animation
+			this->animationComponent.play(*this->currentKey, dt, this->movementComponent.getVelocity().y, this->movementComponent.getMaxVelocity());
+		}
+		else if (this->movementComponent.getState(MOVE_DOWN))
+		{
+			//Animation
+			this->animationComponent.play(*this->currentKey, dt, this->movementComponent.getVelocity().y, this->movementComponent.getMaxVelocity());
+		}
 	}
-	else if (this->movementComponent.getState(MOVE_UP))
+	else
 	{
-		//Animation
-		this->animationComponent.play(*this->currentKey, dt, this->movementComponent.getVelocity().y, this->movementComponent.getMaxVelocity());
-	}
-	else if (this->movementComponent.getState(MOVE_DOWN))
-	{
-		//Animation
-		this->animationComponent.play(*this->currentKey, dt, this->movementComponent.getVelocity().y, this->movementComponent.getMaxVelocity());
+		if (this->animationComponent.play("DEATH", dt, true))
+		{
+			this->deathAniamtion = false;
+			this->isDead = true;
+		}
+
 	}
 }
 
@@ -387,6 +399,11 @@ void Player::setPlayerGUI(PlayerGUI& playerGUI)
 	this->playerGUI = &playerGUI;
 }
 
+const bool& Player::dead()
+{
+	return this->isDead;
+}
+
 const bool& Player::usingSkill()
 {
 	return this->isUsingSkill;
@@ -460,7 +477,7 @@ void Player::gainEXP(const unsigned& exp)
 	}
 
 	//Upgrade buff every 5th player level
-	if (this->statsComponent.level % 5 == 0)
+	if (currentLVL != this->statsComponent.level && this->statsComponent.level % 5 == 0)
 	{
 		if (this->skillsComponent.getBuffLevel() != this->skillsComponent.getBuffMaxLevel())
 		{
@@ -481,6 +498,11 @@ void Player::loseHP(const int& hp)
 {
 	this->statsComponent.loseHP(hp);
 	this->isTakingHit = true;
+
+	if (this->statsComponent.hp <= 0)
+	{
+		this->deathAniamtion = true;
+	}
 }
 
 void Player::gainMP(const int& mp)

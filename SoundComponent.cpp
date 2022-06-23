@@ -472,10 +472,7 @@ void EnemySoundBox::playSound(const SkillType& sound)
 
 void EnemySoundBox::playSound(const std::string& sound)
 {
-	if (this->sounds[sound].second.getStatus() != sf::Sound::Playing)
-	{
-		this->sounds[sound].second.play();
-	}
+	this->sounds[sound].second.play();
 }
 
 void EnemySoundBox::pauseSounds()

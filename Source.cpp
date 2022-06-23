@@ -3,7 +3,7 @@
 
 int main()
 {
-	std::srand(std::time(0));
+	std::srand(static_cast<unsigned int>(std::time(0)));
 
 	Game game;
 	game.run();

@@ -7,6 +7,31 @@ inline void MainMenuState::initVariables()
 
 }
 
+inline void MainMenuState::initTextures()
+{
+	this->crystalsTexture.loadFromFile("Textures/hud/main_menu/crystals.png");
+}
+
+inline void MainMenuState::initAnimations()
+{
+	this->crystalsAnimations.first  = { &this->crystalsSprites.first, &this->crystalsTexture };
+	this->crystalsAnimations.second = { &this->crystalsSprites.second, &this->crystalsTexture };
+
+	//Left crystal
+	this->crystalsAnimations.first.addAnimation("NORMAL", 0, 0, 3, 0, 64, 64, 15.f);
+	this->crystalsAnimations.first.addAnimation("HARD", 0, 1, 3, 1, 64, 64, 15.f);
+	this->crystalsAnimations.first.addAnimation("INSANE", 0, 2, 3, 2, 64, 64, 15.f);
+
+	//Right crystal
+	this->crystalsAnimations.second.addAnimation("NORMAL", 0, 0, 3, 0, 64, 64, 15.f);
+	this->crystalsAnimations.second.addAnimation("HARD", 0, 1, 3, 1, 64, 64, 15.f);
+	this->crystalsAnimations.second.addAnimation("INSANE", 0, 2, 3, 2, 64, 64, 15.f);
+
+	//Sprites positions
+	this->crystalsSprites.first.  setPosition(this->recordText.getPosition().x - 70.f, this->recordText.getPosition().y);
+	this->crystalsSprites.second. setPosition(this->recordText.getPosition().x + 180.f, this->recordText.getPosition().y);
+}
+
 inline void MainMenuState::initSounds()
 {
 	//Init background music
@@ -113,12 +138,34 @@ inline void MainMenuState::initGUI()
 inline void MainMenuState::initRecrodsInfo()
 {
 	//Swith records info button
-	this->buttons["RECORDS"] = std::make_unique<GUI::Button>(this->difficultyText.getPosition().x, this->difficultyText.getPosition().y + 150.f,
-		180.f, 75.f,
-		&this->font, "Records", 50);
+	this->recordText.setPosition         (this->difficultyText.getPosition().x, this->difficultyText.getPosition().y + 150.f);
+	this->recordText.setFont             (this->font);
+	this->recordText.setCharacterSize    (this->difficultyLvlText.getCharacterSize());
+	this->recordText.setFillColor        (this->difficultyLvlText.getFillColor());
+	this->recordText.setOutlineThickness (this->difficultyLvlText.getOutlineThickness());
+	this->recordText.setOutlineColor     (this->difficultyLvlText.getOutlineColor());
+	this->recordText.setString           ("Records");
 
 	//Texts
-	//this->texts[""]
+	this->recordTexts["WAVES_COUNT"]. setString("Waves: " + std::to_string       (this->normalRecordInfo.wavesCount));
+	this->recordTexts["KILLS"].       setString("Kills: " + std::to_string       (this->normalRecordInfo.kills));
+	this->recordTexts["BOSS_KILLS"].  setString("Boss killed: " + std::to_string (this->normalRecordInfo.bossKills));
+	this->recordTexts["CRYSTALS"].    setString("Crystals: " + std::to_string    (this->normalRecordInfo.crystals));
+	this->recordTexts["COINS"].       setString("Coins: " + std::to_string       (this->normalRecordInfo.coins));
+
+	//Positions
+	this->recordTexts["WAVES_COUNT"]. setPosition (this->recordText.getPosition().x, this->recordText.getPosition().y + 60.f);
+	this->recordTexts["KILLS"].       setPosition (this->recordText.getPosition().x, this->recordText.getPosition().y + 2 * 60.f);
+	this->recordTexts["BOSS_KILLS"].  setPosition (this->recordText.getPosition().x, this->recordText.getPosition().y + 3 * 60.f);
+	this->recordTexts["CRYSTALS"].    setPosition (this->recordText.getPosition().x, this->recordText.getPosition().y + 4 * 60.f);
+	this->recordTexts["COINS"].       setPosition (this->recordText.getPosition().x, this->recordText.getPosition().y + 5 * 60.f);
+
+	for (auto& el : this->recordTexts)
+	{
+		el.second.setFont(this->font);
+		el.second.setCharacterSize(40);
+		el.second.setFillColor(sf::Color::White);
+	}
 }
 
 inline void MainMenuState::loadRecordInfo()
@@ -214,6 +261,13 @@ inline void MainMenuState::updateInput(const float& dt)
 
 }
 
+inline void MainMenuState::updateAnimations(const float& dt)
+{
+	//Crystals animations
+	this->crystalsAnimations.second.play(this->crystalsAnimationKey, dt);
+	this->crystalsAnimations.first.play(this->crystalsAnimationKey, dt);
+}
+
 inline void MainMenuState::updateGUI()
 {
 	//Updates all buttons
@@ -299,15 +353,6 @@ inline void MainMenuState::updateGUI()
 
 		this->endState();
 	}
-
-	//Records
-	else if (this->buttons["RECORDS"]->isPressed())
-	{
-		this->sounds.clickSound.second.play();
-		
-		//Swithc game mode record
-
-	}
 }
 
 inline void MainMenuState::updateText()
@@ -315,33 +360,93 @@ inline void MainMenuState::updateText()
 	switch (this->difficultyLvl)
 	{
 	case 1:
-		this->difficultyLvlText.setFillColor(sf::Color::Magenta);
+		//Difficulty text
+		this->difficultyLvlText.setFillColor (sf::Color::Magenta);
+		this->difficultyLvlText.setString    ("Normal");
 
-		this->difficultyLvlText.setString("Normal");
+		//Record text
+		this->recordText.setFillColor    (this->difficultyLvlText.getFillColor());
+		this->recordText.setOutlineColor (this->difficultyLvlText.getOutlineColor());
+
+		this->recordTexts["WAVES_COUNT"]. setString("Waves: " + std::to_string       (this->normalRecordInfo.wavesCount));
+		this->recordTexts["KILLS"].       setString("Kills: " + std::to_string       (this->normalRecordInfo.kills));
+		this->recordTexts["BOSS_KILLS"].  setString("Boss killed: " + std::to_string (this->normalRecordInfo.bossKills));
+		this->recordTexts["CRYSTALS"].    setString("Crystals: " + std::to_string    (this->normalRecordInfo.crystals));
+		this->recordTexts["COINS"].       setString("Coins: " + std::to_string       (this->normalRecordInfo.coins));
+
+		//Crystals animation key
+		this->crystalsAnimationKey = "NORMAL";
+
 		break;
 	case 2:
-		this->difficultyLvlText.setFillColor(sf::Color::Red);
+		//Difficulty text
+		this->difficultyLvlText.setFillColor (sf::Color::Red);
+		this->difficultyLvlText.setString    ("Hard");
 
-		this->difficultyLvlText.setString("Hard");
+		//Record text
+		this->recordText.setFillColor    (this->difficultyLvlText.getFillColor());
+		this->recordText.setOutlineColor (this->difficultyLvlText.getOutlineColor());
+
+		this->recordTexts["WAVES_COUNT"]. setString("Waves: " + std::to_string       (this->hardRecordInfo.wavesCount));
+		this->recordTexts["KILLS"].       setString("Kills: " + std::to_string       (this->hardRecordInfo.kills));
+		this->recordTexts["BOSS_KILLS"].  setString("Boss killed: " + std::to_string (this->hardRecordInfo.bossKills));
+		this->recordTexts["CRYSTALS"].    setString("Crystals: " + std::to_string    (this->hardRecordInfo.crystals));
+		this->recordTexts["COINS"].       setString("Coins: " + std::to_string       (this->hardRecordInfo.coins));
+
+		//Crystals animation key
+		this->crystalsAnimationKey = "HARD";
+
 		break;
 	case 3:
-		this->difficultyLvlText.setFillColor(sf::Color::Black);
+		//Difficulty text
+		this->difficultyLvlText.setFillColor (sf::Color::Black);
+		this->difficultyLvlText.setString    ("Insane");
 
-		this->difficultyLvlText.setString("Insane");
+		//Record text
+		this->recordText.setFillColor    (this->difficultyLvlText.getFillColor());
+		this->recordText.setOutlineColor (this->difficultyLvlText.getOutlineColor());
+
+		this->recordTexts["WAVES_COUNT"]. setString("Waves: " + std::to_string       (this->insaneRecordInfo.wavesCount));
+		this->recordTexts["KILLS"].       setString("Kills: " + std::to_string       (this->insaneRecordInfo.kills));
+		this->recordTexts["BOSS_KILLS"].  setString("Boss killed: " + std::to_string (this->insaneRecordInfo.bossKills));
+		this->recordTexts["CRYSTALS"].    setString("Crystals: " + std::to_string    (this->insaneRecordInfo.crystals));
+		this->recordTexts["COINS"].       setString("Coins: " + std::to_string       (this->insaneRecordInfo.coins));
+
+		//Crystals animation key
+		this->crystalsAnimationKey = "INSANE";
+
 		break;
-	default:
-		this->difficultyLvlText.setFillColor(sf::Color::White);
 
-		this->difficultyLvlText.setString("???");
+	default:
+		//Difficulty text
+		this->difficultyLvlText.setFillColor (sf::Color::White);
+		this->difficultyLvlText.setString    ("???");
+
+		//Record text
+		this->recordText.setFillColor    (this->difficultyLvlText.getFillColor());
+		this->recordText.setOutlineColor (this->difficultyLvlText.getOutlineColor());
+
+		this->recordTexts["WAVES_COUNT"]. setString("Waves: ???");
+		this->recordTexts["KILLS"].       setString("Kills: ???");
+		this->recordTexts["BOSS_KILLS"].  setString("Boss killed: ???");
+		this->recordTexts["CRYSTALS"].    setString("Crystals: ???");
+		this->recordTexts["COINS"].       setString("Coins: ???");
 		break;
 	}
 }
 
-inline void MainMenuState::updateRecordInfo()
+inline void MainMenuState::renderRecordInfo(sf::RenderTarget& target)
 {
-	if (this->buttons["RECORDS"]->getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosWindow)))
+	target.draw(this->recordText);
+	target.draw(this->crystalsSprites.first);
+	target.draw(this->crystalsSprites.second);
+
+	if (this->recordText.getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosWindow)))
 	{
-		
+		for (auto& el : this->recordTexts)
+		{
+			target.draw(el.second);
+		}
 	}
 }
 
@@ -368,6 +473,7 @@ MainMenuState::MainMenuState(StateData* state_data) noexcept
 
 	//Init functions
 	this->initVariables   ();
+	this->initTextures    ();
 	this->initSounds      ();
 	this->initBackground  ();
 	this->initFonts       ();	   
@@ -375,6 +481,7 @@ MainMenuState::MainMenuState(StateData* state_data) noexcept
 	this->initGUI         ();
 	this->loadRecordInfo  ();
 	this->initRecrodsInfo ();
+	this->initAnimations  ();
 }
 
 MainMenuState::~MainMenuState()
@@ -390,6 +497,7 @@ void MainMenuState::updateTopState()
 
 void MainMenuState::updateGuiPosition()
 {
+	//difficulty text
 	this->difficultyText.setPosition(
 		static_cast<float>(this->window->getSize().x) - 550.f,
 		static_cast<float>(this->window->getPosition().y) + 100.f);
@@ -398,6 +506,7 @@ void MainMenuState::updateGuiPosition()
 		this->difficultyText.getPosition().x + 300.f,
 		this->difficultyText.getPosition().y);
 
+	//Buttons
 	this->buttons["DIFFICULTY_LESS"]->setPosition(
 		this->difficultyLvlText.getPosition().x - 30.f,
 		this->difficultyLvlText.getPosition().y + 50.f);
@@ -405,6 +514,21 @@ void MainMenuState::updateGuiPosition()
 	this->buttons["DIFFICULTY_MORE"]->setPosition(
 		this->difficultyLvlText.getPosition().x + 80.f,
 		this->difficultyLvlText.getPosition().y + 50.f);
+
+	//Record text
+	this->recordText.setPosition(this->difficultyText.getPosition().x, this->difficultyText.getPosition().y + 150.f);
+
+	//Positions
+	this->recordTexts["WAVES_COUNT"]. setPosition (this->recordText.getPosition().x, this->recordText.getPosition().y + 60.f);
+	this->recordTexts["KILLS"].       setPosition (this->recordText.getPosition().x, this->recordText.getPosition().y + 2 * 60.f);
+	this->recordTexts["BOSS_KILLS"].  setPosition (this->recordText.getPosition().x, this->recordText.getPosition().y + 3 * 60.f);
+	this->recordTexts["CRYSTALS"].    setPosition (this->recordText.getPosition().x, this->recordText.getPosition().y + 4 * 60.f);
+	this->recordTexts["COINS"].       setPosition (this->recordText.getPosition().x, this->recordText.getPosition().y + 5 * 60.f);
+
+
+	//Sprites positions
+	this->crystalsSprites.first.setPosition(this->recordText.getPosition().x - 70.f, this->recordText.getPosition().y);
+	this->crystalsSprites.second.setPosition(this->recordText.getPosition().x + 180.f, this->recordText.getPosition().y);
 }
 
 void MainMenuState::playMusic()
@@ -418,6 +542,7 @@ void MainMenuState::playMusic()
 void MainMenuState::update(const float& dt)
 {
 	this->updateKeyTime       (dt);
+	this->updateAnimations    (dt);
 	this->updateInput         (dt);
 	this->updateMousePosition ();
 	this->updateGUI           ();
@@ -427,7 +552,8 @@ void MainMenuState::render(sf::RenderTarget* target)
 {
 	target->draw(this->background);
 
-	this->renderGUI(*target);
+	this->renderGUI        (*target);
+	this->renderRecordInfo (*target);
 
 	//REMOVE LATER JUST DEBUG!!!
 	/*sf::Text mouseText;

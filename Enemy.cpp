@@ -66,14 +66,14 @@ void Enemy::initImpactAnimations()
 	this->critHitAnimation.addAnimation("CRIT", 0, 0, 13, 0, 128, 128, 4.f);
 
 	//Skills impact animations
-	this->skillsImpactAnimations[SkillType::BLOOD_SPIKE].addAnimation("SKILL_IMPACT", 0, 0, 14, 0, 64, 49, 5.f);
-	this->skillsImpactAnimations[SkillType::POISON_CLAW].addAnimation("SKILL_IMPACT", 0, 0, 39, 0, 96, 96, 1.f);
-	this->skillsImpactAnimations[SkillType::DARK_BOLT].addAnimation("SKILL_IMPACT", 0, 0, 7, 0, 64, 64, 9.f);
-	this->skillsImpactAnimations[SkillType::THUNDER_STRIKE].addAnimation("SKILL_IMPACT", 0, 0, 4, 0, 32, 32, 9.f);
-	this->skillsImpactAnimations[SkillType::DARK_POSION].addAnimation("SKILL_IMPACT", 0, 0, 15, 0, 140, 93, 8.f);
-	this->skillsImpactAnimations[SkillType::FIRE_EXPLOSION].addAnimation("SKILL_IMPACT", 0, 0, 3, 0, 48, 48, 9.f);
-	this->skillsImpactAnimations[SkillType::HOLY_STRIKE].addAnimation("SKILL_IMPACT", 0, 0, 27, 0, 96, 96, 4.f);
-	this->skillsImpactAnimations[SkillType::LIGHTNING_STRIKE].addAnimation("SKILL_IMPACT", 0, 0, 6, 0, 32, 32, 7.f);
+	this->skillsImpactAnimations[SkillType::BLOOD_SPIKE].      addAnimation ("SKILL_IMPACT", 0, 0, 14, 0, 64, 49, 5.f);
+	this->skillsImpactAnimations[SkillType::POISON_CLAW].      addAnimation ("SKILL_IMPACT", 0, 0, 39, 0, 96, 96, 1.f);
+	this->skillsImpactAnimations[SkillType::DARK_BOLT].        addAnimation ("SKILL_IMPACT", 0, 0, 7, 0, 64, 64, 9.f);
+	this->skillsImpactAnimations[SkillType::THUNDER_STRIKE].   addAnimation ("SKILL_IMPACT", 0, 0, 4, 0, 32, 32, 9.f);
+	this->skillsImpactAnimations[SkillType::DARK_POSION].      addAnimation ("SKILL_IMPACT", 0, 0, 15, 0, 140, 93, 8.f);
+	this->skillsImpactAnimations[SkillType::FIRE_EXPLOSION].   addAnimation ("SKILL_IMPACT", 0, 0, 3, 0, 48, 48, 9.f);
+	this->skillsImpactAnimations[SkillType::HOLY_STRIKE].      addAnimation ("SKILL_IMPACT", 0, 0, 27, 0, 96, 96, 4.f);
+	this->skillsImpactAnimations[SkillType::LIGHTNING_STRIKE]. addAnimation ("SKILL_IMPACT", 0, 0, 6, 0, 32, 32, 7.f);
 }
 
 //Init functions
@@ -132,19 +132,23 @@ void Enemy::renderPopUpText(sf::RenderTarget& target)
 
 //Constructor
 Enemy::Enemy(const int& level, const float& x, const float& y, sf::Texture& texture_sheet, Player* player, EnemySoundBox& sounds)noexcept
-	:statsComponent(level),
-	animationComponent(&this->sprite, &texture_sheet), 
-	player(player), textureSheet(&texture_sheet), soundBox(sounds),
-	popUpTextComponent(player->getFont()),
+	:
+	player             (player), 
+	textureSheet       (&texture_sheet), 
+	soundBox           (sounds),
+	statsComponent     (level),
+	animationComponent (&this->sprite, &texture_sheet), 
+	popUpTextComponent (player->getFont()),
+
 	attackCount(0), attackCountMAX(INT_MAX), attackColdown(0)
 {
 	this->playerUsingSkill = &this->player->getUsingSkilltype();
 	this->playerUsingSkillDmg = &this->player->getUsingSkilldamage();
 
-	this->initStats();
-	this->initSkillsImpactTextures();
-	this->initImpactAnimations();
-	this->initPopUpTextComponent();
+	this->initStats                ();
+	this->initSkillsImpactTextures ();
+	this->initImpactAnimations     ();
+	this->initPopUpTextComponent   ();
 }
 
 Enemy::~Enemy()
@@ -152,6 +156,21 @@ Enemy::~Enemy()
 }
 
 //Accessors
+const int& Enemy::getDamage() const
+{
+	return this->statsComponent.damagePhysical;
+}
+
+const int& Enemy::getHp() const
+{
+	return this->statsComponent.hp;
+}
+
+const int& Enemy::getLvl() const
+{
+	return this->statsComponent.level;
+}
+
 const bool& Enemy::dead()
 {
 	return this->isDead;

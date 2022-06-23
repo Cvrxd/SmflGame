@@ -10,7 +10,6 @@
 #include "MapTrapsComonent.h"
 #include "EnemiesGenarationInterface.h"
 
-
 class State;
 class PauseMenu;
 class TileMap;
@@ -20,15 +19,14 @@ class BossEnemy;
 class MeleEnemy;
 class MageEnemy;
 class DestroyingEnemy;
-class PopUpTextComponent;
 class MapTrapsComonent;
 
 struct RecordInfo
 {
 	size_t wavesCount = 0;
-	size_t kills = 0;
-	size_t bossKills = 0;
-	size_t crystals = 0;
+	size_t kills      = 0;
+	size_t bossKills  = 0;
+	size_t crystals   = 0;
 	size_t coins = 0;
 };
 
@@ -43,12 +41,14 @@ private:
 	using VolumeButtons              = std::pair<std::unique_ptr<GUI::Button>, std::unique_ptr<GUI::Button>>;
 
 	//Variables 
-	const unsigned int diffcultyLvl = 1;
-	const unsigned int trapsCount   = 15;
-	int                wavesCount   = 0;
+	const unsigned int diffcultyLvl  = 1;
+	const unsigned int trapsCount    = 15;
+	int                wavesCount    = 0;
+	size_t             totalEnemies  = 0;
 
 	bool skillMenuActive = false;
 	bool itemsMenuActive = false;
+	bool guiRenderFlag   = true;
 
 	bool bossFight       = false;
 
@@ -67,6 +67,8 @@ private:
 	sf::Font    font;
 	sf::Shader  core_shader;
 
+
+	PauseMenu   gameOverMenu;
 	PlayerGUI   playerGUI;
 	SkillsMenu  skillsMenu;
 	ItemsMune   itemsMenu;
@@ -79,7 +81,7 @@ private:
 	sf::Text      volumeText;
 
 	//Components
-	MapTrapsComonent   mapTrapsComponent;
+	MapTrapsComonent mapTrapsComponent;
 
 	//Sounds
 	EnemySoundBox            enemiesSoundBox;
@@ -113,13 +115,13 @@ private:
 	void initPauseMenu       ();
 	void initShaders         ();
 	void initPlayers         ();
-	void initEnemies         ();
 	void initPlayerGUI       ();
 	void initTileMap         ();
 	void initSounds          ();
 	void createTraps         ();
 
 	//Update functions
+	void gameOverUpdate          ();
 	void updateGameWave          ();
 	void updateVolumeGui         ();
 	void updatePauseMenuButtons  ();

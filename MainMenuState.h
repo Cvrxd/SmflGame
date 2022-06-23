@@ -12,8 +12,10 @@ class Button;
 class MainMenuState : public State
 {
 private:
-	using TextsMap    = std::unordered_map<std::string, sf::Text>;
-	using ButtonsMap  = std::unordered_map<std::string, std::unique_ptr<GUI::Button>>;
+	using TextsMap       = std::unordered_map<std::string, sf::Text>;
+	using ButtonsMap     = std::unordered_map<std::string, std::unique_ptr<GUI::Button>>;
+	using SpitesPair     = std::pair<sf::Sprite, sf::Sprite>;
+	using AnimationsPair = std::pair<AnimationComponent, AnimationComponent>;
 
 	//Main menu sounds
 	struct MainMenuSounds
@@ -37,6 +39,13 @@ private:
 
 	sf::Text            difficultyText;
 	sf::Text            difficultyLvlText;
+	sf::Text            recordText;
+
+	//Animations
+	AnimationsPair crystalsAnimations;
+	SpitesPair     crystalsSprites;
+	sf::Texture    crystalsTexture;
+	std::string    crystalsAnimationKey = "NORMAL";
 
 	//Record info
 	RecordInfo          normalRecordInfo;
@@ -45,13 +54,15 @@ private:
 
 	//GUI
 	ButtonsMap          buttons;
-	TextsMap            texts;
+	TextsMap            recordTexts;
 
 	//Sounds
 	MainMenuSounds      sounds;
 
 	//Init functions
 	void initVariables    ();
+	void initTextures     ();
+	void initAnimations   ();
 	void initSounds       ();
 	void initBackground   ();
 	void initFonts        ();
@@ -65,12 +76,13 @@ private:
 
 	//Update functions
 	void updateInput      (const float& dt)            override;
+	void updateAnimations (const float& dt);
 	void updateGUI        ();
 	void updateText       ();
-	void updateRecordInfo ();
 
-	//Eender functions
-	void renderGUI       (sf::RenderTarget& target);
+	//Render functions
+	void renderGUI        (sf::RenderTarget& target);
+	void renderRecordInfo (sf::RenderTarget& target);
 
 public:
 	MainMenuState (StateData* state_data)              noexcept;
