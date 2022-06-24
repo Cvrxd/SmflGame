@@ -141,6 +141,9 @@
     <ClCompile Include="EnemiesGenarationInterface.cpp">
       <Filter>GameStateComponents</Filter>
     </ClCompile>
+    <ClCompile Include="GameOverMenu.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -232,6 +235,9 @@
     </ClInclude>
     <ClInclude Include="EnemiesGenarationInterface.h">
       <Filter>GameStateComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOverMenu.h">
+      <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

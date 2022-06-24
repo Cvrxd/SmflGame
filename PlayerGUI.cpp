@@ -688,7 +688,7 @@ void SkillsLevelingComponent::render(sf::RenderTarget& target, sf::Vector2i& mou
 //==================================
 
 //Init functions
-inline void SkillsMenu::initBackground(const float& x, const float& y)
+inline void SkillsMenu::initBackground(const float& x, const float& y) noexcept
 {
 	//Background
 	this->background.setSize(sf::Vector2f(x / 1.5f, y / 1.7f));
@@ -717,7 +717,7 @@ inline void SkillsMenu::initBackground(const float& x, const float& y)
 	this->statIcons[7].setTextureRect(sf::IntRect(160, 32, 32, 32)); //Miss cnahce icon 
 }
 
-inline void SkillsMenu::initTexts()
+inline void SkillsMenu::initTexts() noexcept
 {
 	this->texts.resize(12);
 
@@ -765,7 +765,7 @@ inline void SkillsMenu::initTexts()
 
 }
 
-inline void SkillsMenu::initSkillIcons()
+inline void SkillsMenu::initSkillIcons() noexcept
 {
 	this->skillsIcons.resize(this->skillsSize);
 	
@@ -822,7 +822,7 @@ inline void SkillsMenu::initSkillIcons()
 	this->skillsIcons[8].second.setTexture(&this->textures["BUFF"]);
 }
 
-inline void SkillsMenu::initButtons()
+inline void SkillsMenu::initButtons() noexcept
 {
 	this->buttons["HP_UP"] = std::make_unique<GUI::Button>(this->statIcons[0].getPosition().x + 200, this->statIcons[0].getPosition().y + 28,
 		70.f, 50.f, &this->font, "+", 50);
@@ -1071,18 +1071,18 @@ void SkillsMenu::render(sf::RenderTarget& target, sf::Vector2i& mousePosWindow)
 //==================================
 
 //Init functions
-inline void ItemsMune::initVariables()
+inline void ItemsMune::initVariables() noexcept
 {
 	this->playerStats = this->player.getStatsComponent();
 }
 
-inline void ItemsMune::initTextures()
+inline void ItemsMune::initTextures() noexcept
 {
 	this->textures["ITEMS"].loadFromFile ("Textures/hud/inventory_hud/items32_simple_transparent.png");
 	this->textures["COIN"].loadFromFile  ("Textures/hud/game_hud/coin.png");
 }
 
-inline void ItemsMune::initBackground(const float& x, const float& y)
+inline void ItemsMune::initBackground(const float& x, const float& y) noexcept
 {
 	//Background
 	this->background.setSize      (sf::Vector2f(x / 1.5f, y / 1.7f + 50));
@@ -1090,7 +1090,7 @@ inline void ItemsMune::initBackground(const float& x, const float& y)
 	this->background.setPosition  (x / 2.f - this->background.getSize().x / 2.f, y / 2.f - this->background.getSize().y / 2.f);
 }
 
-inline void ItemsMune::initItemsIcons()
+inline void ItemsMune::initItemsIcons() noexcept
 {
 	//Set textures && rect
 	itemsIcons[Items::HELMET].setTexture(&this->textures["ITEMS"]);
@@ -1133,7 +1133,7 @@ inline void ItemsMune::initItemsIcons()
 	}
 }
 
-inline void ItemsMune::initTexts()
+inline void ItemsMune::initTexts() noexcept
 {
 	//Main text
 	this->mainText.first.setCharacterSize(37);
@@ -1159,7 +1159,7 @@ inline void ItemsMune::initTexts()
 	}
 }	
 
-inline void ItemsMune::initButtons()
+inline void ItemsMune::initButtons() noexcept
 {
 	for (auto& el : this->itemsIcons)
 	{
@@ -1169,7 +1169,7 @@ inline void ItemsMune::initButtons()
 	}
 }
 
-inline void ItemsMune::initAnimations()
+inline void ItemsMune::initAnimations() noexcept
 {
 	for (auto& el : this->unclockButtons)
 	{
@@ -1183,12 +1183,13 @@ inline void ItemsMune::initAnimations()
 	}
 }
 
-inline void ItemsMune::initOffsets()
+inline void ItemsMune::initOffsets() noexcept
 {
 	this->offsetX = this->mainText.second.getPosition().x - 100.f;
 	this->offsetY = this->itemsIcons.begin().operator*().second.getPosition().y;
 }
 
+//Update functions
 inline void ItemsMune::updateItemGrade(const Items& item,const sf::Color& color)
 {
 	//Color update
@@ -1493,52 +1494,3 @@ void ItemsMune::render(sf::RenderTarget& target, sf::Vector2i& mousePosWindow)
 	this->renderText    (target);
 	this->renderIcons   (target);
 }
-
-////===============================================
-////Game Over Menu=================================
-////===============================================
-//
-////Init fucntions
-//inline void GameOverMenu::initMusic()
-//{
-//}
-//
-//inline void GameOverMenu::initGui()
-//{
-//	//Bacground
-//	this->background.setSize      (static_cast<sf::Vector2f>(window.getSize()));
-//	this->background.setFillColor (sf::Color(10, 10, 10, 150));
-//}
-//
-////Constructor
-//GameOverMenu::GameOverMenu(sf::RenderWindow& window)
-//	:window(window)
-//{
-//	this->initMusic ();
-//	this->initGui   ();
-//}
-//
-//GameOverMenu::~GameOverMenu()
-//{
-//}
-//
-////Accessors
-//const bool GameOverMenu::exitButtonIsPressed() const
-//{
-//	return this->exitButton->isPressed();
-//}
-//
-////Public functions
-//void GameOverMenu::update(const float& dt, sf::Vector2i& mousePosWindow)
-//{
-//	//Exit button update
-//	this->exitButton->update(mousePosWindow);
-//}
-//
-//void GameOverMenu::render(sf::RenderTarget& target)
-//{
-//	target.draw(this->background);
-//	target.draw(this->text);
-//	
-//	this->exitButton->render(target);
-//}

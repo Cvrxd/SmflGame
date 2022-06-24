@@ -228,10 +228,10 @@ private:
 	MapUnlockButtons  unclockButtons;
 
 	//Init functions
-	void initBackground  (const float& x, const float& y);
-	void initButtons     ();
-	void initTexts       ();
-	void initSkillIcons  ();
+	void initBackground  (const float& x, const float& y) noexcept;
+	void initButtons     () noexcept;
+	void initTexts       () noexcept;
+	void initSkillIcons  () noexcept;
 
 	//Update functions
 	void updateKeyTime   (const float& dt);
@@ -261,7 +261,7 @@ public:
 	void render       (sf::RenderTarget& target, sf::Vector2i& mousePosWindow);
 
 	friend class SkillsLevelingMenu;
-	friend void PlayerGUI::initBuffSkill ();
+	friend void PlayerGUI::initBuffSkill();
 };
 
 class ItemsMune
@@ -323,14 +323,14 @@ private:
 	Maptextures     textures;
 
 	//Init functions
-	void initBackground  (const float& x, const float& y);
-	void initVariables   ();
-	void initTextures    ();
-	void initItemsIcons  ();
-	void initTexts       ();
-	void initButtons     ();
-	void initAnimations  ();
-	void initOffsets     ();
+	void initBackground  (const float& x, const float& y) noexcept;
+	void initVariables   () noexcept;
+	void initTextures    () noexcept;
+	void initItemsIcons  () noexcept;
+	void initTexts       () noexcept;
+	void initButtons     () noexcept;
+	void initAnimations  () noexcept;
+	void initOffsets     () noexcept;
 
 	//Update functions
 	void updateItemGrade   (const Items& item, const sf::Color& color);
@@ -359,33 +359,3 @@ public:
 	void update  (sf::Vector2i& mousePosWindow, const float& dt);
 	void render  (sf::RenderTarget& target, sf::Vector2i& mousePosWindow);
 };
-
-//class GameOverMenu
-//{
-//private:
-//	using ButtonPtr = std::unique_ptr<GUI::Button>;
-//
-//	//Variables
-//	sf::RenderWindow&   window;
-//
-//	sf::RectangleShape  background;
-//	sf::Text            text;
-//	sf::Music           music;
-//	ButtonPtr           exitButton;
-//
-//	//Init functions
-//	void initMusic ();
-//	void initGui   ();
-//
-//public:
-//
-//	GameOverMenu  (sf::RenderWindow& window);
-//	~GameOverMenu ();
-//
-//	//Accessors
-//	const bool exitButtonIsPressed() const;
-//
-//	//Functions
-//	void update(const float& dt, sf::Vector2i& mousePosWindow);
-//	void render(sf::RenderTarget& target);
-//};

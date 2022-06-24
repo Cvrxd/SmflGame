@@ -29,7 +29,7 @@ PauseMenu::PauseMenu(sf::RenderWindow& window, sf::Font& font) noexcept
 	this->menuText.setString("PAUSED");
 	this->menuText.setPosition(this->container.getPosition().x + 140.f, this->container.getPosition().y + 100);
 
-	//Sound init
+	//Sounds
 	this->initSounds();
 }
 

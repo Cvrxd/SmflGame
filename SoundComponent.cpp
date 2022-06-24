@@ -161,16 +161,24 @@ inline void GameStateSoundBox::initMusic()
 	{
 		throw("UNABLE TO LOAD BOSS FIGHT MUSIC");
 	}
+	//Loading music
+	if (!this->music["GAME_OVER"].openFromFile("Sounds/game_state/music/game_over.ogg"))
+	{
+		throw("UNABLE TO OPEN Sounds/game_state/music/game_over.ogg");
+	}
 
 	//Music loop
-	this->music["THEME"].setLoop      (true);
-	this->music["PAUSE"].setLoop      (true);
-	this->music["BOSS_FIGHT"].setLoop (true);
-  
+	for (auto& el : this->music)
+	{
+		el.second.setLoop(true);
+	}
+
 	//Music volume
-	this->music["THEME"].setVolume      (this->volume);
-	this->music["PAUSE"].setVolume      (this->volume);
-	this->music["BOSS_FIGHT"].setVolume (this->volume);
+	for (auto& el : this->music)
+	{
+		el.second.setVolume(this->volume);
+	}
+	this->music["GAME_OVER"].setVolume(this->volume * 2);
 }
 
 //Constructor
@@ -304,6 +312,30 @@ void GameStateSoundBox::stopBossFightMusic()
 	if (this->music["BOSS_FIGHT"].getStatus() != sf::Music::Stopped)
 	{
 		this->music["BOSS_FIGHT"].stop();
+	}
+}
+
+void GameStateSoundBox::pauseGameOverMusic()
+{
+	if (this->music["GAME_OVER"].getStatus() != sf::Music::Paused)
+	{
+		this->music["GAME_OVER"].pause();
+	}
+}
+
+void GameStateSoundBox::playGameOverMusic()
+{
+	if (this->music["GAME_OVER"].getStatus() != sf::Music::Playing)
+	{
+		this->music["GAME_OVER"].play();
+	}
+}
+
+void GameStateSoundBox::stopGameOverMusic()
+{
+	if (this->music["GAME_OVER"].getStatus() != sf::Music::Stopped)
+	{
+		this->music["GAME_OVER"].stop();
 	}
 }
 

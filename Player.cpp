@@ -297,8 +297,16 @@ inline void Player::updateAnimations(const float& dt, sf::Vector2f mouse_pos_vie
 	{
 		if (this->animationComponent.play("DEATH", dt, true))
 		{
-			this->deathAniamtion = false;
-			this->isDead = true;
+			if (this->statsComponent.hp <= 0)
+			{
+				this->isDead = true;
+				//this->deathAniamtion = false;
+			}
+			else
+			{
+				this->deathAniamtion = false;
+			}
+			
 		}
 
 	}

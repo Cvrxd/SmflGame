@@ -419,12 +419,14 @@ void SkillsComponent::updatePlayerBuff(const float& dt, const sf::Vector2f& play
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F) && this->buffTimer.getElapsedTime().asSeconds() > this->buffCooldown && this->statsComponent.mp != 0)
 	{
-		this->statsComponent.loseMP(1);
+		this->statsComponent.gainMP(this->buffLevel);
+		this->statsComponent.gainHP(this->buffLevel);
+
 		this->isBuffed = true;
 		this->usingBuff = true;
 		this->buffTimer.restart();
 
-		this->statsComponent.critRate += this->buffCritRate;
+		this->statsComponent.critRate   += this->buffCritRate;
 		this->statsComponent.missChance += this->buffMissChance;
 
 		//Sound

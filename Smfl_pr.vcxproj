@@ -156,6 +156,7 @@
     <ClCompile Include="DestroyingEnemy.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyGUI.cpp" />
+    <ClCompile Include="GameOverMenu.cpp" />
     <ClCompile Include="MapTrapsComonent.cpp" />
     <ClCompile Include="SoundComponent.cpp" />
     <ClCompile Include="GraphicsSettings.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="DestroyingEnemy.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyGUI.h" />
+    <ClInclude Include="GameOverMenu.h" />
     <ClInclude Include="MapTrapsComonent.h" />
     <ClInclude Include="SoundComponent.h" />
     <ClInclude Include="GraphicsSettings.h" />

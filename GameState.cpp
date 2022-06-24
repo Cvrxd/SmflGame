@@ -64,7 +64,6 @@ inline void GameState::initTextures()
 
 	//Mele enemies
 	this->meleEnemiesTextures[MeleEnemyType::BRINGER_OF_DEATH].loadFromFile("Textures/enemies/mele/bringer_of_death.png");
-	this->meleEnemiesTextures[MeleEnemyType::NOMAND].loadFromFile("Textures/enemies/mele/nomand.png");
 	this->meleEnemiesTextures[MeleEnemyType::MIMIC].loadFromFile("Textures/enemies/mele/mimic.png");
 	this->meleEnemiesTextures[MeleEnemyType::KNIGHT1].loadFromFile("Textures/enemies/mele/knight1.png");
 	this->meleEnemiesTextures[MeleEnemyType::HUNTRESS].loadFromFile("Textures/enemies/mele/huntress.png");
@@ -157,7 +156,10 @@ inline void GameState::gameOverUpdate()
 {
 	if (this->player.dead())
 	{
+		this->gameOverMenuActive = true;
 
+		this->pauseSounds();
+		this->gameStateSoundBox.playGameOverMusic();
 	}
 }
 
@@ -231,7 +233,7 @@ inline void GameState::updatePlayerInput(const float& dt)
 
 inline void GameState::updateInput(const float& dt)
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("CLOSE"))) && this->getKeyTime())
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("CLOSE"))) && this->getKeyTime() && !this->gameOverMenuActive)
 	{
 		this->pauseMenu.playClickSound();
 
@@ -264,6 +266,39 @@ inline void GameState::updateInput(const float& dt)
 			this->skillMenuActive = false;
 			this->itemsMenuActive = false;
 			this->guiRenderFlag   = true;
+		}
+	}
+	else if (this->gameOverMenuActive)
+	{
+		if (this->gameOverMenu.exitButtonIsPressed())
+		{
+			//Sound
+			this->pauseMenu.playClickSound();
+
+			//Update record info
+			if (this->player.getKillsCount() > this->recordInfo.kills)         //Enemies kills count
+			{
+				this->recordInfo.kills = this->player.getKillsCount();
+			}
+			if (this->player.getBossKillsCount() > this->recordInfo.bossKills) //Boss kills count
+			{
+				this->recordInfo.bossKills = this->player.getBossKillsCount();
+			}
+			if (this->wavesCount > this->recordInfo.wavesCount)                //Total waves survived
+			{
+				this->recordInfo.wavesCount = this->wavesCount;
+			}
+			if (this->player.getTotalCoins() > this->recordInfo.coins)         //Total coins earned
+			{
+				this->recordInfo.coins = this->player.getTotalCoins();
+			}
+			if (this->player.getTotalCrystals() > this->recordInfo.crystals)   //Total crystals earned
+			{
+				this->recordInfo.crystals = this->player.getTotalCrystals();
+			}
+
+			//Quit
+			this->endState();
 		}
 	}
 }
@@ -473,7 +508,7 @@ inline void GameState::generateMeleEnemies()
 
 	//Enemy lvl and amount
 	int enemyLvl = 1;
-	int enemiesAmount = this->diffcultyLvl * 3 + this->wavesCount / 5;
+	int enemiesAmount = EnemiesGenerationI<MeleEnemy>::generateAmount(this->wavesCount, this->diffcultyLvl, 2);
 
 	this->totalEnemies += enemiesAmount;
 
@@ -486,10 +521,10 @@ inline void GameState::generateMeleEnemies()
 		rndEnemyType = static_cast<MeleEnemyType>(std::rand() % (this->meleEnemiesTextures.size() - 1));
 
 		//Enemy lvl
-		enemyLvl = this->wavesCount + this->diffcultyLvl + (this->diffcultyLvl * std::rand() % 3);
+		enemyLvl = EnemiesGenerationI<MeleEnemy>::generateLvl(this->wavesCount, this->diffcultyLvl, 2);
 
 		//Enemy position
-		GENERATR_ENEMY_POSITION;
+		enemyPosition = EnemiesGenerationI<MeleEnemy>::generatePosition(this->tileMap.getMaxSizeF(), this->gridSize);
 
 		this->meleEnemiesGenerationI.generate(rndEnemyType, enemyLvl, enemyPosition.x, enemyPosition.y, this->meleEnemiesTextures[rndEnemyType], &this->player, this->enemiesSoundBox);
 	}
@@ -498,12 +533,12 @@ inline void GameState::generateMeleEnemies()
 inline void GameState::generateMageEnemies()
 {
 	//Enemy type and position
-	MageEnemyType rndEnemyType = MageEnemyType::DARK_MAGE;
+	MageEnemyType rndEnemyType = MageEnemyType::NECROMANCER;
 	sf::Vector2f  enemyPosition;
 
 	//Enemy lvl and amount
 	int enemyLvl = 1;
-	int enemiesAmount = this->diffcultyLvl * 2 + this->wavesCount / 5;
+	int enemiesAmount = EnemiesGenerationI<MageEnemy>::generateAmount(this->wavesCount, this->diffcultyLvl, 1);
 
 	this->totalEnemies += enemiesAmount;
 
@@ -516,10 +551,10 @@ inline void GameState::generateMageEnemies()
 		rndEnemyType = static_cast<MageEnemyType>(std::rand() % (this->mageEnemiesTextures.size() - 1));
 
 		//Enemy lvl
-		enemyLvl = this->wavesCount + this->diffcultyLvl + (this->diffcultyLvl * std::rand() % 3);
+		enemyLvl = EnemiesGenerationI<MageEnemy>::generateLvl(this->wavesCount, this->diffcultyLvl, 2);
 
 		//Enemy position
-		GENERATR_ENEMY_POSITION;
+		enemyPosition = EnemiesGenerationI<MageEnemy>::generatePosition(this->tileMap.getMaxSizeF(), this->gridSize);
 
 		this->mageEnemiesGenerationI.generate(rndEnemyType, enemyLvl, enemyPosition.x, enemyPosition.y, this->mageEnemiesTextures[rndEnemyType], &this->player, this->enemiesSoundBox);
 	}
@@ -533,7 +568,7 @@ inline void GameState::generateDestroyingEnemies()
 
 	//Enemy lvl and amount
 	int enemyLvl = 1;
-	int enemiesAmount = this->diffcultyLvl * 2 + this->wavesCount / 5;
+	int enemiesAmount = EnemiesGenerationI<DestroyingEnemy>::generateAmount(this->wavesCount, this->diffcultyLvl, 2);
 
 	this->totalEnemies += enemiesAmount;
 
@@ -546,10 +581,10 @@ inline void GameState::generateDestroyingEnemies()
 		rndEnemyType = static_cast<DestroyingEnemyType>(std::rand() % (this->destroyingEnemiestextures.size() - 1));
 
 		//Enemy lvl
-		enemyLvl = this->wavesCount + this->diffcultyLvl + (this->diffcultyLvl * std::rand() % 3);
+		enemyLvl = EnemiesGenerationI<MeleEnemy>::generateLvl(this->wavesCount, this->diffcultyLvl, 3);
 
 		//Enemy position
-		GENERATR_ENEMY_POSITION;
+		enemyPosition = EnemiesGenerationI<DestroyingEnemy>::generatePosition(this->tileMap.getMaxSizeF(), this->gridSize);
 
 		this->destroyingEnemiesGenerationI.generate(rndEnemyType, enemyLvl, enemyPosition.x, enemyPosition.y, this->destroyingEnemiestextures[rndEnemyType], &this->player, this->enemiesSoundBox);
 	}
@@ -576,10 +611,10 @@ inline void GameState::generateBossEnemies()
 		rndEnemyType = static_cast<BossType>(std::rand() % (this->destroyingEnemiestextures.size() - 1));
 
 		//Enemy lvl
-		enemyLvl = this->wavesCount * this->diffcultyLvl;
+		enemyLvl = EnemiesGenerationI<MeleEnemy>::generateLvl(this->wavesCount, this->diffcultyLvl, 4);
 
 		//Enemy position
-		GENERATR_ENEMY_POSITION;
+		enemyPosition = EnemiesGenerationI<BossEnemy>::generatePosition(this->tileMap.getMaxSizeF(), this->gridSize);
 
 		this->bossesGenerationI.generate(rndEnemyType, enemyLvl, enemyPosition.x, enemyPosition.y, this->bossesEnemiesTextures[rndEnemyType], &this->player, this->enemiesSoundBox);
 	}
@@ -769,6 +804,7 @@ GameState::GameState(StateData* state_data, RecordInfo& info, const unsigned int
 	mageEnemiesGenerationI       (this->mageEnemies),         //Mage enemies generation interface
 	destroyingEnemiesGenerationI (this->destroyingEnemies),   //Destroying enemies generation interface
 
+	gameOverMenu       (*state_data->window, state_data->font),                                               //Game over menu
 	pauseMenu          (*this->window, this->stateData->font),                                                //Pause menu 
 	player             (500, 500, this->textures["PLAYER_SHEET"], this->font, this->isBuffed),                //Player
 	playerGUI          (this->player, this->font, *state_data->window, this->wavesCount, this->diffcultyLvl), //Player GUI
@@ -793,7 +829,7 @@ GameState::GameState(StateData* state_data, RecordInfo& info, const unsigned int
 	this->initPlayerGUI      ();
 	this->createTraps        ();
 
-	//Test
+	//Start game
 	this->updateGameWave();
 }
 
@@ -811,10 +847,10 @@ void GameState::update(const float& dt)
 	this->updateMousePosition (&this->view);
 	this->updateKeyTime       (dt);
 	this->updateInput         (dt);
-	this->gameOverUpdate();
 
-	if (!this->paused) //Update game
+	if (!this->paused && !this->gameOverMenuActive) //Update game
 	{
+		this->gameOverUpdate           ();
 		this->updateView               (dt);
 		this->updateEnemies            (dt);
 		this->updatePlayerInput        (dt);
@@ -835,13 +871,18 @@ void GameState::update(const float& dt)
 		this->playerGUI.itemsMenuUpdate (dt);
 		this->itemsMenu.update          (this->mousePosWindow, dt);
 	}
-	else                                            //Update pause menu
+	else if(this->paused && !this->itemsMenuActive && !this->skillMenuActive)//Update pause menu
 	{
 		this->pauseMenu.update(this->mousePosWindow);
 
 		this->updatePauseMenuButtons ();
 		this->updateVolumeGui        ();
 	}
+	else if (this->gameOverMenuActive) //Update game over menu
+	{
+		this->gameOverMenu.update(dt, this->mousePosWindow);
+	}
+	
 }
 
 void GameState::render(sf::RenderTarget* target)
@@ -852,14 +893,14 @@ void GameState::render(sf::RenderTarget* target)
 
 	//Rendering
 	this->tileMap.renderGameState  (this->renderTexture, this->player.getCenter(), &this->core_shader);  //Render tile map
-	this->renderEnemies            (*target);                                                            //Render all enemies
 	this->mapTrapsComponent.render (this->renderTexture);                                                //Render traps
+	this->renderEnemies            (*target);                                                            //Render all enemies
 	this->player.render            (this->renderTexture, &this->core_shader);                            //Render player
 	this->tileMap.renderAbove      (this->renderTexture, this->player.getCenter(), &this->core_shader);  //Render tiles above entities
 	this->renderTexture.setView    (this->renderTexture.getDefaultView());                               //Seting view
 	this->playerGUI.render         (this->renderTexture, this->guiRenderFlag);                           //Render player GUI
 
-	if (this->paused && !this->skillMenuActive && !this->itemsMenuActive) //Pause menu render
+	if (this->paused && !this->skillMenuActive && !this->itemsMenuActive && !this->gameOverMenuActive) //Pause menu render
 	{
 		this->pauseMenu.render   (this->renderTexture);
 		this->renderPauseMenuGui (this->renderTexture);
@@ -871,6 +912,10 @@ void GameState::render(sf::RenderTarget* target)
 	else if (this->paused && !this->skillMenuActive && this->itemsMenuActive) //Items menu render
 	{
 		this->itemsMenu.render(this->renderTexture, this->mousePosWindow);
+	}
+	else if (this->gameOverMenuActive)
+	{
+		this->gameOverMenu.render(this->renderTexture);
 	}
 
 	//Render renderTexure

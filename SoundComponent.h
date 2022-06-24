@@ -115,18 +115,25 @@ public:
 	void increaseVolume();
 	void decreaseVolume();
 
+	//Theme music
 	void pauseThemeMusic();
 	void playThemeMusic ();
 	void stopThemeMusic ();
 
+	//Puse menu music
 	void pausePauseMenuMusic();
 	void playPauseMenuMusic ();
 	void stopPauseMenuMusic ();
 
+	//Boss fight music
 	void pauseBossFightMusic();
 	void playBossFightMusic ();
 	void stopBossFightMusic ();
 
+	//Game over music
+	void pauseGameOverMusic();
+	void playGameOverMusic();
+	void stopGameOverMusic();
 };
 
 class PlayerSoundBox

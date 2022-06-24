@@ -9,9 +9,11 @@
 #include "DestroyingEnemy.h"
 #include "MapTrapsComonent.h"
 #include "EnemiesGenarationInterface.h"
+#include "GameOverMenu.h"
 
 class State;
 class PauseMenu;
+class GameOverMenu;
 class TileMap;
 class PlayerGUI;
 class Enemy;
@@ -37,7 +39,6 @@ private:
 	using MageEnemiesTextures        = std::unordered_map<MageEnemyType, sf::Texture>;
 	using DestroyingEnemiesTextures  = std::unordered_map<DestroyingEnemyType, sf::Texture>;
 	using BossesEnemiesTextures      = std::unordered_map<BossType, sf::Texture>;
-
 	using VolumeButtons              = std::pair<std::unique_ptr<GUI::Button>, std::unique_ptr<GUI::Button>>;
 
 	//Variables 
@@ -46,16 +47,18 @@ private:
 	int                wavesCount    = 0;
 	size_t             totalEnemies  = 0;
 
-	bool skillMenuActive = false;
-	bool itemsMenuActive = false;
-	bool guiRenderFlag   = true;
+	bool gameOverMenuActive = false;
+	bool skillMenuActive    = false;
+	bool itemsMenuActive    = false;
 
-	bool bossFight       = false;
+	bool guiRenderFlag  = true;
+
+	bool bossFight      = false;
 
 	//Player buff
-	bool isBuffed        = false;
+	bool isBuffed       = false;
 
-	//record info
+	//Record info
 	RecordInfo&        recordInfo;
 
 	//Core
@@ -63,22 +66,23 @@ private:
 	sf::Sprite         renderSprite;
 	sf::Vector2i       viewGridPosition;
 
-	sf::View    view;
-	sf::Font    font;
-	sf::Shader  core_shader;
+	sf::View     view;
+	sf::Font     font;
+	sf::Shader   core_shader;
 
+	PlayerGUI    playerGUI;
+	TileMap      tileMap;
+	Player       player;
 
-	PauseMenu   gameOverMenu;
-	PlayerGUI   playerGUI;
-	SkillsMenu  skillsMenu;
-	ItemsMune   itemsMenu;
-	PauseMenu   pauseMenu;
-	TileMap     tileMap;
-	Player      player;
+	//Menu
+	GameOverMenu gameOverMenu;
+	SkillsMenu   skillsMenu;
+	ItemsMune    itemsMenu;
+	PauseMenu    pauseMenu;
 
 	//Gui
-	VolumeButtons volumeButtons;
-	sf::Text      volumeText;
+	VolumeButtons     volumeButtons;
+	sf::Text          volumeText;
 
 	//Components
 	MapTrapsComonent mapTrapsComponent;
