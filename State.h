@@ -14,6 +14,7 @@ struct StateData
 	using StatesStack      = std::stack<State*>;
 
 	//Variables
+	float*              dt;
 	float               gridSize;
 	sf::Font            font;
 	GraphicsSettings*   gfxSettings;

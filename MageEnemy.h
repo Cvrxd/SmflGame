@@ -50,7 +50,7 @@ public:
 	~MageEnemy();
 
 	//Functions
-	void update  (const float& dt, sf::Vector2f mouse_pos_view)         override;
-	void render  (sf::RenderTarget& target, sf::Shader* shader = NULL)  override;
+	void update  (const float& dt, sf::Vector2f mouse_pos_view)            override;
+	void render  (sf::RenderTarget& target, sf::Shader* shader = nullptr)  override;
 };
 

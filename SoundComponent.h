@@ -189,8 +189,9 @@ private:
 	SkillsImpactVolumeMap  skillsImpactVolumes;
 
 	//Init functions
-	void initSound   ();
-	void initVolumes ();
+	void initSound             ();
+	void initSkillImpactSounds ();
+	void initVolumes           ();
 
 public:
 	EnemySoundBox() noexcept;

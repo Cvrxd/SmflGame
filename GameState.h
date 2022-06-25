@@ -110,6 +110,12 @@ private:
 	EnemiesGenerationI<MageEnemy>        mageEnemiesGenerationI;
 	EnemiesGenerationI<DestroyingEnemy>  destroyingEnemiesGenerationI;
 
+	//Threads
+	sf::Thread magesUpdateThread;
+	sf::Thread meleEnemiesUpdateThread;
+	sf::Thread destroyingEnemiesUpdateThread;
+	sf::Thread bossesEnemiesUpdateThread;
+
 	//Init functions
 	void initRenderTextures  ();
 	void initView            ();
@@ -137,10 +143,10 @@ private:
 
 	//Enemis update
 	void updateEnemies           (const float& dt);
-	void updateDestroyingEnemis  (const float& dt);
-	void updateMeleEnemies       (const float& dt);
-	void updateBossEnemies       (const float& dt);
-	void updateMageEnemies       (const float& dt);
+	void updateDestroyingEnemis  ();
+	void updateMeleEnemies       ();
+	void updateBossEnemies       ();
+	void updateMageEnemies       ();
 
 	//Enemies generation functions
 	void generateMeleEnemies       ();

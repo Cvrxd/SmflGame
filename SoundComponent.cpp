@@ -355,35 +355,6 @@ inline void EnemySoundBox::initSound()
 	this->sounds["PLAYER_HIT"].second.setBuffer(this->sounds["PLAYER_HIT"].first);
 	this->sounds["PLAYER_HIT"].second.setVolume(5.f);
 
-	//Skills impact
-	this->skillsImpact[SkillType::DARK_BOLT].first.loadFromFile("Sounds/game_state/spell_sounds/dark_bolt.ogg");
-	this->skillsImpact[SkillType::DARK_BOLT].second.setBuffer(this->skillsImpact[SkillType::DARK_BOLT].first);
-	this->skillsImpact[SkillType::DARK_BOLT].second.setVolume(10.f);
-
-	this->skillsImpact[SkillType::HOLY_STRIKE].first.loadFromFile("Sounds/game_state/spell_sounds/holy_strile_impact.wav");
-	this->skillsImpact[SkillType::HOLY_STRIKE].second.setBuffer(this->skillsImpact[SkillType::HOLY_STRIKE].first);
-	this->skillsImpact[SkillType::HOLY_STRIKE].second.setVolume(2.f);
-
-	this->skillsImpact[SkillType::BLOOD_SPIKE].first.loadFromFile("Sounds/game_state/spell_sounds/blood_strike_impact.wav");
-	this->skillsImpact[SkillType::BLOOD_SPIKE].second.setBuffer(this->skillsImpact[SkillType::BLOOD_SPIKE].first);
-	this->skillsImpact[SkillType::BLOOD_SPIKE].second.setVolume(2.f);
-
-	this->skillsImpact[SkillType::DARK_POSION].first.loadFromFile("Sounds/game_state/spell_sounds/dark_poison_impact.wav");
-	this->skillsImpact[SkillType::DARK_POSION].second.setBuffer(this->skillsImpact[SkillType::DARK_POSION].first);
-	this->skillsImpact[SkillType::DARK_POSION].second.setVolume(2.f);
-
-	this->skillsImpact[SkillType::POISON_CLAW].first.loadFromFile("Sounds/game_state/spell_sounds/poison_claw_impact.wav");
-	this->skillsImpact[SkillType::POISON_CLAW].second.setBuffer(this->skillsImpact[SkillType::POISON_CLAW].first);
-	this->skillsImpact[SkillType::POISON_CLAW].second.setVolume(2.f);
-
-	this->skillsImpact[SkillType::THUNDER_STRIKE].first.loadFromFile("Sounds/game_state/spell_sounds/thunder_strike_impact.wav");
-	this->skillsImpact[SkillType::THUNDER_STRIKE].second.setBuffer(this->skillsImpact[SkillType::THUNDER_STRIKE].first);
-	this->skillsImpact[SkillType::THUNDER_STRIKE].second.setVolume(2.f);
-
-	this->skillsImpact[SkillType::FIRE_EXPLOSION].first.loadFromFile("Sounds/game_state/spell_sounds/fire_explosion_impact.wav");
-	this->skillsImpact[SkillType::FIRE_EXPLOSION].second.setBuffer(this->skillsImpact[SkillType::FIRE_EXPLOSION].first);
-	this->skillsImpact[SkillType::FIRE_EXPLOSION].second.setVolume(2.f);
-
 	//Bosses skill sounds
 	this->sounds["SAMURAI_SKILL"].first.loadFromFile("Sounds/game_state/enemies_sounds/samurai_skill.ogg");
 	this->sounds["SAMURAI_SKILL"].second.setBuffer(this->sounds["SAMURAI_SKILL"].first);
@@ -450,6 +421,38 @@ inline void EnemySoundBox::initSound()
 	this->sounds["DESTROY_ENEMY_SOUND"].second.setVolume(2.f);
 }
 
+inline void EnemySoundBox::initSkillImpactSounds()
+{
+	//Skills impact
+	this->skillsImpact[SkillType::DARK_BOLT].first.loadFromFile("Sounds/game_state/spell_sounds/dark_bolt.ogg");
+	this->skillsImpact[SkillType::DARK_BOLT].second.setBuffer(this->skillsImpact[SkillType::DARK_BOLT].first);
+	this->skillsImpact[SkillType::DARK_BOLT].second.setVolume(10.f);
+
+	this->skillsImpact[SkillType::HOLY_STRIKE].first.loadFromFile("Sounds/game_state/spell_sounds/holy_strile_impact.wav");
+	this->skillsImpact[SkillType::HOLY_STRIKE].second.setBuffer(this->skillsImpact[SkillType::HOLY_STRIKE].first);
+	this->skillsImpact[SkillType::HOLY_STRIKE].second.setVolume(2.f);
+
+	this->skillsImpact[SkillType::BLOOD_SPIKE].first.loadFromFile("Sounds/game_state/spell_sounds/blood_strike_impact.wav");
+	this->skillsImpact[SkillType::BLOOD_SPIKE].second.setBuffer(this->skillsImpact[SkillType::BLOOD_SPIKE].first);
+	this->skillsImpact[SkillType::BLOOD_SPIKE].second.setVolume(2.f);
+
+	this->skillsImpact[SkillType::DARK_POSION].first.loadFromFile("Sounds/game_state/spell_sounds/dark_poison_impact.wav");
+	this->skillsImpact[SkillType::DARK_POSION].second.setBuffer(this->skillsImpact[SkillType::DARK_POSION].first);
+	this->skillsImpact[SkillType::DARK_POSION].second.setVolume(2.f);
+
+	this->skillsImpact[SkillType::POISON_CLAW].first.loadFromFile("Sounds/game_state/spell_sounds/poison_claw_impact.wav");
+	this->skillsImpact[SkillType::POISON_CLAW].second.setBuffer(this->skillsImpact[SkillType::POISON_CLAW].first);
+	this->skillsImpact[SkillType::POISON_CLAW].second.setVolume(2.f);
+
+	this->skillsImpact[SkillType::THUNDER_STRIKE].first.loadFromFile("Sounds/game_state/spell_sounds/thunder_strike_impact.wav");
+	this->skillsImpact[SkillType::THUNDER_STRIKE].second.setBuffer(this->skillsImpact[SkillType::THUNDER_STRIKE].first);
+	this->skillsImpact[SkillType::THUNDER_STRIKE].second.setVolume(2.f);
+
+	this->skillsImpact[SkillType::FIRE_EXPLOSION].first.loadFromFile("Sounds/game_state/spell_sounds/fire_explosion_impact.wav");
+	this->skillsImpact[SkillType::FIRE_EXPLOSION].second.setBuffer(this->skillsImpact[SkillType::FIRE_EXPLOSION].first);
+	this->skillsImpact[SkillType::FIRE_EXPLOSION].second.setVolume(2.f);
+}
+
 inline void EnemySoundBox::initVolumes()
 {
 	//Sounds volumes
@@ -468,7 +471,12 @@ inline void EnemySoundBox::initVolumes()
 //Constructor
 EnemySoundBox::EnemySoundBox() noexcept
 {
-	this->initSound   ();
+	std::thread initThread1(&EnemySoundBox::initSkillImpactSounds, this);
+	std::thread initThread2(&EnemySoundBox::initSound, this);
+	
+	initThread1.join();
+	initThread2.join();
+
 	this->initVolumes ();
 }
 

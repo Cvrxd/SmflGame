@@ -1,10 +1,6 @@
 #include "stdafx.h" 
 #include "GameState.h"
 
-#define GENERATR_ENEMY_POSITION enemyPosition.x = static_cast<float>(std::rand() % (static_cast<int>(this->tileMap.getMaxSizeF().x + this->gridSize)) - this->gridSize);\
-								enemyPosition.y = static_cast<float>(std::rand() % (static_cast<int>(this->tileMap.getMaxSizeF().y + this->gridSize)) - this->gridSize)
-
-
 //Initialisation
 inline void GameState::initKeybinds()
 {
@@ -55,7 +51,7 @@ inline void GameState::initFonts()
 inline void GameState::initTextures()
 {
 	//Player
-	this->textures["PLAYER_SHEET"].loadFromFile("Textures/characters/player/test_sheet.png");
+	this->textures["PLAYER_SHEET"].loadFromFile("Textures/characters/player/player_sheet.png");
 
 	//Bosses
 	this->bossesEnemiesTextures[BossType::SAMURAI].loadFromFile("Textures/enemies/boses/samurai.png");
@@ -188,9 +184,22 @@ inline void GameState::updateGameWave()
 	}
 
 	//Enemies generation
-	this->generateDestroyingEnemies ();
-	this->generateMageEnemies       ();
-	this->generateMeleEnemies       ();
+	std::vector<std::thread> genataringThreads;
+	genataringThreads.reserve(3);
+
+	genataringThreads.push_back(std::thread(&GameState::generateMageEnemies, this));
+	genataringThreads.push_back(std::thread(&GameState::generateDestroyingEnemies, this));
+	genataringThreads.push_back(std::thread(&GameState::generateMeleEnemies, this));
+
+	for (auto& el : genataringThreads)
+	{
+		if (el.joinable())
+		{
+			el.join();
+		}
+	}
+
+	genataringThreads.clear();
 
 	//Player potions
 	this->player.addPotions(Potions::HEALTH);
@@ -445,56 +454,63 @@ inline void GameState::updateEnemies(const float& dt)
 		this->updateGameWave();
 	}
 
-	this->updateBossEnemies      (dt);
-	this->updateDestroyingEnemis (dt);
-	this->updateMageEnemies      (dt);
-	this->updateMeleEnemies      (dt);
+	//launch threads
+	this->bossesEnemiesUpdateThread.     launch();
+	this->meleEnemiesUpdateThread.       launch();
+	this->magesUpdateThread.             launch();
+	this->destroyingEnemiesUpdateThread. launch();
+
+	//Wait threads
+	this->bossesEnemiesUpdateThread.     wait();
+	this->meleEnemiesUpdateThread.       wait();
+	this->magesUpdateThread.             wait();
+	this->destroyingEnemiesUpdateThread. wait();
 }
 
 //Enemies update separate
-inline void GameState::updateDestroyingEnemis(const float& dt)
+inline void GameState::updateDestroyingEnemis()
 {
 	for (auto& el : this->destroyingEnemies)
 	{
 		if (!el.dead())
 		{
-			el.update(dt, this->mousPosView);
+			el.update(*this->stateData->dt, this->mousPosView);
 		}
 	}
 }
 
-inline void GameState::updateMeleEnemies(const float& dt)
+inline void GameState::updateMeleEnemies()
 {
 	for (auto& el : this->meleEnemies)
 	{
 		if (!el.dead())
 		{
-			el.update(dt, this->mousPosView);
+			el.update(*this->stateData->dt, this->mousPosView);
 		}
 	}
 }
 
-inline void GameState::updateBossEnemies(const float& dt)
+inline void GameState::updateBossEnemies()
 {
 	for (auto& el : this->bosses)
 	{
 		if (!el.dead())
 		{
-			el.update(dt, this->mousPosView);
+			el.update(*this->stateData->dt, this->mousPosView);
 		}
 	}
 }
 
-inline void GameState::updateMageEnemies(const float& dt)
+inline void GameState::updateMageEnemies()
 {
 	for (auto& el : this->mageEnemies)
 	{
 		if (!el.dead())
 		{
-			el.update(dt, this->mousPosView);
+			el.update(*this->stateData->dt, this->mousPosView);
 
 			//Update collision
-			this->tileMap.updateTilesCollision(&el, el.getGridPosition(static_cast<int>(this->gridSize)), dt);
+			this->tileMap.updateTilesCollision(&el, el.getGridPosition(static_cast<int>(this->gridSize)), *this->stateData->dt);
 		}
 	}
 }
@@ -811,8 +827,13 @@ GameState::GameState(StateData* state_data, RecordInfo& info, const unsigned int
 	tileMap            ("map/game_map.txt"),                                                                  //Tile Map
 	mapTrapsComponent  (this->player, this->diffcultyLvl, this->trapsCount),
 
-	skillsMenu         (this->player, this->playerGUI,this->font, this->guiSounBox, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // Skills menu
-	itemsMenu          (this->player, this->playerGUI, this->font, this->guiSounBox, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)) // items menu                                                //Tile map
+	skillsMenu         (this->player, this->playerGUI,this->font, this->guiSounBox, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)),  // Skills menu
+	itemsMenu          (this->player, this->playerGUI, this->font, this->guiSounBox, static_cast<float>(this->window->getSize().x), static_cast<float>(this->window->getSize().y)), // items menu
+
+	magesUpdateThread             (&GameState::updateMageEnemies, this),        //Thread for mages update
+	meleEnemiesUpdateThread       (&GameState::updateMeleEnemies, this),        //Thread for mele enemies update
+	bossesEnemiesUpdateThread     (&GameState::updateBossEnemies, this),        //Thread for bosses update
+	destroyingEnemiesUpdateThread (&GameState::updateDestroyingEnemis, this)    //Thread for destroying enemies update
 {
 	//State type
 	this->type = STATE_TYPE::GAME_STATE;
@@ -896,7 +917,6 @@ void GameState::render(sf::RenderTarget* target)
 	this->mapTrapsComponent.render (this->renderTexture);                                                //Render traps
 	this->renderEnemies            (*target);                                                            //Render all enemies
 	this->player.render            (this->renderTexture, &this->core_shader);                            //Render player
-	this->tileMap.renderAbove      (this->renderTexture, this->player.getCenter(), &this->core_shader);  //Render tiles above entities
 	this->renderTexture.setView    (this->renderTexture.getDefaultView());                               //Seting view
 	this->playerGUI.render         (this->renderTexture, this->guiRenderFlag);                           //Render player GUI
 

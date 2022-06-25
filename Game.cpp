@@ -58,6 +58,7 @@ inline void Game::initKeys()
 inline void Game::initStateData()
 {
 	//Core variables
+	this->stateData.dt             = &this->dt;
 	this->stateData.window         = this->window;
 	this->stateData.states         = &this->states;
 	this->stateData.supportedKeys  = &this->supportedKeys;

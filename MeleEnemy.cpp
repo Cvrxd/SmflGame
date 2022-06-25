@@ -274,9 +274,9 @@ inline void MeleEnemy::addAnimations()
 		this->animationComponent.addAnimation("IDLE", 0, 4, 7, 4, 150, 150, 11.f);
 		break;
 	case MeleEnemyType::MARTIAL_HERO1:
-		this->animationComponent.addAnimation("MOVE", 0, 2, 7, 2, 200, 200, 10.f);
-		this->animationComponent.addAnimation("ATTACK", 0, 0, 5, 0, 200, 200, 13.f);
-		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 3, 3, 200, 200, 14.f);
+		this->animationComponent.addAnimation("MOVE", 0, 2, 6, 2, 200, 200, 10.f);
+		this->animationComponent.addAnimation("ATTACK", 0, 0, 3, 0, 200, 200, 13.f);
+		this->animationComponent.addAnimation("TAKE_HIT", 0, 3, 2, 3, 200, 200, 14.f);
 		this->animationComponent.addAnimation("DEATH", 0, 1, 5, 1, 200, 200, 15.f);
 		this->animationComponent.addAnimation("IDLE", 0, 4, 3, 4, 200, 200, 15.f);
 		break;

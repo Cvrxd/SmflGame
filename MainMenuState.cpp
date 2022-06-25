@@ -466,7 +466,8 @@ inline void MainMenuState::renderGUI(sf::RenderTarget& target)
 
 //Constructor
 MainMenuState::MainMenuState(StateData* state_data) noexcept
-	: State(state_data)
+	: State(state_data),
+	updateGuiThread(&MainMenuState::updateGUI, this)
 {
 	//State type
 	this->type = STATE_TYPE::MAIN_MENU_STATE;
@@ -541,11 +542,12 @@ void MainMenuState::playMusic()
 
 void MainMenuState::update(const float& dt)
 {
+	this->updateGuiThread.launch();
+
 	this->updateKeyTime       (dt);
 	this->updateAnimations    (dt);
 	this->updateInput         (dt);
 	this->updateMousePosition ();
-	this->updateGUI           ();
 }
 
 void MainMenuState::render(sf::RenderTarget* target)

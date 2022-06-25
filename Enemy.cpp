@@ -149,6 +149,7 @@ Enemy::Enemy(const int& level, const float& x, const float& y, sf::Texture& text
 	this->initSkillsImpactTextures ();
 	this->initImpactAnimations     ();
 	this->initPopUpTextComponent   ();
+
 }
 
 Enemy::~Enemy()

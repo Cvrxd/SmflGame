@@ -59,6 +59,9 @@ private:
 	//Sounds
 	MainMenuSounds      sounds;
 
+	//Threads
+	sf::Thread updateGuiThread;
+
 	//Init functions
 	void initVariables    ();
 	void initTextures     ();
