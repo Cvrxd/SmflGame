@@ -11,7 +11,7 @@ enum class STATE_TYPE {GAME_STATE = 0, SETTINGS_STATE, EDITOR_STATE, MAIN_MENU_S
 struct StateData
 {
 	using SupportedKeysMap = std::unordered_map<std::string, int>;
-	using StatesStack      = std::stack<State*>;
+	using StatesStack      = std::stack<std::unique_ptr<State>>;
 
 	//Variables
 	float*              dt;
@@ -26,7 +26,7 @@ struct StateData
 class State
 {
 protected:
-	using StatesStack   = std::stack<State*>;
+	using StatesStack   = std::stack<std::unique_ptr<State>>;
 	using KeysMap       = std::unordered_map<std::string, int>;
 	using TexturesMap   = std::unordered_map<std::string, sf::Texture>;
 

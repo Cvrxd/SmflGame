@@ -168,6 +168,7 @@ inline void MainMenuState::initRecrodsInfo()
 	}
 }
 
+//Loading functions
 inline void MainMenuState::loadRecordInfo()
 {
 	std::ifstream ifile("Saves/Records/normal_record.txt");
@@ -310,16 +311,16 @@ inline void MainMenuState::updateGUI()
 		switch (this->difficultyLvl)
 		{
 		case 1:
-			this->states->push(new GameState(this->stateData, this->normalRecordInfo, this->difficultyLvl));
+			this->states->push(std::make_unique<GameState>(this->stateData, this->normalRecordInfo, this->difficultyLvl));
 			break;
 		case 2:
-			this->states->push(new GameState(this->stateData, this->hardRecordInfo, this->difficultyLvl));
+			this->states->push(std::make_unique<GameState>(this->stateData, this->hardRecordInfo, this->difficultyLvl));
 			break;
 		case 3:
-			this->states->push(new GameState(this->stateData, this->insaneRecordInfo, this->difficultyLvl));
+			this->states->push(std::make_unique<GameState>(this->stateData, this->insaneRecordInfo, this->difficultyLvl));
 			break;
 		default:
-			this->states->push(new GameState(this->stateData, this->normalRecordInfo, this->difficultyLvl));
+			this->states->push(std::make_unique<GameState>(this->stateData, this->normalRecordInfo, this->difficultyLvl));
 			break;
 		}
 
@@ -331,7 +332,7 @@ inline void MainMenuState::updateGUI()
 	{
 		this->sounds.clickSound.second.play();
 
-		this->states->push(new SettingsState(this->stateData));
+		this->states->push(std::make_unique<SettingsState>(this->stateData));
 	}
 
 	//Editor
@@ -339,7 +340,7 @@ inline void MainMenuState::updateGUI()
 	{
 		this->sounds.clickSound.second.play();
 
-		this->states->push(new EditorState(this->stateData));
+		this->states->push(std::make_unique<EditorState>(this->stateData));
 	}
 
 	//Quit game
@@ -542,7 +543,7 @@ void MainMenuState::playMusic()
 
 void MainMenuState::update(const float& dt)
 {
-	this->updateGuiThread.launch();
+	this->updateGuiThread.launch(); //Launch update gui thread
 
 	this->updateKeyTime       (dt);
 	this->updateAnimations    (dt);
@@ -556,13 +557,4 @@ void MainMenuState::render(sf::RenderTarget* target)
 
 	this->renderGUI        (*target);
 	this->renderRecordInfo (*target);
-
-	//REMOVE LATER JUST DEBUG!!!
-	/*sf::Text mouseText;
-	mouseText.setPosition(this->mousPosView.x, this->mousPosView.y - 20);
-	mouseText.setFont(this->font);
-	mouseText.setCharacterSize(12);
-	mouseText.setString(std::to_string(this->mousPosView.x) + " " + std::to_string(this->mousPosView.y));
-
-	target->draw(mouseText);*/
 }

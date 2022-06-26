@@ -36,6 +36,10 @@ private:
 	MapButtons          buttons;
 	TileMap             tileMap;
 
+	//Threads
+	sf::Thread viewUpdateThread;
+	sf::Thread guiUpdateThread;
+
 	//Init functions
 	void initVariables   ();
 	void initView        ();

@@ -637,7 +637,37 @@ inline void GameState::generateBossEnemies()
 }
 
 //Render functions
-inline void GameState::renderEnemies(sf::RenderTarget& target)
+inline void GameState::renderEnemies()
+{
+	this->renderBossEnemies      ();
+	this->renderDestroyingEnemis ();
+	this->renderMageEnemies      ();
+	this->renderMeleEnemies      ();
+}
+
+inline void GameState::renderDestroyingEnemis()
+{
+	for (auto& el : this->destroyingEnemies)
+	{
+		if (!el.dead())
+		{
+			el.render(this->renderTexture, &this->core_shader);
+		}
+	}
+}
+
+inline void GameState::renderMeleEnemies()
+{
+	for (auto& el : this->meleEnemies)
+	{
+		if (!el.dead())
+		{
+			el.render(this->renderTexture, &this->core_shader);
+		}
+	}
+}
+
+inline void GameState::renderBossEnemies()
 {
 	for (auto& el : this->bosses)
 	{
@@ -646,21 +676,11 @@ inline void GameState::renderEnemies(sf::RenderTarget& target)
 			el.render(this->renderTexture, &this->core_shader);
 		}
 	}
-	for (auto& el : this->meleEnemies)
-	{
-		if (!el.dead())
-		{
-			el.render(this->renderTexture, &this->core_shader);
-		}
-	}
+}
+
+inline void GameState::renderMageEnemies()
+{
 	for (auto& el : this->mageEnemies)
-	{
-		if (!el.dead())
-		{
-			el.render(this->renderTexture, &this->core_shader);
-		}
-	}
-	for (auto& el : this->destroyingEnemies)
 	{
 		if (!el.dead())
 		{
@@ -839,16 +859,19 @@ GameState::GameState(StateData* state_data, RecordInfo& info, const unsigned int
 	this->type = STATE_TYPE::GAME_STATE;
 
 	//Init functions
+	std::thread initThread(&GameState::initTextures, this); //Thread for loading textures
+
 	this->initRenderTextures ();
 	this->initView           ();
 	this->initFonts          ();
 	this->initKeybinds       ();
-	this->initTextures       ();
 	this->initPauseMenu      ();
 	this->initSounds         ();
 	this->initShaders        ();
 	this->initPlayerGUI      ();
 	this->createTraps        ();
+
+	initThread.join();
 
 	//Start game
 	this->updateGameWave();
@@ -915,8 +938,10 @@ void GameState::render(sf::RenderTarget* target)
 	//Rendering
 	this->tileMap.renderGameState  (this->renderTexture, this->player.getCenter(), &this->core_shader);  //Render tile map
 	this->mapTrapsComponent.render (this->renderTexture);                                                //Render traps
-	this->renderEnemies            (*target);                                                            //Render all enemies
+
+	this->renderEnemies            ();                                                                   //Render all enemies
 	this->player.render            (this->renderTexture, &this->core_shader);                            //Render player
+
 	this->renderTexture.setView    (this->renderTexture.getDefaultView());                               //Seting view
 	this->playerGUI.render         (this->renderTexture, this->guiRenderFlag);                           //Render player GUI
 

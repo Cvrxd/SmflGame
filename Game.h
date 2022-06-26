@@ -7,7 +7,7 @@ class Game
 {
 private:
 	using KeyBindsMap   = std::unordered_map<std::string, int>;
-	using StatesStack   = std::stack<State*>;
+	using StatesStack   = std::stack<std::unique_ptr<State>>;
 
 	//Vriables
 	float               dt;
@@ -20,7 +20,7 @@ private:
 
 	sf::Clock           dtClock;
 	sf::Event           sfEvent;
-	sf::RenderWindow*   window = nullptr;
+	sf::RenderWindow*   window;
 
 	//Init functions
 	void initVariables         ();

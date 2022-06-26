@@ -156,7 +156,16 @@ private:
 
 	//Render functions
 	void renderPauseMenuGui (sf::RenderTarget& target);
-	void renderEnemies      (sf::RenderTarget& target);
+	
+	//Render enemies
+	void renderEnemies          ();
+
+	//Separete render
+	void renderDestroyingEnemis ();
+	void renderMeleEnemies      ();
+	void renderBossEnemies      ();
+	void renderMageEnemies      ();
+
 
 	//Sounds functions
 	void pauseSounds    ();

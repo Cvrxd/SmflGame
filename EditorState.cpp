@@ -128,8 +128,6 @@ inline void EditorState::updateInput(const float& dt)
 	{
 		this->textureSelector->pressButton();
 	}
-
-	
 }
 
 inline void EditorState::updateEditorInput(const float& dt)
@@ -255,10 +253,13 @@ inline void EditorState::renderGUI(sf::RenderTarget& target)
 	}
 
 	target.setView(this->window->getDefaultView());
+
 	this->textureSelector->render(target);
+
 	target.draw(this->sidebar);
 
 	target.setView(this->view);
+
 	target.draw(this->cursorText);
 }
 
@@ -267,8 +268,11 @@ EditorState::EditorState(StateData* state_data) noexcept
 	: 
 	State(state_data),
 
-	tileMap(this->stateData->gridSize, 50, 50, "Textures/tiles/tileset.jpg"), //Tilemap
-	pauseMenu(*this->stateData->window, this->stateData->font)                 //Pause menu
+	tileMap(this->stateData->gridSize, 50, 50, "Textures/tiles/tileset.jpg"),     //Tilemap
+	pauseMenu(*this->stateData->window, this->stateData->font),                   //Pause menu
+
+	viewUpdateThread (std::bind(&EditorState::updateView, this, *stateData->dt)), //Thread for updating view
+	guiUpdateThread  (std::bind(&EditorState::updateGUI, this, *stateData->dt))   //Thread for updating gui
 {
 	//State type
 	this->type = STATE_TYPE::EDITOR_STATE;
@@ -302,8 +306,9 @@ void EditorState::update(const float& dt)
 
 	if (!this->paused)  //Unpaused
 	{
-		this->updateView        (dt);
-		this->updateGUI         (dt);
+		this->viewUpdateThread.launch (); //Updating view thread
+		this->guiUpdateThread.launch  (); //Updating gui thread
+
 		this->updateButtons     ();
 		this->updateEditorInput (dt);
 	}

@@ -4,7 +4,7 @@
 //Itialisation
 inline void Game::initVariables()
 {
-	this->window    = NULL;
+	this->window    = nullptr;
 	this->dt        = 0.f;
 	this->gridSize  = 64.f;
 }
@@ -47,12 +47,6 @@ inline void Game::initKeys()
 	}
 
 	ifs.close();
-	 
-	//Debug
-	/*for (auto& el : this->supportedKeys)
-	{
-		std::cout << el.first << " " << el.second <<"\n";
-	}*/
 }
 
 inline void Game::initStateData()
@@ -74,7 +68,7 @@ inline void Game::initStateData()
 
 inline void Game::initStates()
 {
-	this->states.push(new MainMenuState(&this->stateData));
+	this->states.push(std::make_unique<MainMenuState>(&this->stateData));
 }
 
 //Update functions
@@ -110,7 +104,6 @@ inline void Game::update()
 			{
 				//Deliting top state
 				this->states.top()->endState();
-				delete this->states.top();
 				this->states.pop();
 				
 				//Update new top state after deleting previous top state
@@ -166,7 +159,7 @@ Game::~Game()
 
 	while (!this->states.empty())
 	{
-		delete this->states.top();
+
 		states.pop();
 	}
 }

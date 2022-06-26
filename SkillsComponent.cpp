@@ -244,14 +244,18 @@ SkillsComponent::SkillsComponent(StatsComponent& statsComponent, const sf::Font&
 	statsComponent(statsComponent),
 	popUpTextComponent(font),
 
-	currentRender(-1), playAnimation(false), usingPotion(false), usingBuff(false), isBuffed(isBuffed), castingSpell(castingSpell),
-	keyTime(0.f), keyTimeMax(15.f), potionKeyTime(0.f), potionKeyTimeMax(5.f), buffDuration(5.f), buffCooldown(15.f),
+	currentRender(-1), playAnimation(false), usingPotion(false), usingBuff(false),      isBuffed(isBuffed), castingSpell(castingSpell),
+	keyTime(0.f),      keyTimeMax(15.f),     potionKeyTime(0.f), potionKeyTimeMax(5.f), buffDuration(5.f),  buffCooldown(15.f),
 	skillsSize(8), usingSkill(isUsingSkill), currentSkillType(currentSkillType), currentSkillDamage(currentSkillDamage)
 {
-	this->initSounds        ();
-	this->initAllSkills     ();
-	this->initAllAnimations ();
-	this->initPopUpText     ();
+	std::thread initSoundsThread     (&SkillsComponent::initAllAnimations, this);  //Thrad for loading textures and initing animations
+	std::thread initAnimationsThread (&SkillsComponent::initSounds, this);         //Thread for loading sounds
+
+	this->initAllSkills();
+	this->initPopUpText();
+
+	initSoundsThread.join();
+	initAnimationsThread.join();
 }
 
 SkillsComponent::~SkillsComponent()

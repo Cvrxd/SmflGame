@@ -3,9 +3,14 @@
 
 //Initialisation functions
 State::State(StateData* state_data) noexcept
-	: stateData(state_data), window(state_data->window), supportedKeys(state_data->supportedKeys), 
-	states(state_data->states), gridSize(state_data->gridSize),
-	  quit(false), paused(false), keyTime(0.f), keyTimeMax(10.f)
+	: 
+	stateData     (state_data), 
+	window        (state_data->window), 
+	supportedKeys (state_data->supportedKeys), 
+	states        (state_data->states), 
+	gridSize      (state_data->gridSize),
+
+	quit(false), paused(false), keyTime(0.f), keyTimeMax(10.f)
 {
 
 }
