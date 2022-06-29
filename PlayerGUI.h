@@ -78,6 +78,7 @@ private:
 	//Render functions
 	void renderQuickSlotBars (sf::RenderTarget& target);
 	void renderInfoText      (sf::RenderTarget& target);
+	void renderStatBars      (sf::RenderTarget& target);
 
 public:
 	//Constructor

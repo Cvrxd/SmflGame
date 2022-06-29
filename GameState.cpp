@@ -232,12 +232,12 @@ inline void GameState::updatePlayerInput(const float& dt)
 	}
 
 	//For Testing
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
+	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
 	{
 		this->player.gainEXP      (1);
 		this->player.gainCoins    (1);
 		this->player.gainCrystals (1);
-	}
+	}*/
 }
 
 inline void GameState::updateInput(const float& dt)
@@ -841,7 +841,7 @@ GameState::GameState(StateData* state_data, RecordInfo& info, const unsigned int
 	destroyingEnemiesGenerationI (this->destroyingEnemies),   //Destroying enemies generation interface
 
 	gameOverMenu       (*state_data->window, state_data->font),                                               //Game over menu
-	pauseMenu          (*this->window, this->stateData->font),                                                //Pause menu 
+	pauseMenu          (*state_data->window, state_data->font),                                               //Pause menu 
 	player             (500, 500, this->textures["PLAYER_SHEET"], this->font, this->isBuffed),                //Player
 	playerGUI          (this->player, this->font, *state_data->window, this->wavesCount, this->diffcultyLvl), //Player GUI
 	tileMap            ("map/game_map.txt"),                                                                  //Tile Map
@@ -859,7 +859,7 @@ GameState::GameState(StateData* state_data, RecordInfo& info, const unsigned int
 	this->type = STATE_TYPE::GAME_STATE;
 
 	//Init functions
-	std::thread initThread(&GameState::initTextures, this); //Thread for loading textures
+	std::thread initTexturesThread(&GameState::initTextures, this); //Thread for loading textures
 
 	this->initRenderTextures ();
 	this->initView           ();
@@ -871,7 +871,7 @@ GameState::GameState(StateData* state_data, RecordInfo& info, const unsigned int
 	this->initPlayerGUI      ();
 	this->createTraps        ();
 
-	initThread.join();
+	initTexturesThread.join();
 
 	//Start game
 	this->updateGameWave();

@@ -313,6 +313,28 @@ inline void PlayerGUI::renderInfoText(sf::RenderTarget& target)
 	target.draw(this->infoText);
 }
 
+inline void PlayerGUI::renderStatBars(sf::RenderTarget& target)
+{
+	//Rendering stat bars
+	if (this->statsComponent.hp > 0)
+	{
+		target.draw(this->bars[0].second);
+	}
+	if (this->statsComponent.mp > 0)
+	{
+		target.draw(this->bars[1].second);
+	}
+	if (this->statsComponent.armor > 0)
+	{
+		target.draw(this->bars[2].second);
+	}
+
+	//Bars borders render
+	target.draw(this->bars[0].first);
+	target.draw(this->bars[1].first);
+	target.draw(this->bars[2].first);
+}
+
 //Constructor
 PlayerGUI::PlayerGUI(Player& player, sf::Font& font, sf::RenderWindow& window, const int& wavesCount, const unsigned int& difficulty) noexcept
 	:
@@ -419,18 +441,12 @@ void PlayerGUI::update(const float& dt)
 void PlayerGUI::render(sf::RenderTarget& target, const bool& showInfoText)
 {
 	this->renderQuickSlotBars (target);
+	this->renderStatBars      (target);
 
 	//Render sprites
 	for (auto& el : this->sprites)
 	{
 		target.draw(el.second);
-	}
-
-	//Render bars
-	for (auto& el : this->bars)
-	{
-		target.draw(el.second);
-		target.draw(el.first);
 	}
 
 	//Render icons
@@ -631,9 +647,6 @@ inline void SkillsLevelingComponent::upgradeSkill(const SkillType& type)
 
 		//Updating text for next level
 		this->updateTexts();
-
-		//Sound
-		this->playSound("UPGRADE_SKILL");
 	}
 }
 
@@ -657,9 +670,9 @@ SkillsLevelingComponent::~SkillsLevelingComponent()
 //Public functions
 void SkillsLevelingComponent::update(sf::Vector2i& mousePosWindow, const float& dt)
 {
-	this->updateKeyTime(dt);
-	this->updateButtons(mousePosWindow, dt);
-	this->updateAnimations(dt);
+	this->updateKeyTime    (dt);
+	this->updateButtons    (mousePosWindow, dt);
+	this->updateAnimations (dt);
 }
 
 void SkillsLevelingComponent::render(sf::RenderTarget& target, sf::Vector2i& mousePosWindow)

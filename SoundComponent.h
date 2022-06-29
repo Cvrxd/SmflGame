@@ -15,11 +15,6 @@ struct GuiSoundsBox
 
 	GuiSoundsBox()
 	{
-		this->volumes["UPGRADE_SKILL"] = 2.f;
-		this->sounds["UPGRADE_SKILL"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/spell_upgrade.wav");
-		this->sounds["UPGRADE_SKILL"].second.setBuffer(this->sounds["UPGRADE_SKILL"].first);
-		this->sounds["UPGRADE_SKILL"].second.setVolume(this->volumes["UPGRADE_SKILL"]);
-
 		this->volumes["UNLOCK_SKILL"] = 2.f;
 		this->sounds["UNLOCK_SKILL"].first.loadFromFile("Sounds/game_state/skills_menu_sounds/spell_unlock.wav");
 		this->sounds["UNLOCK_SKILL"].second.setBuffer(this->sounds["UNLOCK_SKILL"].first);
