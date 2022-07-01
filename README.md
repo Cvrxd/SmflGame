@@ -21,6 +21,16 @@ LIGHT - tile is affected by light shader
 # Game State
 Game time is no limited, game ends only if player dies mean player has 0 hp. If 0 enemies is alive next game wave starts with generating new enemies. Each 5th wave includes Boos Fight.
 
+# Movement Component
+
+# Hitbox Component
+
+# Sound Components
+
+# Animation Component
+
+# Shaders
+
 # Enemies
 Each enemy has unique hitbox parameters, speed, cooldown between attacks and attacking range. Each enemy has resistances
 Almost all enemies have unique sounds with cooldown on it
@@ -35,8 +45,23 @@ Mage Enemy: AI is based on player position. If player intersects mage inner rang
 
 Destroying Enemy: has simple following AI like Mele Enemies. After intersection with player hit range, exploads and deals damage to area.
 
+# Enemies Genetarion Interface
+
 # Player
 
+# Skills Componet
+
+# Tile Map
+
+# Tile Traps
+
+# GUI
+
+# Technologies
+C++ 17, SFML, Multithreading sfml/std, GLSL
+
+# Instalation
+Instalation.exe and screeshots is available on my itch.io page. Link: sculptor.itch.io/dungeon-arena
 
 
 
