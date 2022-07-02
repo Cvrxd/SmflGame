@@ -105,7 +105,7 @@ GUI element provides ability to unlock and upgrade player items. Has info of ite
 C++ 17, SFML, Multithreading sfml/std, GLSL
 
 # Instalation
-Instalation.exe and screeshots is available on my itch.io page. Link: sculptor.itch.io/dungeon-arena
+Instalation.exe and screeshots is available on my itch.io page. Link: sculptor.itch.io/dungeon-arena or in repository website section.
 
 
 
