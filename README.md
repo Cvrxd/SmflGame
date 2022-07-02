@@ -39,40 +39,67 @@ Animations is based on sf::Texture, sf::Sprite, sf::FloatRect, animations is pla
 VertexShader and FragmentShader. Simple shaders using GLSL.
 
 # Enemies
-Each enemy has unique hitbox parameters, speed, cooldown between attacks and attacking range. Each enemy has resistances
-Almost all enemies have unique sounds with cooldown on it.
+Enemy class inherited from base class Entity. Each enemy has unique hitbox parameters, speed, cooldown between attacks and attacking range. Each enemy has resistances
+Almost all enemies have unique sounds with cooldown on it. StatsComponents has base stats parameters(Hp, Damage, Lvl).
 
-Components: MovementComponent, HitboxComponent, AnimationCompopnent, StatsComponen.
+Components: MovementComponent, HitboxComponent, AnimationCompopnent, StatsComponent, PopUptextComponent(for pop up text).
+
+PopUpTexts: MISS, IMMUNE(for resistance), CRIT(for player crit).
 
 Enemy Resistances: resistance to particular player skill, magick resistance, physical resistance.
 
-Mele Enemy: has simple following AI to chase player until intersection with attack range, unique attack cooldown with speed.
+Mele Enemy: Inherited from base class Enemy. Has simple following AI to chase player until intersection with attack range, unique attack cooldown with speed.
 
-Boss Enemy: has simple following AI like Mele Enemies, unique skill with animation, sound and cooldown.
+Boss Enemy: Inherited from base class Enemy. Has simple following AI like Mele Enemies, unique skill with animation, sound and cooldown.
 
-Mage Enemy: AI is based on player position. If player intersects mage inner range, enemy starts running to increase distance. If player does not intersects inner range and intersects attack range, mage attacks. If player is too far from mage, enemy chase him.
+Mage Enemy: Inherited from base class Enemy. AI is based on player position. If player intersects mage inner range, enemy starts running to increase distance. If player does not intersects inner range and intersects attack range, mage attacks. If player is too far from mage, enemy chase him.
 
-Destroying Enemy: has simple following AI like Mele Enemies. After intersection with player hit range, exploads and deals damage to area.
+Destroying Enemy: Inherited from base class Enemy. Has simple following AI like Mele Enemies. After intersection with player hit range, exploads and deals damage to area.
 
 # Enemies Genetarion Interface
 If no enemies alive, new wave starts. Enemies generation is working in different threads to increase perfomance of this action. Generation is based on current wave count, difficulty and random value. 
 
 # Player
-Player
+Components: MovementComponent, HitboxComponent, AnimationCompopnent, StatsComponent, SkillsComponent.
+
+Player class inherited from base class Entity. Controls and keybinds for player is in Configs/gamestate_keybinds.ini. StatsComponents has base stats parameters(Hp, Mp, Armor, exp, lvl, critRate, missChance, physicalDamage, magickalDamage, crystals, coins). Player SoundBox contains playerSounds(walking, running).
 
 # Stats Component
+Sctruct that contains base stat parameters for Entity: Hp, HpMax, Mp, MpMax, Armor, ArmorMax, exp, expNext, lvl, critRate, missChance, physicalDamage, magickalDamage, coins, crysrals.
+Functions: loseHp(value), gainHp(value), loseArmor(value), gainArmor(value), loseMp(value), gainMp(value), gainExp(value), loseExp(value), gainCrystals(value), loseCrystals(value), gainCoins(value), loseCoins(value). For player also has additional info about stats gained from items.
 
 # Skills Componet
+Components: PopUptextComponent, AnimationComponent(for each skill), SoundBox(sounds for each skill)
 
-# Items Component
+Has info of all available skills and player skills/lvls. Maintain skills and potions cooldown, effects, aniamtions.
 
 # Tile Map
+Contains vector<vector<Tile>> for tile map. Each tile has position based on sf::Vector2f(positon on window).
 
-# Collision
+Funtions: updateColiision(looking for tiles with collision parameter in certain area around enity, updating collision with this tiles if needed), update(), render(rendering tiles wich position is on screen).
 
-# Tile Traps
+# Tile Traps Component
+Component for GameState. Each trap has AniamtionComponent based on TrapType. Update intersection with player hitbox afted trap animations is done.
 
 # GUI
+Button class, DropDownList(for SettingsState), TextureSelector(for EditorState).
+
+PauseMenu(GameState, EditorState), GameOverMenu(GameState).
+
+# Enemy GUI
+Has EnemyHealtBar, EnemyLvlIcon. 
+
+# Player GUI
+Gemeral player GUI. Player stats bars, skill slots, lvl icon, record info, crystals, coins info.
+
+# SkillsMenu
+GUI element provides ability to unlock skills, and updagrade player stats. Has info of player current stats. 
+
+# SkillsLevelingComponent
+GUI element provides ability to upgrade player skills. Has skills lvl/damage info.
+
+# ItemsMenu
+GUI element provides ability to unlock and upgrade player items. Has info of items stats and lvls.
 
 # Technologies
 C++ 17, SFML, Multithreading sfml/std, GLSL
