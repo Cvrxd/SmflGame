@@ -22,18 +22,27 @@ LIGHT - tile is affected by light shader
 Game time is no limited, game ends only if player dies mean player has 0 hp. If 0 enemies is alive next game wave starts with generating new enemies. Each 5th wave includes Boos Fight.
 
 # Movement Component
+Entities movement is based on velocity, acceleration values and Sfml Sprite position. Position is entity sprite coordinates(Vector2f) on sfml Window (sf::RenderWindow).
 
 # Hitbox Component
+Entities hinbox is based on Sfmlf RectangleShape and entity position on sfml Window (sf::RenderWindow).
 
-# Sound Components
+# Sound Boxes
+Each sound component contains volume functions(deacreaseVolume, increaseVolume, setVolume), and sounds function(playSounds, stopSounds, pauseSounds, playSound(key)).
+
+Sounds Boxes: GuiSoundsBox(all GUI sounds), GameStateSoundBox(all GameState sounds, theme music), PlayerSoundBox(all player sounds, walking, running), EnemySoundBox(enemies sounds, player hit, player crit, player skills impact sounds), SkillsComponentSounds(all player skills sounds, potions sounds).
 
 # Animation Component
+Animations is based on sf::Texture, sf::Sprite, sf::FloatRect, animations is playing in for loop until finishes or interupts with other animation with priority. Animation with priority can not be canceled until is done.
 
 # Shaders
+VertexShader and FragmentShader. Simple shaders using GLSL.
 
 # Enemies
 Each enemy has unique hitbox parameters, speed, cooldown between attacks and attacking range. Each enemy has resistances
-Almost all enemies have unique sounds with cooldown on it
+Almost all enemies have unique sounds with cooldown on it.
+
+Components: MovementComponent, HitboxComponent, AnimationCompopnent, StatsComponen.
 
 Enemy Resistances: resistance to particular player skill, magick resistance, physical resistance.
 
@@ -46,12 +55,20 @@ Mage Enemy: AI is based on player position. If player intersects mage inner rang
 Destroying Enemy: has simple following AI like Mele Enemies. After intersection with player hit range, exploads and deals damage to area.
 
 # Enemies Genetarion Interface
+If no enemies alive, new wave starts. Enemies generation is working in different threads to increase perfomance of this action. Generation is based on current wave count, difficulty and random value. 
 
 # Player
+Player
+
+# Stats Component
 
 # Skills Componet
 
+# Items Component
+
 # Tile Map
+
+# Collision
 
 # Tile Traps
 
