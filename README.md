@@ -1,7 +1,9 @@
 # SmflGame
 
 # About
-This is top down 2D game made with sfml, c++ and GLSL shaders
+This is top down 2D game made with sfml, c++ and GLSL shaders.
+
+Short description of main game components:
 
 # Main Menu State
 In main menu three game difficulties is avaiable including saved records for each of them, Editor State, Settings State
