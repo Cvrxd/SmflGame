@@ -17,7 +17,9 @@ Map editor contains Texture selector for tile placing and tile deliting. Tile ca
 Tyle types: DEFAULT, ABOVE, DAMAGING, LIGHT
 
 ABOVE - tile renders above entities
+
 DAMAGING - tile deals damage to entities
+
 LIGHT - tile is affected by light shader
 
 # Game State
