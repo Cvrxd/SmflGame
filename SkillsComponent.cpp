@@ -7,7 +7,7 @@
 										     this->skillsEndingSprite.first.setPosition(skill_position.x - 100, skill_position.y - 150);\
 											 this->damageArea.setPosition(skill_position.x - 300, skill_position.y - 300)
 
-#define SKILLS_SOUNDS_VOLUME_MODIFIER 10.f
+
 
 //Init fuctions
 inline void SkillsComponent::initSounds()
@@ -246,6 +246,7 @@ SkillsComponent::SkillsComponent(StatsComponent& statsComponent, const sf::Font&
 
 	currentRender(-1), playAnimation(false), usingPotion(false), usingBuff(false),      isBuffed(isBuffed), castingSpell(castingSpell),
 	keyTime(0.f),      keyTimeMax(15.f),     potionKeyTime(0.f), potionKeyTimeMax(5.f), buffDuration(5.f),  buffCooldown(15.f),
+
 	skillsSize(8), usingSkill(isUsingSkill), currentSkillType(currentSkillType), currentSkillDamage(currentSkillDamage)
 {
 	std::thread initSoundsThread     (&SkillsComponent::initAllAnimations, this);  //Thrad for loading textures and initing animations

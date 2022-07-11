@@ -11,6 +11,8 @@
 #include "EnemiesGenarationInterface.h"
 #include "GameOverMenu.h"
 
+#define BOSSWAVE 5
+
 class State;
 class PauseMenu;
 class GameOverMenu;
@@ -29,7 +31,7 @@ struct RecordInfo
 	size_t kills      = 0;
 	size_t bossKills  = 0;
 	size_t crystals   = 0;
-	size_t coins = 0;
+	size_t coins      = 0;
 };
 
 class GameState : public State

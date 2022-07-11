@@ -3,6 +3,8 @@
 #include"AnimationComponent.h"
 #include"PopUpTextComponent.h"
 
+#define SKILLS_SOUNDS_VOLUME_MODIFIER 10.f
+
 class AnimationComponent;
 class StatsComponent;
 class PopUpTextComponent;

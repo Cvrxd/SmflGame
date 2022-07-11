@@ -163,7 +163,7 @@ inline void GameState::gameOverUpdate()
 inline void GameState::updateGameWave()
 {
 	//Wave count
-	if ((++this->wavesCount) % 5 == 0)
+	if ((++this->wavesCount) % BOSSWAVE == 0)
 	{
 		this->bossFight = true;
 
@@ -627,7 +627,7 @@ inline void GameState::generateBossEnemies()
 		rndEnemyType = static_cast<BossType>(std::rand() % (this->destroyingEnemiestextures.size() - 1));
 
 		//Enemy lvl
-		enemyLvl = EnemiesGenerationI<MeleEnemy>::generateLvl(this->wavesCount, this->diffcultyLvl, 4);
+		enemyLvl = EnemiesGenerationI<BossEnemy>::generateLvl(this->wavesCount, this->diffcultyLvl, 4);
 
 		//Enemy position
 		enemyPosition = EnemiesGenerationI<BossEnemy>::generatePosition(this->tileMap.getMaxSizeF(), this->gridSize);

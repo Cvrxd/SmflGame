@@ -1,4 +1,5 @@
 #pragma once
+#include"Enemy.h"
 
 template<typename EnemyClass>
 class EnemiesGenerationI

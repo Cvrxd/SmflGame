@@ -1,5 +1,5 @@
 #pragma once
-//#include"stdafx.h"
+#define ANIMATION_DT_MULTIPLIER 100.f
 
 class AnimationComponent
 {
@@ -74,7 +74,7 @@ private:
 			this->done = false;
 
 			//Update timer
-			this->timer += 100.f * dt;
+			this->timer += ANIMATION_DT_MULTIPLIER * dt;
 
 			if (this->timer >= this->animationTimer)
 			{
@@ -99,9 +99,9 @@ private:
 		//Play animation with modifiers
 		inline const bool& play  (const float& dt, float percentage)
 		{
-			if (percentage < 0.5f)
+			if (percentage < ANIMATION_DT_MULTIPLIER)
 			{
-				percentage = 0.5f;
+				percentage = ANIMATION_DT_MULTIPLIER;
 			}
 
 			this->done = false;
