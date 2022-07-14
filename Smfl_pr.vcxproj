@@ -152,6 +152,8 @@
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp" />
     <ClCompile Include="BossEnemy.cpp" />
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="DropDownList.cpp" />
     <ClCompile Include="EnemiesGenarationInterface.cpp" />
     <ClCompile Include="DestroyingEnemy.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -167,7 +169,6 @@
     <ClCompile Include="SkillsMenu.cpp" />
     <ClCompile Include="SoundComponent.cpp" />
     <ClCompile Include="GraphicsSettings.cpp" />
-    <ClCompile Include="Gui.cpp" />
     <ClCompile Include="EditorState.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -184,6 +185,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TextureSelector.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="MovementComponent.cpp" />
     <ClCompile Include="PauseMenu.cpp" />
