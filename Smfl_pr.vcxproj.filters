@@ -37,9 +37,6 @@
     <Filter Include="States\GameState">
       <UniqueIdentifier>{0e2661a6-3c2b-45f0-bf93-fcde36e369a6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GUI\PlayerGUI">
-      <UniqueIdentifier>{2f79cc4c-d5b0-4616-88e1-17ee454c882c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="States\GameState\GameStateComponents">
       <UniqueIdentifier>{b1f5ba7e-828a-4e43-881e-8eab7f51cb30}</UniqueIdentifier>
     </Filter>
@@ -49,58 +46,70 @@
     <Filter Include="Map\Traps">
       <UniqueIdentifier>{37a16a20-a5cd-404d-89e2-e0bd58ca4032}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{53da26c7-4523-456c-a791-9b5444f5409c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{87c8c170-62d1-4076-be61-14bad5d7297f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\EntitiesComponents">
+      <UniqueIdentifier>{71db4779-206b-4eb6-9636-95dbabf96010}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\PlayerComponents">
+      <UniqueIdentifier>{037ad7d1-40cd-432b-89ef-794d98cb35a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\GeneralComponents">
+      <UniqueIdentifier>{180fa118-b9cb-42cb-8ace-877664c7412e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\BaseClases">
+      <UniqueIdentifier>{bb421c5d-363f-455f-82e3-66485b947393}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Player">
+      <UniqueIdentifier>{1105a54c-1052-4c36-8760-bbc8b9887571}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\Menu%27s">
+      <UniqueIdentifier>{4bcfcde4-a248-4fbc-8eee-8541aeffb9dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\GeneralGUI">
+      <UniqueIdentifier>{77dd0a14-9c54-4af7-b49b-f9bfc2d32b4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\EntitiesGUI">
+      <UniqueIdentifier>{e8fa71f4-23ce-4ae9-896c-8e20e206d159}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\EntitiesGUI\PlayerGUI">
+      <UniqueIdentifier>{2f79cc4c-d5b0-4616-88e1-17ee454c882c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\EntitiesGUI\EnemiesGUI">
+      <UniqueIdentifier>{09be9841-7e7f-45f4-969a-646e97d3f28f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="States\BaseState">
+      <UniqueIdentifier>{58b1a472-b60f-4ce0-afde-49175d892c83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="States\SettingsState">
+      <UniqueIdentifier>{b567f83f-f0ec-47ff-bbe3-3897ea62404a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="States\EditorState">
+      <UniqueIdentifier>{d4680bbe-03dc-4d37-afef-8cbf70efb270}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="States\MainMenuState">
+      <UniqueIdentifier>{c79224ea-d7c1-4866-b4ed-4621c2e5b76c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="vertex_shader.vert">
-      <Filter>Файлы ресурсов</Filter>
-    </None>
     <None Include="fragment_shader.frag">
-      <Filter>Файлы ресурсов</Filter>
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="vertex_shader.vert">
+      <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="State.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="MainMenuState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="Source.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="MovementComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimationComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="EditorState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="HitboxComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="Tile.cpp">
       <Filter>Map\Tiles</Filter>
-    </ClCompile>
-    <ClCompile Include="PauseMenu.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="SettingsState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="Gui.cpp">
-      <Filter>GUI</Filter>
     </ClCompile>
     <ClCompile Include="TileMap.cpp">
       <Filter>Map</Filter>
@@ -110,15 +119,6 @@
     </ClCompile>
     <ClCompile Include="GraphicsSettings.cpp">
       <Filter>Файлы ресурсов</Filter>
-    </ClCompile>
-    <ClCompile Include="StatsComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="SkillsComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Entities\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="BossEnemy.cpp">
       <Filter>Entities\Enemies</Filter>
@@ -132,20 +132,8 @@
     <ClCompile Include="DestroyingEnemy.cpp">
       <Filter>Entities\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyGUI.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="SoundComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="PopUpTextComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="EnemiesGenarationInterface.cpp">
       <Filter>States\GameState\GameStateComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="GameOverMenu.cpp">
-      <Filter>GUI</Filter>
     </ClCompile>
     <ClCompile Include="GameState.cpp">
       <Filter>States\GameState</Filter>
@@ -160,16 +148,16 @@
       <Filter>States\GameState</Filter>
     </ClCompile>
     <ClCompile Include="PlayerGUI.cpp">
-      <Filter>GUI\PlayerGUI</Filter>
+      <Filter>GUI\EntitiesGUI\PlayerGUI</Filter>
     </ClCompile>
     <ClCompile Include="ItemsMenu.cpp">
-      <Filter>GUI\PlayerGUI</Filter>
+      <Filter>GUI\EntitiesGUI\PlayerGUI</Filter>
     </ClCompile>
     <ClCompile Include="SkillsMenu.cpp">
-      <Filter>GUI\PlayerGUI</Filter>
+      <Filter>GUI\EntitiesGUI\PlayerGUI</Filter>
     </ClCompile>
     <ClCompile Include="SkillsLevelingComponent.cpp">
-      <Filter>GUI\PlayerGUI</Filter>
+      <Filter>GUI\EntitiesGUI\PlayerGUI</Filter>
     </ClCompile>
     <ClCompile Include="MapCollision.cpp">
       <Filter>Map\Collision</Filter>
@@ -177,43 +165,67 @@
     <ClCompile Include="MapTrapsComonent.cpp">
       <Filter>Map\Traps</Filter>
     </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="HitboxComponent.cpp">
+      <Filter>Components\EntitiesComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="MovementComponent.cpp">
+      <Filter>Components\EntitiesComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="StatsComponent.cpp">
+      <Filter>Components\EntitiesComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillsComponent.cpp">
+      <Filter>Components\PlayerComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="PopUpTextComponent.cpp">
+      <Filter>Components\GeneralComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationComponent.cpp">
+      <Filter>Components\GeneralComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundComponent.cpp">
+      <Filter>Components\GeneralComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Entities\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Entities\BaseClases</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Entities\BaseClases</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOverMenu.cpp">
+      <Filter>GUI\Menu%27s</Filter>
+    </ClCompile>
+    <ClCompile Include="PauseMenu.cpp">
+      <Filter>GUI\Menu%27s</Filter>
+    </ClCompile>
+    <ClCompile Include="Gui.cpp">
+      <Filter>GUI\GeneralGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyGUI.cpp">
+      <Filter>GUI\EntitiesGUI\EnemiesGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="State.cpp">
+      <Filter>States\BaseState</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingsState.cpp">
+      <Filter>States\SettingsState</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorState.cpp">
+      <Filter>States\EditorState</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenuState.cpp">
+      <Filter>States\MainMenuState</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="State.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="MainMenuState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="MovementComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="EditorState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="HitboxComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="Tile.h">
       <Filter>Map\Tiles</Filter>
-    </ClInclude>
-    <ClInclude Include="PauseMenu.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="SettingsState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="Gui.h">
-      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="TileMap.h">
       <Filter>Map</Filter>
@@ -223,18 +235,6 @@
     </ClInclude>
     <ClInclude Include="GraphicsSettings.h">
       <Filter>Файлы ресурсов</Filter>
-    </ClInclude>
-    <ClInclude Include="StatsComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Исходные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="SkillsComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Entities\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="MeleEnemy.h">
       <Filter>Entities\Enemies</Filter>
@@ -248,29 +248,74 @@
     <ClInclude Include="DestroyingEnemy.h">
       <Filter>Entities\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyGUI.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="SoundComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="PopUpTextComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="EnemiesGenarationInterface.h">
       <Filter>States\GameState\GameStateComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="GameOverMenu.h">
-      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="GameState.h">
       <Filter>States\GameState</Filter>
     </ClInclude>
     <ClInclude Include="PlayerGUI.h">
-      <Filter>GUI\PlayerGUI</Filter>
+      <Filter>GUI\EntitiesGUI\PlayerGUI</Filter>
     </ClInclude>
     <ClInclude Include="MapTrapsComonent.h">
       <Filter>Map\Traps</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="HitboxComponent.h">
+      <Filter>Components\EntitiesComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementComponent.h">
+      <Filter>Components\EntitiesComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="StatsComponent.h">
+      <Filter>Components\EntitiesComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillsComponent.h">
+      <Filter>Components\PlayerComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="PopUpTextComponent.h">
+      <Filter>Components\GeneralComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationComponent.h">
+      <Filter>Components\GeneralComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundComponent.h">
+      <Filter>Components\GeneralComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Entities\BaseClases</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Entities\BaseClases</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOverMenu.h">
+      <Filter>GUI\Menu%27s</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseMenu.h">
+      <Filter>GUI\Menu%27s</Filter>
+    </ClInclude>
+    <ClInclude Include="Gui.h">
+      <Filter>GUI\GeneralGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyGUI.h">
+      <Filter>GUI\EntitiesGUI\EnemiesGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="State.h">
+      <Filter>States\BaseState</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingsState.h">
+      <Filter>States\SettingsState</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorState.h">
+      <Filter>States\EditorState</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenuState.h">
+      <Filter>States\MainMenuState</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
