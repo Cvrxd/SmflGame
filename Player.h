@@ -75,7 +75,7 @@ private:
 	VectorAnimations    hitAnimations;
 
 	//Initialisation functios
-	void initVariables             ();
+	void initVariables             () override;
 	void createAnimationComponent  (sf::Texture& texture_sheet);
 	void addAnimations             ();
 	void initComponents            (sf::Texture& texture_sheet);

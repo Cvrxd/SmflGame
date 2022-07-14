@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "MapTrapsComonent.h"
 
-#define TRAPS_VOLUME_MODIFIER 15.f
 
 //=======================
 //Trap===================

@@ -172,7 +172,6 @@ private:
 	//Sounds functions
 	void pauseSounds    ();
 	void resumeSounds   ();
-
 	void increaseVolume ();
 	void decreaseVolume ();
 

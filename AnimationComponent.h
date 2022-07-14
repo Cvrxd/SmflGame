@@ -1,5 +1,7 @@
 #pragma once
-#define ANIMATION_DT_MULTIPLIER 100.f
+
+static constexpr float ANIMATION_DT_MULTIPLIER = 100.f;
+static constexpr float ANIMATION_PERSANTAGE    = 0.5f;
 
 class AnimationComponent
 {
@@ -99,9 +101,9 @@ private:
 		//Play animation with modifiers
 		inline const bool& play  (const float& dt, float percentage)
 		{
-			if (percentage < ANIMATION_DT_MULTIPLIER)
+			if (percentage < ANIMATION_PERSANTAGE)
 			{
-				percentage = ANIMATION_DT_MULTIPLIER;
+				percentage = ANIMATION_PERSANTAGE;
 			}
 
 			this->done = false;

@@ -34,8 +34,20 @@
     <Filter Include="Entities\Enemies">
       <UniqueIdentifier>{19660820-cb7b-47b9-b518-38903baa46da}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameStateComponents">
+    <Filter Include="States\GameState">
+      <UniqueIdentifier>{0e2661a6-3c2b-45f0-bf93-fcde36e369a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\PlayerGUI">
+      <UniqueIdentifier>{2f79cc4c-d5b0-4616-88e1-17ee454c882c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="States\GameState\GameStateComponents">
       <UniqueIdentifier>{b1f5ba7e-828a-4e43-881e-8eab7f51cb30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map\Collision">
+      <UniqueIdentifier>{e64eded5-e983-47f5-ad32-0f1a27286729}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map\Traps">
+      <UniqueIdentifier>{37a16a20-a5cd-404d-89e2-e0bd58ca4032}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -48,9 +60,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
     <ClCompile Include="State.cpp">
       <Filter>States</Filter>
     </ClCompile>
@@ -105,9 +114,6 @@
     <ClCompile Include="StatsComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerGUI.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
     <ClCompile Include="SkillsComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -135,20 +141,44 @@
     <ClCompile Include="PopUpTextComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="MapTrapsComonent.cpp">
-      <Filter>Map</Filter>
-    </ClCompile>
     <ClCompile Include="EnemiesGenarationInterface.cpp">
-      <Filter>GameStateComponents</Filter>
+      <Filter>States\GameState\GameStateComponents</Filter>
     </ClCompile>
     <ClCompile Include="GameOverMenu.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
+    <ClCompile Include="GameState.cpp">
+      <Filter>States\GameState</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateInit.cpp">
+      <Filter>States\GameState</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateUpdateF.cpp">
+      <Filter>States\GameState</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateEnemiesF.cpp">
+      <Filter>States\GameState</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerGUI.cpp">
+      <Filter>GUI\PlayerGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemsMenu.cpp">
+      <Filter>GUI\PlayerGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillsMenu.cpp">
+      <Filter>GUI\PlayerGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillsLevelingComponent.cpp">
+      <Filter>GUI\PlayerGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="MapCollision.cpp">
+      <Filter>Map\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="MapTrapsComonent.cpp">
+      <Filter>Map\Traps</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameState.h">
-      <Filter>States</Filter>
-    </ClInclude>
     <ClInclude Include="State.h">
       <Filter>States</Filter>
     </ClInclude>
@@ -197,9 +227,6 @@
     <ClInclude Include="StatsComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerGUI.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
@@ -230,14 +257,20 @@
     <ClInclude Include="PopUpTextComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="MapTrapsComonent.h">
-      <Filter>Map</Filter>
-    </ClInclude>
     <ClInclude Include="EnemiesGenarationInterface.h">
-      <Filter>GameStateComponents</Filter>
+      <Filter>States\GameState\GameStateComponents</Filter>
     </ClInclude>
     <ClInclude Include="GameOverMenu.h">
       <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>States\GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerGUI.h">
+      <Filter>GUI\PlayerGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="MapTrapsComonent.h">
+      <Filter>Map\Traps</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

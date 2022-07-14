@@ -7,8 +7,6 @@
 										     this->skillsEndingSprite.first.setPosition(skill_position.x - 100, skill_position.y - 150);\
 											 this->damageArea.setPosition(skill_position.x - 300, skill_position.y - 300)
 
-
-
 //Init fuctions
 inline void SkillsComponent::initSounds()
 {

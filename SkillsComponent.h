@@ -3,7 +3,7 @@
 #include"AnimationComponent.h"
 #include"PopUpTextComponent.h"
 
-#define SKILLS_SOUNDS_VOLUME_MODIFIER 10.f
+static constexpr float SKILLS_SOUNDS_VOLUME_MODIFIER = 10.f;
 
 class AnimationComponent;
 class StatsComponent;

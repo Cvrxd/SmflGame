@@ -3,7 +3,7 @@
 
 class SkillsComponent;
 
-#define VOLUME_MODIFIER 15.f
+static constexpr float VOLUME_MODIFIER = 15.f;
 
 struct GuiSoundsBox
 {

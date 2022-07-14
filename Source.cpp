@@ -5,8 +5,6 @@ int main()
 {
 	std::srand(static_cast<unsigned int>(std::time(0)));
 
-	std::cout << sizeof(GameState);
-
 	Game game;
 	game.run();
 

@@ -157,7 +157,14 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyGUI.cpp" />
     <ClCompile Include="GameOverMenu.cpp" />
+    <ClCompile Include="GameStateEnemiesF.cpp" />
+    <ClCompile Include="GameStateInit.cpp" />
+    <ClCompile Include="GameStateUpdateF.cpp" />
+    <ClCompile Include="ItemsMenu.cpp" />
+    <ClCompile Include="MapCollision.cpp" />
     <ClCompile Include="MapTrapsComonent.cpp" />
+    <ClCompile Include="SkillsLevelingComponent.cpp" />
+    <ClCompile Include="SkillsMenu.cpp" />
     <ClCompile Include="SoundComponent.cpp" />
     <ClCompile Include="GraphicsSettings.cpp" />
     <ClCompile Include="Gui.cpp" />

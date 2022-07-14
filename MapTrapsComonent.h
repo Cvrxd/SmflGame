@@ -2,6 +2,8 @@
 #include"AnimationComponent.h"
 #include"Player.h"
 
+static constexpr float TRAPS_VOLUME_MODIFIER = 15.f;
+
 enum class TrapType { FIRE_TRAP = 0, SPIKE_TRAP, BEAR_TRAP };
 
 class MapTrapsComonent
