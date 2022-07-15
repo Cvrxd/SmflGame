@@ -1,6 +1,6 @@
 #pragma once
-#include"GraphicsSettings.h"
-#include"Player.h"
+#include<GraphicsSettings/GraphicsSettings.h>
+#include<Entities/Player/Player.h>
 
 struct GraphicsSettings;
 class Player;

@@ -1,8 +1,8 @@
 #pragma once
-#include "PauseMenu.h"
-#include "State.h"
-#include "Gui.h"
-#include "TileMap.h"
+#include <Gui/Menu's/PauseMenu.h>
+#include <States/State.h>
+#include <Gui/GeneralGui/Gui.h>
+#include <Map/Map/TileMap.h>
 
 class State;
 class PauseMenu;

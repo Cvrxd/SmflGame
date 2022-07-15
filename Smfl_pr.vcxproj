@@ -118,6 +118,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>C:\Users\Sculptor\source\repos\Smfl_pr\Src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -136,6 +137,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <Optimization>MaxSpeed</Optimization>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>C:\Users\Sculptor\source\repos\Smfl_pr\Src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -145,88 +147,85 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="fragment_shader.frag" />
     <None Include="packages.config" />
-    <None Include="vertex_shader.vert" />
+    <None Include="Src\Shaders\fragment_shader.frag" />
+    <None Include="Src\Shaders\vertex_shader.vert" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AnimationComponent.cpp" />
-    <ClCompile Include="BossEnemy.cpp" />
-    <ClCompile Include="Button.cpp" />
-    <ClCompile Include="DropDownList.cpp" />
-    <ClCompile Include="EnemiesGenarationInterface.cpp" />
-    <ClCompile Include="DestroyingEnemy.cpp" />
-    <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="EnemyGUI.cpp" />
-    <ClCompile Include="GameOverMenu.cpp" />
-    <ClCompile Include="GameStateEnemiesF.cpp" />
-    <ClCompile Include="GameStateInit.cpp" />
-    <ClCompile Include="GameStateUpdateF.cpp" />
-    <ClCompile Include="ItemsMenu.cpp" />
-    <ClCompile Include="MapCollision.cpp" />
-    <ClCompile Include="MapTrapsComonent.cpp" />
-    <ClCompile Include="SkillsLevelingComponent.cpp" />
-    <ClCompile Include="SkillsMenu.cpp" />
-    <ClCompile Include="SoundComponent.cpp" />
-    <ClCompile Include="GraphicsSettings.cpp" />
-    <ClCompile Include="EditorState.cpp" />
-    <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameState.cpp" />
-    <ClCompile Include="HitboxComponent.cpp" />
-    <ClCompile Include="MageEnemy.cpp" />
-    <ClCompile Include="MeleEnemy.cpp" />
-    <ClCompile Include="PopUpTextComponent.cpp" />
-    <ClCompile Include="StatsComponent.cpp" />
-    <ClCompile Include="MainMenuState.cpp" />
-    <ClCompile Include="PlayerGUI.cpp" />
-    <ClCompile Include="SkillsComponent.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="TextureSelector.cpp" />
-    <ClCompile Include="TileMap.cpp" />
-    <ClCompile Include="MovementComponent.cpp" />
-    <ClCompile Include="PauseMenu.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="SettingsState.cpp" />
-    <ClCompile Include="Source.cpp" />
-    <ClCompile Include="State.cpp" />
-    <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="Src\Components\EntitiesComponents\HitboxComponent.cpp" />
+    <ClCompile Include="Src\Components\EntitiesComponents\MovementComponent.cpp" />
+    <ClCompile Include="Src\Components\EntitiesComponents\SkillsComponent.cpp" />
+    <ClCompile Include="Src\Components\EntitiesComponents\StatsComponent.cpp" />
+    <ClCompile Include="Src\Components\GeneralComponents\AnimationComponent.cpp" />
+    <ClCompile Include="Src\Components\GeneralComponents\PopUpTextComponent.cpp" />
+    <ClCompile Include="Src\Components\GeneralComponents\SoundComponent.cpp" />
+    <ClCompile Include="Src\Entities\Enemies\BossEnemy.cpp" />
+    <ClCompile Include="Src\Entities\Enemies\DestroyingEnemy.cpp" />
+    <ClCompile Include="Src\Entities\Enemies\Enemy.cpp" />
+    <ClCompile Include="Src\Entities\Enemies\MageEnemy.cpp" />
+    <ClCompile Include="Src\Entities\Enemies\MeleEnemy.cpp" />
+    <ClCompile Include="Src\Entities\Entity.cpp" />
+    <ClCompile Include="Src\Entities\Player\Player.cpp" />
+    <ClCompile Include="Src\Game\Game.cpp" />
+    <ClCompile Include="Src\GraphicsSettings\GraphicsSettings.cpp" />
+    <ClCompile Include="Src\Gui\EnemiesGui\EnemyGUI.cpp" />
+    <ClCompile Include="Src\Gui\GeneralGui\Button.cpp" />
+    <ClCompile Include="Src\Gui\GeneralGui\DropDownList.cpp" />
+    <ClCompile Include="Src\Gui\GeneralGui\TextureSelector.cpp" />
+    <ClCompile Include="Src\Gui\Menu%27s\GameOverMenu.cpp" />
+    <ClCompile Include="Src\Gui\Menu%27s\ItemsMenu.cpp" />
+    <ClCompile Include="Src\Gui\Menu%27s\PauseMenu.cpp" />
+    <ClCompile Include="Src\Gui\Menu%27s\SkillsMenu.cpp" />
+    <ClCompile Include="Src\Gui\PlayerGui\PlayerGUI.cpp" />
+    <ClCompile Include="Src\Gui\PlayerGui\SkillsLevelingComponent.cpp" />
+    <ClCompile Include="Src\Map\Map\MapCollision.cpp" />
+    <ClCompile Include="Src\Map\Map\TileMap.cpp" />
+    <ClCompile Include="Src\Map\Tiles\Tile.cpp" />
+    <ClCompile Include="Src\Map\Traps\MapTrapsComonent.cpp" />
+    <ClCompile Include="Src\Source.cpp" />
+    <ClCompile Include="Src\States\EditorState\EditorState.cpp" />
+    <ClCompile Include="Src\States\GameState\Cpp%27s\GameState.cpp" />
+    <ClCompile Include="Src\States\GameState\Cpp%27s\GameStateEnemiesF.cpp" />
+    <ClCompile Include="Src\States\GameState\Cpp%27s\GameStateInit.cpp" />
+    <ClCompile Include="Src\States\GameState\Cpp%27s\GameStateUpdateF.cpp" />
+    <ClCompile Include="Src\States\GameState\EnemiesGenerationI\EnemiesGenarationInterface.cpp" />
+    <ClCompile Include="Src\States\MainMenuState\MainMenuState.cpp" />
+    <ClCompile Include="Src\States\SettingsState\SettingsState.cpp" />
+    <ClCompile Include="Src\States\State.cpp" />
+    <ClCompile Include="Src\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AnimationComponent.h" />
-    <ClInclude Include="BossEnemy.h" />
-    <ClInclude Include="EnemiesGenarationInterface.h" />
-    <ClInclude Include="DestroyingEnemy.h" />
-    <ClInclude Include="Enemy.h" />
-    <ClInclude Include="EnemyGUI.h" />
-    <ClInclude Include="GameOverMenu.h" />
-    <ClInclude Include="MapTrapsComonent.h" />
-    <ClInclude Include="SoundComponent.h" />
-    <ClInclude Include="GraphicsSettings.h" />
-    <ClInclude Include="Gui.h" />
-    <ClInclude Include="EditorState.h" />
-    <ClInclude Include="Entity.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="GameState.h" />
-    <ClInclude Include="HitboxComponent.h" />
-    <ClInclude Include="MageEnemy.h" />
-    <ClInclude Include="MeleEnemy.h" />
-    <ClInclude Include="PopUpTextComponent.h" />
-    <ClInclude Include="StatsComponent.h" />
-    <ClInclude Include="MainMenuState.h" />
-    <ClInclude Include="PlayerGUI.h" />
-    <ClInclude Include="SkillsComponent.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="TileMap.h" />
-    <ClInclude Include="MovementComponent.h" />
-    <ClInclude Include="PauseMenu.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="SettingsState.h" />
-    <ClInclude Include="State.h" />
-    <ClInclude Include="Tile.h" />
+    <ClInclude Include="Src\Components\EntitiesComponents\HitboxComponent.h" />
+    <ClInclude Include="Src\Components\EntitiesComponents\MovementComponent.h" />
+    <ClInclude Include="Src\Components\EntitiesComponents\SkillsComponent.h" />
+    <ClInclude Include="Src\Components\EntitiesComponents\StatsComponent.h" />
+    <ClInclude Include="Src\Components\GeneralComponents\AnimationComponent.h" />
+    <ClInclude Include="Src\Components\GeneralComponents\PopUpTextComponent.h" />
+    <ClInclude Include="Src\Components\GeneralComponents\SoundComponent.h" />
+    <ClInclude Include="Src\Entities\Enemies\BossEnemy.h" />
+    <ClInclude Include="Src\Entities\Enemies\DestroyingEnemy.h" />
+    <ClInclude Include="Src\Entities\Enemies\Enemy.h" />
+    <ClInclude Include="Src\Entities\Enemies\MageEnemy.h" />
+    <ClInclude Include="Src\Entities\Enemies\MeleEnemy.h" />
+    <ClInclude Include="Src\Entities\Entity.h" />
+    <ClInclude Include="Src\Entities\Player\Player.h" />
+    <ClInclude Include="Src\Game\Game.h" />
+    <ClInclude Include="Src\GraphicsSettings\GraphicsSettings.h" />
+    <ClInclude Include="Src\Gui\EnemiesGui\EnemyGUI.h" />
+    <ClInclude Include="Src\Gui\GeneralGui\Gui.h" />
+    <ClInclude Include="Src\Gui\Menu%27s\GameOverMenu.h" />
+    <ClInclude Include="Src\Gui\Menu%27s\PauseMenu.h" />
+    <ClInclude Include="Src\Gui\PlayerGui\PlayerGUI.h" />
+    <ClInclude Include="Src\Map\Map\TileMap.h" />
+    <ClInclude Include="Src\Map\Tiles\Tile.h" />
+    <ClInclude Include="Src\Map\Traps\MapTrapsComonent.h" />
+    <ClInclude Include="Src\States\EditorState\EditorState.h" />
+    <ClInclude Include="Src\States\GameState\EnemiesGenerationI\EnemiesGenarationInterface.h" />
+    <ClInclude Include="Src\States\GameState\GameState.h" />
+    <ClInclude Include="Src\States\MainMenuState\MainMenuState.h" />
+    <ClInclude Include="Src\States\SettingsState\SettingsState.h" />
+    <ClInclude Include="Src\States\State.h" />
+    <ClInclude Include="Src\stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

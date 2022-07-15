@@ -1,5 +1,5 @@
-#include "stdafx.h" 
-#include "GameState.h"
+#include <stdafx.h> 
+#include <States/GameState/GameState.h>
 
 //Constructor
 GameState::GameState(StateData* state_data, RecordInfo& info, const unsigned int& difficultyLvl)

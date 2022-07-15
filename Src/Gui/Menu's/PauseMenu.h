@@ -1,5 +1,5 @@
 #pragma once
-#include "Gui.h"
+#include <Gui/GeneralGui/Gui.h>
 
 class Button;
 

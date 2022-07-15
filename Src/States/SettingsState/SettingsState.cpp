@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <stdafx.h>
 #include "SettingsState.h"
 
 #define UPDATE_DROP_DOWN_LIST_OFFSET this->offsetYforDropDownLists += 90.f

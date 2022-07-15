@@ -1,5 +1,5 @@
 #pragma once
-#include"MainMenuState.h"
+#include<States/MainMenuState/MainMenuState.h>
 
 class MainMenuState;
 

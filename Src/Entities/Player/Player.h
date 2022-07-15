@@ -1,7 +1,7 @@
 #pragma once
-#include "Entity.h"
-#include "PlayerGUI.h"
-#include "SoundComponent.h"
+#include <Entities/Entity.h>
+#include <Gui/PlayerGui/PlayerGUI.h>
+#include <Components/GeneralComponents/SoundComponent.h>
 
 class Entity;
 class PlayerGUI;

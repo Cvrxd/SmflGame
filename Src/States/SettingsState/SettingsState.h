@@ -1,6 +1,6 @@
 #pragma once
-#include "State.h"
-#include "Gui.h"
+#include <States/State.h>
+#include <Gui/GeneralGui/Gui.h>
 
 class State;
 class Button;

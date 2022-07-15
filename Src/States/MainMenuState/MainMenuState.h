@@ -1,8 +1,8 @@
 #pragma once
-#include "GameState.h"
-#include "EditorState.h"
-#include "SettingsState.h"
-#include "Gui.h"
+#include <States/GameState/GameState.h>
+#include <States/EditorState/EditorState.h>
+#include <States/SettingsState/SettingsState.h>
+#include <Gui/GeneralGui/Gui.h>
 
 class GameState;
 class EditorState;
