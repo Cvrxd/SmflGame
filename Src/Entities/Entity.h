@@ -1,10 +1,11 @@
 #pragma once
-#include"HitboxComponent.h"
-#include"MovementComponent.h"
-#include"AnimationComponent.h"
-#include"StatsComponent.h"
-#include"SkillsComponent.h"
-#include"PopUpTextComponent.h"
+#include <Components/EntitiesComponents/HitboxComponent.h>
+#include <Components/EntitiesComponents/StatsComponent.h>
+#include <Components/EntitiesComponents/SkillsComponent.h>
+#include <Components/EntitiesComponents/MovementComponent.h>
+
+#include <Components/GeneralComponents/PopUpTextComponent.h>
+#include <Components/GeneralComponents/AnimationComponent.h>
 
 class SkillsComponent;
 class HitboxComponent;

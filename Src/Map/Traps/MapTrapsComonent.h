@@ -1,6 +1,6 @@
 #pragma once
-#include"AnimationComponent.h"
-#include"Player.h"
+#include<Components/GeneralComponents/AnimationComponent.h>
+#include<Entities/Player/Player.h>
 
 static constexpr float TRAPS_VOLUME_MODIFIER = 15.f;
 

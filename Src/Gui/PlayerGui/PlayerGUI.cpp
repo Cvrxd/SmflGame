@@ -1,6 +1,5 @@
-#include "stdafx.h"
-#include "PlayerGUI.h"
-
+#include <stdafx.h>
+#include <Gui/PlayerGui/PlayerGUI.h>
 
 //Initialisation
 inline void PlayerGUI::initVariables()

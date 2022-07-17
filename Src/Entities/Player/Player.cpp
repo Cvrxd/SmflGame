@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <stdafx.h>
 #include "Player.h"
 
 #define SPTIRES_SETSCALE_LEFT this->sprite.setOrigin(50.f, 0.f);\
@@ -447,14 +447,14 @@ void Player::increaseSoundsVolume()
 {
 	this->soundBox.increaseVolume();
 
-	this->skillsComponent.increaseSoundsVolume();
+	this->skillsComponent.increaseVolume();
 }
 
 void Player::decreaseSoundsVolume()
 {
 	this->soundBox.decreaseVolume();
 
-	this->skillsComponent.decreaseSoundsVolume();
+	this->skillsComponent.decreaseVolume();
 }
 
 void Player::pauseSounds()
@@ -468,7 +468,7 @@ void Player::playSounds()
 {
 	this->soundBox.unpauseMovementSound();
 
-	this->skillsComponent.resumeSounds();
+	this->skillsComponent.playSounds();
 }
 
 //Stats functions

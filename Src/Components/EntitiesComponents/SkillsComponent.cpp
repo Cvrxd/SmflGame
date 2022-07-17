@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <stdafx.h>
 #include "SkillsComponent.h"
 
 #define _SKILLS_COMPONENT_USE_SKILL_CHECK this->keyTime >= this->keyTimeMax && this->statsComponent.mp > 0
@@ -13,49 +13,33 @@ inline void SkillsComponent::initSounds()
 	//Loading sounds
 	this->sounds[SkillType::BUFF].first.loadFromFile("Sounds/game_state/spell_sounds/buff.wav");
 	this->sounds[SkillType::BUFF].second.setBuffer(this->sounds[SkillType::BUFF].first);
-	this->sounds[SkillType::BUFF].second.setVolume(5.f);
 
 	this->sounds[SkillType::THUNDER_STRIKE].first.loadFromFile("Sounds/game_state/spell_sounds/thunder_strike.wav");
 	this->sounds[SkillType::THUNDER_STRIKE].second.setBuffer(this->sounds[SkillType::THUNDER_STRIKE].first);
-	this->sounds[SkillType::THUNDER_STRIKE].second.setVolume(4.f);
 
 	this->sounds[SkillType::FIRE_EXPLOSION].first.loadFromFile("Sounds/game_state/spell_sounds/fire_explosion.wav");
 	this->sounds[SkillType::FIRE_EXPLOSION].second.setBuffer(this->sounds[SkillType::FIRE_EXPLOSION].first);
-	this->sounds[SkillType::FIRE_EXPLOSION].second.setVolume(3.f);
 
 	this->sounds[SkillType::POISON_CLAW].first.loadFromFile("Sounds/game_state/spell_sounds/poison_claw.wav");
 	this->sounds[SkillType::POISON_CLAW].second.setBuffer(this->sounds[SkillType::POISON_CLAW].first);
-	this->sounds[SkillType::POISON_CLAW].second.setVolume(3.f);
 
 	this->sounds[SkillType::BLOOD_SPIKE].first.loadFromFile("Sounds/game_state/spell_sounds/blood_strike.wav");
 	this->sounds[SkillType::BLOOD_SPIKE].second.setBuffer(this->sounds[SkillType::BLOOD_SPIKE].first);
-	this->sounds[SkillType::BLOOD_SPIKE].second.setVolume(2.f);
 
 	this->sounds[SkillType::DARK_POSION].first.loadFromFile("Sounds/game_state/spell_sounds/dark_poision.wav");
 	this->sounds[SkillType::DARK_POSION].second.setBuffer(this->sounds[SkillType::DARK_POSION].first);
-	this->sounds[SkillType::DARK_POSION].second.setVolume(3.f);
 
 	this->sounds[SkillType::DARK_BOLT].first.loadFromFile("Sounds/game_state/spell_sounds/dark_bolt.wav");
 	this->sounds[SkillType::DARK_BOLT].second.setBuffer(this->sounds[SkillType::DARK_BOLT].first);
-	this->sounds[SkillType::DARK_BOLT].second.setVolume(3.f);
 
 	this->sounds[SkillType::HOLY_STRIKE].first.loadFromFile("Sounds/game_state/spell_sounds/holy_strike.wav");
 	this->sounds[SkillType::HOLY_STRIKE].second.setBuffer(this->sounds[SkillType::HOLY_STRIKE].first);
-	this->sounds[SkillType::HOLY_STRIKE].second.setVolume(2.f);
 
 	this->sounds[SkillType::LIGHTNING_STRIKE].first.loadFromFile("Sounds/game_state/spell_sounds/lightning_strike.wav");
 	this->sounds[SkillType::LIGHTNING_STRIKE].second.setBuffer(this->sounds[SkillType::LIGHTNING_STRIKE].first);
-	this->sounds[SkillType::LIGHTNING_STRIKE].second.setVolume(2.f);
 
 	this->sounds[SkillType::POTION].first.loadFromFile("Sounds/game_state/spell_sounds/potion.wav");
 	this->sounds[SkillType::POTION].second.setBuffer(this->sounds[SkillType::POTION].first);
-	this->sounds[SkillType::POTION].second.setVolume(3.f);
-
-	//Init volumes
-	for (auto& el : this->sounds)
-	{
-		this->soundsVolumes[el.first] = el.second.second.getVolume();
-	}
 }
 
 inline void SkillsComponent::initAllSkills()
@@ -237,8 +221,10 @@ inline void SkillsComponent::playSkillSound(const SkillType& type)
 
 //Constructor
 SkillsComponent::SkillsComponent(StatsComponent& statsComponent, const sf::Font& font, bool& isUsingSkill, SkillType& currentSkillType,
-	int& currentSkillDamage, bool& isBuffed, bool& castingSpell) noexcept
-	:
+	int& currentSkillDamage, bool& isBuffed, bool& castingSpell) noexcept 
+
+	: ISoundsPlayer(this->sounds, 2.f, 4.f),
+
 	statsComponent(statsComponent),
 	popUpTextComponent(font),
 
@@ -255,6 +241,8 @@ SkillsComponent::SkillsComponent(StatsComponent& statsComponent, const sf::Font&
 
 	initSoundsThread.join();
 	initAnimationsThread.join();
+
+	this->setVolume(this->getVolume());
 }
 
 SkillsComponent::~SkillsComponent()
@@ -300,59 +288,6 @@ int& SkillsComponent::getMpPotions()
 int& SkillsComponent::getHpPotions()
 {
 	return this->healthPotions.second;
-}
-
-//Sounds functions 
-void SkillsComponent::setSoundsVolume(const float& volume)
-{
-	for (auto& el : this->sounds)
-	{
-		el.second.second.setVolume(volume);
-	}
-}
-
-void SkillsComponent::increaseSoundsVolume()
-{
-	for (auto& el : this->sounds)
-	{
-		el.second.second.setVolume(el.second.second.getVolume() + (this->soundsVolumes[el.first] * SKILLS_SOUNDS_VOLUME_MODIFIER / 100.f));
-	}
-
-}
-
-void SkillsComponent::decreaseSoundsVolume()
-{
-	for (auto& el : this->sounds)
-	{
-		el.second.second.setVolume(el.second.second.getVolume() - (this->soundsVolumes[el.first] * SKILLS_SOUNDS_VOLUME_MODIFIER / 100.f));
-
-		if (el.second.second.getVolume() < 0)
-		{
-			el.second.second.setVolume(0);
-		}
-	}
-}
-
-void SkillsComponent::pauseSounds()
-{
-	for (auto& el : this->sounds)
-	{
-		if (el.second.second.getStatus() == sf::Sound::Status::Playing)
-		{
-			el.second.second.pause();
-		}
-	}
-}
-
-void SkillsComponent::resumeSounds()
-{
-	for (auto& el : this->sounds)
-	{
-		if (el.second.second.getStatus() == sf::Sound::Status::Paused)
-		{
-			el.second.second.play();
-		}
-	}
 }
 
 //Public Functions

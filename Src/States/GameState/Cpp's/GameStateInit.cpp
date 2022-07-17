@@ -89,7 +89,7 @@ void GameState::initPauseMenu()
 	//Volume text
 	this->volumeText.setFont(this->font);
 	this->volumeText.setCharacterSize(40);
-	this->volumeText.setString("Sounds volume: " + std::to_string(static_cast<int>(this->gameStateSoundBox.getVolume() * 100 / this->gameStateSoundBox.getVolumeMax())) + '%');
+	this->volumeText.setString("Sounds volume: " + std::to_string(static_cast<int>(this->gameStateSoundBox.getVolume() * 100 / this->gameStateSoundBox.getMaxVolume())) + '%');
 	this->volumeText.setFillColor(sf::Color(255, 255, 255, 200));
 	this->volumeText.setPosition(static_cast<float>(this->window->getSize().x) - 400.f, 100.f);
 
@@ -104,7 +104,7 @@ void GameState::initPauseMenu()
 
 void GameState::initShaders()
 {
-	if (!this->core_shader.loadFromFile("vertex_shader.vert", "fragment_shader.frag"))
+	if (!this->core_shader.loadFromFile("Src/Shaders/vertex_shader.vert", "Src/Shaders/fragment_shader.frag"))
 	{
 		std::cout << "Shader error";
 	}

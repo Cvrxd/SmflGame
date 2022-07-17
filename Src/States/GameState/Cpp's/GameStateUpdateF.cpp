@@ -3,7 +3,7 @@
 
 void GameState::updateVolumeText()
 {
-	this->volumeText.setString("Sounds volume: " + std::to_string(static_cast<int>(this->gameStateSoundBox.getVolume() * 100 / this->gameStateSoundBox.getVolumeMax())) + '%');
+	this->volumeText.setString("Sounds volume: " + std::to_string(static_cast<int>(this->gameStateSoundBox.getVolume() * 100 / this->gameStateSoundBox.getMaxVolume())) + '%');
 }
 
 void GameState::updatePlayerInput(const float& dt)
@@ -133,7 +133,7 @@ void GameState::updateVolumeGui()
 	//Increasing volume button
 	if (this->volumeButtons.second->isPressed() && this->getKeyTime())
 	{
-		if (this->gameStateSoundBox.getVolume() != this->gameStateSoundBox.getVolumeMax())
+		if (this->gameStateSoundBox.getVolume() != this->gameStateSoundBox.getMaxVolume())
 		{
 			//Sound
 			this->guiSounBox.sounds["CLICK"].second.play();
@@ -355,7 +355,7 @@ void GameState::decreaseVolume()
 	{
 		this->enemiesSoundBox.setVolume(0);
 		this->guiSounBox.setVolume(0);
-		this->player.getSkillComponent()->setSoundsVolume(0);
+		this->player.getSkillComponent()->setVolume(0);
 		this->mapTrapsComponent.setSoundsVolume(0);
 	}
 	else

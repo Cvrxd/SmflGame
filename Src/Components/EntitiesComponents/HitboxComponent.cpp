@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <stdafx.h>
 #include "HitboxComponent.h"
 
 //Constructor

@@ -1,8 +1,5 @@
-#include "stdafx.h"
+#include <stdafx.h>
 #include "GameOverMenu.h"
-//===============================================
-//Game Over Menu=================================
-//===============================================
 
 //Init fucntions
 inline void GameOverMenu::initGui() noexcept

@@ -1,5 +1,5 @@
-#include "stdafx.h"
-#include "Gui.h"
+#include <stdafx.h>
+#include <Gui/GeneralGui/Gui.h>
 
 //============================//
 //Button======================//

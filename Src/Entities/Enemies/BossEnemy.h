@@ -1,5 +1,6 @@
 #pragma once
-#include "Enemy.h"
+#include <Entities/Enemies/Enemy.h>
+
 enum class BossType { NIGHTBORN = 0, FIRE_DEMON, SAMURAI };
 
 class BossEnemy : public Enemy

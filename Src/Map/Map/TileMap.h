@@ -1,6 +1,6 @@
 #pragma once
-#include "Tile.h"
-#include "Entity.h"
+#include <Map/Tiles/Tile.h>
+#include <Entities/Entity.h>
 
 class Entity;
 class Tile;

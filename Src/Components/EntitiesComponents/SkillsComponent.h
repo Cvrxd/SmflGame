@@ -1,9 +1,10 @@
 #pragma once
-#include"StatsComponent.h"
-#include"AnimationComponent.h"
-#include"PopUpTextComponent.h"
+#include <Components/EntitiesComponents/StatsComponent.h>
 
-static constexpr float SKILLS_SOUNDS_VOLUME_MODIFIER = 10.f;
+#include <Components/GeneralComponents/PopUpTextComponent.h>
+#include <Components/GeneralComponents/AnimationComponent.h>
+#include <Components/GeneralComponents/ISoundsPlayer.h>
+
 
 class AnimationComponent;
 class StatsComponent;
@@ -17,7 +18,7 @@ enum class SkillType
 
 enum Potions{HEALTH = 0, MANA};
 
-class SkillsComponent
+class SkillsComponent : public ISoundsPlayer<SkillType>
 {
 private:
 	using PopUpKeysMap          = std::unordered_map<SkillType, std::string>;
@@ -28,7 +29,6 @@ private:
 	using MapSkillsTextures     = std::unordered_map<SkillType, std::pair<sf::Sprite, sf::Texture>>;
 	using MapSkillsAnimations   = std::unordered_map<SkillType, AnimationComponent>;
 	using SoundsMap             = std::unordered_map<SkillType, std::pair<sf::SoundBuffer, sf::Sound>>;
-	using SoundsVolumesMap      = std::unordered_map<SkillType, float>;
 
 	//Variables
 	sf::Clock skillTimer;
@@ -57,7 +57,6 @@ private:
 
 	//Sounds
 	SoundsMap           sounds;
-	SoundsVolumesMap    soundsVolumes;
 
 	//Potions
 	PotionsCount        healthPotions;
@@ -136,14 +135,6 @@ public:
 	const bool                getBuffKeyTime   ()    const;
 	int&                      getMpPotions     ();
 	int&                      getHpPotions     ();
-
-	//Sound functions
-	void setSoundsVolume      (const float& volume);
-	void increaseSoundsVolume ();
-	void decreaseSoundsVolume ();
-
-	void resumeSounds         ();
-	void pauseSounds          ();
 
 	//Functions
 	void addPotion         (const Potions& potion_type);

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <stdafx.h>
 #include "SoundComponent.h"
 
 //======================
@@ -14,7 +14,6 @@ inline void PlayerSoundBox::initSounds()
 		throw("UNABLE TO LOAD PLAYER WALKING SOUND");
 	}
 	this->sounds["WALKING"].second.setBuffer(this->sounds["WALKING"].first);
-	this->sounds["WALKING"].second.setVolume(this->volumeMin);
 	this->sounds["WALKING"].second.setLoop(true);
 
 	this->movementSound = &this->sounds["WALKING"].second;
@@ -28,7 +27,6 @@ inline void PlayerSoundBox::initSounds()
 		throw("UNABLE TO LOAD PLAYER WALKING SOUND");
 	}
 	this->sounds["RUNNING"].second.setBuffer(this->sounds["RUNNING"].first);
-	this->sounds["RUNNING"].second.setVolume(this->volumeMin);
 	this->sounds["RUNNING"].second.setLoop(true);
 
 	this->sounds["RUNNING"].second.play();
@@ -36,10 +34,11 @@ inline void PlayerSoundBox::initSounds()
 }
 
 //Constructors
-PlayerSoundBox::PlayerSoundBox() 
-	:movementSound(nullptr)
+PlayerSoundBox::PlayerSoundBox() : ISoundsPlayer(this->sounds, 0.1f, 1.f)
+	,movementSound(nullptr)
 {
 	this->initSounds();
+	this->setVolume(0.1f);
 }
 
 PlayerSoundBox::~PlayerSoundBox()
@@ -53,14 +52,6 @@ PlayerSoundBox::~PlayerSoundBox()
 	}
 }
 
-//Accessors
-void PlayerSoundBox::setVolume(const float& volume)
-{
-	for (auto& el : this->sounds)
-	{
-		el.second.second.setVolume(volume);
-	}
-}
 
 //Public functions
 void PlayerSoundBox::changeMovementSound(const bool& running)
@@ -94,36 +85,9 @@ void PlayerSoundBox::changeMovementVolume(const bool& increase)
 	}
 	else
 	{
-		if (this->movementSound->getVolume() != this->volumeMin)
+		if (this->movementSound->getVolume() != this->volume)
 		{
 			this->movementSound->setVolume(this->volumeMax);
-		}
-	}
-}
-
-void PlayerSoundBox::increaseVolume()
-{
-	this->volumeMin = this->volumeMin + (this->volumeMin * VOLUME_MODIFIER / 100.f);
-	this->volumeMax = this->volumeMax + (this->volumeMax * VOLUME_MODIFIER / 100.f);
-
-	for (auto& el : this->sounds)
-	{
-		el.second.second.setVolume(this->volumeMin);
-	}
-}
-
-void PlayerSoundBox::decreaseVolume()
-{
-	this->volumeMin = this->volumeMin - (this->volumeMin * VOLUME_MODIFIER / 100.f);
-	this->volumeMax = this->volumeMax - (this->volumeMax * VOLUME_MODIFIER / 100.f);
-
-	for (auto& el : this->sounds)
-	{
-		el.second.second.setVolume(this->volumeMin);
-
-		if (el.second.second.getVolume() < 0)
-		{
-			el.second.second.setVolume(0);
 		}
 	}
 }
@@ -172,74 +136,18 @@ inline void GameStateSoundBox::initMusic()
 	{
 		el.second.setLoop(true);
 	}
-
-	//Music volume
-	for (auto& el : this->music)
-	{
-		el.second.setVolume(this->volume);
-	}
-	this->music["GAME_OVER"].setVolume(this->volume * 2);
 }
 
 //Constructor
-GameStateSoundBox::GameStateSoundBox()
+GameStateSoundBox::GameStateSoundBox() : IMusicPlayer(this->music, this->volume, this->volumeMAX)
 {
 	this->initMusic();
+	this->setVolume(this->volume);
 }
 
 GameStateSoundBox::~GameStateSoundBox()
 {
-	//Stoping all music
-	this->stopBossFightMusic ();
-	this->stopPauseMenuMusic ();
-	this->stopThemeMusic     ();
-}
-
-//Accessors
-void GameStateSoundBox::setVolume(const float& volume)
-{
-	for (auto& el : this->music)
-	{
-		el.second.setVolume(volume);
-	}
-
-	this->volume = volume;
-}
-
-const float& GameStateSoundBox::getVolume() const
-{
-	return this->volume;
-}
-
-const float& GameStateSoundBox::getVolumeMax() const
-{
-	return this->volumeMAX;
-}
-
-//Public functions
-//Volume
-void GameStateSoundBox::increaseVolume()
-{
-	this->volume += 0.15f;
-
-	if (this->volume > this->volumeMAX)
-	{
-		this->volume = this->volumeMAX;
-	}
-
-	this->setVolume(this->volume);
-}
-
-void GameStateSoundBox::decreaseVolume()
-{
-	this->volume -= 0.15f;
-
-	if (this->volume < 0)
-	{
-		this->volume = 0;
-	}
-
-	this->setVolume(this->volume);
+	this->stopMusic();
 }
 
 //Music
@@ -453,23 +361,11 @@ inline void EnemySoundBox::initSkillImpactSounds()
 	this->skillsImpact[SkillType::FIRE_EXPLOSION].second.setVolume(2.f);
 }
 
-inline void EnemySoundBox::initVolumes()
-{
-	//Sounds volumes
-	for (auto& el : this->sounds)
-	{
-		this->soundsVolumes[el.first] = el.second.second.getVolume();
-	}
-
-	//Skill impact volumes
-	for (auto& el : this->skillsImpact)
-	{
-		this->skillsImpactVolumes[el.first] = el.second.second.getVolume();
-	}
-}
-
 //Constructor
 EnemySoundBox::EnemySoundBox() noexcept
+	:
+	soundPlayer(this->sounds, 1.5f, 2.f),
+	impactSoundsPlayer(this->skillsImpact, 2.f, 3.f)
 {
 	std::thread initThread1(&EnemySoundBox::initSkillImpactSounds, this);
 	std::thread initThread2(&EnemySoundBox::initSound, this);
@@ -477,31 +373,21 @@ EnemySoundBox::EnemySoundBox() noexcept
 	initThread1.join();
 	initThread2.join();
 
-	this->initVolumes ();
+	this->impactSoundsPlayer.setVolume(this->impactSoundsPlayer.getVolume());
+	this->soundPlayer.setVolume(this->soundPlayer.getVolume());
 }
 
 EnemySoundBox::~EnemySoundBox()
 {
-	for (auto& el : this->sounds)
-	{
-		if (el.second.second.getStatus() != sf::Music::Stopped)
-		{
-			el.second.second.stop();
-		}
-	}
+	this->soundPlayer.stopSounds();
+	this->impactSoundsPlayer.stopSounds();
 }
 
 //Accessors
 void EnemySoundBox::setVolume(const float& volume)
 {
-	for (auto& el : this->sounds)
-	{
-		el.second.second.setVolume(volume);
-	}
-	for (auto& el : this->skillsImpact)
-	{
-		el.second.second.setVolume(volume);
-	}
+	this->soundPlayer.setVolume(volume);
+	this->impactSoundsPlayer.setVolume(volume);
 }
 
 //Functions
@@ -517,79 +403,26 @@ void EnemySoundBox::playSound(const std::string& sound)
 
 void EnemySoundBox::pauseSounds()
 {
-	//Pause regular sounds
-	for (auto& el : this->sounds)
-	{
-		if (el.second.second.getStatus() == sf::Sound::Playing)
-		{
-			el.second.second.pause();
-		}
-	}
-
-	//Pause skill impact sounds
-	for (auto& el : this->skillsImpact)
-	{
-		if (el.second.second.getStatus() == sf::Sound::Playing)
-		{
-			el.second.second.pause();
-		}
-	}
+	this->impactSoundsPlayer.pauseSounds();
+	this->soundPlayer.pauseSounds();
 }
 
 void EnemySoundBox::resumeSounds()
 {
-	//Unpause regular sounds
-	for (auto& el : this->sounds)
-	{
-		if (el.second.second.getStatus() == sf::Sound::Paused)
-		{
-			el.second.second.play();
-		}
-	}
+	this->impactSoundsPlayer.playSounds();
+	this->soundPlayer.playSounds();
 
-	//Unpause skill impact sounds
-	for (auto& el : this->skillsImpact)
-	{
-		if (el.second.second.getStatus() == sf::Sound::Paused)
-		{
-			el.second.second.play();
-		}
-	}
 }
 
 void EnemySoundBox::increaseVolume()
 {
-	for (auto& el : this->sounds)
-	{
-		el.second.second.setVolume(el.second.second.getVolume() + (this->soundsVolumes[el.first] * VOLUME_MODIFIER / 100.f));
-	}
-
-	for (auto& el : this->skillsImpact)
-	{
-		el.second.second.setVolume(el.second.second.getVolume() + (this->skillsImpactVolumes[el.first] * VOLUME_MODIFIER / 100.f));
-	}
+	this->impactSoundsPlayer.increaseVolume();
+	this->soundPlayer.increaseVolume();
 }
 
 void EnemySoundBox::decreaseVolume()
 {
-	for (auto& el : this->sounds)
-	{
-		el.second.second.setVolume(el.second.second.getVolume() - (this->soundsVolumes[el.first] * VOLUME_MODIFIER / 100.f));
-
-		if (el.second.second.getVolume() < 0)
-		{
-			el.second.second.setVolume(0);
-		}
-	}
-
-	for (auto& el : this->skillsImpact)
-	{
-		el.second.second.setVolume(el.second.second.getVolume() + (this->skillsImpactVolumes[el.first] * VOLUME_MODIFIER / 100.f));
-
-		if (el.second.second.getVolume() < 0)
-		{
-			el.second.second.setVolume(0);
-		}
-	}
+	this->impactSoundsPlayer.decreaseVolume();
+	this->soundPlayer.decreaseVolume();
 }
 

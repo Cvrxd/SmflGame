@@ -1,6 +1,6 @@
 #pragma once
-#include"Player.h"
-#include"Gui.h"
+#include <Entities/Player/Player.h>
+#include <Gui/GeneralGui/Gui.h>
 
 class Player;
 class GUI::Button;

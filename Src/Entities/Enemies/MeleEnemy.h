@@ -1,5 +1,5 @@
 #pragma once
-#include "Enemy.h"
+#include <Entities/Enemies/Enemy.h>
 
 enum class MeleEnemyType { MIMIC = 0, BRINGER_OF_DEATH, 
 	KNIGHT1, HUNTRESS, MARTIAL_HERO1, MARTIAL_HERO2, NOMAND};

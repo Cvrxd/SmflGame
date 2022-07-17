@@ -109,6 +109,9 @@
     <Filter Include="States\GameState\Cpp">
       <UniqueIdentifier>{f8de2d3d-5038-41b8-814f-187e0116c597}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Components\GeneralComponents\ISounds">
+      <UniqueIdentifier>{62a4e9ad-e5f7-45ac-a508-587c7d059fe0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -243,6 +246,12 @@
     <ClCompile Include="Src\stdafx.cpp">
       <Filter>Файлы заголовков</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Components\GeneralComponents\IMusicPlayer.cpp">
+      <Filter>Components\GeneralComponents\ISounds</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\GeneralComponents\ISoundsPlayer.cpp">
+      <Filter>Components\GeneralComponents\ISounds</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\stdafx.h">
@@ -337,6 +346,12 @@
     </ClInclude>
     <ClInclude Include="Src\GraphicsSettings\GraphicsSettings.h">
       <Filter>Файлы ресурсов</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\GeneralComponents\IMusicPlayer.h">
+      <Filter>Components\GeneralComponents\ISounds</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\GeneralComponents\ISoundsPlayer.h">
+      <Filter>Components\GeneralComponents\ISounds</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

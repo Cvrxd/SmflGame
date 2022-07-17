@@ -157,6 +157,8 @@
     <ClCompile Include="Src\Components\EntitiesComponents\SkillsComponent.cpp" />
     <ClCompile Include="Src\Components\EntitiesComponents\StatsComponent.cpp" />
     <ClCompile Include="Src\Components\GeneralComponents\AnimationComponent.cpp" />
+    <ClCompile Include="Src\Components\GeneralComponents\IMusicPlayer.cpp" />
+    <ClCompile Include="Src\Components\GeneralComponents\ISoundsPlayer.cpp" />
     <ClCompile Include="Src\Components\GeneralComponents\PopUpTextComponent.cpp" />
     <ClCompile Include="Src\Components\GeneralComponents\SoundComponent.cpp" />
     <ClCompile Include="Src\Entities\Enemies\BossEnemy.cpp" />
@@ -200,6 +202,8 @@
     <ClInclude Include="Src\Components\EntitiesComponents\SkillsComponent.h" />
     <ClInclude Include="Src\Components\EntitiesComponents\StatsComponent.h" />
     <ClInclude Include="Src\Components\GeneralComponents\AnimationComponent.h" />
+    <ClInclude Include="Src\Components\GeneralComponents\IMusicPlayer.h" />
+    <ClInclude Include="Src\Components\GeneralComponents\ISoundsPlayer.h" />
     <ClInclude Include="Src\Components\GeneralComponents\PopUpTextComponent.h" />
     <ClInclude Include="Src\Components\GeneralComponents\SoundComponent.h" />
     <ClInclude Include="Src\Entities\Enemies\BossEnemy.h" />
