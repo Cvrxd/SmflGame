@@ -13,6 +13,11 @@ private:
 
 	float volume;
 
+	ISoundsPlayer()                                       = delete;
+	ISoundsPlayer(const ISoundsPlayer& other)             = delete;
+	ISoundsPlayer(ISoundsPlayer&& other)                  = delete;
+	ISoundsPlayer& operator =(const ISoundsPlayer other)  = delete;
+	ISoundsPlayer& operator =(ISoundsPlayer&& other)      = delete;
 public:
 	ISoundsPlayer(SoundsMap& sounds, const float& volume, const float& volumeMax, const float& volumeModifier = 0.15f);
 	~ISoundsPlayer();

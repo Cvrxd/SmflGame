@@ -1,15 +1,20 @@
 #pragma once
 #include <States/State.h>
+
 #include <Gui/Menu's/PauseMenu.h>
-#include <Map/Map/TileMap.h>
 #include <Gui/PlayerGui/PlayerGUI.h>
+#include <Gui/Menu's/GameOverMenu.h>
+
 #include <Entities/Enemies/BossEnemy.h>
 #include <Entities/Enemies/MeleEnemy.h>
 #include <Entities/Enemies/DestroyingEnemy.h>
 #include <Entities/Enemies/MageEnemy.h>
-#include <Map/Traps/MapTrapsComonent.h>
+
 #include <States/GameState/EnemiesGenerationI/EnemiesGenarationInterface.h>
-#include <Gui/Menu's/GameOverMenu.h>
+
+#include <Map/Traps/MapTrapsComonent.h>
+#include <Map/Map/TileMap.h>
+
 
 #define BOSSWAVE 5
 

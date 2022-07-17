@@ -12,6 +12,12 @@ private:
 
 	float volume;
 
+	IMusicPlayer()                                      = delete;
+	IMusicPlayer(const IMusicPlayer& other)             = delete;
+	IMusicPlayer(IMusicPlayer&& other)                  = delete;
+	IMusicPlayer& operator =(const IMusicPlayer other)  = delete;
+	IMusicPlayer& operator =(IMusicPlayer&& other)      = delete;
+
 public:
 	IMusicPlayer(MusicMap& music, const float& volume, const float& volumeMax, const float& volumeModifier = 0.15f);
 	~IMusicPlayer();
